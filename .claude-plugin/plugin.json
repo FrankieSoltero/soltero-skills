@@ -4,9 +4,9 @@
   "displayName": "Soltero Skills",
   "description": "Skills for scaffolding, security/compliance review, AI-agent engineering, and docs/knowledge capture",
   "version": "0.1.0",
-  "author": { "name": "Francisco Soltero", "email": "frankiesoltero@gmail.com" },
-  "homepage": "https://github.com/OWNER/soltero-skills",
-  "repository": "https://github.com/OWNER/soltero-skills",
+  "author": { "name": "Francisco Soltero" },
+  "homepage": "https://github.com/FrankieSoltero/soltero-skills",
+  "repository": "https://github.com/FrankieSoltero/soltero-skills",
   "license": "MIT",
   "keywords": ["skills", "scaffolding", "security", "compliance", "mcp", "prisma", "docs"]
 }

@@ -2,14 +2,14 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "soltero-skills-marketplace",
   "description": "Marketplace for the Soltero Skills plugin",
-  "owner": { "name": "Francisco Soltero", "email": "frankiesoltero@gmail.com" },
+  "owner": { "name": "Francisco Soltero" },
   "plugins": [
     {
       "name": "soltero-skills",
       "source": "./",
       "description": "Skills for scaffolding, security/compliance review, AI-agent engineering, and docs/knowledge capture",
       "version": "0.1.0",
-      "author": { "name": "Francisco Soltero", "email": "frankiesoltero@gmail.com" },
+      "author": { "name": "Francisco Soltero" },
       "category": "development",
       "keywords": ["skills", "scaffolding", "security", "compliance"]
     }

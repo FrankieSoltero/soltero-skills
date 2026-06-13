@@ -6,7 +6,7 @@ for scaffolding, security/compliance review, AI-agent engineering, and docs/know
 ## Install
 
 ```
-/plugin marketplace add OWNER/soltero-skills
+/plugin marketplace add FrankieSoltero/soltero-skills
 /plugin install soltero-skills@soltero-skills-marketplace
 ```
 
