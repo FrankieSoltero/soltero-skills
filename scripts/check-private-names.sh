@@ -8,7 +8,7 @@ if [[ ! -f "$DENYLIST" ]]; then
   exit 0
 fi
 # Build an alternation of non-empty, non-comment terms.
-TERMS=$(grep -vE '^\s*(#|$)' "$DENYLIST" | paste -sd'|' -)
+TERMS=$(grep -vE '^\s*(#|$)' "$DENYLIST" | paste -sd'|' - || true)
 if [[ -z "$TERMS" ]]; then echo "Denylist empty — skipping."; exit 0; fi
 if git grep -nIE "$TERMS" -- ':!.private-denylist.txt' ':!scripts/check-private-names.sh'; then
   echo "✗ Private names found above. Remove before publishing."

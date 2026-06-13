@@ -15,7 +15,7 @@ jobs:
       - name: Frontmatter lint (hard gate, no deps)
         run: node tools/lint-frontmatter.mjs
       - name: Unit tests (hard gate, no deps)
-        run: node --test tools/
+        run: npm test
       - name: Markdown lint (best-effort)
         run: npx --yes markdownlint-cli2 "**/*.md" "#node_modules" || echo "markdownlint unavailable — skipped"
       - name: Plugin validate (best-effort; CLI may be unavailable)
