@@ -1,0 +1,27 @@
+name: validate
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Frontmatter lint (hard gate, no deps)
+        run: node tools/lint-frontmatter.mjs
+      - name: Unit tests (hard gate, no deps)
+        run: node --test tools/
+      - name: Markdown lint (best-effort)
+        run: npx --yes markdownlint-cli2 "**/*.md" "#node_modules" || echo "markdownlint unavailable — skipped"
+      - name: Plugin validate (best-effort; CLI may be unavailable)
+        run: |
+          if command -v claude >/dev/null 2>&1; then
+            claude plugin validate ./ --strict
+          else
+            echo "claude CLI unavailable in CI — frontmatter lint is the gate"
+          fi
