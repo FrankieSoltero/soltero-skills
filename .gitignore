@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+*.log
+# Private, non-public design notes and confidentiality denylist (spec §2.1)
+private-notes/
+.private-denylist.txt
