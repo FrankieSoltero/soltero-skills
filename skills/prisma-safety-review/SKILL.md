@@ -53,5 +53,7 @@ the fix. Review only — don't rewrite code unless asked.
 - A bulk write hits the DB per-row with no `$transaction` → **Critical** (pool exhaustion *and*
   non-atomic partial failure).
 - A migration adds a `NOT NULL` column with no default to a populated table → it fails on deploy.
+- Cursor pagination whose cursor field isn't the `orderBy` field → pages are silently wrong
+  (skips/dupes). Key the cursor on the **exact `orderBy` tuple**, and make that tuple unique.
 - "Looks fine, it's a small DB change" → run the two scripts and the checklist anyway; the quiet
   issues (atomicity, missing index, tiebreaker) are exactly the ones a glance misses.
