@@ -95,17 +95,30 @@ ESLint `no-console` rule allowing only `console.error` in stdio code.
 Stateless mode (one server per request — scales horizontally, no sticky sessions). The deprecated
 HTTP+SSE transport (2024-11-05) is back-compat only; use Streamable HTTP.
 
+> **Gotcha (verified the hard way):** `createMcpExpressApp()` already calls `express.json()`
+> internally (with no body limit) and adds host validation. If you use it AND add your own
+> `app.use(express.json(...))`, the second parser reads an already-consumed stream and **every POST
+> returns 500 — `InternalServerError: stream is not readable`**. Either use the helper alone (and
+> accept its default body limit), or build the app by hand as below to keep DNS-rebinding
+> protection *and* set a body-size limit. Don't combine the two.
+
 ```ts
 import express, { type Request, type Response } from "express";
 import crypto from "node:crypto";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
+import {
+  hostHeaderValidation,
+  localhostHostValidation,
+} from "@modelcontextprotocol/sdk/server/middleware/hostHeaderValidation.js";
 import { buildServer } from "./server.js";
 import { env } from "./env.js";
 
-// createMcpExpressApp() ships DNS-rebinding protection on by default (host 127.0.0.1).
-// Pass { host: "0.0.0.0" } only behind a TLS proxy that sets a trusted host allowlist.
-const app = createMcpExpressApp({ host: env.BIND_HOST });
+const app = express();
+// DNS-rebinding protection: localhost binds get it automatically; a non-localhost bind (0.0.0.0
+// behind a TLS proxy) MUST pass an explicit Host allowlist.
+const LOCALHOST = ["127.0.0.1", "localhost", "::1"];
+if (LOCALHOST.includes(env.BIND_HOST)) app.use(localhostHostValidation());
+else if (env.ALLOWED_HOSTS?.length) app.use(hostHeaderValidation(env.ALLOWED_HOSTS));
 app.use(express.json({ limit: "1mb" }));
 
 function authorized(req: Request): boolean {

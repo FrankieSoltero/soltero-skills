@@ -3,14 +3,30 @@
 import express, { type Request, type Response } from "express";
 import crypto from "node:crypto";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
+import {
+  hostHeaderValidation,
+  localhostHostValidation,
+} from "@modelcontextprotocol/sdk/server/middleware/hostHeaderValidation.js";
 import { buildServer } from "./server.js";
 import { env } from "./env.js";
 import { logger } from "./logger.js";
 
-// createMcpExpressApp() enables DNS-rebinding protection by default. Bind 0.0.0.0 ONLY behind a
-// TLS proxy; keep the default 127.0.0.1 for local-only.
-const app = createMcpExpressApp({ host: env.BIND_HOST });
+// Build the Express app by hand. Do NOT use createMcpExpressApp() here AND add your own
+// express.json(): the helper already installs express.json() (with no body limit), so a second
+// parser reads an already-consumed stream and every POST 500s ("stream is not readable"). Building
+// it manually keeps DNS-rebinding protection AND lets you set a body-size limit.
+const app = express();
+
+// DNS-rebinding protection: validate the Host header before reading the body.
+const LOCALHOST = ["127.0.0.1", "localhost", "::1"];
+if (LOCALHOST.includes(env.BIND_HOST)) {
+  app.use(localhostHostValidation());
+} else if (env.ALLOWED_HOSTS?.length) {
+  app.use(hostHeaderValidation(env.ALLOWED_HOSTS)); // required when binding 0.0.0.0 behind a proxy
+} else {
+  logger.warn({ host: env.BIND_HOST }, "non-localhost bind without ALLOWED_HOSTS — set it for DNS-rebinding protection");
+}
+
 app.use(express.json({ limit: "1mb" }));
 
 function authorized(req: Request): boolean {

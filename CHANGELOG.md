@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.5.1] - 2026-06-14
+### Fixed
+- `build-mcp-server`: the Streamable HTTP template combined `createMcpExpressApp()` (which already
+  installs `express.json()`) with a second `app.use(express.json({ limit }))`, so the second parser
+  read an already-consumed request stream and **every POST 500'd** (`stream is not readable`). Found
+  while dogfooding the skill to build a real server. The template + `reference.md` now build the
+  Express app by hand (DNS-rebinding via `localhostHostValidation`/`hostHeaderValidation` + a single
+  `express.json({ limit })`), add an `ALLOWED_HOSTS` env for non-localhost binds, and document the
+  gotcha. Verified end-to-end against SDK 1.29.0: 401 without/with a bad bearer, 200 + `initialize`
+  result with a valid bearer, 405 on `GET /mcp`.
+
 ## [0.5.0] - 2026-06-14
 ### Added
 - `build-mcp-server` skill: build, harden, and deploy a production-grade MCP server in TypeScript
