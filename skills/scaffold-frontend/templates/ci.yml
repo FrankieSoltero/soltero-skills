@@ -1,0 +1,22 @@
+# Goes in the SCAFFOLDED project at .github/workflows/ci.yml
+# Assumes package.json scripts: typecheck (tsc --noEmit), lint, test, build. --if-present skips any you omit.
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run typecheck --if-present
+      - run: npm run lint --if-present
+      - run: npm test --if-present
+      - run: npm run build --if-present
