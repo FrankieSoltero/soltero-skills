@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.3.0] - 2026-06-14
+### Added
+- `scaffold-frontend` skill: a menu + scaffolder for new front-ends. Presents a neutral
+  framework tradeoffs menu (Next.js / Vite+React / Astro / Expo) and the matching UI layer
+  (Tailwind v4 + shadcn/ui + ReactBits for web; NativeWind + react-native-reusables for mobile),
+  scaffolds via the official CLI, then applies a bundled standards layer (strict TS, ESLint, Zod
+  env validation, security headers, vitest, pre-commit, CI, `Docs/`, `CLAUDE.md`). RED baseline
+  showed a casual agent presented route options 0/3 and applied only eslint; with the skill,
+  route options reached 3/3 and standards coverage ~8.7/9. Commands verified against current docs.
+
 ## [0.2.0] - 2026-06-13
 ### Added
 - `prisma-safety-review` skill: triggers a systematic safety pass before DB changes merge,

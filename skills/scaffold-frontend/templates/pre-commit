@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Goes in the SCAFFOLDED project at .husky/pre-commit (husky v9 style — no boilerplate header needed).
+# Setup once: npm i -D husky lint-staged && npx husky init
+# lint-staged config: templates/lint-staged.config.mjs
+npx lint-staged

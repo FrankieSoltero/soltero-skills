@@ -1,0 +1,28 @@
+# <PROJECT_NAME>
+
+<one-line description of what this app is and who uses it>
+
+## Stack
+- Framework: <Next.js App Router | Vite+React | Astro | Expo>
+- Styling/UI: Tailwind v4 + shadcn/ui (web) | NativeWind + react-native-reusables (mobile)
+- Language: TypeScript (strict, verbatimModuleSyntax)
+
+## Commands
+- `npm run dev` — start the dev server
+- `npm run build` — production build
+- `npm run typecheck` — `tsc --noEmit`
+- `npm run lint` — ESLint (or `biome check`)
+- `npm test` — Vitest
+
+## Architecture
+- `src/` — <layout: routes/pages, components, lib>
+- `src/lib/env.ts` — validated env (import `env`, never `process.env` directly)
+
+## Critical rules
+- Never hardcode secrets; add vars to `src/lib/env.ts` + `.env.example`. Client vars need the
+  framework's public prefix (NEXT_PUBLIC_ / VITE_ / PUBLIC_ / EXPO_PUBLIC_); everything else is server-only.
+- Security headers live in `next.config.ts` (web) / the host `_headers` (static). Keep CSP strict.
+- Log mistakes + fixes in `Docs/mistakes-and-fixes.md` as you go.
+
+## Known gotchas
+- <project-specific gotchas as you discover them>
