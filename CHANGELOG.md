@@ -3,6 +3,23 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.5.0] - 2026-06-14
+### Added
+- `build-mcp-server` skill: build, harden, and deploy a production-grade MCP server in TypeScript
+  on the official `@modelcontextprotocol/sdk`. Centers a verify-the-SDK-first rule (the API is
+  mid-migration: stable v1.29.x monolith + **raw-shape** `inputSchema` vs the v2.0.0-alpha scoped
+  packages + `z.object` — pin the installed version, never author from memory), the
+  stdout-is-the-stdio-channel rule, the tool-vs-resource decision, and a default production floor
+  (Zod validation + typed `isError` + stderr logging, both transports, bearer auth + Zod env,
+  tests + CI + Dockerfile), then verifies via the MCP Inspector and `claude mcp add`. Bundles
+  `reference.md` (verified-current v1.29.0 API, sourced from the SDK repo at tag `v1.29.0`) and
+  `templates/` (shared `buildServer()`, stdio + Streamable HTTP entries, Zod env, stderr logger,
+  in-memory integration test, CI, multi-stage non-root Dockerfile). RED baseline (3 fresh agents,
+  no skill) shipped a single-transport stdio toy when asked for "a working server" and drifted on
+  the SDK API across runs (raw-shape vs `z.object`, hardcoded `^1.0.0`); with the skill all three
+  ran `npm view` first, pinned v1.29.x, split tool-vs-resource, honored the stdout rule, and built
+  the full floor — one agent compiled the templates against real SDK 1.29.0 to 10/10 passing tests.
+
 ## [0.4.0] - 2026-06-14
 ### Added
 - `agent-handoff` skill: writes/refreshes a living `HANDOFF.md` enforcing the 8 elements that make
