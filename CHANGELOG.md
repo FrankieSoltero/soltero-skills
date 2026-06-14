@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.4.0] - 2026-06-14
+### Added
+- `agent-handoff` skill: writes/refreshes a living `HANDOFF.md` enforcing the 8 elements that make
+  work resumable (goal, status, decisions+why, ordered next steps, files **with line refs**,
+  gotchas, **open questions**, resume & verify) so a fresh agent continues with zero re-derivation.
+  Bundles `hooks/context-watch.mjs` — a `UserPromptSubmit` hook that estimates context from the
+  transcript and reminds at a configurable threshold (~40%), the closest reliable approximation
+  since Claude Code has no native context-% trigger. RED baseline missed file/line refs in all 3
+  scenarios and suppressed open questions; with the skill (validated against a real fixture) all 8
+  elements present with verified-real line refs and honestly surfaced open questions.
+
 ## [0.3.0] - 2026-06-14
 ### Added
 - `scaffold-frontend` skill: a menu + scaffolder for new front-ends. Presents a neutral
