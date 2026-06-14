@@ -24,7 +24,10 @@ standards** — ending at a runnable project that matches the author's conventio
 ## The Flow
 
 1. **Offer the framework menu — do NOT pick silently.** Present the tradeoffs table below and
-   let the user choose.
+   let the user choose. Show the menu **whenever more than one route fits** — even when the
+   prompt seems to imply one (a "dashboard / just a React app" fits Vite SPA *or* Next.js). Only
+   when the request truly narrows to a single route (e.g. "a mobile app" → Expo) may you name
+   that route and proceed instead of showing a menu.
 
    | Route | Best for |
    |-------|----------|
@@ -47,8 +50,9 @@ standards** — ending at a runnable project that matches the author's conventio
 
    - [ ] Strict `tsconfig` (+ `verbatimModuleSyntax`) — `templates/tsconfig.strict.json`
    - [ ] ESLint flat config (or Biome) — `templates/eslint.config.mjs`
+   - [ ] Pre-commit hook (husky + lint-staged) — `templates/lint-staged.config.mjs`, `templates/pre-commit`
    - [ ] Zod env validation + `.env.example` — `templates/env.ts`, `templates/.env.example`
-   - [ ] Security headers — `templates/next.config.security.ts` (Next) / static `_headers` (see reference)
+   - [ ] Security headers **(web only — N/A for Expo)** — `templates/next.config.security.ts` (Next) / static `_headers` (see reference)
    - [ ] Vitest setup — `templates/vitest.config.ts`, `templates/vitest.setup.ts`
    - [ ] CI workflow — `templates/ci.yml`
    - [ ] `Docs/mistakes-and-fixes.md` seed — `templates/mistakes-and-fixes.md`
@@ -71,7 +75,9 @@ standards** — ending at a runnable project that matches the author's conventio
 
 ## Red Flags — STOP
 
-- Scaffolding a framework without first offering the route menu → STOP, present the options.
+- Scaffolding a framework without offering the route menu when more than one route fits → STOP,
+  present the options. An "obvious" web choice (dashboard, "just a React app") is still the
+  user's call — Vite *and* Next.js fit. (Only a truly single-route ask like "mobile" → Expo is exempt.)
 - Handing back a project with no env validation, no security headers, no CI, no Docs/CLAUDE.md →
   the standards layer is the whole point; apply it.
 - Emitting `npx shadcn-ui@latest` or Tailwind-v4 CSS-first steps inside a React Native project →

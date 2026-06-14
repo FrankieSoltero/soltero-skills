@@ -108,7 +108,10 @@ Docs: tailwindcss.com · ui.shadcn.com · reactbits.dev · nativewind.dev · rea
   react-hooks v6 `recommended-latest`, jsx-a11y; `eslint-config-prettier` LAST). Biome alternative:
   `npm i -D --save-exact @biomejs/biome && npx @biomejs/biome init` (v2: `includes` not `ignore`;
   `domains.react`; run `biome check --write .`).
-- **Security headers:** Next.js → `templates/next.config.security.ts` (CSP, X-Frame-Options DENY,
+- **Pre-commit:** `npm i -D husky lint-staged && npx husky init`; put `npx lint-staged` in
+  `.husky/pre-commit`. Config: `templates/lint-staged.config.mjs` (+ `templates/pre-commit`).
+- **Security headers** (web only — a native Expo app has no HTTP server/CSP, so skip for mobile):
+  Next.js → `templates/next.config.security.ts` (CSP, X-Frame-Options DENY,
   X-Content-Type-Options nosniff, Referrer-Policy, HSTS, Permissions-Policy, `poweredByHeader:false`).
   Vite/Astro → headers belong on the **host/CDN**, not the dev server. For static hosts
   (Netlify/Cloudflare Pages) add `public/_headers`:
