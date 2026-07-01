@@ -47,6 +47,11 @@ time there is.**
 
    `mode: "standard"` runs one finder round; use `"thorough"` only if the user explicitly
    asked for an exhaustive/deep pass, since it loops rounds until dry and costs more.
+
+   **Cost note:** even standard mode is not cheap — the 3-skeptic panel spawns three
+   verifiers per unique finding, so a swarm of dozens of agents is normal (a tiny repo can
+   still run ~50+ agents). That's the price of verified, low-false-positive findings; it is
+   expected, not a malfunction. Reserve `"thorough"` for when the user has accepted that cost.
 3. **Relay the result.** Read the returned `reportPath`, present the summary and the top
    confirmed findings (severity, file:line, one-line impact) in chat, and point at the report
    file. Do not start fixing anything, even trivially.

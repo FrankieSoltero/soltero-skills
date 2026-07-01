@@ -9,9 +9,12 @@ export const meta = {
   ],
 }
 
-const root = args.root
-const date = args.date
-const thorough = args.mode === 'thorough'
+// Some runtimes deliver the Workflow `args` value as a JSON string rather than a parsed
+// object; tolerate both so `args.root` is never silently undefined.
+const opts = typeof args === 'string' ? JSON.parse(args) : (args || {})
+const root = opts.root
+const date = opts.date
+const thorough = opts.mode === 'thorough'
 if (!root || !date) throw new Error('args.root and args.date are required')
 
 const INVENTORY_SCHEMA = {
