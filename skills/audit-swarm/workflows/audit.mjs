@@ -1,0 +1,209 @@
+export const meta = {
+  name: 'audit-swarm',
+  description: 'Whole-repo security + legal audit: scout, adaptive finder swarm, 3-skeptic verification, synthesized report',
+  phases: [
+    { title: 'Scout', detail: 'inventory stack, deps, licenses, attack surface (real commands)' },
+    { title: 'Find', detail: 'one read-only specialist finder per applicable dimension' },
+    { title: 'Verify', detail: '3-skeptic majority-vote panel per deduped finding' },
+    { title: 'Report', detail: 'synthesize severity-ranked report into Docs/' },
+  ],
+}
+
+const root = args.root
+const date = args.date
+const thorough = args.mode === 'thorough'
+if (!root || !date) throw new Error('args.root and args.date are required')
+
+const INVENTORY_SCHEMA = {
+  type: 'object',
+  properties: {
+    stack: { type: 'array', items: { type: 'string' } },
+    hasDataLayer: { type: 'boolean' },
+    dataLayerNotes: { type: 'string' },
+    authSurfaces: { type: 'array', items: { type: 'string' } },
+    entryPoints: { type: 'array', items: { type: 'string' } },
+    dependencyLicenses: { type: 'string' },
+    vulnScanOutput: { type: 'string' },
+    secretScanOutput: { type: 'string' },
+    regulatorySignals: { type: 'array', items: { type: 'string' } },
+    attributionNotes: { type: 'string' },
+    summary: { type: 'string' },
+  },
+  required: ['stack', 'hasDataLayer', 'summary'],
+}
+
+const FINDINGS_SCHEMA = {
+  type: 'object',
+  properties: {
+    findings: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          file: { type: 'string' },
+          line: { type: 'integer' },
+          category: { type: 'string' },
+          severity: { type: 'string', enum: ['critical', 'high', 'medium', 'low'] },
+          title: { type: 'string' },
+          evidence: { type: 'string' },
+          impact: { type: 'string' },
+          remediation: { type: 'string' },
+        },
+        required: ['file', 'category', 'severity', 'title', 'evidence', 'impact', 'remediation'],
+      },
+    },
+  },
+  required: ['findings'],
+}
+
+const VERDICT_SCHEMA = {
+  type: 'object',
+  properties: {
+    refuted: { type: 'boolean' },
+    reasoning: { type: 'string' },
+  },
+  required: ['refuted', 'reasoning'],
+}
+
+const REPORT_SCHEMA = {
+  type: 'object',
+  properties: {
+    reportPath: { type: 'string' },
+    summary: { type: 'string' },
+  },
+  required: ['reportPath', 'summary'],
+}
+
+phase('Scout')
+const inv = await agent(
+  `You are the scout for a whole-repo security/legal audit of ${root}. Build a factual ` +
+  `inventory using real commands — never guess. (1) Detect the stack and frameworks from ` +
+  `manifests and lockfiles. (2) List dependencies with their licenses (npm ls --all, license ` +
+  `fields in package metadata, or the pip/poetry/cargo equivalent) — summarize copyleft ` +
+  `(GPL/AGPL/LGPL) hits explicitly. (3) Run the ecosystem vulnerability scanner if available ` +
+  `(npm audit --json, pip-audit, osv-scanner) and capture the salient output. (4) Grep tracked ` +
+  `files for secret patterns (AWS keys, private key blocks, api_key/token/password assignments). ` +
+  `(5) Map entry points: HTTP routes, CLI mains, exported handlers. (6) Map the data layer ` +
+  `(ORM schemas, SQL, storage of user data) and auth surfaces (login, sessions, middleware). ` +
+  `(7) Note regulatory signals: payment, health, biometric, analytics/tracking, or PII terms. ` +
+  `(8) Note vendored/copied third-party code and LICENSE/NOTICE file state. Read-only: modify nothing.`,
+  { label: 'scout', phase: 'Scout', schema: INVENTORY_SCHEMA, agentType: 'security-auditor' }
+)
+if (!inv) throw new Error('Scout agent failed — cannot audit without an inventory')
+
+const CORE = [
+  { key: 'secrets', focus: 'hardcoded secrets, API keys, credentials, tokens in code, config, or git history', context: inv.secretScanOutput || '' },
+  { key: 'injection', focus: 'SQL/NoSQL/command/path/template injection, XSS, SSRF — every place external input reaches an interpreter or sink', context: (inv.entryPoints || []).join('\n') },
+  { key: 'authz', focus: 'authentication and authorization gaps: missing checks, IDOR, privilege escalation, session/token handling', context: (inv.authSurfaces || []).join('\n') },
+  { key: 'crypto-config', focus: 'weak or homegrown crypto, missing TLS enforcement, insecure defaults, permissive CORS, missing security headers, debug modes left enabled', context: '' },
+  { key: 'supply-chain', focus: 'known-vulnerable, outdated, or unmaintained dependencies; lockfile drift; risky install scripts; typosquat-suspect names', context: inv.vulnScanOutput || '' },
+  { key: 'licenses', focus: 'dependency license conflicts (GPL/AGPL contamination of proprietary code), missing LICENSE, incompatible transitive licenses', context: inv.dependencyLicenses || '' },
+]
+const dims = [...CORE]
+if (inv.hasDataLayer) {
+  dims.push({ key: 'pii-privacy', focus: 'PII collected, logged, or stored without safeguards; missing retention/deletion paths; consent gaps (GDPR/CCPA posture)', context: inv.dataLayerNotes || '' })
+}
+if ((inv.regulatorySignals || []).length) {
+  dims.push({ key: 'regulatory', focus: `regulatory posture for detected signals (${inv.regulatorySignals.join(', ')}): audit trails, encryption at rest and in transit, access control (SOC 2 / HIPAA / PCI-DSS as applicable)`, context: '' })
+}
+if (inv.dependencyLicenses || inv.attributionNotes) {
+  dims.push({ key: 'attribution', focus: 'copied/vendored code without attribution, missing NOTICE obligations, API terms-of-service violations', context: inv.attributionNotes || '' })
+}
+if ((inv.stack || []).length) {
+  dims.push({ key: `stack-${inv.stack[0].toLowerCase().replace(/[^a-z0-9]+/g, '-')}`, focus: `security pitfalls specific to ${inv.stack.slice(0, 2).join(' + ')} (framework misconfigurations, unsafe idioms, deployment footguns)`, context: '' })
+}
+
+log(`Auditing ${dims.length} dimensions${thorough ? ' (thorough mode: loop until 2 dry rounds)' : ''}: ${dims.map(d => d.key).join(', ')}`)
+
+const LENSES = [
+  { key: 'reproduce', instruction: 'Verify the cited file and line exist and the quoted evidence matches what is actually there, and that the flagged path is reachable (not dead or test-only code).' },
+  { key: 'exploitability', instruction: 'Take the code as cited — is there a realistic attacker, input, and impact at the claimed severity, or does a guard, configuration, or trust boundary neutralize it?' },
+  { key: 'missing-context', instruction: 'Hunt for context the finder missed: upstream sanitization, framework defaults, compensating controls, documented intent, or licensing/legal facts that change the conclusion.' },
+]
+
+const finderPrompt = (d, round, prior) =>
+  `You are one specialist in a security/legal audit swarm for the repository at ${root}. ` +
+  `Your single dimension: ${d.key} — ${d.focus}. ` +
+  `Project summary from the scout: ${inv.summary} ` +
+  (d.context ? `Scout context for your dimension:\n${d.context}\n` : '') +
+  `Rules: whole-repo scope; read the code before claiming anything; every finding cites file and ` +
+  `line with the offending excerpt as evidence; report only your dimension; severity is realistic ` +
+  `impact. Return findings via structured output.` +
+  (round > 1 ? ` This is deep-dive round ${round}: the following file|category pairs are already reported — do NOT re-report them; dig into areas not yet covered: ${prior.join(', ')}` : '')
+
+const skepticPrompt = (f, lens) =>
+  `A finder in a security/legal audit of ${root} reported this finding:\n${JSON.stringify(f, null, 2)}\n` +
+  `Your lens: ${lens.key}. ${lens.instruction} ` +
+  `Inspect the actual repository. Try to REFUTE the finding. If you cannot confirm it stands under ` +
+  `your lens, return refuted=true (default to refuted when uncertain), with your reasoning.`
+
+const seen = new Set()
+const confirmed = []
+const refuted = []
+const keyOf = f => `${f.file}|${f.category}`
+let round = 0
+let dry = 0
+
+do {
+  round++
+  const found = (await parallel(dims.map(d => () =>
+    agent(finderPrompt(d, round, [...seen]), {
+      label: `find:${d.key}${thorough ? `:r${round}` : ''}`,
+      phase: 'Find',
+      schema: FINDINGS_SCHEMA,
+      agentType: 'security-auditor',
+    })
+  ))).filter(Boolean).flatMap(r => r.findings)
+
+  const fresh = found.filter(f => !seen.has(keyOf(f)))
+  if (!fresh.length) { dry++; log(`Round ${round}: nothing new (${dry} dry)`); continue }
+  dry = 0
+  fresh.forEach(f => seen.add(keyOf(f)))
+  log(`Round ${round}: ${found.length} raw findings, ${fresh.length} new — sending to skeptic panels`)
+
+  const judged = await parallel(fresh.map(f => () =>
+    parallel(LENSES.map(lens => () =>
+      agent(skepticPrompt(f, lens), {
+        label: `verify:${lens.key}:${f.category}`,
+        phase: 'Verify',
+        schema: VERDICT_SCHEMA,
+        agentType: 'finding-skeptic',
+      })
+    )).then(votes => {
+      const cast = votes.filter(Boolean)
+      const kills = cast.filter(v => v.refuted).length
+      return { ...f, panelRefutes: kills, panelReasons: cast.map(v => `${v.refuted ? 'REFUTED' : 'STANDS'}: ${v.reasoning}`) }
+    })
+  ))
+  for (const j of judged.filter(Boolean)) {
+    (j.panelRefutes < 2 ? confirmed : refuted).push(j)
+  }
+  log(`Round ${round}: ${judged.filter(j => j && j.panelRefutes < 2).length} confirmed, ${judged.filter(j => j && j.panelRefutes >= 2).length} refuted`)
+} while (thorough && dry < 2 && round < 10)
+
+phase('Report')
+const SEV = ['critical', 'high', 'medium', 'low']
+confirmed.sort((a, b) => SEV.indexOf(a.severity) - SEV.indexOf(b.severity))
+
+const report = await agent(
+  `Write the final audit report for the security/legal audit of ${root} to the file ` +
+  `${root}/Docs/audit-${date}.md (create the Docs directory if missing). Sections, in order: ` +
+  `(1) "Executive summary" — 3-6 sentences on overall posture and the top risks. ` +
+  `(2) "Confirmed findings" — grouped by severity (critical, high, medium, low); for each: title, ` +
+  `file:line, category, evidence excerpt, impact, remediation. ` +
+  `(3) "Refuted findings appendix" — for each refuted finding: title, file, and the panel's refutation ` +
+  `reasons, so reviewers can see what was checked and dismissed. ` +
+  `(4) "Audit inventory" — the scout's inventory for scope transparency. ` +
+  `Data follows as JSON.\n\nCONFIRMED:\n${JSON.stringify(confirmed, null, 2)}\n\nREFUTED:\n` +
+  `${JSON.stringify(refuted, null, 2)}\n\nINVENTORY:\n${JSON.stringify(inv, null, 2)}\n\n` +
+  `After writing the file, return the report path and a 5-line-max summary of the top findings.`,
+  { label: 'synthesize', phase: 'Report', schema: REPORT_SCHEMA }
+)
+
+return {
+  reportPath: report ? report.reportPath : `${root}/Docs/audit-${date}.md`,
+  summary: report ? report.summary : 'Synthesis agent failed; findings are in the workflow return value.',
+  confirmed: confirmed.length,
+  refuted: refuted.length,
+  dimensions: dims.map(d => d.key),
+}
