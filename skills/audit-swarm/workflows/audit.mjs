@@ -86,6 +86,8 @@ const inv = await agent(
   `(GPL/AGPL/LGPL) hits explicitly. (3) Run the ecosystem vulnerability scanner if available ` +
   `(npm audit --json, pip-audit, osv-scanner) and capture the salient output. (4) Grep tracked ` +
   `files for secret patterns (AWS keys, private key blocks, api_key/token/password assignments). ` +
+  `When reporting a secret match, MASK the value — give the variable/name, file:line, and key ` +
+  `type, never the full credential — so the audit report never persists a live secret. ` +
   `(5) Map entry points: HTTP routes, CLI mains, exported handlers. (6) Map the data layer ` +
   `(ORM schemas, SQL, storage of user data) and auth surfaces (login, sessions, middleware). ` +
   `(7) Note regulatory signals: payment, health, biometric, analytics/tracking, or PII terms. ` +
@@ -132,7 +134,7 @@ const finderPrompt = (d, round, prior) =>
   `Rules: whole-repo scope; read the code before claiming anything; every finding cites file and ` +
   `line with the offending excerpt as evidence; report only your dimension; severity is realistic ` +
   `impact. Return findings via structured output.` +
-  (round > 1 ? ` This is deep-dive round ${round}: the following file|category pairs are already reported — do NOT re-report them; dig into areas not yet covered: ${prior.join(', ')}` : '')
+  (round > 1 ? ` This is deep-dive round ${round}: the following file|category|title findings are already reported — do NOT re-report them; dig into areas not yet covered: ${prior.join(', ')}` : '')
 
 const skepticPrompt = (f, lens) =>
   `A finder in a security/legal audit of ${root} reported this finding:\n${JSON.stringify(f, null, 2)}\n` +
@@ -143,7 +145,9 @@ const skepticPrompt = (f, lens) =>
 const seen = new Set()
 const confirmed = []
 const refuted = []
-const keyOf = f => `${f.file}|${f.category}`
+// Key on title too: two distinct issues in the same file+category are different findings and
+// must not collapse into one (matters across rounds in thorough mode).
+const keyOf = f => `${f.file}|${f.category}|${f.title}`
 let round = 0
 let dry = 0
 
@@ -175,13 +179,27 @@ do {
     )).then(votes => {
       const cast = votes.filter(Boolean)
       const kills = cast.filter(v => v.refuted).length
-      return { ...f, panelRefutes: kills, panelReasons: cast.map(v => `${v.refuted ? 'REFUTED' : 'STANDS'}: ${v.reasoning}`) }
+      // Quorum: without at least 2 skeptics reporting, the panel did not actually verify
+      // this finding. Defaulting to "confirmed" there would invert the skill's promise
+      // ("verified before reported") and the skeptics' own default-to-refuted posture, so
+      // an under-quorum panel refutes.
+      const hasQuorum = cast.length >= 2
+      const survives = hasQuorum && kills < 2
+      return {
+        ...f,
+        panelVotes: cast.length,
+        panelRefutes: kills,
+        panelReasons: hasQuorum
+          ? cast.map(v => `${v.refuted ? 'REFUTED' : 'STANDS'}: ${v.reasoning}`)
+          : [`REFUTED (no quorum): only ${cast.length} of ${LENSES.length} skeptics reported; cannot confirm without a panel.`],
+        survives,
+      }
     })
   ))
   for (const j of judged.filter(Boolean)) {
-    (j.panelRefutes < 2 ? confirmed : refuted).push(j)
+    (j.survives ? confirmed : refuted).push(j)
   }
-  log(`Round ${round}: ${judged.filter(j => j && j.panelRefutes < 2).length} confirmed, ${judged.filter(j => j && j.panelRefutes >= 2).length} refuted`)
+  log(`Round ${round}: ${judged.filter(j => j && j.survives).length} confirmed, ${judged.filter(j => j && !j.survives).length} refuted`)
 } while (thorough && dry < 2 && round < 10)
 
 phase('Report')
@@ -196,17 +214,40 @@ const report = await agent(
   `file:line, category, evidence excerpt, impact, remediation. ` +
   `(3) "Refuted findings appendix" — for each refuted finding: title, file, and the panel's refutation ` +
   `reasons, so reviewers can see what was checked and dismissed. ` +
-  `(4) "Audit inventory" — the scout's inventory for scope transparency. ` +
+  `(4) "Audit inventory" — the scout's inventory for scope transparency. If any secret VALUE ` +
+  `appears in the data below, mask it in the report (keep the name, file:line, and key type). ` +
   `Data follows as JSON.\n\nCONFIRMED:\n${JSON.stringify(confirmed, null, 2)}\n\nREFUTED:\n` +
   `${JSON.stringify(refuted, null, 2)}\n\nINVENTORY:\n${JSON.stringify(inv, null, 2)}\n\n` +
   `After writing the file, return the report path and a 5-line-max summary of the top findings.`,
   { label: 'synthesize', phase: 'Report', schema: REPORT_SCHEMA }
 )
 
+if (report) {
+  return {
+    reportPath: report.reportPath,
+    summary: report.summary,
+    confirmedCount: confirmed.length,
+    refutedCount: refuted.length,
+    dimensions: dims.map(d => d.key),
+  }
+}
+
+// Synthesis agent failed: it is the only agent that writes the file, so no report exists.
+// Return the actual findings (not just counts) so the caller can still relay/persist them
+// and the audit's work is not lost.
+const fallbackLines = confirmed.map(f =>
+  `- [${f.severity}] ${f.title} — ${f.file}${f.line ? `:${f.line}` : ''} (${f.category})`
+)
 return {
-  reportPath: report ? report.reportPath : `${root}/Docs/audit-${date}.md`,
-  summary: report ? report.summary : 'Synthesis agent failed; findings are in the workflow return value.',
-  confirmed: confirmed.length,
-  refuted: refuted.length,
+  reportPath: null,
+  reportWritten: false,
+  summary: `Synthesis agent failed — no report file was written. ${confirmed.length} confirmed and ` +
+    `${refuted.length} refuted findings are returned in this object (confirmed/refuted). ` +
+    `Relay them and, if wanted, write them to ${root}/Docs/audit-${date}.md manually.`,
+  confirmedCount: confirmed.length,
+  refutedCount: refuted.length,
+  confirmed,
+  refuted,
+  fallbackMarkdown: `# Audit findings (synthesis failed) — ${date}\n\n## Confirmed\n${fallbackLines.join('\n')}`,
   dimensions: dims.map(d => d.key),
 }
