@@ -11,7 +11,7 @@
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
     "validate:plugin": "claude plugin validate ./ --strict",
     "check:workflows": "node tools/check-workflow-syntax.mjs skills/audit-swarm/workflows/audit.mjs",
-    "check": "npm run test && npm run lint:fm && npm run lint:md"
+    "check": "npm run test && npm run lint:fm && npm run lint:md && npm run check:workflows"
   },
   "devDependencies": {
     "markdownlint-cli2": "^0.14.0"

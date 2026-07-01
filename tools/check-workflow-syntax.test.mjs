@@ -1,6 +1,16 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { checkWorkflowSyntax } from './check-workflow-syntax.mjs'
+
+const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
+
+test('the committed audit-swarm workflow script parses under the runtime dialect', () => {
+  const src = readFileSync(`${REPO_ROOT}skills/audit-swarm/workflows/audit.mjs`, 'utf8')
+  const r = checkWorkflowSyntax(src)
+  assert.equal(r.ok, true, r.error)
+})
 
 test('accepts a workflow script with export meta, top-level await, and top-level return', () => {
   const src = [
