@@ -3,6 +3,22 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.7.0] - 2026-07-02
+### Added
+- `code-optimizer` skill: whole-repo cleanup that applies changes on a branch behind a real test
+  gate. An inline sequenced pipeline (not a swarm — it writes code): clean-tree + new branch, a
+  `.code-optimizer.yml` config with a public-API allowlist (bootstrapped from the project's declared
+  standards if absent), a required green baseline, then four serial per-category commits (dead-code
+  → redundancy → file-split → guideline fixes) each re-verified with the project's own commands and
+  discarded on breakage. Detection is tool-grounded (knip/ts-prune/ESLint/ruff/vulture/jscpd), never
+  eyeballed; a callerless symbol needs a dynamic-reference check + gate + allowlist before removal,
+  so live-but-unreferenced code (dynamic dispatch, string-keyed registries) is never deleted.
+  Bundles `reference.md` (per-language tool matrix + config schema). Findings that can't be
+  automated safely are listed for manual follow-up.
+
+> Note: released from a branch off 0.5.1; if audit-swarm's 0.6.0 (PR #6) merges first, this rebases
+> onto it so versions stay monotonic.
+
 ## [0.5.1] - 2026-06-14
 ### Fixed
 - `build-mcp-server`: the Streamable HTTP template combined `createMcpExpressApp()` (which already

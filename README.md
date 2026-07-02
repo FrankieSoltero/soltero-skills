@@ -18,6 +18,7 @@ Then invoke skills as `soltero-skills:<skill-name>`.
 |-------|--------------|
 | `creating-a-skill` | The repo's own dev process: test-first, subagent-validated skill authoring. |
 | `capture-lesson` | Records a structured lesson in `Docs/mistakes-and-fixes.md` after a fix. |
+| `code-optimizer` | Whole-repo cleanup behind a test gate: tool-grounded dead-code removal, de-dup/shortening, live-file splitting, and project-guideline enforcement — every change verified and revertible. |
 
 Roadmap (see `docs/specs/`): `prisma-safety-review`, `scaffold-ts-service`,
 `security-compliance-review`, `claude-integration-patterns`, `build-mcp-server`,
