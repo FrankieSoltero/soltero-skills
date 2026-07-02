@@ -3,6 +3,19 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.6.0] - 2026-07-01
+### Added
+- `audit-swarm` skill: whole-repo security + legal audit. A bundled Workflow script runs
+  scout → adaptive specialist finders (secrets, injection, authz, crypto/config, supply
+  chain, licenses; conditional PII, regulatory, attribution, stack-specific) → 3-skeptic
+  majority-vote verification → a severity-ranked report at `Docs/audit-YYYY-MM-DD.md`.
+  Opt-in `thorough` mode loops finder rounds until dry. Findings only — never edits code.
+- Plugin agents `security-auditor` and `finding-skeptic`: read-only audit specialists
+  (tools limited to Read/Grep/Glob/Bash) reusable by future swarm-style skills.
+- `tools/check-workflow-syntax.mjs` + `check:workflows` script: syntax-gates Workflow
+  scripts under the runtime's dialect (top-level `await` + `return`), which plain
+  `node --check` rejects. Wired into `npm test` and the aggregate `check`.
+
 ## [0.5.1] - 2026-06-14
 ### Fixed
 - `build-mcp-server`: the Streamable HTTP template combined `createMcpExpressApp()` (which already
