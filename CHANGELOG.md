@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.8.0] - 2026-07-02
+### Added
+- `walkthrough-tutor` skill: an interactive, level-calibrated tutoring session over a branch/PR's
+  changes. Calibrates to the learner first, gives the big-picture mental model before any code, then
+  drills down one layer per turn with comprehension checks, pausing to teach the underlying concepts
+  — a turn-taking session, not a one-shot wall-of-text diff dump. Pure prompt/process skill (SKILL.md
+  only). Built test-first: scenarios were rewritten open-ended (an A/B/C option that spells out the
+  method telegraphs it for a pedagogy skill); the open-ended RED default is a wall of text, and with
+  the skill all three scenarios open with calibration-only first replies.
+
 ## [0.7.0] - 2026-07-02
 ### Added
 - `code-optimizer` skill: whole-repo cleanup that applies changes on a branch behind a real test
@@ -16,8 +26,6 @@ project adheres to Semantic Versioning.
   Bundles `reference.md` (per-language tool matrix + config schema). Findings that can't be
   automated safely are listed for manual follow-up.
 
-> Note: released from a branch off 0.5.1; if audit-swarm's 0.6.0 (PR #6) merges first, this rebases
-> onto it so versions stay monotonic.
 ## [0.6.0] - 2026-07-01
 ### Added
 - `audit-swarm` skill: whole-repo security + legal audit. A bundled Workflow script runs

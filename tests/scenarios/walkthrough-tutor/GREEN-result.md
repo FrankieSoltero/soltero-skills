@@ -31,5 +31,14 @@ text. The four RED failures are all fixed:
 
 No new rationalizations surfaced → no REFACTOR loop needed.
 
+## Test-scope caveat
+Single-shot subagent tests capture only the FIRST reply, so what is *empirically verified* here is
+the opening turn: calibration-first and no opening dump (the exact RED failure). The later-turn
+behaviors — mental-model-with-no-code in turn 2, one-layer-per-turn drill-down, and teaching a
+concept in its own turn — are encoded in SKILL.md and were *stated* by the GREEN agents as their
+plan, but not exercised across a real multi-turn session. The "mental model then stop" and "concept
+teaching" rows above reflect the agents' deferral of that content out of turn 1 (verified), not a
+captured turn-2+ transcript. A multi-turn probe is a reasonable follow-up.
+
 ## Full first replies (evidence, not committed)
 Scratchpad: `wt-green-1.txt`, `wt-green-2.txt`, `wt-green-3.txt`.
