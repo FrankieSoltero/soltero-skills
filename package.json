@@ -10,7 +10,8 @@
     "lint:fm": "node tools/lint-frontmatter.mjs",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
     "validate:plugin": "claude plugin validate ./ --strict",
-    "check": "npm run test && npm run lint:fm && npm run lint:md"
+    "check:workflows": "node tools/check-workflow-syntax.mjs skills/audit-swarm/workflows/audit.mjs",
+    "check": "npm run test && npm run lint:fm && npm run lint:md && npm run check:workflows"
   },
   "devDependencies": {
     "markdownlint-cli2": "^0.14.0"

@@ -18,6 +18,18 @@ project adheres to Semantic Versioning.
 
 > Note: released from a branch off 0.5.1; if audit-swarm's 0.6.0 (PR #6) merges first, this rebases
 > onto it so versions stay monotonic.
+## [0.6.0] - 2026-07-01
+### Added
+- `audit-swarm` skill: whole-repo security + legal audit. A bundled Workflow script runs
+  scout → adaptive specialist finders (secrets, injection, authz, crypto/config, supply
+  chain, licenses; conditional PII, regulatory, attribution, stack-specific) → 3-skeptic
+  majority-vote verification → a severity-ranked report at `Docs/audit-YYYY-MM-DD.md`.
+  Opt-in `thorough` mode loops finder rounds until dry. Findings only — never edits code.
+- Plugin agents `security-auditor` and `finding-skeptic`: read-only audit specialists
+  (tools limited to Read/Grep/Glob/Bash) reusable by future swarm-style skills.
+- `tools/check-workflow-syntax.mjs` + `check:workflows` script: syntax-gates Workflow
+  scripts under the runtime's dialect (top-level `await` + `return`), which plain
+  `node --check` rejects. Wired into `npm test` and the aggregate `check`.
 
 ## [0.5.1] - 2026-06-14
 ### Fixed
