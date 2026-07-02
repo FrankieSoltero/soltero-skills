@@ -32,7 +32,8 @@ observed output — success is never claimed without the command and its output.
 **green baseline** first by running the project's verify commands (test + typecheck + lint) and
 observing them pass; if the baseline is red, it stops and reports — it does not "optimize" a broken
 repo. Every applied change is behavior-preserving and re-verified; any change that breaks the baseline
-is reverted (`git revert`/reset), logged as skipped, and the pipeline continues.
+is discarded (it is uncommitted — `git restore .`/`git reset --hard HEAD`, never `git revert`,
+which would invert the previous good commit), logged as skipped, and the pipeline continues.
 
 **Config — `.code-optimizer.yml`, the source of truth.** Declares: verify commands (or how to detect
 them), max file length, which static-analysis tools to run, exclude paths, and a **public-API allowlist

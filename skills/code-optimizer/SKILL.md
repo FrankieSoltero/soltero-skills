@@ -69,8 +69,11 @@ In this order, each its own commit:
    CLAUDE.md/AGENTS.md, and its linter/formatter configs) that tools can't auto-fix — never
    general language conventions you happen to know from memory.
 
-After EACH change: run the verify commands and OBSERVE the output. Green → commit. Red → revert
-(`git revert`/reset), log it as skipped, continue. Never batch categories into one commit.
+After EACH change: run the verify commands and OBSERVE the output. Green → commit. Red → discard
+the change and continue. The failing change is still UNCOMMITTED (you commit only on green), so
+discard it with `git restore .` (or `git checkout -- .` / `git reset --hard HEAD` for staged
+edits, plus `git clean -fd` if you added files) — do NOT run `git revert`, which inverts the
+previous *good* commit. Log the discarded change as skipped. Never batch categories into one commit.
 
 All four categories run to completion every pass. A category that only produces a flag — "this
 file is over the limit," "this block looks duplicated" — is not finished; apply the split or the
@@ -88,7 +91,7 @@ that couldn't be automated safely for manual follow-up. Open a PR.
 | Excuse | Reality |
 |--------|---------|
 | "No caller references it, so it's dead — delete it." | "No static caller" is a candidate, not a verdict. Dynamic dispatch / string-keyed registries / public API look callerless. Confirm with a tool + the gate + the allowlist, or keep it. |
-| "I'll just read the code and try invoking it myself to see if it's really used." | That one-off detective work doesn't scale past a single symbol on a small repo. Record the keep decision in the config's public-API allowlist so the next run — and the next reviewer — doesn't have to redo it. |
+| "I'll just read the code and try invoking it myself to see if it's really used." | Do the reachability check once (dynamic/string refs, entry points) — that's required for any callerless candidate. Then *persist* the keep decision in the config's public-API allowlist so the next run doesn't redo it. The allowlist records the decision; it does not replace the first-time check, and a bare tool flag alone never justifies deleting a callerless symbol. |
 | "Move fast — delete, shorten, and split in one commit." | Serial, one category per commit, gate after each. A batched commit means a broken test can't be traced and the whole cleanup is suspect. |
 | "The change is obviously safe, I don't need to re-run tests." | Every change re-runs the gate with observed output, per commit. "Obviously safe" refactors are precisely the ones that silently break dynamic paths. |
 | "I flagged the oversized file / the duplication — that's a good result, I'll leave the actual split for later." | Flag-then-skip leaves a whole category incomplete. A tool-flagged oversized file that's still imported must be split, and the duplication deduped, gate-verified the same as any other change — not merely noted. |

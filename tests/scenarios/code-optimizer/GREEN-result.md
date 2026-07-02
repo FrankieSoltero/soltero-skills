@@ -48,4 +48,14 @@ Ran the actual skill pipeline on a git-initialized copy.
   exercised on genuinely-live code, which was the priority. A future fixture could make both dupe
   sides live to exercise category 2 directly.
 
-## All scenarios: PASS (3/3) + end-to-end pipeline: PASS
+## Known coverage gap (per final review, Important #2)
+Of the four apply categories, the end-to-end run proved **dead-code removal (cat 1), file-split
+(cat 3), and guideline fix (cat 4)** on live code, plus revert-on-red. **Live-code dedup (cat 2)
+was NOT exercised**: the fixture's duplicate second copy (`invoices.js`) was itself unreferenced,
+so the clone was resolved by dead-file deletion and cat 2 was an honest no-op. Cat 2 shares the
+identical gate-verified-commit mechanism proven by cats 3–4, so the risk is low, but it remains a
+test-coverage gap. Follow-up: a fixture with BOTH dupe sides live to exercise dedup directly. The
+SKILL.md instruction "all four categories run to completion every pass" is a runtime directive to
+the agent, not a claim that all four were exercised in this test.
+
+## All scenarios: PASS (3/3) + end-to-end pipeline: PASS (cat 2 dedup coverage gap noted above)
