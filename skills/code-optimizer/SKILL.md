@@ -65,7 +65,9 @@ In this order, each its own commit:
 3. **File splitting** — files over threshold split along export/responsibility seams; rewire
    imports. This applies to files that are still imported and in live use, not only unreferenced
    ones — a live oversized file must be split and gate-verified like any other change.
-4. **Guideline fixes** — apply config rules linters/formatters can't auto-fix.
+4. **Guideline fixes** — apply the rules the project has *declared* (in `.code-optimizer.yml`,
+   CLAUDE.md/AGENTS.md, and its linter/formatter configs) that tools can't auto-fix — never
+   general language conventions you happen to know from memory.
 
 After EACH change: run the verify commands and OBSERVE the output. Green → commit. Red → revert
 (`git revert`/reset), log it as skipped, continue. Never batch categories into one commit.
