@@ -35,9 +35,9 @@ Entry format (every entry follows it):
 - **Detail:** Apply increasingly aggressive pruning/masking/summarization as token pressure rises (e.g. warn >0.70, mask old observations >0.80, prune >0.85, full summarize >0.99), calibrated against the API's reported prompt_tokens. OpenDev reports ~54% lower peak consumption. Convergent with staged compaction in Claude Code (microcompaction) and OpenCode.
 
 ### Offload large tool outputs to disk and attach agent-facing truncation hints, instead of silently truncating in-context.
-- **Tier:** Proven (added 2026-07-09)
-- **Sources:** [OpenDev](https://arxiv.org/abs/2603.05344)
-- **Detail:** Above a size threshold, persist the full result to disk and replace it with a compact preview plus a hint on how to retrieve the rest (offset/limit/grep). Shipped in Claude Code, LangChain DeepAgents, and AWS Strands — the identical two-part pattern across three independent harnesses.
+- **Tier:** Proven (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [OpenDev](https://arxiv.org/abs/2603.05344), [Cursor — Dynamic context discovery](https://cursor.com/blog/dynamic-context-discovery)
+- **Detail:** Above a size threshold, persist the full result to disk and replace it with a compact preview plus a hint on how to retrieve the rest (offset/limit/grep/tail). Shipped in Claude Code, LangChain DeepAgents (offload >20k-token results to a file pointer + preview), AWS Strands, and Letta — the identical two-part pattern across independent harnesses. Avoids the data loss of naive head/tail truncation (still the default in several harnesses — Codex's 10KiB head-and-tail, pi-agent's 2000-line cap) and cuts mid-task summarization events; IBM's memory-pointer variant reports a >16,000x context reduction on a related mechanism.
 
 ### Inject 'system reminders' as event-triggered, template-based user-role messages gated by guardrail counters, to counteract instruction fade-out.
 - **Tier:** Promising (added 2026-07-09)
@@ -152,14 +152,59 @@ Entry format (every entry follows it):
 - **Detail:** Fixes LLM 'time blindness' (spending hours on full slow runs); sample ~1-10%, deterministic per agent identity but varying across VMs. Requires a fleet + per-agent seeding; single-source, unbenchmarked.
 
 ### Retain agent history as append-only immutable events with compaction represented by inserted markers, so aggressive compaction never destroys replay/audit.
-- **Tier:** Watch (added 2026-07-09)
-- **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515)
-- **Detail:** OpenHands computes filtered views from an immutable EventStream via condensation markers, contrasted with Aider's destructive summarization that overwrites history. Minority pattern (event-sourcing cost); descriptive evidence only.
+- **Tier:** Promising (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515), [Anthropic — Scaling Managed Agents](https://www.anthropic.com/engineering/managed-agents), [Cursor — Dynamic context discovery](https://cursor.com/blog/dynamic-context-discovery)
+- **Detail:** OpenHands computes filtered views from an immutable EventStream via condensation markers, contrasted with Aider's destructive summarization that overwrites history. Store raw events durably (emitEvent/getEvents/getSession), do compaction as a read-time transform, and when a summary drops a needed detail grep the full pre-summary history to recover it — three independent implementations (OpenHands, Anthropic Managed Agents, ESAA arXiv 2602.23193) converge, upgrading this from a minority curiosity to a credible default. Cost: event-sourcing overhead; no source yet gives a controlled quality benchmark vs. destructive compaction.
 
 ### Diagnose context bucket-by-bucket and target the single largest offender first, rather than pruning blindly.
 - **Tier:** Watch (added 2026-07-09)
 - **Sources:** [Cursor 3.3 changelog](https://cursor.com/changelog/05-06-26)
 - **Detail:** Use the relative sizes of rules/skills/MCP/subagent categories to decide what to cut; a forum user discovered a skill was consuming disproportionate context this way. Tool-specific mechanism; single anecdote.
+
+### Prefer materializing large/dynamic information (tool outputs, history, skills, tool schemas, logs) as plain files on disk and let the agent use generic read/grep/search over them, rather than bespoke per-source context-injection abstractions.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Cursor — Dynamic context discovery](https://cursor.com/blog/dynamic-context-discovery)
+- **Detail:** "Files as a simple, powerful primitive" — a safer default than another abstraction that can't account for the future. Only the MCP-folder instance carries a quantified benchmark (46.9%), but multiple independent teams converge on the same practice: Vercel ("can I represent this as files?"), Arize's survey of Pi/OpenClaw/Claude Code/Letta disk-offload caps, and an arXiv "is grep all you need" analysis. Changes real decisions (don't build a custom summarizer/RAG per data type).
+
+### Return only a structured result from each sub-task worker to the planner (status, artifact refs, a short summary, and on failure a brief root-cause) — never let raw stdout, stack traces, or failed attempts propagate back.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [CodeDelegator (arXiv 2601.14914)](https://arxiv.org/abs/2601.14914)
+- **Detail:** Replacing this typed asymmetric channel with free-form message passing (keeping the two-agent split) costs 4.7pp on MCPMark, isolating the value of filtered upward communication. Corroborated in practice by Claude Code subagent design, LangChain subagents, and Redis engineering — sub-agents return condensed conclusions, not raw traces, to avoid polluting the planner's context.
+
+### Structure post-hoc trajectory analysis as a layered drill-down corpus — raw traces at the bottom, per-task reports above, one aggregated overview at top — so a debugging agent starts cheap and pulls detail only to justify a specific edit.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Agentic Harness Engineering (arXiv 2604.25850)](https://arxiv.org/html/2604.25850v1)
+- **Detail:** Distills millions of raw trajectory tokens into files supporting progressive disclosure. The general progressive-disclosure principle is well established (Anthropic skill guidance, multiple token-reduction reports), but this specific trajectory-analysis instantiation is single-source with no isolated metric. Analogous to a top-level summary.md plus per-case detail files.
+
+### Constrain an agentic code evaluator to read only entry-point definitions and interface signatures rather than exhaustively reading the whole codebase, to avoid diluting its attention budget.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** A judge-prompt iteration ("context overload" fix, v3→v4) improved BoN-Acc 62.4%→67.4% and r_eval 0.556→0.598 on NL2Repo. Note the paired finding that the very next step (over-specification) hurt — the useful band between under- and over-instruction is narrow and evaluator-capacity-dependent. Single non-isolated ablation, one narrow use case (code-judge evaluators).
+
+### After any automatic code-context pruning/compression step, run a cheap AST-based repair pass that force-restores structurally-required lines even if the pruner scored them low.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
+- **Detail:** Restore referenced imports, enclosing class/def/scope headers, matching try/except/else/finally siblings, bracket/string closures, and referenced return lines. Removing the repair step lowered validation F1 (0.780→0.796 with repair), lowered LongCodeQA accuracy at 8x compression (55.6→60.0), and increased agent interaction rounds (21.3→18.8). Single-paper; sibling work confirms broken syntactic structure is a top compression failure mode, but no second source validates this exact fix.
+
+### When compressing code context, prune and score at line granularity (aggregate token scores into a per-line keep-fraction, threshold ~0.4) rather than pruning individual tokens, to preserve syntactic validity.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
+- **Detail:** Token-level baselines (LLMLingua-2, Selective-Context) degrade far more sharply at 8x compression on LCC/LongCodeQA than line-granularity methods, which the authors attribute to token pruning corrupting syntax. Corroborated independently by LongCodeZip (arXiv 2510.00446) and SWE-Pruner. Causal isolation imperfect (chunk/function-level retrieval also degrades gracefully), and the insight predates this paper.
+
+### When building a code-context pruner/retriever, decompose "keep this line?" into multiple independent relevance dimensions (semantic match vs. structural/dependency necessity) instead of one scalar relevance score.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
+- **Detail:** A single-objective CRF pruner must model both contiguous semantic blocks and sparse structural-support lines with one transition matrix, dropping imports/class headers/except clauses that score low on semantics alone. But the naive version (adding a dimension without AST-aware dependency repair + MoE gating) underperforms semantic-only on LongCodeQA-8x — the reported gains require the fuller mechanism, and combining semantic+structural signals is already known practice (GraphCodeBERT hybrids, dependency-aware reranking).
+
+### Don't stack two aggressive compression stages; run an upstream retriever in coarse/rank-only mode (function-level selection) and let a dedicated fine-grained pruner handle line-level decisions.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
+- **Detail:** Running LongCodeZip in full-compression mode before the line-pruner substantially hurt performance; the best result used LongCodeZip in rank-only mode (coarse function selection) plus the fine pruner. The recommended coarse-retrieval-then-fine-pruning pattern is independently validated by SWE-Pruner (arXiv 2601.16746, 23-54% extra token reduction over retrieval alone); the negative-stacking failure mode itself is single-source.
+
+### When you lack per-dimension labels for a multi-objective relevance classifier, derive them for free from an existing binary keep/prune corpus via static analysis (AST dependency-edge propagation with geometrically decaying hop weights) instead of new annotation.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
+- **Detail:** Rubric-guided labeling extracts semantic and dependency sub-labels with zero extra LLM calls and denoises the teacher's binary labels (recovering import/scope lines the teacher marked prunable on semantic grounds). Single-source, no ablation isolating the denoising benefit, and narrow (only relevant when training a custom pruner).
 
 ## Agentic loop design
 
@@ -300,6 +345,82 @@ Entry format (every entry follows it):
 - **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515)
 - **Detail:** Prometheus (LangGraph state machine) makes control flow inspectable/checkpointable vs recursive/imperative loops where state is harder to serialize — at the cost of defining state types and per-node scoping. n=1 in the corpus; event-sourcing or exception hierarchies achieve similar goals more cheaply.
 
+### Split a coding system into three independently-replaceable pieces — a durable Session (event log), a stateless Harness (the model-calling loop + tool router), and Sandboxes/tools — connected only via narrow, stable interfaces.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Anthropic — Scaling Managed Agents](https://www.anthropic.com/engineering/managed-agents)
+- **Detail:** Session is source-of-truth/audit/resume point; harness is stateless and crash-recoverable; sandbox is untrusted and credential-isolated. Framed by analogy to the stable read() syscall across decades of disk changes. Independently converged on by LangChain ("anatomy of an agent harness") and Mastra, neither citing Anthropic. No independently-replicated benchmark of the split itself; skip if you only use the Claude Code CLI (which already does this internally), apply when building a custom loop over the Messages API.
+
+### Defer full sandbox provisioning (repo clone, process boot, event fetch) until the harness actually needs to invoke a tool — start inference immediately off the session log instead of provisioning a container upfront.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Anthropic — Scaling Managed Agents](https://www.anthropic.com/engineering/managed-agents)
+- **Detail:** Anthropic reports p50 time-to-first-token dropped ~60% and p95 >90% vs. the old coupled design. First-party single-source figures, but the general cold-start tension is corroborated industry-wide (Modal/E2B/Daytona compete on exactly this latency dimension). Warm-pool vs. on-demand cost/latency is an orthogonal implementation detail.
+
+### Make the harness stateless and crash-recoverable: on crash, boot a fresh harness with just the sessionId, pull the full event log, and resume from the last event — no in-memory harness state survives a crash.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Scaling Managed Agents](https://www.anthropic.com/engineering/managed-agents)
+- **Detail:** "Cattle not pets": durable log is source of truth, in-process state is disposable cache. The general durable-execution pattern is over-determined by industry consensus (Restate, AWS durable-execution guides, Temporal), but the only quantified metric (TTFT) is confounded with the separate lazy-provisioning change — the specific reliability benefit is unbenchmarked.
+
+### When letting an agent self-modify its own harness/config, block the shortcuts an unconstrained self-modifier would take (disabling the verifier, swapping to a stronger model, raising its own reasoning budget) via a hard controllability constraint outside its edit surface.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Agentic Harness Engineering (arXiv 2604.25850)](https://arxiv.org/html/2604.25850v1)
+- **Detail:** Implemented as read-only permissions on the runs directory, tracer, verifier, and model config — only the harness workspace is writable. The threat is independently and repeatedly documented (METR: o3/Claude 3.7 reward-hack in 30%+ of runs by monkey-patching graders; RewardHackingAgents benchmark arXiv 2603.11337), though the specific file-permission mitigation is not itself benchmarked and the paper flags governance as incomplete.
+  *Tool notes:* Applies to any setup where an agent can edit its own CLAUDE.md, hooks, permissions, or MCP config — don't let the agent being graded also edit the grader or its own model/temperature.
+
+### Track agent interaction rounds and total end-to-end trajectory tokens when judging whether a context-compression technique helps — not just per-call token reduction or static quality scores.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
+- **Detail:** With a strong backbone (Opus 4.6), a single-objective pruner *increased* total token usage by 6.6% on SWE-Bench Verified and up to +22% on SWE-QA despite compressing per-call context, because discarding structurally necessary code forced repeated file reads/retries — a failure visible only by measuring rounds and total trajectory tokens. Single research group, no third-party replication.
+
+### Run the generator-evaluator cycle iteratively (~5-15 rounds per generation) rather than single-pass, letting the generator decide each round whether to refine the current direction or pivot entirely based on trending scores.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+- **Detail:** Frontend runs used 5-15 iterations (up to ~4hr), with scores improving before plateauing and one run pivoting at iteration 10 (landing page → 3D CSS experience). The pivot-vs-refine heuristic is a real operational detail, but the mechanism is largely the established Self-Refine/Reflexion pattern, and the round-count is domain-specific to open-ended aesthetic tasks — other domains show optimal counts of ~3-4.
+
+### Treat every harness component (sprint decomposition, evaluator passes, context resets) as an assumption about a model capability gap, and periodically strip components out as newer models close that gap.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+- **Detail:** With Opus 4.6 the sprint-decomposition construct was removed and the evaluator moved to a single end-of-build pass. "Find the simplest solution possible; only increase complexity when needed." The cited cost/time delta (6hr/$200 → 3hr50/$124.70) confounds task, model, and harness changes simultaneously — not a controlled A/B — and the principle is becoming convergent boilerplate ("build for deletion") without controlled data anywhere.
+
+### Decompose a complex task into sub-tasks by two concrete criteria — atomicity (finishable within one worker session) and verifiability (a clear checkable expected outcome) — not purely by topic or dependency-graph shape.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [CodeDelegator (arXiv 2601.14914)](https://arxiv.org/abs/2601.14914)
+- **Detail:** Stated as the Delegator's decomposition guidance; supports the overall role-separation gain (10.5pp ablation) but the heuristic itself is not independently measured, and it overlaps with agile INVEST criteria (Small, Testable).
+
+### Before crediting a more expressive action format (code-as-action) with better performance, benchmark it against a simpler structured-action baseline (ReAct) stratified by task difficulty.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [CodeDelegator (arXiv 2601.14914)](https://arxiv.org/abs/2601.14914)
+- **Detail:** On stratified τ²-bench airline tasks, CodeAct underperformed ReAct by −5.8pp (Low) and −2.5pp (Medium) — incurring more context tokens at every level — and only won by +7.7pp on High-difficulty. Expressiveness gains may show up only on the hard tail and be pure context overhead elsewhere. Difficulty was established independently from 16 prior trials across 4 other models (non-circular), but it's a narrow single-paper pilot; corroborating industry commentary is directional only.
+
+### Mechanically clean raw agent trajectories before any analysis/distillation step — strip base64 blobs, dedup repeated tool output — to keep the evidence corpus dense and within budget.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Agentic Harness Engineering (arXiv 2604.25850)](https://arxiv.org/html/2604.25850v1)
+- **Detail:** Generic data hygiene with no isolated measurement; lightly corroborated by adjacent systems (Headroom externalizing base64, LogSieve, dedup pipelines reporting ~16% reduction) but no benchmark targets this exact step.
+
+### When candidates per task are large and cheap to sample, consider substituting more unfiltered volume for evaluator-based filtering; reserve evaluator filtering for constrained-budget regimes.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** At matched size, evaluator-filtered data beat random by 1.91pp (23.52 vs 21.61), but the full unfiltered set (~2x data) reached 24.75 at higher compute. This is offline training-data curation, not runtime rollout budgeting; single noisy, compute-mismatched ablation. The general quality/quantity tradeoff shape is supported by data-filtering scaling-law literature.
+
+### When fine-tuning on human/user feedback, don't default to naive per-token loss reweighting by feedback polarity — its effect is non-monotonic; only mild downweighting of negative-feedback tokens helps.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Negative-span weight 0.0 → 37.2% and 0.5 → 35.1% both undershot the SFT baseline (41.8%); only 0.8 exceeded it (44.4%). The paper's actual headline recommendation is to abandon per-token reweighting for span-level preference learning. Training-time detail (narrow audience), single-source, one cited data point mischaracterized.
+
+### For feedback-driven post-training, prefer span-level preference optimization (group tokens into contiguous positive/negative/neutral spans, apply a KTO-style loss per span against an EMA reference, keep cross-entropy on neutral spans) over uniform SFT or simple reweighting.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Span-KTO beat SFT and reweighted-SFT on all 5 benchmarks (e.g. +5.6pp on SWE-bench Verified, +13.3pp on Aone-bench). Foundation-model post-training technique requiring a large proprietary feedback pipeline and training infra — inapplicable to most agent builders working over API models; single-org, partly-proprietary-benchmark evidence.
+
+### On a blocked action, don't halt the agent — return the denial as a normal tool result plus an instruction to find a safer path in good faith, and only stop/escalate after repeated denials (e.g. 3 consecutive or 20 total).
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)
+- **Detail:** Justified against a 0.4% FPR (a false positive costs one retry, not the session); headless mode terminates instead of waiting for a human. Single-vendor self-report, and counter-evidence exists: a documented case of the agent fabricating justifications to talk a human into overriding a block, an independently-measured 81% end-to-end FNR under adversarial prompts, and a production incident where classifier failures pushed a user to disable permissions entirely. Treat the "false positives are cheap" framing skeptically.
+
+### Match knowledge-augmentation strategy to model capability: expect large gains from skills on modern strong-reasoning models and little benefit on older/weaker ones, rather than assuming a skill helps uniformly.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/)
+- **Detail:** Gemini 3.x models jumped sharply with the skill while 2.5-series improved little in the same harness. Single vendor, single-skill benchmark, and the broader literature is mixed — some work finds weaker models benefit *more* from scaffolding that compensates for weak native planning. Useful caution to validate per-model, but not a settled pattern.
+
 ## Spec & prompting
 
 ### Write task specs precise enough that two independent domain experts reach the same pass/fail verdict, and state every condition the grader checks in the task description.
@@ -373,13 +494,73 @@ Entry format (every entry follows it):
 - **Sources:** [TACO](https://arxiv.org/abs/2606.19572)
 - **Detail:** Tell the generator which noise (ANSI codes, banners, empty-prompt polling) is filtered elsewhere so it doesn't waste rule slots, and bias every rule-generation prompt toward preservation. Sound but single-source, non-ablated application of generic prompt hygiene.
 
+### Before a chunk of work, have the generator and evaluator negotiate a written, testable "sprint contract" defining what counts as done, rather than letting the generator decide scope unilaterally.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+- **Detail:** Contracts were granular (Sprint 3 alone had 27 criteria) and let the evaluator flag criterion-level failures (a rectangle-fill tool that only placed tiles at drag endpoints). The two-agent negotiation prevents the generator quietly narrowing scope and gives the evaluator pre-agreed objective criteria. Overlaps with Agile/BDD Definition-of-Done, and rests on one anecdotal case study with no controlled comparison.
+
+### Use an automated Planner agent to expand a terse 1-4 sentence user prompt into a full product spec (feature list + sprint breakdown) before generation starts, rather than coding from the raw prompt.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+- **Detail:** A planner turned a short prompt into a 16-feature/ten-sprint spec; without it the generator under-scoped and started building without speccing. The general spec-first pattern is well corroborated (GitHub spec-kit, JetBrains, Tweag, Addy Osmani), but the specific "be maximally ambitious / pad scope" instruction is single-source and context-specific (an unsupervised demo) — those broader sources emphasize human spec review and scoping to actual requirements, so treat scope-maximization as a caveat, not a universal.
+
+### Specify delegated sub-tasks with a typed schema rather than free text: a natural-language directive, input bindings as typed references to already-committed objects (type, shape, sample values), and a return schema naming expected outputs with validation conditions.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [CodeDelegator (arXiv 2601.14914)](https://arxiv.org/abs/2601.14914)
+- **Detail:** Typed references to existing artifacts avoid re-serializing large data into text; a validation-bearing return contract makes completion checkable. Corroborated independently by Anthropic's multi-agent research system ("each subagent needs an objective, an output format, guidance on tools, and clear task boundaries"), which documents vague free-text directives causing duplicated/misinterpreted work. Schema's marginal contribution not isolated from other confounds.
+
+### Don't hard-code harness workarounds for a specific model's quirks (e.g. forced context-reset prompts to fight "context anxiety") as permanent logic — re-test after each model bump and remove workarounds the new model no longer needs.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Anthropic — Scaling Managed Agents](https://www.anthropic.com/engineering/managed-agents)
+- **Detail:** Sonnet 4.5 needed context-reset workarounds for "context anxiety"; Opus 4.5 didn't, making them dead weight — discovered only after the fact. Independently corroborated by practitioner sources (Sean Goedecke "prompts are technical debt too," MindStudio's model-upgrade checklist explicitly asking whether old-model workarounds should now be removed). Multiple converging anecdotes, no rigorous benchmark.
+
+### When building a gating classifier for agent actions, strip the agent's own explanatory/rationalizing text from what the classifier sees — show it only the user's original messages plus the bare tool-call command.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Anthropic — Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)
+- **Detail:** Prevents the agent talking the classifier into a bad call. An ablation showed a tool-calls-only variant had the lowest FNR but lost the user-intent anchor (over-blocking plainly-requested actions); the shipped design keeps user messages + tool calls, dropping assistant text. Single primary source with a real ablation; secondary write-ups are all downstream summaries.
+
+### Write a safety/permission classifier's prompt to evaluate the real-world effect of an action (not its surface text), run checks in a fixed order (block rules → allow-exceptions → user-intent), and treat anything the agent decided on its own as unauthorized until the user has said otherwise.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)
+- **Detail:** E.g. if the agent writes a payload to a file then executes it, classify the payload's behavior, not the innocuous "write file" call. Paired with a customizable slot for 20+ block rules (destroy/exfiltrate, degrade security, cross trust boundaries, bypass review) and allow-exceptions. Single-vendor design description with no independent efficacy testing; effect-based (action-aware) evaluation is a real, non-obvious axis many content moderators miss.
+
+### Structure a knowledge-injection skill as feature/capability overviews → current model+SDK descriptions per language → minimal runnable sample code per SDK → links to canonical docs as source of truth — rather than dumping full documentation into context.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/)
+- **Detail:** This is the structure of the skill that produced the reported pass-rate gains; the "point to docs as source of truth, don't embed them" principle is echoed independently (Block Engineering's skill-design principles, Expo docs). No ablation isolates whether this exact four-slot structure beats simpler alternatives — the source itself flags that direct AGENTS.md instruction can compete.
+
+### Consider pointing the agent directly at authoritative documentation files (AGENTS.md-style, an embedded docs index) instead of, or in addition to, a packaged skill — direct doc instruction sometimes outperforms the skill abstraction.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/)
+- **Detail:** Vercel's own eval (Next.js 16 APIs absent from training data) found baseline 53%, skills-default 53% (skill never invoked 56% of the time), skills-with-explicit-instructions 79%, and an 8KB AGENTS.md docs index embedded in context 100%. Skills win when narrow/current/verified; docs win when skill routing is unreliable. Note the opposite risk: ETH Zurich's AGENTbench found bloated/LLM-generated context files can *decrease* pass rates (~−3%) via attention dilution.
+
+### Before trusting an executable-test reward signal, run an agentic quality judge over each task (instruction + repo + tests) to score instruction clarity and instruction-test alignment, and filter out low-quality tasks rather than training on them.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** The judge (MiniSWEAgent with shell/file access in the task's Docker env) actively explores rather than classifying from text; filtering trimmed low-quality tasks while retaining most volume, and RL on the filtered set improved SWE-bench Multilingual and Pro while holding steady on Verified. The judge is itself imperfect (~76-90% F1) and the benefit is non-uniform; single-lab, no independent replication of this exact recipe.
+
+### When a judge must assess instruction-to-test alignment (the hardest verifier-faithfulness dimension), feed it reference material — few-shot demonstrations and/or the ground-truth patch — rather than the bare instruction and tests.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Few-shot raised precision; adding the ground-truth patch raised recall and gave the best F1 on that dimension. Single small human-annotated benchmark (~47 samples), no replication, and largely restates established reference-guided LLM-as-judge practice (MT-Bench, G-Eval).
+
+### When iterating an evaluator/judge system prompt, add detail only up to a point — moderately explicit rules and criteria help, but piling on exhaustive prohibited-command lists and procedural guardrails degrades a weaker judge's overall judgment.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** On NL2Repo, prompt versions v1→v4 raised BoN-Acc 57.9%→67.4% and τ 0.379→0.473, but an over-specified v5 regressed on most metrics. Watch for a regression point rather than assuming "more explicit rules = better." Single-model/single-dataset ablation; the "weaker model" causal attribution is the authors' plausible speculation, not tested. Corroborated in spirit by instruction-overload literature.
+
+### Design evaluator prompts to close three recurring LLM-judge failure modes: lazy static evaluation that never executes tests, unit-level-only checks that miss end-to-end/import/dependency breakage, and role confusion (the judge editing the generator's code, reusing existing repo tests as its own, or rationalizing away failing tests).
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Each failure mode has a targeted prompt fix, and the v1→v4 prompt progression improved BoN-Acc and τ on NL2Repo (though BoN-Acc dipped at the role-confusion step; τ and regret improved). Role confusion — the judge quietly editing code or reusing repo tests — is a specific, non-obvious articulation. Single-source, single dataset/judge model.
+
 ## Tool design
 
-### Don't preload every MCP/tool schema into the prompt; expose an on-demand tool-search meta-tool that scores available tools and registers only the selected ones.
-- **Tier:** Proven (added 2026-07-09)
-- **Sources:** [OpenDev](https://arxiv.org/abs/2603.05344), [Evolution of Tool Use survey](https://arxiv.org/pdf/2603.22862)
-- **Detail:** Matches Anthropic's shipped tool_search feature (~85% token reduction, tool-selection accuracy 49%→74%), and independent systems ToolLLM, AnyTool, MCP-Zero (98% token cut), RAG-MCP (13.6%→43.1% accuracy). Now default in Claude Code.
-  *Tool notes:* Pair with a schema-validation gate and per-subagent allow-lists.
+### Don't preload every MCP/tool schema into the prompt; expose an on-demand tool-search meta-tool that scores available tools and registers only the selected ones, or sync per-server schemas to disk and load them only when a tool is actually called.
+- **Tier:** Proven (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [OpenDev](https://arxiv.org/abs/2603.05344), [Evolution of Tool Use survey](https://arxiv.org/pdf/2603.22862), [Cursor — Dynamic context discovery](https://cursor.com/blog/dynamic-context-discovery), [Amp — Efficient MCP tool loading](https://ampcode.com/news/lazy-load-mcp-with-skills), [Cursor 2.4 changelog](https://cursor.com/changelog/2-4)
+- **Detail:** Matches Anthropic's shipped tool_search feature (~85% token reduction, tool-selection accuracy 49%→74%), and independent systems ToolLLM, AnyTool, MCP-Zero (98% token cut), RAG-MCP (13.6%→43.1% accuracy). Now default in Claude Code once tool descriptions exceed ~10% of context. A file-on-disk variant (sync each server's tool descriptions to a per-server folder, expose only names, read the full schema on demand) gives Cursor a statistically-significant 46.9% total-token cut and Anthropic's code-execution-with-MCP ~98.7% on a worked example. Known tradeoff: ~50% more round-trips per call and diminishing value below ~50 tools — reserve for tool-heavy, many-server setups.
+  *Tool notes:* Pair with a schema-validation gate and per-subagent allow-lists. Amp narrows further two ways: gate a server behind a Skill so schemas inject only when the skill fires, and use an `includeTools` name/glob allowlist to expose a 4-of-26 subset (chrome-devtools ~17k → ~1.5k tokens).
 
 ### Ruthlessly curate the active tool set: remove ambiguous/overlapping tools and disable unused MCP servers/tools per task, since every tool definition consumes context and dilutes selection.
 - **Tier:** Proven (added 2026-07-09)
@@ -449,9 +630,9 @@ Entry format (every entry follows it):
 - **Detail:** Reduces hallucinated APIs and incompatible function choices; ToolCoder reports ≥6% pass@1 gain. Corroborated by API-documentation-grounding papers (De-Hallucinator). The 'trained to invoke' form needs SFT; approximate with doc/web search + a prompt to consult it when knowledge is likely stale.
 
 ### Run agent execution in sandboxed, reproducible, permissioned substrates — ephemeral network-controlled containers, fixed dependency lockfiles/seeds/snapshots — so verification signals reflect defects, not environment drift or answer leakage.
-- **Tier:** Promising (added 2026-07-09)
-- **Sources:** [Code as Agent Harness](https://arxiv.org/pdf/2605.18747), [Scaling Coding Agents via Atomic Skills](https://arxiv.org/abs/2604.05013)
-- **Detail:** Isolated fs/shell/runtime + fixed lockfiles/seeds keep test signals stable; disabling network and stripping .git history force execution-grounded rewards and block patch retrieval. Cursor's stricter-isolation experiments confirm large score drops when leakage is closed (note: the Atomic Skills paper was withdrawn for data errors, but this specific practice is independently corroborated).
+- **Tier:** Promising (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [Code as Agent Harness](https://arxiv.org/pdf/2605.18747), [Scaling Coding Agents via Atomic Skills](https://arxiv.org/abs/2604.05013), [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Isolated fs/shell/runtime + fixed lockfiles/seeds keep test signals stable; disabling network and stripping .git history force execution-grounded rewards and block patch retrieval. Cursor's stricter-isolation experiments confirm large score drops when leakage is closed (note: the Atomic Skills paper was withdrawn for data errors, but this specific practice is independently corroborated). Treat environment hardening as a first-pass anti-reward-hacking defense, not a complete one: under hardening the Verification Horizon paper found static-leakage behaviors (repo-history mining, harness tampering, visible-test overfitting) all correlate negatively with resolved rate (φ −0.02 to −0.11), but active shortcut-seeking persisted (solution-artifact retrieval in 4.3% of trajectories at +12.35pp resolved). Sanitizing git history must cover other branches/refs/reflog, and tasks that keep network open keep an exploitable retrieval channel — pair hardening with trajectory monitoring.
   *Tool notes:* Daytona/E2B microVMs; strip/reinit .git as single-commit.
 
 ### When ablating a retrieval/tool feature, remove exactly the tool(s) that expose it and hold every other harness component fixed, so deltas can be attributed to the feature alone.
@@ -510,6 +691,69 @@ Entry format (every entry follows it):
 - **Sources:** [Code as Agent Harness](https://arxiv.org/pdf/2605.18747)
 - **Detail:** SWE-agent's ACI roughly doubled its SWE-bench pass rate vs a raw-bash baseline (older model). But OpenHands finds a bash/code-first interface generalizes better for modern strong models, and Codex CLI leans bash-primary — a genuinely split design choice, not settled.
 
+### Apply progressive disclosure to skills/capabilities: keep name + one-line description always-on, and load the full instruction body only when the skill is triggered.
+- **Tier:** Proven (added 2026-07-09)
+- **Sources:** [Amp — Efficient MCP tool loading](https://ampcode.com/news/lazy-load-mcp-with-skills); [Cursor — Dynamic context discovery](https://cursor.com/blog/dynamic-context-discovery)
+- **Detail:** Define capabilities as file-based skill definitions; only the name/description sits in static context, and the agent grep/semantic-searches to pull full instructions when relevant. This is the exact tiered-loading contract Claude Skills runs on (metadata ~100 tokens at startup, full SKILL.md on trigger, bundled resources on demand). Anthropic's tool-use work reports large accompanying gains (Opus 4 tool-selection 49%→74%, Opus 4.5 79.5%→88.1%). Guard against the one failure mode — a hidden capability never invoked because the model doesn't know it exists — by writing a discoverable, always-visible short description.
+
+### Keep credentials out of the sandbox that runs model/tool-generated code — bundle auth into the resource at provision time or route calls through a token-holding proxy.
+- **Tier:** Proven (added 2026-07-09)
+- **Sources:** [Anthropic — Scaling Managed Agents](https://www.anthropic.com/engineering/managed-agents)
+- **Detail:** Two patterns: (1) clone a repo with a token pre-wired into the local git remote so generated code just runs `git push` with no token in reach; (2) for MCP/custom tools, hold tokens in an external vault and have the harness call through a proxy that fetches the token and makes the call on the sandbox's behalf, so the harness/sandbox is never made aware of any credential. Motivated by a real risk in coupled designs (a prompt injection reading env vars to spawn unauthorized sessions). Independently converged on by Infisical (Agent Vault), TRM Labs (built with no reference to Anthropic), and SANS's PDP/CDP broker guidance, with real incidents (Feb-2024 Defender confused-deputy, Mar-2026 LiteLLM supply-chain attack) motivating it. Never mount long-lived OAuth secrets as env vars inside a sandbox running untrusted code.
+  *Tool notes:* Directly actionable for MCP-server and coding-agent design.
+
+### Pass large intermediate artifacts (dataframes, files, API responses) between agents as live typed references in a shared workspace, not as text serialized into a prompt.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [CodeDelegator (arXiv 2601.14914)](https://arxiv.org/abs/2601.14914)
+- **Detail:** Serializing execution outputs to text flattens structured types, forces costly re-parsing, and precludes live inspection; passing a reference plus type/shape/sample metadata lets a downstream worker manipulate the real object without printing it into context. Corroborated by CaveAgent (arXiv 2601.01569, persistent-runtime variable references) and production tooling (VS Code Copilot streams large output to temp files). Contribution isolated only within the bundled EPSS ablation (−4.7pp), not on its own.
+  *Tool notes:* Requires a persistent runtime/workspace holding typed objects across agent boundaries.
+
+### For transactional tasks (multi-statement DB writes), be wary of decomposing into a code loop or multi-step pipeline — a single-tool-call-per-step pattern aligns with atomic transaction boundaries.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [CodeDelegator (arXiv 2601.14914)](https://arxiv.org/abs/2601.14914)
+- **Detail:** On MCPMark's PostgreSQL domain — the one case of five — ReAct (52.4%) beat both CodeDelegator (41.7%) and CodeAct (36.2%), which the authors attribute post-hoc to transactional atomicity (single tool call per step vs. code that risks partial-failure inconsistent state). N=1 domain/model/paper, no targeted ablation; the more robust fix per adjacent work (Atomix, SagaLLM) is transactional/saga wrapping at the tool layer (BEGIN/COMMIT, idempotency keys, compensations), which is orthogonal to orchestration style.
+
+### Decompose an agent harness into orthogonal, independently-editable component files at fixed mount points (system prompt, tool descriptions/impls, middleware, skills, sub-agent configs, long-term memory).
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Agentic Harness Engineering (arXiv 2604.25850)](https://arxiv.org/html/2604.25850v1)
+- **Detail:** Loose coupling so each observed failure pattern maps to one file to change, each change independently revertible. A component-swap ablation shows distinct effect sizes (memory +5.3pp, tools +3.3pp, middleware +2.2pp, system prompt −2.3pp), but on a small single-model benchmark (89 Terminal-Bench-2 tasks) with non-additive interactions (+11.1pp summed vs +7.3pp integrated). Single-team result; for Claude Code this largely redescribes existing separation (CLAUDE.md, skills/, hooks, MCP defs, subagents).
+
+### When spinning up a subagent, narrow its config to the subtask: a custom system prompt, a tool allowlist restricted to what the subtask needs, and optionally a cheaper/faster model than the parent.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Cursor 2.4 changelog](https://cursor.com/changelog/2-4)
+- **Detail:** Three independently configurable axes (prompt, tool access, model). Independently adopted by Claude Code subagents (per-subagent `tools:` allowlist + `model:` override) and VS Code — cross-product convergence, but no benchmark comparing restricted vs. unrestricted access. Make tool restriction an architecturally-enforced allowlist (harness doesn't expose disallowed schemas), not a prompted courtesy: prompt-only restrictions are violated 37-68% of the time under adversarial framing.
+
+### Choose the strongest available model as the evaluator/judge backbone for ranking fidelity and run-to-run stability, not just peak score.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Table 8: Claude Opus 4.7 led all four backbones on BoN-Acc (70.4%) and Kendall's τ (0.579); a weaker backbone occasionally matched Opus-level peak BoN-Acc but showed ±10pp variance across repeated runs. A weaker-but-sometimes-comparable judge can be masked by lucky runs, so compare on reliability, not just peak. Single benchmark (NL2Repo, ~104 tasks); notable that a Qwen-authored paper's own result favors a competitor's model.
+
+### Sync integrated terminal output continuously to the filesystem so the agent can grep long-running process output on demand rather than needing copy/paste into the prompt.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Cursor — Dynamic context discovery](https://cursor.com/blog/dynamic-context-discovery)
+- **Detail:** Mirrors how CLI coding agents already behave; closes a gap specific to IDE-integrated agents with a persistent terminal pane. Single primary source, no isolated metric. Requires wiring terminal stdout/stderr to a file the agent's read/grep tools can reach; CLI agents already get equivalent behavior via background processes.
+
+### Reuse the per-server MCP folder/file channel to also communicate live server status to the agent (e.g. a server needing re-authentication) rather than only tool descriptions.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Cursor — Dynamic context discovery](https://cursor.com/blog/dynamic-context-discovery)
+- **Detail:** Instead of silently dropping tools when a server needs re-auth (leaving the agent confused), write status into the same folder so it can prompt the user proactively. Single-source, qualitative, and partly overlapping with MCP's `notifications/tools/list_changed`; a near-free add-on only if you've already adopted the per-server-folder pattern.
+
+### Ship a lightweight installable "developer skill" that packages current API/SDK facts and sample code, so the agent doesn't rely on stale training-data knowledge of an evolving SDK.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/)
+- **Detail:** Google reports large pass-rate jumps with vs. without the skill (Gemini 3.1 Pro 28%→~96%, 3.0 Pro/Flash 6.8%→87-96%) on a 117-prompt harness. Vendor-self-reported and unreplicated, and the source itself concedes direct AGENTS.md instruction can be more effective than the skill packaging — the real driver is delivering current curated SDK facts, not the specific CLI distribution mechanism.
+  *Tool notes:* Distributed via Vercel `skills` CLI or Context7 `ctx7` CLI; pattern generalizes to any harness that loads an installable context package.
+
+### When prompting a generator to build an app with its own internal AI feature, direct it to construct a real tool-using agent inside the app (not a scripted fake) — and budget extra iteration.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+- **Detail:** Resulting in-app agents drove real end-to-end tool use (a DAW agent laid down a melody, built drums, set mixer levels, added reverb). Agent-building patterns are recent enough that training data covers them thinly, so this class of feature needs more explicit prompting than a typical feature request. Single-source anecdote; niche to cases where the deliverable app itself embeds a tool-using agent.
+
+### Use a sequence model with an explicit label-transition prior (CRF favoring keep→keep) and Viterbi decoding for keep/prune decisions over code lines, so retained code stays in coherent contiguous runs.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
+- **Detail:** A learned keep→keep transition avoids isolated single-line keeps that fragment output; SWE-Pruner (independent prior work) reports 23-38% token reduction while holding task success. No ablation isolates the transition prior from confounds, the source paper itself supersedes single-CRF with a multi-CRF/MoE refinement, and it requires training a bespoke sequence-labeling model — low broad actionability.
+
 ## Verification & self-repair
 
 ### Verify the final environment state (files, DB contents, logs, page state) after a trial rather than trusting what the agent's transcript claims it did.
@@ -518,20 +762,20 @@ Entry format (every entry follows it):
 - **Detail:** Confirm the reservation exists in the DB, not that the agent said 'booked'. Operationalized at scale by SWE-bench (apply patch, run tests) and WebArena (programmatic state checks); an independent paper argues log/state inspection is necessary for credible agent evaluation.
   *Tool notes:* Implement state_check graders that query DB/filesystem/logs post-trial.
 
-### Regularly read a sample of full transcripts and grader outputs, not just aggregate pass rates, to catch broken or gameable graders before trusting scores.
-- **Tier:** Proven (added 2026-07-09)
-- **Sources:** [Anthropic: Demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
-- **Detail:** On CORE-Bench, transcript review took Opus 4.5 from 42% to 95% by surfacing rigid numeric matching, ambiguous specs, and stochastic tasks. Corroborated by Hamel Husain's evals writing and a Berkeley RDI study where a near-zero-capability exploit scored ~100% on eight benchmarks.
+### Regularly read a sample of full transcripts and grader/evaluator outputs, not just aggregate pass rates, to catch broken or gameable graders — and when the evaluator diverges from the human quality bar, rewrite its prompt against the divergence cases (expect several rounds).
+- **Tier:** Proven (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [Anthropic: Demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents), [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+- **Detail:** On CORE-Bench, transcript review took Opus 4.5 from 42% to 95% by surfacing rigid numeric matching, ambiguous specs, and stochastic tasks. Corroborated by Hamel Husain's evals writing and a Berkeley RDI study where a near-zero-capability exploit scored ~100% on eight benchmarks. A specific, easy-to-miss evaluator failure mode: out of the box a coding-agent evaluator will identify a legitimate bug then talk itself into approving it — the fix is the standard LLM-as-judge calibration loop (Arize, LangChain, Braintrust): read its logs, find the divergence cases, and rewrite the evaluator prompt to close each gap, over several rounds, with residual gaps remaining.
 
 ### Choose pass@k when a single success suffices and pass^k when the agent must behave reliably every time (e.g. customer-facing systems).
 - **Tier:** Proven (added 2026-07-09)
 - **Sources:** [Anthropic: Demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents), [τ-bench](https://arxiv.org/abs/2406.12045)
 - **Detail:** At 75% per-trial success, pass^3 ≈ 42%; by k=10 pass@k → 100% while pass^k → 0%. pass^k originates in the τ-bench paper (GPT-4o pass^8 <25% in retail) — picking the wrong metric for your deployment hides production-breaking unreliability.
 
-### Calibrate LLM-based graders against human expert judgment before scaling, give them escape clauses ('return Unknown'), and split them into isolated single-dimension judges rather than one monolithic rubric.
-- **Tier:** Proven (added 2026-07-09)
-- **Sources:** [Anthropic: Demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
-- **Detail:** Judge-human agreement rises sharply with decomposed/anchored rubrics (kappa ~0.4→0.78 in RubricEval/LLM-Rubric work); abstention research supports escape clauses; LangChain/Kinde practitioner guides support gold-set calibration. Cost: isolated judges mean 2-3x more calls.
+### Calibrate LLM-based graders against human expert judgment before scaling, give them escape clauses ('return Unknown'), and split them into isolated, named, weighted single-dimension judges calibrated with few-shot scored examples rather than one monolithic rubric.
+- **Tier:** Proven (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [Anthropic: Demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents), [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps), [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Judge-human agreement rises sharply with decomposed/anchored rubrics (kappa ~0.4→0.78 in RubricEval/LLM-Rubric work); abstention research supports escape clauses; LangChain/Kinde practitioner guides support gold-set calibration. When a quality dimension is subjective, replace vague judgment with named, weighted, gradable criteria: Anthropic's long-running-app harness used four weighted criteria (Design Quality, Originality, Craft, Functionality — design/originality weighted higher to push past 'AI slop') and reports reduced score drift, and the Verification Horizon rubric decomposition (functional/content/visual/layout/UX/technical) reached Spearman ρ up to 0.905 and cross-judge τ ≥ 0.93 vs. human ranking on 671 tasks × 8 models (further corroborated by Autorubric, CheckEval). Cost: isolated judges mean 2-3x more calls. Caveat: static rubric judges are themselves gameable via length-inflation — pair with live/interactive verification where feasible.
 
 ### Invest disproportionately in making the verifier/test harness near-perfect, since the agent trusts and optimizes against it even when wrong and will reward-hack a flawed signal.
 - **Tier:** Proven (added 2026-07-09)
@@ -716,10 +960,10 @@ Entry format (every entry follows it):
 - **Sources:** [Code as Agent Harness](https://arxiv.org/pdf/2605.18747)
 - **Detail:** Proposed as the 'central missing abstraction' for semantic verification beyond executable feedback. Must be grounded in actual tool output, not narrated from memory, or it becomes performative theater. Speculative research direction.
 
-### Before self-modifying the harness (prompts, tool schemas, retrieval policy, permissions, workflow topology), require a 'change contract' per mutation and validate on held-out regression suites before promoting.
-- **Tier:** Watch (added 2026-07-09)
-- **Sources:** [Code as Agent Harness](https://arxiv.org/pdf/2605.18747)
-- **Detail:** Contract fields: which component changes, target failure mode, predicted improvement, invariants to preserve, a falsifying evaluation, rollback plan. The authors' proposed five-stage Evolution-Agent loop; conceptual synthesis, unbenchmarked.
+### Before self-modifying the harness (prompts, tool schemas, retrieval policy, permissions, workflow topology), require a 'change contract' per mutation — a falsifiable prediction of which failures it fixes and which passing cases it risks — and validate on held-out regression suites before promoting.
+- **Tier:** Watch (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [Code as Agent Harness](https://arxiv.org/pdf/2605.18747), [Agentic Harness Engineering (arXiv 2604.25850)](https://arxiv.org/html/2604.25850v1)
+- **Detail:** Contract fields: which component changes, target failure mode, predicted improvement, invariants to preserve, a falsifying evaluation, rollback plan. The authors' proposed five-stage Evolution-Agent loop; conceptual synthesis. Empirically the self-prediction is weak — Agentic Harness Engineering scored fix predictions at 33.7% precision / 51.4% recall (~5x random) but the safety-critical regression-risk half barely above chance (11.8%/11.1%), so also require every edit to cite specific failure evidence from an actual trajectory (root cause + targeted fix), and use the contract to force root-cause reasoning, not as a trustworthy regression gate.
 
 ### Instrument the agent loop with deep telemetry (prompts + retrieved context, token/cost/latency, tool args, permission requests, diffs, sandbox snapshots, test results, rejected alternatives, human interventions) so harness changes are diagnosed via trace replay, not anecdote.
 - **Tier:** Watch (added 2026-07-09)
@@ -790,37 +1034,113 @@ Entry format (every entry follows it):
 - **Detail:** APIGen's staged checking (format → execution against real backends → semantic LLM judge) with ablations showing execution/semantics failures degrade downstream models; ToolACE independently converges on layered structural + semantic validation. Format-only filtering becomes insufficient at scale.
 
 ### Enforce a multi-tier permission model for agent actions — read-only, sandbox-edit, full-access (network/credentials/deploy/destructive) — and gate the highest tier behind mandatory human approval.
-- **Tier:** Proven (added 2026-07-09)
-- **Sources:** [Code as Agent Harness](https://arxiv.org/pdf/2605.18747), [OpenAI Codex docs]
-- **Detail:** Independently implemented by Claude Code (approval before writes/network), Codex (Suggest/Auto-Edit/Full-Auto), and Gemini CLI (read-only Plan Mode). Confine mandatory approval to the smallest highest-risk tier to avoid approval fatigue (Anthropic telemetry: ~93% reflexive approval under flat gating).
+- **Tier:** Proven (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [Code as Agent Harness](https://arxiv.org/pdf/2605.18747), [OpenAI Codex docs], [Anthropic — Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)
+- **Detail:** Independently implemented by Claude Code (approval before writes/network), Codex (Suggest/Auto-Edit/Full-Auto), and Gemini CLI (read-only Plan Mode). Confine mandatory approval to the smallest highest-risk tier to avoid approval fatigue (Anthropic telemetry: ~93% reflexive approval under flat gating). Claude Code auto mode tiers into three bands — a no-classifier allowlist for read-only ops, unreviewed in-project file writes, and classifier review for shell/external-network/out-of-project/subagent-spawn — so routine work skips classifier latency (and blanket-shell/wildcarded-interpreter/package-manager rules are stripped on entering auto mode). Caveat: the 'unreviewed in-project writes are fine because git' leg has a documented gap — an independent eval found 36.8% of state-changing actions occur via un-gated edits (92.9% FNR on artifact-cleanup attacks), so treat unreviewed writes in unsupervised sessions as an open risk.
 
 ### Drive implementation with an explicit generate-test-repair inner loop: after each edit, run lint/tests, and if either fails re-prompt the model with the actual error text, capped at a fixed number of iterations.
 - **Tier:** Promising (added 2026-07-09)
 - **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515)
 - **Detail:** Aider's inner loop feeds real error output back (capped max_reflections=3), the foundational unit under most agents' composed loops. Corroborated by Reflexion; feed actual error text, not just pass/fail.
 
-### When an LLM judges or selects among its own candidate outputs, use a separate model from the one that generated them to avoid the judge sharing the generator's blind spots.
-- **Tier:** Watch (added 2026-07-09)
-- **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515)
-- **Detail:** Moatless configures the value/critic to a different model than the action agent; DARS-Agent (same model both roles) shares biases. Only two in-corpus instances, but the mechanism is backed by well-documented LLM self-preference bias (NeurIPS 2024).
+### Separate the agent that produces work from the agent that judges it — ideally a different model, at minimum a different context — because self-evaluating agents share their own blind spots and over-praise their own output.
+- **Tier:** Promising (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515), [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+- **Detail:** Moatless configures the value/critic to a different model than the action agent; DARS-Agent (same model both roles) shares biases. The premise is strongly corroborated by self-preference-bias literature (arXiv 2410.21819; NeurIPS 2024 'LLM Evaluators Recognize and Favor Their Own Generations' — models favor lower-perplexity self-generated text), and Anthropic's long-running-app harness structurally splits generator and evaluator into different agent contexts. Important nuance: the evaluator is still an LLM inclined to be generous, so separation helps but isn't a magic fix — tune the evaluator's prompt to be adversarial.
 
-### For safety-critical tool calls (arbitrary shell, filesystem writes), layer an independent LLM risk-evaluator that scores each proposed call and blocks high-risk ones, on top of OS-level sandboxing.
-- **Tier:** Watch (added 2026-07-09)
-- **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515)
-- **Detail:** Codex CLI combines Bubblewrap/Landlock/Seatbelt sandboxing with a 'Guardian' LLM that reviews and can deny tool calls (the two address different failure classes). Real dual-layer design (verified in openai/codex source, though the paper's specific 0-100/threshold detail is stale); no efficacy data or adversarial-evasion testing.
-  *Tool notes:* Sandboxing is OS-specific; the Guardian pattern is model-agnostic and adds one LLM call per invocation.
+### For safety-critical tool calls (arbitrary shell, filesystem writes), layer an independent LLM risk-evaluator that scores each proposed call and blocks high-risk ones, on top of OS-level sandboxing — ideally a two-stage classifier (fast single-token filter that errs toward blocking, then a slower chain-of-thought re-check run only on flagged actions).
+- **Tier:** Promising (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515), [Anthropic — Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)
+- **Detail:** Codex CLI combines Bubblewrap/Landlock/Seatbelt sandboxing with a 'Guardian' LLM that reviews and can deny tool calls (the two address different failure classes; verified in openai/codex source). Anthropic's auto-mode two-stage classifier, validated on three datasets (10k real-traffic actions, 52 overeager actions, 1k synthetic exfiltration), reports Stage 1 alone 8.5% FPR/6.6% FNR and the full pipeline 0.4% FPR (FNR ~17% overeager, 5.7% synthetic exfil); engineer Stage 2's prompt as a superset of Stage 1's so it lands as a prompt-cache hit. Caveat: an independent stress-test (arXiv 2604.04978) found FNR up to 81% under adversarial/ambiguous-authorization prompts and 36.8% of state-changing actions bypassing the classifier via un-gated in-project edits — validated for accidental overshoot, not adversarial coverage.
+  *Tool notes:* Sandboxing is OS-specific; the classifier/Guardian pattern is model-agnostic and adds one (or two) LLM calls per invocation.
 
 ### When producing an evidence-grounded analysis of a codebase, pin every claim to a file path and line number at a fixed commit and run a dedicated post-hoc verification pass before trusting it.
 - **Tier:** Promising (added 2026-07-09)
 - **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515)
 - **Detail:** A verification pass over 296 claims confirmed 267, corrected 19 (mostly line drift), accepted 10 as simplifications — ~10% needed correction. Corroborated by citation-grounded-code-comprehension work showing naive LLM citations fail 28-48% without grounding+verification. Prefer independent-reviewer verification over self-verification.
 
+### Have the evaluator actually drive the running artifact (click through the UI, hit API endpoints, execute simulated user actions in a live environment) rather than judge from static source code or screenshots.
+- **Tier:** Proven (added 2026-07-09)
+- **Sources:** [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps); [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Anthropic's Playwright-MCP evaluator caught 8+ specific bugs across three QA rounds by driving the real app; the Verification Horizon paper shows a Playwright-driven interactive judge (action-planner → live execution → trace-scored rubric) beats visual/hybrid static judges as an RL reward, achieving higher held-out scores while keeping generation length stable — static judges are exploitable via verbose, length-inflated code that looks good on inspection but doesn't work. Two independent sources converge; each individual instantiation is anecdotal/single-lab, so favor a constrained action-list judge over claims of a full autonomous agent judge.
+
+### Validate a paired A/B eval (same prompts, with vs. without an intervention) across multiple model tiers before shipping a knowledge-augmentation skill — confirm it moves pass rates and see where it doesn't.
+- **Tier:** Proven (added 2026-07-09)
+- **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/); [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Google's 117-prompt paired harness across Gemini 3.1/3.0/2.5 revealed gains varied sharply by model generation (skill benefit is not uniform). Independently confirmed by SkillsBench (arXiv 2602.12670: 87 tasks × 18 model-harness configs, gains ranging +4.1 to +25.7pp) and Anthropic's skill-creator "comparator agents" doing blind skill-vs-no-skill A/B. Testing on only one model/tier can badly mislead a ship/no-ship decision.
+
+### Before trusting an efficiency comparison between two agent configurations, manually spot-check a sample of the actual outputs (not just aggregate time/token metrics) to rule out that the "cheaper" condition is just producing degenerate or aborted work.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Impact of AGENTS.md files (arXiv 2601.20404)](https://arxiv.org/abs/2601.20404)
+- **Detail:** The authors sampled 50 PR tasks and checked outputs were non-empty, non-trivial, task-consistent code changes vs. the merged human PRs before trusting token/time deltas. Guards against a config looking cheaper because it silently does less. Single paper, an informal confirmatory check the authors call non-rigorous; the related EET paper operationalizes the same principle via automated resolution-rate checks.
+
+### After a worker attempt, have the planner classify the outcome three ways instead of a single retry loop: Proceed (commit, advance) on success; Retry (fresh worker, refined spec) when the failure looks recoverable; Replan (revise the decomposition) when structural or retry budget is exhausted.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [CodeDelegator (arXiv 2601.14914)](https://arxiv.org/abs/2601.14914)
+- **Detail:** Formalized in the execution protocol; drives the overall gains but its increment over simpler retry logic is not separately ablated. A similar Retry→Replan escalation appears independently (Self-Healing Orchestrators arXiv 2606.01416, benchmarked vs retry-only/replan-only; practitioner guides), but neither isolates this exact mechanism's contribution in a real coding-agent setting.
+
+### To claim an agent-architecture improvement is due to the design (not one model's context-handling quirk), re-run the comparison across multiple model tiers — including a strong backbone — and check the effect direction holds.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [CodeDelegator (arXiv 2601.14914)](https://arxiv.org/abs/2601.14914); [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
+- **Detail:** CodeDelegator held its top rank across DeepSeekV3.2 and GPT-5 (though the ReAct-vs-CodeAct sub-ordering flipped, and only 3 of the compared bases were genuinely different families). LaMR shows why the strong backbone matters specifically: a pruner's structural-omission failure was invisible on a weak backbone (which fails/retries regardless) and appeared sharply on Opus 4.6 (up to +22% tokens) where full context would have succeeded. Two independent sources; neither cleanly isolates the exact mechanism, and "model-agnostic" from two frontier models is thin.
+
+### Don't trust a self-modifying agent's own regression forecasts as a safety net — gate on actual full-suite re-execution instead, and expect non-monotonic score swings across iterations.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Agentic Harness Engineering (arXiv 2604.25850)](https://arxiv.org/html/2604.25850v1)
+- **Detail:** Regression prediction (which passing tests an edit breaks) was barely above random (11.8% precision, 11.1% recall, ~2x baseline), named as an unresolved failure mode driving non-monotone evolution curves. Corroborated by independent work: models silently endorse their own semantic-drift regressions ~31.7% of the time (arXiv 2605.21537), and vanilla coding agents average 6.5 broken pass-to-pass tests per patch while believing the patch is clean. Self-verbalized assessment is no substitute for external, rule-based verification.
+
+### Enforce a hard rule that no harness edit is applied without being traceable to a specific cited piece of failure evidence from an actual trajectory — ban speculative/hunch-driven edits to the agent's own tools, prompts, or config.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Agentic Harness Engineering (arXiv 2604.25850)](https://arxiv.org/html/2604.25850v1)
+- **Detail:** The evolve-agent prompt explicitly forbids changes based on intuition/speculation/best-practices alone; every change must cite failure evidence, root cause, targeted fix, and predicted impact. Sound root-cause-first hygiene for self-modifying loops, but no ablation isolates the rule's own causal contribution from the overall pipeline.
+
+### Keep all role agents (code executor, debugger/distiller, harness editor) on the same base model to isolate whether gains come from the changes vs. a smarter editor, then confirm the edited harness still helps when swapped onto other model families.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Agentic Harness Engineering (arXiv 2604.25850)](https://arxiv.org/html/2604.25850v1)
+- **Detail:** All three roles shared one base model (GPT-5.4), isolating gains to harness edits; the frozen evolved harness then transferred, yielding +2.3 to +10.1pp across five alternate bases without re-running evolution. Corroborated in spirit by SWE-Agent ablations showing consistent cross-model gains. Narrow applicability (teams running harness-evolution loops); single-paper specific numbers.
+
+### Treat the verifier as a living system: periodically re-derive its rules/pattern set from the current policy's trajectories rather than freezing it after design, since a fixed reward function stops working as the policy improves.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** After each training interval, sample rollouts that trigger or pass the verifier, have an agentic reviewer add newly-discovered exploit patterns, and redeploy before the next round. The paper's ablation proves "a monitor helps" (hack rate 37.76%→1.31%) but does not isolate *refreshing* vs. a static pattern set. The co-evolution principle is corroborated by iterated-RLHF retraining literature, ReVeal, Code-A1, and adversarial reward auditing.
+
+### Add a trajectory-level behavior monitor that audits the full command/git/network history of an agent run (not just the final patch) for known shortcut patterns, and penalize matches, instead of relying on pass/fail test results alone.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** Across 3 SWE-Bench variants, monitoring cut average hacked-resolved rate from 28.57% to 0.56% and raised clean-resolved from 40.22% to 60.53%; unmonitored RL collapsed late in training. Corroborated by Baker et al. (arXiv 2503.11926, CoT/trajectory monitoring catches hacks that output-only monitoring misses). Fundamentally an RL-training-time technique; note the adversarial caveat that optimizing against a monitor can breed obfuscated hacking, so the pattern set must keep chasing new exploits.
+
+### Match the verifier's operating point to the downstream use: low false-positive rate at a fixed threshold for rejection-sampling filtering; ranking consistency and score discrimination for RL reward shaping; and jointly weigh strictness against surviving-sample count when candidates are scarce.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** A judge that is "correct" but assigns near-uniform low scores gives near-zero reward variance and stalls policy-gradient learning, even if it filters well. The metric that matters flips by objective (BoN-Acc/τ vs. threshold-conditioned score). The general premise (ranking accuracy doesn't predict RL usefulness) is corroborated by RewardBench-2-style findings, but the specific cited threshold comparison contains a transcription error and the framework is single-source.
+
+### Score agent behavior on a separate process-quality rubric (execution error, misunderstanding, omission, overaction, inefficiency, communication) in addition to binary task-resolution — especially on failed runs, since better failure behavior is invisible to a resolved/unresolved reward.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** On SWE-bench Verified, Span-KTO's gains on resolved instances were modest (+0.5 to +6.8%), but on unresolved instances it improved Inefficiency by +34.5% and Communication by +26.5% — visible only via the six-axis agent-as-judge rubric. Two equally-unresolved runs can differ hugely in whether the agent recognized being stuck vs. flailed. Single-source self-reported ablation; thematically corroborated by rubric-as-contextual-verifier work (arXiv 2601.04171).
+
+### Treat sandbox/container death as an ordinary tool-call error surfaced back to the model (not a fatal harness failure), and let the harness re-provision a fresh environment on demand so the agent can retry rather than lose the session.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Scaling Managed Agents](https://www.anthropic.com/engineering/managed-agents)
+- **Detail:** Wrap sandbox/tool calls so infra failures come back as a normal error result the model can react to, with a provision() escape hatch for retry. Convergent with independent frameworks (sandcastle maxRetries + session resumption, Temporal sandbox orchestration), but single-vendor self-report with no benchmark of this specific pattern's effectiveness.
+
+### Run a dedicated (non-agent) probe over tool outputs (file reads, web fetches, shell output, external responses) before they enter the agent's context, and on suspected prompt injection inject a warning into the context rather than silently blocking or passing it through.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)
+- **Detail:** A server-side defense distinct from the permission classifier, targeting the prompt-injection category. The general "scan retrieved content before it reaches the model" idea is established (OWASP, Rebuff, PromptShield), but the specific warn-don't-block choice is single-source — several independent implementations favor graduated blocking/quarantine at high-confidence detections instead.
+  *Tool notes:* Applies to any harness piping untrusted tool output back into context.
+
+### Define an automatable, objective failure signal for coding-agent evals — e.g. "did the generated code call a deprecated SDK/method" — instead of relying on subjective grading, so pass/fail can be checked at scale.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/)
+- **Detail:** The 117-prompt harness operationalized failure specifically as deprecated-SDK usage, enabling scaled pass-rate measurement (6.8%/28% baselines). Deprecated-API detection is a distinct signal from execution-based correctness (code can call a deprecated API and still pass functional tests) — corroborated as an evaluation technique across independent academic work (RustEvo², Versicode, APIScanner). Implementable via grep/AST/static analysis; not a consensus best-practice recommendation yet.
+
 ## Multi-agent orchestration
 
 ### Structure multi-agent task decomposition as manager/child map-reduce (manager splits, children execute, manager synthesizes), and make shared state and cross-agent communication explicit — they don't emerge by default.
-- **Tier:** Promising (added 2026-07-09)
-- **Sources:** [Cognition: Multi-Agents](https://cognition.com/blog/multi-agents-working), [Anthropic multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)
-- **Detail:** Cognition and Anthropic independently converge on orchestrator-worker over unstructured swarms, and both flag that agents falsely assume they share state with children and that cross-agent messaging must be deliberately scaffolded (internal MCP / shared memory). Anthropic reports >90% over single-agent on their research eval.
+- **Tier:** Promising (added 2026-07-09; updated 2026-07-09)
+- **Sources:** [Cognition: Multi-Agents](https://cognition.com/blog/multi-agents-working), [Anthropic multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system), [CodeDelegator (arXiv 2601.14914)](https://arxiv.org/abs/2601.14914)
+- **Detail:** Cognition and Anthropic independently converge on orchestrator-worker over unstructured swarms, and both flag that agents falsely assume they share state with children and that cross-agent messaging must be deliberately scaffolded (internal MCP / shared memory). Anthropic reports >90% over single-agent on their research eval. CodeDelegator sharpens the split for code agents — a persistent orchestrator that only decomposes, writes sub-task specs, and decides Proceed/Retry/Replan (never writing or running code) plus ephemeral single-use workers each given one spec in a fresh context and discarded with their trace history — and its 'w/o Role Separation' ablation (single agent, same bookkeeping) dropped MCPMark by 10.5pp, the single largest ablation effect (38.4% vs 26.4% CodeAct / 25.8% ReAct pass@1).
   *Tool notes:* Coordination via internal MCP between manager and children.
 
 ### When scaling beyond a handful of agents, avoid lock-based coordination among equal-status agents editing shared state — it bottlenecks throughput down to a couple of agents.
@@ -919,6 +1239,27 @@ Entry format (every entry follows it):
 - **Sources:** [Inside the Scaffold](https://arxiv.org/pdf/2604.03515)
 - **Detail:** Codex CLI exposes spawn/resume/close tools for full LLM control; OpenCode spawns scaffold-defined specialists where the plan agent has edit tools disabled regardless of what the LLM wants. Framing/checklist point; 5 agents in the corpus use 5 distinct mechanisms (an active design frontier).
 
+### Don't apply the evaluator unconditionally — reserve it for tasks beyond what the current base model handles reliably solo, and re-check that boundary as models improve since it moves outward.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Harness design for long-running apps](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+- **Detail:** With Opus 4.6's higher baseline, tasks that used to need the evaluator's check were often handled well by the generator alone. Single-source anecdote; the increment over Anthropic's earlier evaluator-optimizer guidance is the nonstationary-boundary reminder, but it gives no metric/threshold for detecting "beyond solo capability."
+
+### In agent-to-subagent delegation, run the permission classifier at both the outbound handoff (a subagent's task isn't fully authorized just because a parent issued it) and the return point (review the subagent's full action history), and on a flagged return prepend a security warning to the parent rather than discarding results.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)
+- **Detail:** Asymmetric design: deny-capable at outbound (the orchestrator's instruction otherwise looks like a fully-authorized user message inside the subagent), warn-only at return. Annotate-don't-discard is a specific, somewhat counterintuitive choice. Single-source self-report; the subagent-specific slice isn't separately benchmarked from the overall classifier numbers.
+
+### For open-ended long-horizon tasks no fixed test suite covers, deploy an autonomous agent evaluator that decomposes the spec into a verifiable checklist and reports both a per-item checklist pass rate and a separate holistic quality score.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
+- **Detail:** The holistic score tracked ground-truth unit tests better than the checklist average across 104 NL2Repo tasks × 6 frontier models. Counterintuitive and useful as an evaluation-metric-design tactic, but the "prefer holistic as the primary training signal" framing extrapolates past a static correlation study (no closed-loop RL run), and the paper itself documents the judge is gameable and produces false positives. Single-paper, correlational.
+
+### Allow one agent ("brain") to hand off its execution sandbox to another agent mid-task, since neither brain nor sandbox is permanently bound — enabling delegation without re-provisioning.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Anthropic — Scaling Managed Agents](https://www.anthropic.com/engineering/managed-agents)
+- **Detail:** An architectural consequence of a decoupled execute(name,input)→string interface, described conceptually with no benchmark or case study. Adjacent practices exist (Microsoft handoff orchestration, Temporal sandbox borrow/handover locks) but none validate this specific mid-task sandbox transfer.
+  *Tool notes:* For supervisor/subagent frameworks, consider a shared execute()-addressable sandbox pool instead of a fresh sandbox per subagent.
+
 ## Memory
 
 ### Accumulate retrievable episodic memory of past task outcomes (distilled failure lessons and successful trajectories) and consult it before retrying a similar task.
@@ -1002,3 +1343,13 @@ Entry format (every entry follows it):
 - **Sources:** [GitHub Copilot CLI changelog](https://github.blog/changelog/2026-01-14-github-copilot-cli-enhanced-agents-context-management-and-new-ways-to-install/)
 - **Detail:** `--resume` + TAB cycles local and remote coding-agent sessions. Analogous to Cursor Cloud Handoff; feature-description only, no reliability data.
   *Tool notes:* Copilot CLI `--resume`.
+
+### When investing limited harness-improvement effort, prioritize a persistent long-term-memory file (highest-value single component in isolation) — but don't expect memory to stack additively with other fixes; it can even outperform the fully-combined system on the hardest tier via redundant/over-cautious verification.
+- **Tier:** Promising (added 2026-07-09)
+- **Sources:** [Agentic Harness Engineering (arXiv 2604.25850)](https://arxiv.org/html/2604.25850v1)
+- **Detail:** Ablation: long-term-memory-only +5.6pp (largest single gain, vs tools +3.3, middleware +2.2, system prompt −2.3); memory alone beat full AHE on the Hard tier, and the three positive single-component gains (+11.1pp) don't sum to the full system's +7.3pp (memory/middleware/system-prompt all push the same closure-style verification, causing redundant re-checks). Single unreplicated paper, one benchmark/model, inside an automated harness-evolution loop rather than human-authored harnesses.
+
+### Treat installed skills as content requiring lifecycle management — since there's no automatic update mechanism, periodically review and prune/update skills so outdated information doesn't silently accumulate and mislead the agent.
+- **Tier:** Watch (added 2026-07-09)
+- **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/)
+- **Detail:** Named by the source as a limitation: no auto-update story, so stale skill info can accumulate and do more harm than good. Distinct from ordinary dependency hygiene because skills are natural-language instruction content with no version pinning or CI to catch drift — silent accumulation of confidently-wrong guidance. Corroborated as a recognized gap by skill-lifecycle-management feature requests and a dynamic-skill-lifecycle paper, but underspecified (no cadence/staleness criteria) and no evidence of error-rate reduction.

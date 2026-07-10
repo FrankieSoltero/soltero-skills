@@ -4,7 +4,7 @@ Every source a sweep deep-read, with its disposition — so rejected sources are
 re-litigated. Keys are arXiv IDs or canonical URLs; the sweep dedupes against this
 whole table.
 
-**Last sweep:** 2026-07-09 (bootstrap; window 2026-01-09 → 2026-07-09).
+**Last sweep:** 2026-07-09 (bootstrap + same-day delta run; window 2026-01-09 → 2026-07-09).
 
 | Key | Title | Evaluated | Disposition | Reason |
 |-----|-------|-----------|-------------|--------|
@@ -32,3 +32,15 @@ whole table.
 | 2604.19572 | [A Self-Evolving Framework for Efficient Terminal Agents via Observational Context Compression](https://arxiv.org/pdf/2604.19572) | 2026-07-09 | adopted | 18 tactic(s) kept: Watch, Promising, Watch, Watch, Promising, Watch, Promising, Promising, Promising, Watch, Watch, Watch, Promising, Watch, Watch, Watch, Watch, Promising |
 | 2603.22862 | [The Evolution of Tool Use in LLM Agents: From Single-Tool Call to Multi-Tool Orchestration](https://arxiv.org/pdf/2603.22862) | 2026-07-09 | adopted | 17 tactic(s) kept: Proven, Watch, Watch, Proven, Watch, Proven, Promising, Promising, Promising, Proven, Promising, Proven, Promising, Proven, Proven, Promising, Promising |
 | 2605.18747 | [Code as Agent Harness](https://arxiv.org/pdf/2605.18747) | 2026-07-09 | adopted | 25 tactic(s) kept: Proven, Proven, Promising, Promising, Proven, Promising, Watch, Promising, Promising, Promising, Promising, Promising, Promising, Watch, Promising, Promising, Promising, Watch, Watch, Promising, Watch, Promising, Promising, Promising, Watch |
+| anthropic.com/engineering/harness-design-long-running-apps | [Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps) | 2026-07-09 | adopted | 9 tactic(s) kept: Promising, Promising, Watch, Promising, Promising, Watch, Promising, Watch, Watch |
+| cursor.com/blog/dynamic-context-discovery | [Dynamic context discovery](https://cursor.com/blog/dynamic-context-discovery) | 2026-07-09 | adopted | 7 tactic(s) kept: Promising, Promising, Promising, Proven, Watch, Watch, Promising |
+| amp-news-lazy-load-mcp-with-skills | [Amp — Efficient MCP Tool Loading: gate MCP tool definitions behind skill invocation](https://ampcode.com/news/lazy-load-mcp-with-skills) | 2026-07-09 | adopted | 3 tactic(s) kept: Promising, Promising, Proven |
+| 2601.20404 | [On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents](https://arxiv.org/abs/2601.20404) | 2026-07-09 | watch | 1 tactic(s) kept: Watch |
+| 2601.14914 | [CodeDelegator: Mitigating Context Pollution via Role Separation in Code-as-Action Agents](https://arxiv.org/abs/2601.14914) | 2026-07-09 | adopted | 10 tactic(s) kept: Promising, Promising, Promising, Promising, Watch, Watch, Promising, Watch, Watch, Watch |
+| 2604.25850 | [Agentic Harness Engineering: Observability-Driven Automatic Evolution of Coding-Agent Harnesses](https://arxiv.org/html/2604.25850v1) | 2026-07-09 | adopted | 10 tactic(s) kept: Watch, Watch, Promising, Watch, Promising, Watch, Promising, Watch, Watch, Promising |
+| anthropic.com/engineering/managed-agents | [Scaling Managed Agents: Decoupling the brain from the hands](https://www.anthropic.com/engineering/managed-agents) | 2026-07-09 | adopted | 8 tactic(s) kept: Promising, Promising, Watch, Proven, Watch, Promising, Promising, Watch |
+| anthropic.com/engineering/claude-code-auto-mode | [How we built Claude Code auto mode: a safer way to skip permissions](https://www.anthropic.com/engineering/claude-code-auto-mode) | 2026-07-09 | adopted | 7 tactic(s) kept: Promising, Promising, Watch, Watch, Watch, Watch, Watch |
+| developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills | [Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/) | 2026-07-09 | adopted | 7 tactic(s) kept: Watch, Promising, Promising, Proven, Watch, Promising, Watch |
+| cursor-changelog-2-4-subagents-mcp-json | [Cursor 2.4 — Subagents with own context, and MCP tools as lazily-loaded JSON files](https://cursor.com/changelog/2-4) | 2026-07-09 | adopted | 3 tactic(s) kept: Promising, Watch, Promising |
+| 2606.26300 | [The Verification Horizon: No Silver Bullet for Coding Agent Rewards](https://arxiv.org/abs/2606.26300) | 2026-07-09 | adopted | 17 tactic(s) kept: Promising, Promising, Promising, Promising, Watch, Promising, Promising, Promising, Promising, Watch, Promising, Watch, Watch, Watch, Watch, Promising, Watch |
+| 2605.15315 | [Context Pruning for Coding Agents via Multi-Rubric Latent Reasoning](https://arxiv.org/pdf/2605.15315) | 2026-07-09 | adopted | 8 tactic(s) kept: Watch, Promising, Promising, Watch, Promising, Promising, Watch, Promising |
