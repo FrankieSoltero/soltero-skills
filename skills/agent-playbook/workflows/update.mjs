@@ -154,7 +154,7 @@ const laneResults = await parallel(LANES.map(l => () =>
     l.prompt +
     ` Return up to 15 candidates via structured output; relevanceScore 1-10 reflects how ` +
     `actionable the claimed tactic is for someone driving a coding agent.`,
-    { label: `sweep:${l.key}`, phase: 'Sweep', schema: CANDIDATES_SCHEMA }
+    { label: `sweep:${l.key}`, phase: 'Sweep', schema: CANDIDATES_SCHEMA, model: 'sonnet' }
   )
 ))
 const lanes = LANES.map((l, i) => ({ lane: l.key, ok: !!laneResults[i] }))
@@ -191,7 +191,7 @@ const evaluated = await pipeline(
     `benchmarks; Promising for a single credible result; Watch for plausible-but-unvalidated), ` +
     `and tool-specific notes if the tactic is tool-bound. If you cannot fetch/read the source, ` +
     `return readable=false with whyUnreadable and an empty tactics list.`,
-    { label: `read:${c.key}`.slice(0, 60), phase: 'Read', schema: TACTICS_SCHEMA }
+    { label: `read:${c.key}`.slice(0, 60), phase: 'Read', schema: TACTICS_SCHEMA, model: 'sonnet' }
   ),
   async (read, c) => {
     if (!read) return { read: null, verdicts: [] }
@@ -208,7 +208,7 @@ const evaluated = await pipeline(
         `independent sources or rigorous benchmark results you can point at. Return ` +
         `survives=false for vacuous, unsupported, or redundant tactics. If it survives, assign ` +
         `the final tier — WHEN UNCERTAIN, DEMOTE (Watch, not Promising; Promising, not Proven).`,
-        { label: `verify:${t.topic}`.slice(0, 60), phase: 'Verify', schema: VERDICT_SCHEMA }
+        { label: `verify:${t.topic}`.slice(0, 60), phase: 'Verify', schema: VERDICT_SCHEMA, model: 'sonnet' }
       ).then(v => ({ tactic: t, verdict: v }))
     ))
     return { read, verdicts: verdicts.filter(Boolean) }
@@ -275,7 +275,7 @@ const synth = await agent(
   `(markdown links), Detail with optional Tool notes. (5) Write a digest: a "## Sweep ${today} ` +
   `(window ${sinceDate} → ${today})" markdown block summarizing what was added/replaced at which ` +
   `tiers, notable supersessions, and ending with: "${laneNote}"`,
-  { label: 'synthesize', phase: 'Synthesize', schema: SYNTH_SCHEMA }
+  { label: 'synthesize', phase: 'Synthesize', schema: SYNTH_SCHEMA, model: 'opus' }
 )
 if (!synth) throw new Error('Synthesis agent failed — sweep results are in the journal; re-run with resumeFromRunId')
 
