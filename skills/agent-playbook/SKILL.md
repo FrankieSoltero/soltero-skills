@@ -52,7 +52,8 @@ plugin release cycle).
    fill a sweep from memory. Get today's date: `date +%F`.
 2. **Parse `references/source-log.md`:** watermark ("Last sweep") → `sinceDate`
    (bootstrap: if none, use ~6 months ago and `bootstrap: true`); every Key-column
-   value → `seenKeys`.
+   value PLUS every URL inside the Title-column links → `seenKeys` (lanes don't
+   always key a source the same way twice; the URL is the stable identity).
 3. **Invoke the Workflow — do not improvise your own sweep, and do not self-vet
    claims by spot-checking your own research:**
 
