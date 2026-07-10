@@ -92,7 +92,7 @@ const inv = await agent(
   `(ORM schemas, SQL, storage of user data) and auth surfaces (login, sessions, middleware). ` +
   `(7) Note regulatory signals: payment, health, biometric, analytics/tracking, or PII terms. ` +
   `(8) Note vendored/copied third-party code and LICENSE/NOTICE file state. Read-only: modify nothing.`,
-  { label: 'scout', phase: 'Scout', schema: INVENTORY_SCHEMA, agentType: 'security-auditor' }
+  { label: 'scout', phase: 'Scout', schema: INVENTORY_SCHEMA, agentType: 'security-auditor', model: 'sonnet' }
 )
 if (!inv) throw new Error('Scout agent failed — cannot audit without an inventory')
 
@@ -159,6 +159,7 @@ do {
       phase: 'Find',
       schema: FINDINGS_SCHEMA,
       agentType: 'security-auditor',
+      model: 'sonnet',
     })
   ))).filter(Boolean).flatMap(r => r.findings)
 
@@ -175,6 +176,7 @@ do {
         phase: 'Verify',
         schema: VERDICT_SCHEMA,
         agentType: 'finding-skeptic',
+        model: 'sonnet',
       })
     )).then(votes => {
       const cast = votes.filter(Boolean)
@@ -219,7 +221,7 @@ const report = await agent(
   `Data follows as JSON.\n\nCONFIRMED:\n${JSON.stringify(confirmed, null, 2)}\n\nREFUTED:\n` +
   `${JSON.stringify(refuted, null, 2)}\n\nINVENTORY:\n${JSON.stringify(inv, null, 2)}\n\n` +
   `After writing the file, return the report path and a 5-line-max summary of the top findings.`,
-  { label: 'synthesize', phase: 'Report', schema: REPORT_SCHEMA }
+  { label: 'synthesize', phase: 'Report', schema: REPORT_SCHEMA, model: 'opus' }
 )
 
 if (report) {

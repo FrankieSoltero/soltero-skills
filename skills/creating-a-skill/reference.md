@@ -9,6 +9,9 @@
 - RED: run the scenario on a fresh subagent WITHOUT the skill. Record verbatim.
 - GREEN: run the same scenario WITH the skill. The agent should choose correctly AND cite the
   skill's sections.
+- Pin an explicit model on every scenario dispatch (a standard tier like sonnet, same for
+  RED and GREEN so runs are comparable) — an omitted model inherits the session model, which
+  makes baselines expensive and non-reproducible across sessions.
 
 ## Meta-testing
 
