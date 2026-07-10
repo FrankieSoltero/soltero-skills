@@ -25,6 +25,7 @@ Then invoke skills as `soltero-skills:<skill-name>`.
 | `audit-swarm` | Whole-repo security + legal audit via an agent swarm: scout → adaptive finders → 3-skeptic verification → severity-ranked report in `Docs/`. |
 | `code-optimizer` | Whole-repo cleanup behind a test gate: tool-grounded dead-code removal, de-dup/shortening, live-file splitting, and project-guideline enforcement — every change verified and revertible. |
 | `walkthrough-tutor` | Interactive, level-calibrated walkthrough of a branch/PR's changes — mental model first, then one layer per turn with comprehension checks, teaching the concepts behind the code. |
+| `agent-playbook` | Living, tiered playbook of coding-agent best practices: advisor mode serves source-linked, tier-labeled guidance; update mode runs a research-sweep Workflow (arXiv + lab blogs + OSS → dedupe → deep-read → skeptic tiering). |
 
 Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`,
 `author-claude-md`.
