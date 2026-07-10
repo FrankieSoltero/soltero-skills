@@ -229,7 +229,10 @@ for (let i = 0; i < picked.length; i++) {
     logEntries.push({ ...base, disposition: 'rejected', reason: res.read.whyUnreadable || 'source not fetchable' })
     continue
   }
-  const kept = res.verdicts.filter(v => v.verdict && v.verdict.survives && v.verdict.tier)
+  // Surviving tactic with no tier = skeptic omission; default-demote to Watch rather than drop.
+  const kept = res.verdicts
+    .filter(v => v.verdict && v.verdict.survives)
+    .map(v => ({ ...v, verdict: { ...v.verdict, tier: v.verdict.tier || 'Watch' } }))
   if (!kept.length) {
     const why = res.verdicts.map(v => v.verdict && v.verdict.reasoning).filter(Boolean).join(' | ') || 'no actionable tactics extracted'
     logEntries.push({ ...base, disposition: 'rejected', reason: why.slice(0, 300) })

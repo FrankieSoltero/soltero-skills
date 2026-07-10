@@ -70,7 +70,7 @@ fetchable source link.
 **Phase 5 — Synthesize.** One agent merges survivors against the current playbook text
 into explicit diffs: new entries, tier promotions/demotions, supersessions ("replaces old
 guidance on X"), plus a short digest paragraph. Returns
-`{diffs, digest, newLogEntries}`; every evaluated candidate gets a log entry with
+`{edits, digest, logEntries}`; every evaluated candidate gets a log entry with
 disposition (adopted / rejected + why / watch) so rejected sources are never re-litigated.
 
 **If WebSearch is unavailable,** update mode aborts with a clear message rather than
@@ -101,4 +101,5 @@ persistence), GREEN scenarios under `tests/scenarios/agent-playbook/`:
 (a) update mode produces orchestrated, tiered, source-linked diffs + digest + log entries;
 (b) advisor mode cites tiered playbook guidance during an agent-engineering task;
 (c) a re-run does not re-ingest sources already in the log.
-`node --check` on `update.mjs` as a syntax gate.
+`node tools/check-workflow-syntax.mjs` on `update.mjs` as the syntax gate (plain
+`node --check` rejects the Workflow dialect's top-level `return`).
