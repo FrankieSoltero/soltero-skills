@@ -1,6 +1,6 @@
 {
   "name": "soltero-skills",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "A public Claude Code skills library",
   "type": "module",
   "private": false,
@@ -10,7 +10,7 @@
     "lint:fm": "node tools/lint-frontmatter.mjs",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
     "validate:plugin": "claude plugin validate ./ --strict",
-    "check:workflows": "node tools/check-workflow-syntax.mjs skills/audit-swarm/workflows/audit.mjs",
+    "check:workflows": "node tools/check-workflow-syntax.mjs skills/audit-swarm/workflows/audit.mjs && node tools/check-workflow-syntax.mjs skills/agent-playbook/workflows/update.mjs",
     "check": "npm run test && npm run lint:fm && npm run lint:md && npm run check:workflows"
   },
   "devDependencies": {

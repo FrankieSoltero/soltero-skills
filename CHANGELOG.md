@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.9.0] - 2026-07-10
+### Added
+- `agent-playbook` skill: living, tiered (Proven/Promising/Watch) playbook of
+  coding-agent and agentic-loop best practices. Advisor mode applies source-linked,
+  tier-labeled entries during agent-engineering work; update mode (soltero-skills
+  repo only) runs a bundled Workflow — 3-lane sweep (arXiv, lab blogs, OSS agent
+  frameworks) → dedupe vs persistent source log → deep-read → one-skeptic tiering
+  (default demote) → synthesis diffs + per-sweep digest. Per-stage model pins
+  (sonnet fan-out, opus synthesis) so sweeps never inherit the session model.
+  Ships bootstrap-seeded: 258 entries from 36 vetted sources.
+
 ## [0.8.0] - 2026-07-02
 ### Added
 - `walkthrough-tutor` skill: an interactive, level-calibrated tutoring session over a branch/PR's
