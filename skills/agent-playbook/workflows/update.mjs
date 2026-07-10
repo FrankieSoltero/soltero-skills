@@ -9,11 +9,14 @@ export const meta = {
   ],
 }
 
-const sinceDate = args.sinceDate
-const today = args.today
-const playbook = args.playbook
-const bootstrap = !!args.bootstrap
-const seen = new Set((args.seenKeys || []).map(k => String(k).toLowerCase().trim()))
+// Some runtimes deliver the Workflow `args` value as a JSON string rather than a parsed
+// object; tolerate both so required fields are never silently undefined.
+const opts = typeof args === 'string' ? JSON.parse(args) : (args || {})
+const sinceDate = opts.sinceDate
+const today = opts.today
+const playbook = opts.playbook
+const bootstrap = !!opts.bootstrap
+const seen = new Set((opts.seenKeys || []).map(k => String(k).toLowerCase().trim()))
 if (!sinceDate || !today || typeof playbook !== 'string') {
   throw new Error('args.sinceDate, args.today, and args.playbook (string) are required')
 }
