@@ -72,8 +72,10 @@ plugin release cycle).
    - each `edits[]` item: `add` → append `entryMarkdown` under its `## <topic>`
      heading (remove the "_No entries yet_" placeholder); `replace` → replace the
      entry whose `###` heading equals `replacesHeading`.
-   - prepend `digest` under the changelog title; update "Last sweep:" to today;
-     append one table row per `logEntries[]` item.
+   - prepend `digest` below the changelog's description line (i.e., after the file's
+     intro text, before any previous digests — newest first); update "Last sweep:" to
+     today; append one table row per `logEntries[]` item, mapping: Key ← key,
+     Title ← `[title](url)`, Evaluated ← today, Disposition ← disposition, Reason ← reason.
 5. **Report:** show the digest (it must state which lanes ran) and commit the three
    reference files: `chore: playbook sweep YYYY-MM-DD`.
 
