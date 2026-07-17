@@ -65,7 +65,7 @@ sections. Formats and conventions: `references/operations.md`.
    (`verified-by: memory-skeptic <date>`); never self-stamp "verified."
 7. **Commit + evidence.** Commit the pass (`chore(memory): gardening pass YYYY-MM-DD`,
    body listing each applied edit and each rejection/quarantine). Then run `git show
-   --stat` and base your report on that actual output — every claim in the report
+   --stat HEAD` and base your report on that actual output — every claim in the report
    (counts, commits, files) must be traceable to it. Git history is the rollback
    mechanism; an uncommitted pass is an unfinished pass.
 

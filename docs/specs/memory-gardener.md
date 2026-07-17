@@ -44,7 +44,8 @@
 ## Design source & evidence
 
 Design follows `docs/plans/2026-07-17-memory-skills-roadmap.md` §1 and its
-"Cross-cutting design rule". Evidence tiers use the agent-playbook vocabulary:
+"Cross-cutting design rule" (a local planning draft in the main checkout, not yet
+committed to the repo — commit it alongside or with the roadmap's own PR). Evidence tiers use the agent-playbook vocabulary:
 
 - Playbook **Promising** — curated/governed experience cards beat raw trajectory records,
   +4.65% SWE-bench Verified (MemGovern, via
