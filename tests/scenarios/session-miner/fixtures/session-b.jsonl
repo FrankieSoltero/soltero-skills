@@ -1,0 +1,14 @@
+{"type":"user","timestamp":"2026-06-09T09:15:02Z","message":{"role":"user","content":"Need a preview for the promo-banner branch, and the integration tests were flaky yesterday"}}
+{"type":"assistant","timestamp":"2026-06-09T09:15:30Z","message":{"role":"assistant","content":[{"type":"text","text":"Integration tests need a clean test DB first — resetting, then the usual preview flow."},{"type":"tool_use","name":"Bash","input":{"command":"npm run db:reset-test"}}]}}
+{"type":"tool_result","timestamp":"2026-06-09T09:15:55Z","content":"Test database reset. Requires DATABASE_URL_TEST in .env.test (found)."}
+{"type":"assistant","timestamp":"2026-06-09T09:16:03Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"git fetch origin && git rebase origin/main"}}]}}
+{"type":"tool_result","timestamp":"2026-06-09T09:16:20Z","content":"Successfully rebased and updated refs/heads/promo-banner."}
+{"type":"assistant","timestamp":"2026-06-09T09:16:28Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"npm run typecheck && npm test"}}]}}
+{"type":"tool_result","timestamp":"2026-06-09T09:18:47Z","content":"tsc: 0 errors\nTest Suites: 12 passed, 12 total\nTests: 44 passed, 44 total"}
+{"type":"assistant","timestamp":"2026-06-09T09:18:59Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"npm run build:preview && ./scripts/upload-preview.sh promo-banner"}}]}}
+{"type":"tool_result","timestamp":"2026-06-09T09:21:33Z","content":"Build complete.\nUploaded. Preview: https://promo-banner.preview.acme-shop.test"}
+{"type":"assistant","timestamp":"2026-06-09T09:21:40Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"for i in 1 2 3 4 5; do curl -sf https://promo-banner.preview.acme-shop.test/healthz && break; sleep 10; done"}}]}}
+{"type":"tool_result","timestamp":"2026-06-09T09:22:12Z","content":"{\"status\":\"ok\"}"}
+{"type":"assistant","timestamp":"2026-06-09T09:22:20Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"git commit -am 'chore: preview deploy for promo-banner'"}}]}}
+{"type":"tool_result","timestamp":"2026-06-09T09:22:24Z","content":"[promo-banner 9ab77e1] chore: preview deploy for promo-banner"}
+{"type":"user","timestamp":"2026-06-09T09:25:01Z","message":{"role":"user","content":"Works, shipping the link to the team. Done."}}

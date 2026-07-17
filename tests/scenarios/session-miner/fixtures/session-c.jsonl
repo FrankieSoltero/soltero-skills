@@ -1,0 +1,14 @@
+{"type":"user","timestamp":"2026-06-24T16:40:19Z","message":{"role":"user","content":"Preview deploy for gift-cards branch please. Run the integration suite too."}}
+{"type":"assistant","timestamp":"2026-06-24T16:40:45Z","message":{"role":"assistant","content":[{"type":"text","text":"Resetting the test DB first (integration tests fail without it), then rebase, verify, build, upload."},{"type":"tool_use","name":"Bash","input":{"command":"npm run db:reset-test"}}]}}
+{"type":"tool_result","timestamp":"2026-06-24T16:41:08Z","content":"Test database reset. Requires DATABASE_URL_TEST in .env.test (found)."}
+{"type":"assistant","timestamp":"2026-06-24T16:41:15Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"git fetch origin && git rebase origin/main"}}]}}
+{"type":"tool_result","timestamp":"2026-06-24T16:41:33Z","content":"Successfully rebased and updated refs/heads/gift-cards."}
+{"type":"assistant","timestamp":"2026-06-24T16:41:40Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"npm run typecheck && npm test && npm run test:integration"}}]}}
+{"type":"tool_result","timestamp":"2026-06-24T16:45:58Z","content":"tsc: 0 errors\nTest Suites: 15 passed, 15 total\nTests: 51 passed, 51 total\nIntegration: 9 passed, 9 total"}
+{"type":"assistant","timestamp":"2026-06-24T16:46:10Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"npm run build:preview && ./scripts/upload-preview.sh gift-cards"}}]}}
+{"type":"tool_result","timestamp":"2026-06-24T16:48:51Z","content":"Build complete.\nUploaded. Preview: https://gift-cards.preview.acme-shop.test"}
+{"type":"assistant","timestamp":"2026-06-24T16:48:58Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"for i in 1 2 3 4 5; do curl -sf https://gift-cards.preview.acme-shop.test/healthz && break; sleep 10; done"}}]}}
+{"type":"tool_result","timestamp":"2026-06-24T16:49:31Z","content":"{\"status\":\"ok\"}"}
+{"type":"assistant","timestamp":"2026-06-24T16:49:40Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"git commit -am 'chore: preview deploy for gift-cards'"}}]}}
+{"type":"tool_result","timestamp":"2026-06-24T16:49:44Z","content":"[gift-cards c44d0f2] chore: preview deploy for gift-cards"}
+{"type":"user","timestamp":"2026-06-24T16:52:10Z","message":{"role":"user","content":"Confirmed working. Thanks!"}}

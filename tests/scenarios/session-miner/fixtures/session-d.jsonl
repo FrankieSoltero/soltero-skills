@@ -1,0 +1,9 @@
+{"type":"user","timestamp":"2026-06-17T18:02:44Z","message":{"role":"user","content":"Site felt slow after the last deploy. Can you do the cache warm-up thing?"}}
+{"type":"assistant","timestamp":"2026-06-17T18:03:05Z","message":{"role":"assistant","content":[{"type":"text","text":"Running the warm-up ritual: flush redis, replay seed traffic, prime the CDN."},{"type":"tool_use","name":"Bash","input":{"command":"redis-cli -h cache.internal.acme-shop.test FLUSHDB"}}]}}
+{"type":"tool_result","timestamp":"2026-06-17T18:03:12Z","content":"OK"}
+{"type":"assistant","timestamp":"2026-06-17T18:03:20Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"node scripts/replay-seed-traffic.mjs --count 500"}}]}}
+{"type":"tool_result","timestamp":"2026-06-17T18:05:41Z","content":"Replayed 500 requests. 500 completed."}
+{"type":"assistant","timestamp":"2026-06-17T18:05:50Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"./scripts/prime-cdn.sh --paths /,/checkout,/products"}}]}}
+{"type":"tool_result","timestamp":"2026-06-17T18:07:02Z","content":"Primed 3 path groups."}
+{"type":"assistant","timestamp":"2026-06-17T18:07:15Z","message":{"role":"assistant","content":[{"type":"text","text":"Warm-up ritual complete — all three steps ran cleanly. The site should feel faster once caches settle."}]}}
+{"type":"user","timestamp":"2026-06-17T18:08:03Z","message":{"role":"user","content":"Ok, hard to tell yet. Let's pick this up tomorrow."}}
