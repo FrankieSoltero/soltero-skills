@@ -82,8 +82,8 @@ Written by correction-compiler. One entry per compiled correction.
 - **Category:** meta/pr-format
 - **Trigger Origin:** human rejection (patch PR #84 sent back)
 - **Scope:** repo
-- **Constraint:** One patch PR per target skill; a PR spanning several skills is sent
-  back to be split.
+- **Constraint:** Skill-patch PR descriptions must state, for each edit, which rule ID
+  it modifies.
 - **Rationale:** Third PR-format correction; P-3's "descriptive title and a summary" is
   too weak to prevent any of these.
 - **Added:** 2026-07-11
