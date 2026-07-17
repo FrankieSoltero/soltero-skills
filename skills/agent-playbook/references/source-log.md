@@ -4,7 +4,7 @@ Every source a sweep deep-read, with its disposition — so rejected sources are
 re-litigated. Keys are arXiv IDs or canonical URLs; the sweep dedupes against this
 whole table.
 
-**Last sweep:** 2026-07-09 (bootstrap + same-day delta run; window 2026-01-09 → 2026-07-09).
+**Last sweep:** 2026-07-17 (delta run; window 2026-07-09 → 2026-07-17).
 
 | Key | Title | Evaluated | Disposition | Reason |
 |-----|-------|-----------|-------------|--------|
@@ -44,3 +44,15 @@ whole table.
 | cursor-changelog-2-4-subagents-mcp-json | [Cursor 2.4 — Subagents with own context, and MCP tools as lazily-loaded JSON files](https://cursor.com/changelog/2-4) | 2026-07-09 | adopted | 3 tactic(s) kept: Promising, Watch, Promising |
 | 2606.26300 | [The Verification Horizon: No Silver Bullet for Coding Agent Rewards](https://arxiv.org/abs/2606.26300) | 2026-07-09 | adopted | 17 tactic(s) kept: Promising, Promising, Promising, Promising, Watch, Promising, Promising, Promising, Promising, Watch, Promising, Watch, Watch, Watch, Watch, Promising, Watch |
 | 2605.15315 | [Context Pruning for Coding Agents via Multi-Rubric Latent Reasoning](https://arxiv.org/pdf/2605.15315) | 2026-07-09 | adopted | 8 tactic(s) kept: Watch, Promising, Promising, Watch, Promising, Promising, Watch, Promising |
+| 2607.14890 | [Proof-or-Stop: Don't Trust the Agent, Trust the Evidence -- Loop Engineering for Verifiable Evidence-Gated Lifecycle Control](https://arxiv.org/abs/2607.14890) | 2026-07-17 | adopted | 11 tactic(s) kept: Watch, Promising, Promising, Promising, Watch, Watch, Watch, Promising, Watch, Watch, Promising |
+| 2607.14167 | [Structured Feedback Improves Repair in an LLM Agent Loop](https://arxiv.org/abs/2607.14167) | 2026-07-17 | adopted | 4 tactic(s) kept: Promising, Watch, Promising, Watch |
+| 2607.13091 | [Self-Improving AI Coding Agents Through Accumulated Behavioral Rules: A Closed-Loop Framework](https://arxiv.org/abs/2607.13091) | 2026-07-17 | adopted | 10 tactic(s) kept: Watch, Watch, Watch, Watch, Watch, Watch, Promising, Watch, Watch, Watch |
+| 2607.13034 | [Do AI Agents Know When a Task Is Simple? Toward Complexity-Aware Reasoning and Execution](https://arxiv.org/abs/2607.13034) | 2026-07-17 | adopted | 8 tactic(s) kept: Promising, Promising, Promising, Watch, Watch, Promising, Watch, Promising |
+| claude.com/blog/ai-code-migration | [How Anthropic runs large-scale code migrations with Claude Code](https://claude.com/blog/ai-code-migration) | 2026-07-17 | adopted | 13 tactic(s) kept: Promising, Promising, Promising, Promising, Watch, Watch, Promising, Promising, Watch, Promising, Promising, Promising, Watch |
+| warp.dev/blog/self-improving-code-review | [How to build a cloud software factory: self-improving code review](https://www.warp.dev/blog/how-to-build-a-cloud-software-factory-self-improving-code-review) | 2026-07-17 | adopted | 7 tactic(s) kept: Promising, Proven, Proven, Promising, Promising, Watch, Proven |
+| openhands-toolshield-analyzer | [OpenHands SDK v1.36.0: add ToolShieldLLMSecurityAnalyzer — separate guardrail LLM evaluates every tool action instead of actor self-annotation](https://github.com/OpenHands/software-agent-sdk/releases/tag/v1.36.0) | 2026-07-17 | adopted | 7 tactic(s) kept: Watch, Promising, Watch, Watch, Watch, Watch, Watch |
+| 2607.14390 | [Why Git Is the Memory Solution for the Agentic Development Lifecycle](https://arxiv.org/abs/2607.14390) | 2026-07-17 | adopted | 14 tactic(s) kept: Watch, Watch, Watch, Watch, Promising, Promising, Watch, Watch, Watch, Watch, Watch, Watch, Watch, Watch |
+| 2607.12605 | [Multi-Perspective Agentic Program Repair via Code Property Graphs and Temporal Execution Graphs](https://arxiv.org/abs/2607.12605) | 2026-07-17 | adopted | 12 tactic(s) kept: Promising, Promising, Promising, Watch, Promising, Watch, Watch, Watch, Watch, Watch, Promising, Promising |
+| 2607.14166 | [Stop Means Stop: Measuring and Repairing the Enforcement Gap in Agent-Framework Control Primitives](https://arxiv.org/abs/2607.14166) | 2026-07-17 | adopted | 16 tactic(s) kept: Watch, Promising, Promising, Promising, Promising, Promising, Promising, Promising, Watch, Watch, Promising, Promising, Promising, Promising, Watch, Watch |
+| cognition.com/blog/making-fable-cheaper-than-opus | [Making Fable Cheaper Than Opus](https://cognition.com/blog/making-fable-cheaper-than-opus) | 2026-07-17 | adopted | 5 tactic(s) kept: Watch, Watch, Watch, Promising, Watch |
+| claude-code-2.1.210-prompt-injection-agent-tool | [Claude Code 2.1.210: hardened the Agent (subagent-spawning) tool against indirect prompt injection via content a subagent read](https://github.com/anthropics/claude-code/releases/tag/v2.1.210) | 2026-07-17 | adopted | 9 tactic(s) kept: Watch, Promising, Watch, Watch, Watch, Watch, Watch, Watch, Watch |

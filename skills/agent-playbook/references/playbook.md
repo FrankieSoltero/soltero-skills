@@ -206,6 +206,53 @@ Entry format (every entry follows it):
 - **Sources:** [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
 - **Detail:** Rubric-guided labeling extracts semantic and dependency sub-labels with zero extra LLM calls and denoises the teacher's binary labels (recovering import/scope lines the teacher marked prunable on semantic grounds). Single-source, no ablation isolating the denoising benefit, and narrow (only relevant when training a custom pruner).
 
+### Give the agent a structured, queryable evidence graph to query on demand for hypothesis-relevant events, instead of serializing full execution traces/logs into the prompt.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** A motivational study on 17 Defects4J projects found raw traces average 2.38M runtime events/bug, only 0.55% touch developer-patched methods, and 99.95% are repetitive — huge and low-signal as context. A Temporal Execution Graph queried on demand (dynamic_method_macro/sequence_info/call_context/…) keeps repair effective while compressing this; ablating it dropped correctly-repaired bugs ~8.6%. Single paper.
+  *Tool notes:* Built from bytecode-level instrumentation; orchestration in LangGraph.
+
+### Compact dynamic evidence with a staged filter pipeline before it reaches the agent: coverage-filter to methods executed by a failing test, structural-filter out trivially-recoverable methods (getters/setters/empty/delegators), then behavior-filter records that can't connect to a valid invocation chain.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** On 854 bugs, execution filtering removed ~94.85% of executed methods, structural filtering a further −16.9% methods / −37.5% events, and behavior filtering −55.97% retained records / −45.89% trace size — compounding, cheapest-first. Single paper (Java/Defects4J).
+  *Tool notes:* EF via JaCoCo coverage, SF via AST analysis, BF via graph-connectivity over the reconstructed execution.
+
+### Pass a structured summary (key findings, unresolved issues, chosen next action) between reasoning stages instead of full history, letting the agent pull raw history back only if the summary proves insufficient.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** CT-Repair's summary-based state transfer averaged ~178K tokens/bug vs 270K/438K for context-heavier baselines. The quantitative attribution is a confounded whole-pipeline comparison, and summarization is lossy — the on-demand raw-retrieval fallback is what makes it safe; the pattern (structured handoff + on-demand raw pull) is independently attested in industry compaction work.
+
+### Anchor agent memory to git: persist only a thin ledger (conversation turns with role tags, tool names, file paths, producing commit SHA — never diff/code content) and treat derived indexes/structural maps as disposable functions of the tree at a SHA, regenerated from the ledger.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Why Git Is the Memory Solution for the Agentic Development Lifecycle (arXiv 2607.14390)](https://arxiv.org/abs/2607.14390)
+- **Detail:** Reconstruct code content on demand from the commit SHA; refresh compiled structure by diffing only changed sections and surface drift as an ordinary reviewable git diff; keep the memory router's own decision logic as plain git-versioned text rather than an opaque component. Single vendor preprint — architectural argument, no ablation vs a fat/diff-storing store.
+
+### Periodically review an accumulated rule/instruction file for redundant or overlapping entries and let the more specific rule subsume the more general one, rather than letting duplicates accumulate.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Self-Improving AI Coding Agents Through Accumulated Behavioral Rules (arXiv 2607.13091)](https://arxiv.org/abs/2607.13091)
+- **Detail:** A specificity-based tie-break for overlaps; the paper flags automated conflict detection (cluster similar review comments, flag proposed rules that contradict existing ones before merge) as unbuilt future work. Convergent with CLAUDE.md/AGENTS.md pruning guidance and rule-based subsumption; unquantified governance heuristic.
+
+### Keep an ephemeral session-handoff file (in-progress work, pending reviews, suggested next actions) plus a chronological task log, distinct from the permanent rule/memory file, to preserve work-in-progress continuity across sessions.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Self-Improving AI Coding Agents (arXiv 2607.13091)](https://arxiv.org/abs/2607.13091)
+- **Detail:** The specific split — ephemeral WIP handoff vs permanent rules vs chronological log — is corroborated by multiple independent handoff-pattern implementations (this repo's agent-handoff skill converges on the same eight-element handoff). In-paper evidence isn't isolated, but the design is a concrete, adopted community pattern.
+
+### When overseeing a large agent swarm, deliberately ignore individual agent failures (the loop's fixer agents burn those down) and watch only for recurring cross-file patterns that signal a systemic rule gap.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** 'Individual failures are the loop's job. Your attention belongs on the patterns' — a recurring mistake means fix the upstream rule once and regenerate, not patch each instance. A specific instance of human-on-the-loop oversight; single-source case study.
+
+### When building the context a judge/guardrail LLM sees, include only the risk-signal fields (tool name, arguments, a short actor summary) and exclude verbose reasoning/extended-thinking traces, exposing the formatter as an overridable hook for the rare case needing reasoning visibility.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [OpenHands SDK v1.36.0 — ToolShieldLLMSecurityAnalyzer](https://github.com/OpenHands/software-agent-sdk/releases/tag/v1.36.0)
+- **Detail:** Reasoning text inflates prompt size without proportional judge-accuracy gain (asserted design choice, unablated). Note the field is genuinely split — some guardrail designs (GuardReasoner-style) deliberately keep or generate reasoning as part of judgment, so treat this as one team's default, not settled.
+
+### Don't treat 'read everything first' as the safe default for hard/deceptive tasks — on the hardest tier it is also the policy most likely to fail (burning step budgets, hitting provider tokens-per-minute limits), not a reliability guarantee.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Do AI Agents Know When a Task Is Simple? (arXiv 2607.13034)](https://arxiv.org/abs/2607.13034)
+- **Detail:** In a real GPT-4o case study the heaviest-reading trajectories were the ones that failed (step-budget exhaustion, wrong edits, TPM rate-limit at ~315k cumulative tokens). Cuts against the intuitive 'when unsure, read more to be safe'; the token-bloat→TPM-ceiling mechanism is independently corroborated by Claude Code rate-limit/auto-compaction guidance. Underpowered case study (n=3, one model).
+
 ## Agentic loop design
 
 ### Run the agent in Plan Mode before generating code: research the codebase, ask clarifying questions, and produce a reviewable plan with file paths that you approve first.
@@ -245,10 +292,10 @@ Entry format (every entry follows it):
 - **Sources:** [mini-swe-agent v2.4.0 (PR #863)](https://github.com/SWE-agent/mini-swe-agent/releases), [OpenDev](https://arxiv.org/abs/2603.05344)
 - **Detail:** mini-swe-agent caps consecutive format errors (default 3, RepeatedFormatError exit) and resets on any clean step; OpenDev fingerprints repeated tool calls in a sliding window and escalates. Count *consecutive* failures separately from total steps, and give the abort a distinct exit status for triage. Kilocode ships the same fingerprint mechanism.
 
-### Have the frontier/main agent take minimal direct actions and delegate mechanical execution to a cheaper sidekick, reserving the main model for planning, disambiguation, and review.
-- **Tier:** Promising (added 2026-07-09)
-- **Sources:** [Cognition: Devin Fusion](https://cognition.com/blog/devin-fusion), [Anthropic multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)
-- **Detail:** The main agent should delegate and monitor by default; Anthropic's lead/subagent split reports >90% over single-agent baseline. Cognition notes a negative case where delegating nuanced-judgment work hurt, so keep judgment-heavy steps on the strong model.
+### Have the frontier/main agent take minimal direct actions and delegate mechanical execution to a cheaper sidekick, reserving the main model for planning, disambiguation, review — and for writing the rules other agents will follow.
+- **Tier:** Promising (added 2026-07-09; updated 2026-07-17)
+- **Sources:** [Cognition: Devin Fusion](https://cognition.com/blog/devin-fusion), [Anthropic multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system), [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration), [Cognition: Making Fable Cheaper Than Opus](https://cognition.com/blog/making-fable-cheaper-than-opus)
+- **Detail:** The main agent should delegate and monitor by default; Anthropic's lead/subagent split reports >90% over single-agent. Two further first-party reports sharpen it: Anthropic's large-scale migrations route high-volume mechanical translation to smaller models (Sonnet fanned across subagents) and reserve the largest model for reviewers and — critically — for authoring the rules/prompts other agents follow (a Bun Zig→Rust migration spent ~$165k across 5.9B/690M tokens under this routing); and Cognition's Fable found lead-model turn count is the dominant cost lever (Fable lead ~11.5 turns/run vs Opus ~26.5, cost dominated by lead turns + dragged-along context, not raw token price), so design the loop for the lead to take as few turns as possible by delegating substantive work early rather than looping solo. Keep judgment-heavy steps on the strong model — Cognition notes delegating nuanced-judgment work hurt.
 
 ### Generate new filtering/handling rules reactively and lazily — only on first encounter with an uncovered output type — rather than enumerating every case upfront.
 - **Tier:** Promising (added 2026-07-09)
@@ -421,6 +468,58 @@ Entry format (every entry follows it):
 - **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/)
 - **Detail:** Gemini 3.x models jumped sharply with the skill while 2.5-series improved little in the same harness. Single vendor, single-skill benchmark, and the broader literature is mixed — some work finds weaker models benefit *more* from scaffolding that compensates for weak native planning. Useful caution to validate per-model, but not a settled pattern.
 
+### Default every lifecycle gate to fail-closed: missing, incomplete, stale, or unauthorized evidence blocks the transition outright rather than letting the agent proceed on the assumption that work is probably fine.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** Engine-contract scenarios (evidence-gate, budget-stop, human-handoff, no-false-done) all correctly BLOCK 10/10, and stress scenarios with one missing or prose-only piece of evidence correctly fail 'done'. Classic fail-safe-defaults applied to autonomous-agent completion; single self-reported paper plus directional community convergence on veto-on-completion designs.
+
+### Expect and openly report a real cost overhead from evidence gating (~1.2x tokens vs a compute-matched retry loop, up to ~3.8x vs an ungated no-review run) rather than treating overhead as something to hide or optimize away first.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** The gated arm spent ~1.2x the tokens of a compute-budgeted naive retry for a +1.6pp not-amplified improvement (hidden-failure amplification 31/1800→2/1800, CI excludes 0). Sets a concrete budgeting expectation and counsels against prematurely weakening gates to chase token savings. Single paper, one model family; the 3.8x figure is a weaker descriptive comparison.
+
+### Before acting, estimate task difficulty/scope from cheap lexical signals and commit to a minimum-viable execution path sized to that estimate rather than reading everything first — and keep the upfront estimation step even though it adds a small planning cost.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Do AI Agents Know When a Task Is Simple? — E3 (arXiv 2607.13034)](https://arxiv.org/abs/2607.13034)
+- **Detail:** On MSE-Bench (121 tasks) the Estimate+Execute-minimal policy matched a read-everything baseline's 100% success while cutting cost ~85% / tokens ~91% / files-inspected ~92%; removing the estimate step kept success but raised cost +20% (+36% on repo-scope tasks). Caveat: on frontier models that already read frugally, expect only modest (~15-20%) real savings, not the simulator's dramatic figures. Self-built simulator benchmark, single paper.
+  *Tool notes:* Implementable as a lexical scope classifier (explicit filename → single-file; 'refactor across the codebase' → repo-level) over the instruction text.
+
+### Make agent work queues disk-based and idempotent by defining 'done' as 'the output file exists on disk,' so an orchestrator rebuilds the remaining work list from disk state each run and survives crashes/restarts without extra bookkeeping.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** Makes a file-emitting agent pipeline inherently fault-tolerant and resumable — agents become safely re-runnable and crashes recover without a separate state machine. Echoes make-style target-existence staleness and independent idempotent-agent-pipeline write-ups (check-before-act executors, done-markers).
+  *Tool notes:* For shell/orchestrator-driven, file-emitting pipelines; still applies alongside the durable-log/event-sourcing patterns.
+
+### Don't assume a framework's human-approval pause suspends the whole run — when a step has concurrent/sibling branches, assume a sibling's side effect will execute during the pause unless verified otherwise.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** The 'sibling leak' reproduced in every evaluated framework shipping a pre-execution gate (LangGraph, LlamaIndex Workflows, MS Agent Framework, OpenAI Agents SDK, LangGraph.js), P(leak|emitted)=1.00; a 1,000-workflow sweep showed 577/577 leak when effect and gate share a superstep, 0/363 for gate-descendant effects. A proven design trichotomy: you can get at most two of {concurrency, in-framework enforcement, no-leak} — the third path is an external mediated admission point. Durable-execution engines (Temporal) that guarantee clean replay do NOT thereby provide the pause-barrier — verify it separately, and prefer heartbeat-based cooperative cancellation over best-effort interruption of blocking calls. Single fresh unreviewed preprint, but backed by a formal proof, cross-framework reproduction, and a 13-incident public GitHub corpus.
+
+### Structure an agent's reasoning as an explicit finite-state machine — few states, each with a fixed objective, a required output schema, and a bounded tool set — self-looping on a 'need more X' transition until the schema is satisfiable, then advancing.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** Used across CT-Repair's perspective agents (understand_fault → collect_evidence → generate_fix, with self-loop transitions). Already-standard practice (LangGraph nodes/edges, prior FSM-agent work); the paper's ablations isolate evidence diversity, not the FSM control-flow itself, so this restates a known pattern.
+
+### To get implementation-level variation while holding the diagnosis/plan fixed, cycle through multiple LLMs/backbones round-robin per accepted strategy (bounded as r models × k samples) rather than unboundedly resampling one model against one shared context.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** With a 12-candidate budget CT-Repair beat baselines using 45–117 samples, but the win is a confounded whole-system comparison, not an ablation isolating round-robin sampling. Single paper.
+
+### Triage memory queries before answering: send present-tense 'what does the code do now' questions to grep/read the tree at HEAD (never to stored episodes, which can be stale), route past-tense/'why' questions to the memory ledger, and route different question kinds (breadth vs pointed vs rationale) to different retrieval mechanisms rather than one single-shot lookup.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Why Git Is the Memory Solution (arXiv 2607.14390)](https://arxiv.org/abs/2607.14390)
+- **Detail:** Substrate triage (grep the tree for present tense, recall the ledger for past tense, stay silent when neither) plus per-kind routing; a routed map+episodes system matched or beat the best single mode per question kind at far lower token cost. Single vendor preprint, tiny n, with some evidence overstated in-paper — treat as directional.
+
+### In hook/callback-driven agent loops, surface a 'callback timed out' signal distinctly from 'user rejected' — conflating them makes unattended sessions stall waiting on a rejection that never happened.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Claude Code v2.1.210 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.210)
+- **Detail:** Keep timeout and rejection as distinct signal values in the callback protocol so a timeout doesn't read as a human 'no' and block an autonomous run. Single changelog line; generic 'don't overload distinct error states' applied to agent hook callbacks.
+
+### For a consequential per-call model choice (e.g. an auto-mode permission classifier), validate/select the model once on the session's first request and pin it for the session rather than re-deciding per call.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Claude Code v2.1.210 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.210)
+- **Detail:** Keeps permission behavior consistent within a session (avoids mid-session behavioral drift from flip-flopping model choice). Single changelog line, no rationale/benchmark; narrow to teams building their own per-call model-selection classifiers.
+
 ## Spec & prompting
 
 ### Write task specs precise enough that two independent domain experts reach the same pass/fail verdict, and state every condition the grader checks in the task description.
@@ -553,6 +652,86 @@ Entry format (every entry follows it):
 - **Tier:** Promising (added 2026-07-09)
 - **Sources:** [The Verification Horizon (arXiv 2606.26300)](https://arxiv.org/abs/2606.26300)
 - **Detail:** Each failure mode has a targeted prompt fix, and the v1→v4 prompt progression improved BoN-Acc and τ on NL2Repo (though BoN-Acc dipped at the role-confusion step; τ and regret improved). Role confusion — the judge quietly editing code or reusing repo tests — is a specific, non-obvious articulation. Single-source, single dataset/judge model.
+
+### Don't over-invest in feedback formatting (JSON/keyed schema vs natural-language prose) — deliver the same repair content in whichever format fits your tooling, since the syntactic wrapper made negligible difference once the same information was present.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Structured Feedback Improves Repair in an LLM Agent Loop (arXiv 2607.14167)](https://arxiv.org/abs/2607.14167)
+- **Detail:** Keyed JSON (TypedFields) vs matched-content prose (SameNL) differed by only +2/0 pts (CIs include zero) while both beat raw diagnostics by ~42pts — the repair content (location, observed value, admissible alternatives), not the schema, drives the gain. Directionally corroborated by format-restriction studies (arXiv 2408.02442). Single narrow benchmark (TextWorld), not yet shown on real code repair — cuts against the convention of heavy Pydantic/JSON-schema investment for feedback quality.
+
+### For a large agent-driven migration/transformation, front-load a rulebook written before the gap inventory (gap inventory = what the rulebook's defaults won't cover, tested together in a joint audit), then run a disposable stress-test pass on a small slice whose output you discard entirely, using only what breaks to harden the rulebook.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** 'The rulebook must come before the gap inventory'; 'the rulebook and the stress test are the most time-consuming, everything after is mostly queues burning down.' Stress-test output is credited nothing — the goal is to refine rules, not make incremental progress. Single-source mechanic; the redesign case shows ordering can invert (translate-then-audit), so treat as a strong default, not a law.
+
+### Start with detailed, blunt/emphatic prompts (e.g. 'the compiler will catch mistakes in the next step') while consistency is still being established, then shift to shorter targeted prompts once a compiler-backed loop is trusted to catch downstream errors.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** Ties prompt verbosity to whether a downstream automated verifier exists to catch errors, and sequences it to migration phases (stress test → scaled rollout). Single anecdotal migration-playbook source, no A/B data.
+
+### Have an implementer agent that hits genuine, unresolvable ambiguity emit a machine-greppable marker (e.g. `// TODO(port): <reason>`) instead of guessing, so ambiguous spots are collected and resolved centrally rather than silently and inconsistently patched per-file.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** A batch/unattended adaptation of 'flag, don't guess' — downstream compiler/test failures surface the flagged markers for a dedicated fix step. The general ask-when-unsure principle is common; the greppable-marker + centralized-triage mechanic for non-interactive multi-agent pipelines is single-source.
+
+### Give a review skill explicit written criteria for its severity tiers (severe/important/nit) and comment style/tone so feedback is consistent across runs.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Warp: self-improving code review](https://www.warp.dev/blog/how-to-build-a-cloud-software-factory-self-improving-code-review)
+- **Detail:** Reduces LLM-reviewer inconsistency and nitpicking (a documented failure mode). Independently recommended by Anthropic's own Claude Code code-review docs (per-repo redefinition of severity, nit caps) and multiple AI-review products with tunable nitpickiness — multiple credible sources, but no controlled benchmark of the specific practice.
+
+### When an estimator's surface signals conflict with a cheap structural check (wording sounds localized but a quick grep shows the token occurs across many files), lower confidence and pre-flag the task as a likely expansion candidate rather than trusting the lexical read.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Do AI Agents Know When a Task Is Simple? (arXiv 2607.13034)](https://arxiv.org/abs/2607.13034)
+- **Detail:** Implementable as grep occurrence-count vs implied scope → downgrade confidence, bias toward one extra scope tier or earlier verification. Note the paper's own blind spot: this misses deceptive indirect sites (alias/re-export) where the literal token doesn't match — recovery there comes from the verify-and-expand loop, not this heuristic. Unablated in isolation.
+
+### Organize the agent instruction file into distinct named sections — Behavioral Rules, Code Standards, Self-Review Checklist, Anti-Patterns (prohibited pattern + explanation + correct alternative), and Workflow Rules (task-type → which tool/subagent to invoke) — rather than one undifferentiated block.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Self-Improving AI Coding Agents (arXiv 2607.13091)](https://arxiv.org/abs/2607.13091)
+- **Detail:** The Workflow Rules section functions as a task-type→tool/subagent routing table (the more distinctive, agentic piece). Uncontrolled single-deployment case study (authors ran no baseline/ablation isolating structure); the general sectioning idea is already common industry practice.
+
+### Represent a candidate solution as a fixed schema (e.g. {root-cause, target-locations, intended-changes, confidence/risk}) rather than free text, so downstream stages (patch generation, scoring, feedback routing) consume a stable machine-readable contract.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** CT-Repair's ⟨RootCause, Suggestion⟩ representation enables per-candidate identifier tracking and routing scored feedback back to the originating strategy. Necessary plumbing for that system rather than a proven win; overlaps existing typed-schema guidance, no ablation isolating schema-vs-prose.
+
+### When adding a human-approval gate to a multi-phase external API (authorize-then-capture, create-then-activate), explicitly choose and key the gate to the phase where authority becomes irrevocable, rather than assuming one admission point covers the whole logical multi-step action atomically.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** Phase-grained mediation gives no atomicity across phases of one logical action, so pick the irrevocable phase deliberately and key the gate there. Consistent with saga/compensation literature; a limitations-note in the paper, not benchmarked.
+
+### When prompting a judge/classifier to flag risky agent actions, instruct it to evaluate the full recent action sequence (not the current action in isolation) and name the attack shape to watch for (e.g. 'reconnaissance then privilege escalation, or components that assemble into malware'), so individually-benign steps that compose into harm are caught.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [OpenHands SDK v1.36.0 — ToolShield](https://github.com/OpenHands/software-agent-sdk/releases/tag/v1.36.0)
+- **Detail:** The shipped guardrail system prompt does exactly this. The general principle (conversation-level judging beats turn-by-turn) is corroborated elsewhere (Crescendo, JailJudge), but the specific numeric ASR drop is confounded with the separate-judge de-biasing effect and self-reported in a GitHub issue.
+
+### When delegating a coding task to a cheaper subagent, write an outcome/constraint-based spec (algorithm, constraints, edge cases, test matrix, definition of done) rather than dictating exact implementation details line-by-line.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Cognition: Making Fable Cheaper Than Opus](https://cognition.com/blog/making-fable-cheaper-than-opus)
+- **Detail:** Contrasts constraint specs (e.g. 'operator() must be O(1) in pointer length … report the diff and test results before committing') against implementation dictation ('overwrite config.json with exactly: {…}'). Single vendor benchmark that confounds model with prompt style; the underlying spec-driven-delegation principle is independently established (spec-driven-development literature).
+
+### Bake an explicit verification gate into the delegation brief itself, requiring the subagent to report back the full diff and test results before it is allowed to commit.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Cognition: Making Fable Cheaper Than Opus](https://cognition.com/blog/making-fable-cheaper-than-opus)
+- **Detail:** A single quoted spec excerpt ('Report back with the full diff and test results BEFORE committing'). The general 'orchestrator verifies subagent claims before merge' pattern is echoed across independent sources, but this exact brief-instruction's effect isn't isolated from the whole delegation style.
+
+### Gate special keyword trigger phrases / behavior escalations (an 'ultracode'-style opt-in) to genuinely human-originated input, excluding webhook payloads and relayed/quoted third-party text (PR comments), so an external actor can't trigger elevated behavior by embedding the phrase in content the agent reads.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Claude Code v2.1.210 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.210)
+- **Detail:** A provenance / data-channel-separation instance for keyword-gated mode switches — trigger phrases are easy to treat as plain text matching without considering input provenance. Single changelog line; generalizes to any keyword-triggered agent behavior switch.
+
+### In skill/command templates using positional placeholders ($1, $2, …), preserve unmatched placeholders verbatim rather than silently stripping them, so a missing-argument bug is visible instead of producing a silently mangled prompt.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Claude Code v2.1.210 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.210)
+- **Detail:** Fail-visible over silent-strip on a template-substitution miss (a generalization of strict-undefined template modes). Single changelog line; mainly actionable for those building their own $-style substitution for skill/subagent prompts.
+
+### Freeze the scope of an agentic dev task into a contract bound to specific file paths at the plan-to-dev transition, and fail closed if the resulting diff touches anything outside that contracted scope.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** A diff-path allowlist bound to the current source hash, with out-of-scope edits refused at a named lifecycle gate. Convergent with practitioner 'agent-guardrails' / change-budget tooling, but exercised only implicitly across the paper's corpus with no isolated experiment.
+
+### Restrict heavy evidence/verification machinery to claims that actually move the lifecycle (phase change, review pass, test certification, done, merge); treat ordinary developer notes, rationale, and docs as advisory-only and exclude them from any gate or source-state binding.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** Keeps the gating discipline from becoming too heavyweight by partitioning five gated claim-types from advisory content. A stated scoping principle (unquantified); convergent with standard CI/CD 'gate at consequential checkpoints only' practice.
 
 ## Tool design
 
@@ -753,6 +932,80 @@ Entry format (every entry follows it):
 - **Tier:** Watch (added 2026-07-09)
 - **Sources:** [Context Pruning via Multi-Rubric Latent Reasoning (arXiv 2605.15315)](https://arxiv.org/pdf/2605.15315)
 - **Detail:** A learned keep→keep transition avoids isolated single-line keeps that fragment output; SWE-Pruner (independent prior work) reports 23-38% token reduction while holding task success. No ablation isolates the transition prior from confounds, the source paper itself supersedes single-CRF with a multi-CRF/MoE refinement, and it requires training a bespoke sequence-labeling model — low broad actionability.
+
+### Run a CI-triggered review/analysis agent with read-only permissions and have deterministic CI code (not the agent) perform the actual writes — emit structured output (e.g. review.json) that a non-agent step converts into PR comments — to blunt prompt-injection from untrusted PR content.
+- **Tier:** Proven (added 2026-07-17)
+- **Sources:** [Warp: self-improving code review](https://www.warp.dev/blog/how-to-build-a-cloud-software-factory-self-improving-code-review)
+- **Detail:** An agentic workflow must never simultaneously process untrusted input, hold write/secret access, and change external state (Microsoft's 'Agents Rule of Two'); the read-only-agent + separate-write-step split is the mitigation for the documented 'Comment and Control' (CVSS 9.4) prompt-injection class that affected Claude Code, Gemini CLI, and GitHub Copilot Agent GitHub Actions. Multiple independent authoritative sources (Warp, Microsoft Security, Cloud Security Alliance, disclosed exploits) converge.
+  *Tool notes:* GitHub Actions specifically; the privilege-separation principle (analyze-only agent, deterministic step performs privileged writes) is framework-agnostic.
+
+### Ship deterministic logic a skill uses (diff parsing, output formatting) as bundled scripts (skill resources), rather than having the agent regenerate that code from scratch each run.
+- **Tier:** Proven (added 2026-07-17)
+- **Sources:** [Warp: self-improving code review](https://www.warp.dev/blog/how-to-build-a-cloud-software-factory-self-improving-code-review), [Anthropic: Agent Skills best practices](https://platform.claude.com/docs)
+- **Detail:** More reliable than generated code, saves tokens (no code in context), and ensures consistency across runs. Anthropic's official skill-authoring docs state the identical rule ('prefer scripts for deterministic operations', 'provide utility scripts') with matching rationale, and multiple third-party guides converge. Applies to any skill-based agent framework that supports bundling non-agent code alongside instructions.
+
+### Prefer narrowly-scoped Edit(path)/Read(path) permission rules over Write(path)/NotebookEdit(path)/Glob(path) rules when scoping what an agent/subagent may touch.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Claude Code v2.1.210 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.210)
+- **Detail:** In Claude Code, Write/NotebookEdit/Glob path rules are parsed but never matched by the file-permission checks (silent no-ops for scoping), giving a false sense of confinement; Edit(path) covers all file-editing tools and Read(path) covers Glob/Grep. Verified against the current permissions docs; single-vendor but a concrete, non-obvious footgun.
+  *Tool notes:* Claude Code permission-rule syntax.
+
+### Serialize expensive shared build/compile operations through a single dedicated 'build daemon' that batches patches from parallel fixer agents, rebuilds once, re-runs affected tests, and reports back — rather than letting many agents trigger independent colliding rebuilds.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** 'The daemon is the only process allowed to rebuild the binary; fixers write patches, the daemon batches them, rebuilds once, re-runs affected tests.' A concrete instantiation of serialize-contention-on-a-shared-resource (independently recommended for multi-agent orchestration race conditions); no quantified before/after in-source. Applies to any pipeline where parallel agents patch one expensive-to-rebuild artifact.
+
+### Represent review/test verdicts as signed, self-contained JSON receipts (command, args, cwd, exit code, output digest, plus source/policy/command-set hashes) rather than free-text comments or logs, so a later gate can mechanically re-verify them offline.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** An 18-tamper-class contract (forged signature, host-verdict swap, malformed structure, non-zero exit, …) verified with 0 false-accepts, fully offline. The broader signed-offline-verifiable-receipt pattern is independently converging (in-toto/SLSA attestations, agent action-receipt tooling); the specific benchmark is single-paper and narrow-scope.
+  *Tool notes:* Generalizes to any git repo plus a CI signing/digest step; requires infrastructure to sign and store receipts alongside commits.
+
+### Give every side-effecting tool call a stable idempotency key scoped to (run_id, key) — ideally a caller-named semantic key (charge_card:{order_id}) minted at the call site — so replays dedupe instead of double-executing; and after a run is cancelled, explicitly fence its later/orphaned effect submissions and drop its pending held effects rather than letting in-flight work land silently.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** Replay double-execution reproduced in 2/5 frameworks and cancellation orphans across frameworks (even a pure-async JS runtime whose AbortSignal can't interrupt a promise chain, and worker threads that survive the cancel signal); both fixes are formally verified (TLA+/TLC to ~74.8M states, 0 violations) in the reference implementation. General idempotency-key/terminal-state discipline; single unreviewed preprint.
+  *Tool notes:* Keys must be stable across retries of the same logical action — a fresh key per retry silently defeats dedup; scope by (run,key), not a globally-unique per-call token.
+
+### Harden an effect-mediation/admission gate at its boundary: authenticate every approval/rejection decision (e.g. HMAC over run_id, key, approved, verified in constant time before any state change), and where kernel support exists back the 'route every side effect through the gate' discipline with OS-level structural enforcement so a forgotten wrapper fails loud instead of leaking.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** Forged approve/reject both refused (HMAC-SHA256, RFC 4231 vector); an unwrapped tool's egress refused by the kernel (ENETUNREACH/EPERM) inside a loopback-only network namespace or cgroup eBPF egress limit while the gate still releases; deny-by-default seccomp/Landlock blocked 3/3 non-network side channels (filesystem/IPC/shared-memory) vs 0/3 confined, with path-granular writes still permitted to a granted workdir. HMAC/constant-time and the kernel primitives are independently well-established; Linux-specific, single preprint for the agent-gate application. Layer a static mediation linter as a best-effort catch for unwrapped calls.
+
+### Route every side-effecting tool call through an environment-external admission broker (a stateful submit/decide/cancel service outside the agent framework's own control flow) that enforces hold-until-decided and reject-cancels semantics, instead of relying on the framework's built-in pause/cancel/timeout to actually block effects.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** A ~20-line-per-framework wrapper (SoundGate) blocked every measured violation class across six frameworks; a live experiment showed 215/1,200 runs executed an effect during a human's pause when unmediated vs 0/1,200 when mediated, ~1ms/write. When batching admissions to a durable write-ahead log, use group commit (one fsync per batch, single writer) to preserve 'acknowledge only after durable' at throughput. Single very-fresh unreviewed preprint plus its own same-day package; the umbrella pattern (policy-enforcement point at a controlled boundary) is established architecture.
+
+### In any checkpoint/resume durability mechanism, persist a node's pending write (ordered) before the checkpoint that would let a resumed run reconstruct that step — otherwise a crash between the write and the superseding checkpoint yields host-dependent recovery that duplicates the external side effect.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** A documented, community-reproduced (incl. macOS/arm64) LangGraph durability='sync' ordering bug where a task's pending-write persistence and the superseding checkpoint were submitted to a shared thread pool with no ordering edge. Write-ahead-ordering discipline applied to one framework's concurrency bug; single well-documented instance, well-known principle.
+
+### Add a deterministic, non-LLM 'facet' index term at index time (per-session distinct tool paths + command prefixes + steering text, BM25-searched as an extra orthogonal hybrid layer) to recover answers that live in tool-call metadata but are never mentioned in conversational turns; make it config-gated (boost weight settable to 0) so it can be disabled to reproduce the pre-facet baseline exactly.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Why Git Is the Memory Solution (arXiv 2607.14390)](https://arxiv.org/abs/2607.14390)
+- **Detail:** The one imported ranking mechanism that survived the paper's pre-registered incumbent-vs-candidate discipline (A +0.110, B +0.053, CIs excluding zero after a joint re-tune), with magnitude monotone in tool-path diversity. Single vendor-authored preprint; the gain requires re-tuning the whole hybrid weight mix, not just flipping the layer on.
+
+### For agent-memory retrieval, build a repository 'structural map' by having an LLM read the actual directory skeleton and README/architecture docs (a comprehension summary with greppable path anchors) rather than clustering file/tool co-occurrence, and default to a local in-binary embedding model over a hosted API since alignment of the hybrid retrieval mix, not embedder quality, was the binding constraint.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Why Git Is the Memory Solution (arXiv 2607.14390)](https://arxiv.org/abs/2607.14390)
+- **Detail:** Statistical clustering grouped tool-call-id dumps/scratch files into meaningless clusters; hosted-vs-local embedder deltas were non-significant under paired bootstrap (one comparator tested, and hosted+re-tuned actually edged out local+default). Single vendor preprint, small n, self-benchmarked — the real lesson is 're-tune the mix when swapping the embedder', not 'local is intrinsically better'.
+
+### Derive which tool-specific guardrail knowledge to load from the agent's already-declared tool/MCP configuration (a static known source of truth) rather than probing the network/localhost for running services at runtime; keep any live-scanning path as an explicit, clearly-labeled developer convenience, not the default.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [OpenHands SDK v1.36.0 — ToolShield](https://github.com/OpenHands/software-agent-sdk/releases/tag/v1.36.0)
+- **Detail:** Config-derived loading needs no network probing and works for stdio-based MCP servers that never open a scannable port (which a scan-based default silently fails for). Review-feedback-driven design in one SDK; the general direction (declarative wiring over runtime discovery) is corroborated, but this exact tradeoff is single-source.
+
+### When a working-directory-changing command (cd) is moved to background execution, have the tool result explicitly state the working directory is unchanged, instead of letting the agent assume the cd took effect.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Claude Code v2.1.210 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.210)
+- **Detail:** Assert what did NOT change when a tool silently defers/backgrounds a command whose effect the model would otherwise infer happened (state-assumption drift across sync/async boundaries). Single changelog line; generalizes to any agent framework with background/async tool execution.
+
+### In a retry loop, persist every prompt, raw model response, parsed output, gate result, model/decoding settings, and elapsed time before issuing the next call.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Structured Feedback Improves Repair in an LLM Agent Loop (arXiv 2607.14167)](https://arxiv.org/abs/2607.14167)
+- **Detail:** The exact per-call field list that underpins a reproducible ablation/debugging corpus (this harness released 880 row-level results and 2,652 call traces). Descriptive research hygiene — unbenchmarked as a technique and narrower than, but consonant with, the playbook's existing durable-trace/telemetry entries.
 
 ## Verification & self-repair
 
@@ -1135,6 +1388,131 @@ Entry format (every entry follows it):
 - **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/)
 - **Detail:** The 117-prompt harness operationalized failure specifically as deprecated-SDK usage, enabling scaled pass-rate measurement (6.8%/28% baselines). Deprecated-API detection is a distinct signal from execution-based correctness (code can call a deprecated API and still pass functional tests) — corroborated as an evaluation technique across independent academic work (RustEvo², Versicode, APIScanner). Implementable via grep/AST/static analysis; not a consensus best-practice recommendation yet.
 
+### When a generated candidate (action/plan/code) fails validation, return keyed repair feedback with three fields — failure location, observed value, and admissible alternatives — rather than the raw validator error string, before retrying; prioritize surfacing the admissible alternatives, since location-only feedback captures only a small fraction of the gain.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Structured Feedback Improves Repair in an LLM Agent Loop (arXiv 2607.14167)](https://arxiv.org/abs/2607.14167)
+- **Detail:** On TextWorld, TypedFields feedback raised success 28%→72% (Qwen2.5-Coder-14B) and 16%→58% (Llama-3.1-8B), replicated across models/call-budgets/seeds with McNemar+Holm; an ablation shows admissible-alternatives (not location, not JSON structure) drives the gain. Applies to any loop with a validator that can localize a failure and enumerate valid alternatives — but the authors' own HumanEval scope-check showed no benefit where the visible validator couldn't expose the failure, so code-repair transfer is unproven. Single fresh preprint.
+
+### Bind each verification verdict to a hash of the current tracked source tree (a materialHash/headHash via git ls-tree, excluding the lifecycle metadata itself) so evidence generated against a now-stale commit automatically fails the gate — and never accept the agent's own natural-language report ('all tests passed', 'LGTM') as that evidence for a lifecycle-advancing claim.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** Formalized as the 'Fresh(E,H)' admissibility conjunct; stale-evidence scenarios correctly fail 'done' until refreshed and a code-byte flip is rejected as stale, with the metadata-exclusion trick avoiding a self-referential invalidation loop. The general content-hash cache-invalidation pattern is established (Bazel/ccache, lockfile keys); its application to stopping an agent from reusing a stale reviewed/tested verdict is a concrete instantiation. Reinforces (does not replace) the existing deterministic-signals acceptance gate. Single paper.
+
+### Track and report 'terminal completion' (pipeline went green) and 'admissible delivery' (the gate actually accepted the evidence) as two distinct, separately-measured outcomes, since a run can finish without being gate-admissible.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** In a 1,152-cell paired matrix, no-review runs 'completed' 1,143/1,152 but the gate admitted only 1,042/1,152 — a ~9% gap between an agent's 'done' signal and independent admission (the refused 106 were not adjudicated against hidden ground truth). A concrete telemetry discipline: keep separate counters for 'loop terminated' vs 'evidence admitted'. Single self-caveated supplementary result.
+
+### When re-validating a review lane, admit an older signed passing run only if its source/scope hashes still match live state, but always require the lane's most recent run for any still-open finding — so a newer clean pass can never silently mask an unresolved earlier finding.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** Id-recency is not itself a freshness predicate: a PASS is admissible from any signed run in the current round whose material/scope hashes match, while open FINDING evidence requires the lane's latest run. Closes a retry-induced reviewRunId-churn race that would falsely reject a still-valid pass; single un-ablated design fix.
+
+### Periodically red-team the verification/evidence system itself against four properties: replay-determinism (same evidence re-verifies to identical digests), tamper-fail-closed (every tamper class rejects or is a documented limitation), resume-integrity (interruption produces exactly one record per iteration, no duplicates/gaps), and scale-envelope (verification completes within a fixed time budget at target scale).
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** A red-team campaign over 5 DONE stories reported 33/33 replay-determinism matches, 27/27 tamper verdicts conforming, 0 duplicate/0 gap on resume after injected kills, and all checks within a 128.2s cap (max 18.7s at 10^6-row scale). Targets the verifier itself, which most teams don't systematically test; single one-day-old self-audit.
+
+### Only expand the agent's search/context scope after a verification step actually fails — increase scope by exactly one level, reuse previously-gathered search/read results, and replan — rather than expanding preemptively; and treat this bounded verify-and-expand loop, not the estimator's accuracy, as the real correctness safety net.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Do AI Agents Know When a Task Is Simple? — E3 (arXiv 2607.13034)](https://arxiv.org/abs/2607.13034)
+- **Detail:** Removing the Expand stage dropped success 100%→85.1%, losing all 18 deceptive hidden-dependency tasks even though cost barely fell; under paraphrased task wording estimator accuracy fell 85.1%→66.9% yet end-to-end success stayed 100% (cost +8.7%) because the escalation loop compensated. Requires a reliable verification oracle; bound the loop with a max-expansion count K. Self-built simulator, single paper.
+
+### Place the compiler/type-checker inside the per-unit implement-review-fix loop when it runs in seconds (e.g. TypeScript), but defer it to a dedicated separately-batched step when it's slow (e.g. Rust/cargo taking minutes) — tune referee placement to the referee's own latency.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** Fast checks belong in the inner loop; slow checks break the agent's loop and should be layered/deferred. Multiple independent qualitative sources agree on this two-tier verification design (Sonar's loop-engineering writing, practitioner 'stop babysitting your agent' guides), though none give a quantified effect size.
+
+### When the original test suite is too language/runtime-specific to run against migrated code, build a parity/behavioral harness that evaluates the original and the migrated code 'on equal terms', then run one dedicated fix-agent per failing scenario until all pass.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** 'The judge must be able to evaluate both the original code and the target code on equal terms' — a small script that runs the same scenarios against both implementations and diffs results, with a per-failure fix-agent looping to convergence. A crystallization of classical characterization/golden-master testing for agentic migration; single anecdotal case (n=1) plus one adjacent environment-in-the-loop migration paper.
+
+### Route mechanical failures (compile errors, crashes, test failures) through a fixer-agent queue that categorizes them by root cause (with adversarial review), and when the same failure pattern recurs across many files, fix it once upstream (add a rule to the rulebook and regenerate the affected batch) instead of patching each file.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** 'When a reviewer keeps catching the same mistake across files, the fix isn't per-file — add one sentence to the rulebook and regenerate.' Root-cause-over-symptom repair is corroborated by adjacent APR research; the rulebook+regeneration mechanic presupposes a pipeline where regeneration is cheap and idempotent (migrations/codegen), not live hand-edited code.
+
+### After objective referees (compiler, parity harness) pass, have the agent design and run its own broader end-to-end test suite autonomously (e.g. overnight) as an additional self-generated verification layer beyond the human-specified checks.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration)
+- **Detail:** A self-designed overnight suite caught 'paper cuts no scenario list would have predicted' over four consecutive nights of fix-and-rerun. Single anecdote; real risks (agent authoring self-serving/loose tests, wasted compute, false confidence) are unquantified — treat as an extra layer, not a substitute for objective referees.
+
+### When using an LLM-as-judge to compare two agent systems on a qualitative axis, anonymize system identity and shuffle presentation order to remove identity/order bias, use multiple independent judges reporting mean/std, and separately validate a human-labeled sample against the judgments with an explicit agreement statistic before trusting the metric.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** The paper anonymized both systems, shuffled order, used 3 independent LLM judges reporting mean±std, and validated 100 human-labeled samples at Cohen's κ=0.82. The debiasing components are established; the most transferable, under-applied part is separately validating the LLM-judge metric against a human subsample with a named agreement statistic before trusting it.
+
+### Before shipping a multi-component agent architecture, run a leave-one-component-out ablation (each major piece removed individually, everything else fixed) on a held-out benchmark subset to quantify each component's independent marginal contribution, rather than only reporting end-to-end numbers.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** Individually removing each of CPG / TEG / three perspective-agents / iterative-refinement degraded solved bugs by 4.9–12.2% from a 245-bug baseline, showing each contributes distinct value rather than being redundant. Standard ML methodology worth restating for multi-agent pipelines usually validated only end-to-end; single paper, run on a smaller subset with no reported variance.
+
+### When deciding whether to ship a new ranking/retrieval mechanism, evaluate it under a pre-registered incumbent-vs-candidate protocol on a held-out test split with a paired bootstrap CI that must exclude zero, rather than tuning and reporting on the same data.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Why Git Is the Memory Solution (arXiv 2607.14390)](https://arxiv.org/abs/2607.14390)
+- **Detail:** Applied across 8 corpora, 5 of 7 imported ranking mechanisms (RRF, temporal, dilution, z-norm, embedder swap) were rejected as non-significant or degrading, and only 2 kept — a genuine mechanism graveyard, not cherry-picked wins. Complements the playbook's existing multi-seed paired-test guidance with a train/test-discipline + pre-registration angle; single (vendor-authored) paper.
+
+### For agent memory, admit a checkpoint into shared/exportable memory only once its originating commit lands on the default branch through normal review+CI+merge (use the merge as the external verifier, not the model judging its own admission); and when evaluating such systems, replace single-gold-session MRR with a judged answer-sufficiency metric (blind judge rates assembled context SUFFICIENT/PARTIAL/INSUFFICIENT) reported per question-kind.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Why Git Is the Memory Solution (arXiv 2607.14390)](https://arxiv.org/abs/2607.14390)
+- **Detail:** Single-shot retrieval scored only 0.07–0.20 answer-sufficiency despite non-trivial MRR — the two metrics diverge, so MRR alone misleads. 'Don't let the model grade its own memory-admission homework' plus a judged, per-kind metric; single vendor preprint, tiny n, self-caveated.
+
+### Score a proposed tool action's risk with a separate guardrail LLM (fed only the proposed action + recent history) instead of letting the acting LLM self-annotate its own security_risk field, because the same context that biases the actor toward a risky action biases its self-assessment.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [OpenHands SDK v1.36.0 — ToolShieldLLMSecurityAnalyzer](https://github.com/OpenHands/software-agent-sdk/releases/tag/v1.36.0)
+- **Detail:** Shipped as ToolShieldLLMSecurityAnalyzer; a self-reported MT-AgentRisk ablation claims attack-success dropping from 75–88% (self-annotation) to 14–18% (separate guardrail). The actor≠judge principle is well-established, but the specific numbers are single-source (a GitHub issue) and inconsistent with the cited paper's own figures for the same model. Pair with a fail-closed enforcement policy.
+
+### On a judge/guardrail LLM failure, map both an infrastructure error and an unparseable response to a neutral 'UNKNOWN' verdict (letting a downstream policy apply the conservative behavior) rather than a synthetic maximal-severity value; and when regex-parsing a structured verdict out of free-form output, require a strict anchored on-its-own-line match and treat multiple distinct labels in one response as ambiguous (→ the failure value) instead of taking first/last match.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [OpenHands SDK v1.36.0 — ToolShield](https://github.com/OpenHands/software-agent-sdk/releases/tag/v1.36.0)
+- **Detail:** Failing closed to HIGH on every transient blip would block every action, so UNKNOWN pairs with a confirm-on-unknown policy; anchored parsing prevents an earlier or injected 'RISK: LOW' in the explanation being picked over the real 'RISK: HIGH'. Single-project design fixes justified by unit tests and inline rationale, not benchmarked.
+
+### Score competing solution strategies with a continuous compile/test-based signal (reward for eliminating original failures, penalty for newly-introduced ones, −1 for non-compiling) rather than a binary plausible/not-plausible label, so a 'close' strategy can still outrank a strictly-worse one and be selected for refinement; halt if every strategy's aggregate score is ≤0.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** A specific delta-based fitness function plus a no-positive-signal stopping floor. Kin to search-based-APR weighted fitness (GenProg-lineage); more informative than a binary plausible/not-plausible gate, but no ablation isolates continuous-vs-binary in this system.
+
+### When no fully-valid candidate exists after a generation round, don't retry all strategies uniformly — select only the highest-scoring strategy, extract structured feedback (compile status, remaining/new failing tests, diffs) from its best candidate, and route that feedback only to the agent/path that produced it for a targeted refinement pass.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** Disabling iterative refinement dropped solved bugs 245→233 (−4.9%), but that ablation tests refinement-vs-none, not the targeted-vs-uniform budget allocation the tactic actually prescribes. Actionable heuristic (concentrate remaining budget on the single best path); single paper, mechanism not isolated.
+
+### Use cheap coverage instrumentation (e.g. JaCoCo) as a first-pass relevance gate to scope which methods are worth deeper dynamic/static analysis, before any expensive fine-grained tracing.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** Execution filtering (keep only methods executed by a failing test) produced the single largest evidence-volume reduction in the pipeline (~94.85% of candidate methods excluded). Essentially spectrum-based fault localization (decades-old); actionable for an agent verification loop but not novel, single paper.
+
+### Make rejection decisions sticky and durable: once an effect identity is rejected, it stays refused on any later resubmission, not merely refused the one time it's evaluated.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** Verified via exhaustive TLC (74.8M states, 0 violations) + machine-checked TLAPS induction; a mutation swapping the release/reject verdict was caught by the conformance harness. Terminal/idempotent-rejection state applied to an effect-admission core; single unreviewed preprint, one implementation.
+
+### Fuzz the untrusted transport/protocol boundary of any tool-mediation server with malformed and hostile inputs (random bytes, invalid UTF-8, wrong-shape/typed JSON, forged MACs, duplicate keys, protocol-state abuse like decide-before-submit/double-decide, truncated/oversized framing) to confirm it fails closed and stays alive rather than crashing or silently admitting a bad request.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** 1.8×10^5 malformed inputs across 8 classes drove zero fail-open behavior, a planted canary state survived every batch, and a valid round-trip still succeeded after every attack batch. A concrete checklist (the protocol-state-abuse classes are the non-obvious, mediation-specific part); single fresh preprint, self-reported.
+
+### Don't treat an LLM's tendency to serialize consequential tool calls as a safety guarantee — verify enforcement independent of any model's disposition, including under adversarially injected instructions; and when measuring tool-call behavior through a third-party API gateway, run a positive-control (a benign-only variant of the same task) to check whether an apparently low/zero risky-call rate reflects real caution or the serving path simply not supporting parallel tool calls.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** Under benign prompts the risky parallel-batch shape appeared 0–14% by model; under live injection, 0/100 to 95/100 by model, and every emitted instance leaked when unmediated (P(leak|emitted)=1.00) vs 0/400 when gated. A positive-control diagnostic revealed three 'near-zero' models were a gateway artifact — the model read as safest was in fact the most exposed on its native API. Single fresh preprint.
+
+### Have the agent execute a numbered, rule-mapped self-review checklist before presenting code to a human reviewer, growing the checklist as new rule classes are added.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Self-Improving AI Coding Agents (arXiv 2607.13091)](https://arxiv.org/abs/2607.13091)
+- **Detail:** Over 4 weeks the checklist grew 0→15 items and reviewer comments shifted from 14% mechanical-correctness to 66% architecture/API/performance across 36 PRs. But the checklist's effect isn't isolated from the rest of the rule-accumulation framework (code standards, anti-patterns, workflow rules all grew simultaneously), and it's a single non-ablated single-org deployment; the rule-mapped/growing angle is the value beyond generic 'self-review'.
+
+### Run automated validation at the start of every session checking that agent-definition files have valid frontmatter/required fields, skill directories are well-formed, knowledge docs carry freshness dates, the instruction file has all required sections, and tool-server configs are well-formed.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Self-Improving AI Coding Agents (arXiv 2607.13091)](https://arxiv.org/abs/2607.13091)
+- **Detail:** Lets a growing rule/skill set 'grow safely'. Corroborated by an ecosystem of independent skill/config linters (skills-check, agnix, skill-validator, claude-pre-commit) converging on the same practice — but that's adoption evidence, not efficacy: no failure-rate/defect-catch data in-source. Implementable as plain CI/lint checks.
+
+### Review a subagent's completed work with a lightweight git diff/show check rather than pulling all changed files into the lead's context or rewriting it; if the diff surfaces a real bug, re-delegate the fix to the subagent instead of fixing it at lead-model prices.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Cognition: Making Fable Cheaper Than Opus](https://cognition.com/blog/making-fable-cheaper-than-opus)
+- **Detail:** The stronger lead pulled sidekick files fully into context ~2x more often and made ~4x more corrective edits when it rewrote rather than re-delegated. The 'review via diff, keep the lead's context clean' half is established practice; the redelegate-vs-rewrite cost policy is the novel part and rests on a single vendor self-comparison with only qualitative support.
+
 ## Multi-agent orchestration
 
 ### Structure multi-agent task decomposition as manager/child map-reduce (manager splits, children execute, manager synthesizes), and make shared state and cross-agent communication explicit — they don't emerge by default.
@@ -1260,6 +1638,31 @@ Entry format (every entry follows it):
 - **Detail:** An architectural consequence of a decoupled execute(name,input)→string interface, described conceptually with no benchmark or case study. Adjacent practices exist (Microsoft handoff orchestration, Temporal sandbox borrow/handover locks) but none validate this specific mid-task sandbox transfer.
   *Tool notes:* For supervisor/subagent frameworks, consider a shared execute()-addressable sandbox pool instead of a fresh sandbox per subagent.
 
+### Run adversarial independent review passes before granting strong assurance — two reviewers evaluating in separate contexts with disagreement escalated to a third arbiter — and for high-risk changes require a quorum whose passes differ in host, session, and signing key (not repeated calls to the same reviewer), explicitly marking a lone verdict as 'degraded single-host' rather than silently upgrading it to a full quorum.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Anthropic: large-scale code migrations](https://claude.com/blog/ai-code-migration), [Proof-or-Stop (arXiv 2607.14890)](https://arxiv.org/abs/2607.14890)
+- **Detail:** Anthropic's migration used two adversarial reviewers in separate contexts with a third-agent tiebreak (Cognition's Python→TS port independently used three adversarial review rounds); Proof-or-Stop formalizes independence as host+session+signing-key divergence to close the 'same reviewer called twice, mislabeled a quorum' gaming vector. Multiple independent OSS adversarial-review projects converge on builder/critic/moderator patterns; no rigorous defect-catch benchmark, and the strong cross-vendor quorum claim is author-hedged.
+
+### To get diverse solution attempts, push diversity into the reasoning stage — give independent agents different evidence perspectives so they form genuinely different root-cause hypotheses — rather than only into the sampling stage (resampling one shared reasoning context, which tends to reproduce the same hypothesis in different code form).
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Multi-Perspective Agentic Program Repair (arXiv 2607.12605)](https://arxiv.org/abs/2607.12605)
+- **Detail:** The union of three static/dynamic/hybrid perspective agents repaired 99 more bugs (+25.4%) than the strongest single perspective; independent LLM+human evaluation (κ=0.82) confirmed more diverse, less-duplicated evidence/hypotheses than a shared-context baseline. Corroborated in direction by diversity-of-thought debate work (different domain/mechanism). Single paper, Java/Defects4J only, pre-replication.
+
+### Skip delegating to a subagent for short tasks (a handful of turns between deciding and shipping) and for serial debugging chains where root-cause hunting is one continuous chain of judgment and the accumulated context itself is the work.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Cognition: Making Fable Cheaper Than Opus](https://cognition.com/blog/making-fable-cheaper-than-opus)
+- **Detail:** Delegation has no leverage over cost when there's nothing worth handing off; 'the same judgment that writes a good brief also knows when not to write one.' Corroborated in direction by multi-agent coordination-overhead literature and by debugging-across-handoffs suffering context fragmentation; no isolated metric for this specific skip-rule.
+
+### Treat the subagent-dispatch tool call itself as an injection surface — content a subagent reads (files, web pages, tool output) can attempt to hijack the tool call that spawned/controls it, so harden the dispatch path, not just the final-answer path — and verify (don't assume) that a worktree-isolated subagent's git-mutating commands actually stay confined to its worktree rather than reaching the main checkout.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Claude Code v2.1.210 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.210)
+- **Detail:** Two hardened bug-fixes in one release: indirect prompt injection via content a subagent read (attacking the delegation mechanism, not just the subagent's output), and a `isolation: 'worktree'` leak that let a subagent's git-mutating commands hit the main repo checkout. Single-source changelog lines; the dispatch-as-surface point extends known defense-in-depth to multi-agent delegation.
+
+### Consider replicating a critical stateful gate/broker across a small consensus cluster (e.g. Raft) rather than a single instance when cross-region availability or crash-tolerance is required — but budget for a real per-commit latency cost (~two extra network round-trips) versus a single-node durable instance, and reserve single-node mode for latency-sensitive, low-availability-risk deployments.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Stop Means Stop (arXiv 2607.14166)](https://arxiv.org/abs/2607.14166)
+- **Detail:** A demonstrated failover (new leader within ~1.9s, a pre-crash-released identity correctly refused as a duplicate on the new leader, no double-release) sustained ~1–1.8k admissions/sec vs single-node's higher throughput; 10ms simulated WAN roughly doubled per-admission cost. A textbook consensus-HA tradeoff applied to an effect gate; single-machine demonstration (loopback peers), not a distributed fault-injection benchmark.
+
 ## Memory
 
 ### Accumulate retrievable episodic memory of past task outcomes (distilled failure lessons and successful trajectories) and consult it before retrying a similar task.
@@ -1353,3 +1756,43 @@ Entry format (every entry follows it):
 - **Tier:** Watch (added 2026-07-09)
 - **Sources:** [Google — Closing the knowledge gap with agent skills](https://developers.googleblog.com/closing-the-knowledge-gap-with-agent-skills/)
 - **Detail:** Named by the source as a limitation: no auto-update story, so stale skill info can accumulate and do more harm than good. Distinct from ordinary dependency hygiene because skills are natural-language instruction content with no version pinning or CI to catch drift — silent accumulation of confidently-wrong guidance. Corroborated as a recognized gap by skill-lifecycle-management feature requests and a dynamic-skill-lifecycle paper, but underspecified (no cadence/staleness criteria) and no evidence of error-rate reduction.
+
+### Close a self-improvement loop: run a recurring meta-agent that synthesizes accepted review feedback and human corrections/overrides across many PRs and opens a PR that patches the agent's own review skill/ruleset itself (not just logs findings), so the next run automatically incorporates the update — and keep that rule/skill file in a repo where the patching PR goes through normal review.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [Warp: self-improving code review](https://www.warp.dev/blog/how-to-build-a-cloud-software-factory-self-improving-code-review), [Self-Improving AI Coding Agents (arXiv 2607.13091)](https://arxiv.org/abs/2607.13091)
+- **Detail:** Two independent sources converge on turning review feedback into persistent, version-controlled agent instructions via PR: Warp's daily outer-loop meta-agent synthesizes cross-PR feedback and opens a PR updating the review skill, and Microsoft's deployment codifies each accepted review comment as a versioned behavioral rule (with a PR-template step that, on accepting a generalizable-mistake comment, adds the rule in the same PR or files a follow-up). Depends on the skill being version-controlled text+scripts and on human review before merge — a guard against the agent hallucinating corrections or overwriting human-authored rules. No quantified improvement-over-time; the self-modifying loop carries real drift risk.
+
+### For each tool a guardrail will judge, distill reusable 'safety experiences' once via automated sandbox red-teaming (the agent auto-generates test cases, runs them in an isolated sandbox, observes downstream effects, writes structured per-tool guidelines) and inject that text into the guardrail's system prompt at decision time, rather than hand-writing per-tool security rules.
+- **Tier:** Promising (added 2026-07-17)
+- **Sources:** [OpenHands SDK v1.36.0 — ToolShield](https://github.com/OpenHands/software-agent-sdk/releases/tag/v1.36.0), [ToolShield paper (arXiv 2602.13379)](https://arxiv.org/abs/2602.13379)
+- **Detail:** Shipped as an installable extra; the distilled experiences dropped MT-AgentRisk attack-success further (to 7–10% vs 14–18% for the bare guardrail) at marginal added cost with zero benign actions blocked, and are model-agnostic once generated (swapping the guardrail LLM needs no regeneration). The innovation is replacing manual per-tool rule-authoring with one-time automated self-exploration; evidence traces to one benchmark family and effectively one adopter.
+
+### Give each accumulated rule a structured schema even inside a human-readable Markdown file — Rule ID, Category, Trigger Origin, Scope, Constraint, Rationale, Checklist Map, Added date, Traced-To review comment — rather than an unstructured bullet.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Self-Improving AI Coding Agents (arXiv 2607.13091)](https://arxiv.org/abs/2607.13091)
+- **Detail:** Enables origin tracking and a verifiable bridge to the self-review checklist. An ADR/RFC-style structured-decision record transplanted onto agent rules; unablated and single-source, and in mild tension with corroborated 'keep instruction files concise' findings — weigh the per-rule metadata cost against the file being loaded straight into context.
+
+### When a new review comment shows an existing rule is too broad or too narrow, refine that rule in place (keep the same rule ID, sharpen the constraint text) instead of adding a new overlapping rule.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Self-Improving AI Coding Agents (arXiv 2607.13091)](https://arxiv.org/abs/2607.13091)
+- **Detail:** Prevents rule-set bloat and silent contradiction (illustrated by one real conflict resolved by scoping a rule rather than deleting either). Convergent with Cursor-rules guidance and agent-memory UPDATE-over-append designs (Memory-R1, Hindsight); single anecdote, manual detection, no automated conflict tooling.
+
+### Gate episodic-memory injection on retrieval confidence (top-1 similarity and the top-1-to-top-2 gap), staying silent rather than injecting below a calibrated bar; and for 'why'/rationale questions run a decision-scoped gather across the whole ledger (the choice, its rejected alternatives, reasoning markers like 'because'/'instead of'/'rejected') and synthesize the arc in one call citing each claim to its source turn and commit SHA, rather than single-shot retrieval of one episode.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Why Git Is the Memory Solution (arXiv 2607.14390)](https://arxiv.org/abs/2607.14390)
+- **Detail:** Ungated episodes degraded a structural-map baseline (0.63→0.29); a confidence gate keyed off the retriever's own scores recovered most of it (→0.50). Single vendor preprint with tiny, near-degenerate ablations and clear self-interest — directionally reasonable, try-and-measure, not validated practice.
+
+### Generate benchmark ground truth for 'did memory help' by mining commit-session links and git topology (a SQL miner over ledger + git history producing provenance/decision-recall/dead-end/multi-hop pairs) instead of hand-labeling, then have an LLM only paraphrase each mined label into a natural-language question under an explicit lexical-leakage ceiling (e.g. 4-gram Jaccard ≤ 0.30).
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Why Git Is the Memory Solution (arXiv 2607.14390)](https://arxiv.org/abs/2607.14390)
+- **Detail:** Zero-labeling-cost benchmark construction runnable by any user on their own history; provenance/dead-end pairs are near-noise-free metadata facts while multi-hop (co-occurrence) pairs are noisier. The 'label noise biases scores downward / conservative' claim is asserted but unaudited; single vendor preprint.
+
+### When a memory-index write (e.g. MEMORY.md) would push the index over its configured read limit, fail loudly with an explicit error rather than silently truncating, so stale/lost memory entries are never invisible.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Claude Code v2.1.210 release notes](https://github.com/anthropics/claude-code/releases/tag/v2.1.210)
+- **Detail:** Validate size against the read limit before writing; silent truncation of an index read on every session bootstrap is invisible to the operator/agent. Single changelog line; a specific failure mode (not generic 'handle errors well') for any agent memory-index system.
+
+### When synthesizing lessons for a self-updating agent skill, explicitly capture — alongside codebase style conventions and codebase-specific gotchas — guidance on how the agent should validate its own suggestions before flagging them, not just what to flag.
+- **Tier:** Watch (added 2026-07-17)
+- **Sources:** [Warp: self-improving code review](https://www.warp.dev/blog/how-to-build-a-cloud-software-factory-self-improving-code-review)
+- **Detail:** Style and gotcha capture is already the standard content of CLAUDE.md/AGENTS.md-style memory; the distinctive, under-used element is memorializing self-validation/precision heuristics (to cut false-positive review comments). Single practitioner source, presented in-source as one 'etc.'-qualified example rather than a fixed taxonomy.
