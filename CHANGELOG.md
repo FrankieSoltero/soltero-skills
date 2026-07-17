@@ -3,6 +3,36 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.10.0] - 2026-07-17
+### Added
+- Memory & self-improvement suite — six skills built from the 2026-07-17 research
+  sweep and roadmap (`docs/plans/2026-07-17-memory-skills-roadmap.md`), all sharing
+  one design rule: the verifier stays outside the loop's write surface.
+  - `memory-gardener`: skeptic-gated curation/consolidation of persistent memory
+    (dedupe, merge, distill, prune as itemized edits; provenance gating; new
+    `memory-skeptic` agent approves every destructive edit).
+  - `correction-compiler`: compiles repeated user corrections into human-approved
+    deterministic enforcement (hooks/lint/CI) with a structured, Traced-To
+    corrections ledger (`Docs/corrections-ledger.md`) shared with `skill-patcher`.
+  - `session-miner`: offline transcript mining for recurring successful procedures;
+    smallest-artifact-first proposals under `Docs/mining/proposals/`, independent
+    reviewer verdicts, redaction/provenance rules; never touches live surfaces.
+  - `skill-gardener`: report-only lifecycle/staleness audit of installed skills
+    (structural validation, live-evidence freshness spot-checks, config-driven
+    retirement thresholds) written to `Docs/skill-garden-report-YYYY-MM-DD.md`.
+  - `skill-patcher`: clusters corrections/lessons across sessions (≥3 traced
+    incidents or ≥2 independent sessions) and opens itemized patch PRs against the
+    guilty skill files; self-modification in separate labeled PRs; never merges
+    its own PRs.
+  - `evidence-gate`: fail-closed verification receipts for lifecycle claims —
+    tree-hash-bound JSON receipts produced by observed runs via bundled
+    `create-receipt`/`verify-receipt` scripts; stale-tree evidence auto-fails;
+    prose reports are never evidence.
+- Playbook sweep 2026-07-17: 12 sources, 88 skeptic-vetted entries (87 adds,
+  1 update) across all seven topics.
+- All six skills built test-first per `creating-a-skill` (RED pressure scenarios
+  on fresh subagents → GREEN with disk-verified results → validation gates).
+
 ## [0.9.0] - 2026-07-10
 ### Added
 - `agent-playbook` skill: living, tiered (Proven/Promising/Watch) playbook of

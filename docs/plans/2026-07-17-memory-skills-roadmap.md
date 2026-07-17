@@ -1,7 +1,7 @@
 # Memory & Self-Improvement Skills Roadmap
 
 **Date:** 2026-07-17
-**Status:** Complete — sweep additions merged 2026-07-17; `memory-gardener` built on `feat/memory-gardener` (pending review/merge)
+**Status:** Implemented — all six skills built test-first and integrated on `feat/skills-suite-0.10.0` (2026-07-17); pending human review/merge
 **Theme:** Close the gap between *capturing* knowledge (which `capture-lesson`,
 `agent-handoff`, and `agent-playbook` already do) and *curating, verifying, and
 retiring* it. Research consensus: append-only memory decays into noise, and

@@ -4,3 +4,6 @@ node_modules/
 # Private, non-public design notes and confidentiality denylist (spec §2.1)
 private-notes/
 .private-denylist.txt
+
+# agent worktrees (session-local, never committed)
+.claude/worktrees/
