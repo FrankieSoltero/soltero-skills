@@ -45,7 +45,7 @@
   cited as config-not-fact, and writes exactly one report at
   `Docs/skill-garden-report-YYYY-MM-DD.md` — having modified nothing.
 - **Bundled assets:** `references/claim-inventory.md` (extraction patterns, sampling and
-  evidence rules), `references/report-template.md` (report contract + risk taxonomy +
+  evidence rules), `references/output-template.md` (report contract + risk taxonomy +
   default config block).
 
 ## Freshness metadata convention (proposed, audited — not applied)
