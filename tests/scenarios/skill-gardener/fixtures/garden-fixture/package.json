@@ -1,0 +1,9 @@
+{
+  "name": "garden-fixture",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint:fm": "node tools/lint-frontmatter.mjs"
+  }
+}
