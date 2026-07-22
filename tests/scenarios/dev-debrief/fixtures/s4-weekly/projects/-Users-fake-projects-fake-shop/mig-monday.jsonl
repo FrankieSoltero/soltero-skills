@@ -1,0 +1,10 @@
+{"type":"user","timestamp":"2026-07-13T09:30:00Z","message":{"role":"user","content":"Order lookups by customer are slow — add an index on Order.customerId."}}
+{"type":"assistant","timestamp":"2026-07-13T09:30:22Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Skill","input":{"skill":"soltero-skills:prisma-safety-review"}}]}}
+{"type":"tool_result","timestamp":"2026-07-13T09:30:24Z","content":"Launching skill: soltero-skills:prisma-safety-review"}
+{"type":"assistant","timestamp":"2026-07-13T09:31:10Z","message":{"role":"assistant","content":[{"type":"text","text":"Safety pass: index-only migration, additive, no destructive ops; no transaction concerns."},{"type":"tool_use","name":"Edit","input":{"file_path":"/Users/fake/projects/fake-shop/prisma/schema.prisma","old_string":"model Order {\n  id         String @id\n  customerId String","new_string":"model Order {\n  id         String @id\n  customerId String\n\n  @@index([customerId])"}}]}}
+{"type":"tool_result","timestamp":"2026-07-13T09:31:12Z","content":"Edit applied to prisma/schema.prisma"}
+{"type":"assistant","timestamp":"2026-07-13T09:31:30Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"npx prisma migrate dev --name add-order-customer-index"}}]}}
+{"type":"tool_result","timestamp":"2026-07-13T09:32:20Z","content":"Migration 20260713093140_add_order_customer_index applied."}
+{"type":"assistant","timestamp":"2026-07-13T09:32:35Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"npm test && git commit -am 'perf: index Order.customerId'"}}]}}
+{"type":"tool_result","timestamp":"2026-07-13T09:34:02Z","content":"Tests: 42 passed, 42 total\n[main FAKE7788] perf: index Order.customerId"}
+{"type":"user","timestamp":"2026-07-13T09:35:00Z","message":{"role":"user","content":"nice, quick one. thanks"}}

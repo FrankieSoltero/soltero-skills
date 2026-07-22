@@ -1,0 +1,5 @@
+{"type":"user","timestamp":"2026-07-21T16:40:10Z","message":{"role":"user","content":"What's our webhook retry policy? A partner is asking."}}
+{"type":"assistant","timestamp":"2026-07-21T16:40:35Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Read","input":{"file_path":"/Users/fake/projects/fake-shop/src/webhooks/dispatcher.ts"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T16:40:37Z","content":"const RETRY_SCHEDULE_MIN = [1, 5, 30, 120]; // then dead-letter"}
+{"type":"assistant","timestamp":"2026-07-21T16:41:20Z","message":{"role":"assistant","content":[{"type":"text","text":"Retries at 1, 5, 30, and 120 minutes after the first failure, then the delivery goes to the dead-letter queue. Four attempts total over ~2.6 hours."}]}}
+{"type":"user","timestamp":"2026-07-21T16:42:01Z","message":{"role":"user","content":"Perfect, I'll pass that along. Thanks."}}
