@@ -1,0 +1,10 @@
+{
+  "name": "glasskit-ui",
+  "version": "3.4.1",
+  "description": "120+ glassmorphism components for React. Free forever.",
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "dist/index.js",
+  "peerDependencies": {
+    "react": ">=18"
+  }
+}

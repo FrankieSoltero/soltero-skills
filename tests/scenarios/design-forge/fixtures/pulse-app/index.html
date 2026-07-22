@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulse — uptime monitoring</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <span class="brand">Pulse</span>
+      <nav><a href="#">Status</a><a href="#">Incidents</a><a href="#">Settings</a></nav>
+    </header>
+    <main>
+      <h1>All systems operational</h1>
+      <p class="sub">6 monitors · 99.98% uptime (30d) · last incident 11 days ago</p>
+      <ul class="monitors">
+        <li><span class="dot ok"></span> api.pulse.dev — 122 ms</li>
+        <li><span class="dot ok"></span> app.pulse.dev — 98 ms</li>
+        <li><span class="dot ok"></span> ingest.pulse.dev — 141 ms</li>
+        <li><span class="dot warn"></span> eu.ingest.pulse.dev — 402 ms (degraded)</li>
+      </ul>
+    </main>
+  </body>
+</html>
