@@ -75,8 +75,8 @@ size threshold.**
    })
    ```
 
-   Optional: `reportPath` to override the default `<basename>-distilled.md` next to the
-   input. **Cost note:** the pipeline spawns one verifier per extracted item plus chunk
+   Optional: add `reportPath` INSIDE `args` (a top-level `reportPath` is ignored) to
+   override the default `<basename>-distilled.md` next to the input. **Cost note:** the pipeline spawns one verifier per extracted item plus chunk
    extractors and a critic — dozens of agents on a long meeting is normal, not a
    malfunction. That is the price of items that survived independent refutation.
 4. **Relay the result.** Read the returned `reportPath`, present the decisions/actions
