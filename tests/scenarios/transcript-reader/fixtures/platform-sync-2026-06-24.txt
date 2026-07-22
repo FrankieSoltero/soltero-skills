@@ -1,0 +1,98 @@
+Platform Sync — 2026-06-24 — attendees: Elena Vasquez (eng lead), Marcus Cole (PM), Tara Lindqvist (backend), Noah Adeyemi (data)
+
+[00:00:04] Marcus: Alright, it's four past, let's get going. Agenda is image pipeline, webhook reliability, conversion numbers, and if we have time, the on-call rotation.
+[00:00:15] Elena: Can we also squeeze in five minutes on the staging environment? It's been flaky all week.
+[00:00:21] Marcus: If we're quick, yes. Okay, image pipeline first. Tara, where are we?
+[00:00:29] Tara: So the in-house pipeline is holding up, but the thumbnailing queue backed up twice last week. Both times it recovered on its own, but the p95 for thumbnail generation is now around nine seconds.
+[00:00:47] Elena: Nine seconds is bad. What was it a month ago?
+[00:00:51] Tara: Around four. The growth in upload volume is basically linear with the new tenant onboarding.
+[00:01:02] Marcus: And the Pixelworks evaluation? Where did that land?
+[00:01:07] Tara: Their API did everything we need in the proof of concept. Latency was consistently under two seconds for the same workloads.
+[00:01:18] Noah: Their docs are genuinely good too. I integrated the demo in an afternoon.
+[00:01:24] Elena: What's the pricing model?
+[00:01:27] Tara: Per-image, tiered. I don't have the final quote yet, the sales rep said end of week.
+[00:01:36] Marcus: My instinct is we shouldn't keep sinking sprints into the queue tuning if a vendor solves it.
+[00:01:44] Elena: I agree. Maintaining that pipeline is a tax on every on-call shift.
+[00:01:51] Marcus: Okay, let's call it. We migrate image processing to Pixelworks. Tara, you'd own the migration, targeting end of Q3.
+[00:02:04] Tara: Fine by me, with the caveat that I want the final pricing before we commit hard dates.
+[00:02:12] Elena: Noted, but directionally we're agreed — Pixelworks it is. Let's not relitigate this every week.
+[00:02:20] Marcus: Agreed, decision made. Moving on. Webhooks. Noah, you flagged the retry storms?
+[00:02:29] Noah: Yeah. Twice this month, Segment delivery slowed down and their retry policy hammered us. We 429'd them, which made their backoff worse, and events arrived up to six hours late.
+[00:02:45] Tara: To be fair, part of that is our ingestion endpoint doing synchronous validation. If we queued first and validated async, we'd absorb the bursts.
+[00:02:57] Noah: Sure, but their retry schedule is still unreasonable. Other vendors back off exponentially, Segment retries in a tight loop for the first hour.
+[00:03:10] Elena: Have we actually talked to them, or are we just reading their docs?
+[00:03:15] Noah: Just docs and one support ticket that got a canned answer.
+[00:03:21] Tara: I looked at their status page history while debugging — their EU ingestion has had four incidents this quarter.
+[00:03:30] Marcus: Okay, someone needs to actually get on a call with Segment support and get their retry policy clarified, and ideally get us on their allowlist for higher burst limits.
+[00:03:43] Noah: The async validation change is probably a two-day fix on our side regardless.
+[00:03:50] Tara: I can take the async validation piece, that's my code anyway.
+[00:03:55] Marcus: Good. And you take that — chase Segment support this week, get the retry policy in writing.
+[00:04:04] Elena: While we're on reliability, the staging flakiness — I think it's the same ingestion service, by the way. Staging shares the queue infra.
+[00:04:15] Tara: Partially, yes. Staging also has that ancient Redis that we never upgraded.
+[00:04:22] Marcus: Let's park staging for the end. Conversion numbers, Noah?
+[00:04:28] Noah: Signup conversion for June so far is 5.4 percent, measured landing-to-activated within seven days. That's down from 5.9 in May.
+[00:04:41] Marcus: Any read on why?
+[00:04:44] Noah: The drop correlates with the pricing page change on June 10th. Sessions that hit the new pricing page convert at roughly half the rate of the old one.
+[00:04:56] Elena: Half? That's a huge effect. Is the sample big enough?
+[00:05:01] Noah: About twelve thousand sessions since the change, so yes, it's not noise.
+[00:05:08] Marcus: Hm. Growth won't like that. The new pricing page was their initiative.
+[00:05:14] Noah: I'm just reporting the funnel. I'd want a proper A/B before claiming causation, we shipped it as a straight swap.
+[00:05:24] Elena: Can we even A/B it now? The old page is gone.
+[00:05:28] Noah: We can resurrect it behind the experiment framework in a day or so.
+[00:05:34] Marcus: Do it, and let's loop in Growth before we publish any numbers, I don't want this landing on them cold.
+[00:05:43] Noah: Fair. I'll draft the experiment plan and share it in the growth channel by Thursday.
+[00:05:50] Marcus: Great. Okay, on-call rotation. Elena?
+[00:05:55] Elena: Two things. First, we're down to five people in the rotation since Ravi left, which means everyone's on call more than once a month. Second, the alert noise is still terrible — forty percent of pages last month were non-actionable.
+[00:06:12] Tara: The noisy ones are mostly the queue-depth alerts. They fire during every traffic spike and self-resolve.
+[00:06:20] Elena: Right, and if we do move to Pixelworks those alerts mostly go away, which is another point for the migration.
+[00:06:28] Marcus: Can we tune the thresholds in the meantime? Forty percent noise is how people start ignoring real pages.
+[00:06:36] Elena: I'll do a pass on the alert rules this week and bring a proposal for the rotation size next sync.
+[00:06:44] Marcus: Thanks. Noah, anything from the data side on the incident postmortem? The June 14th one.
+[00:06:52] Noah: Postmortem doc is done, published in the wiki yesterday. Root cause was the certificate rotation script silently failing on the ingestion boxes. Total customer-visible impact was about twenty-five minutes of failed uploads.
+[00:07:08] Elena: The action item from that was automating the cert renewal, right? Who had that?
+[00:07:14] Noah: It's in the doc as unassigned, honestly. It fell through the cracks.
+[00:07:19] Elena: Okay, that can't stay unassigned. Tara, can it ride along with your ingestion work?
+[00:07:25] Tara: Yes, I'll fold cert auto-renewal into the async validation change, same service, same deploy.
+[00:07:32] Marcus: Good. Now, staging, since Elena keeps giving me looks.
+[00:07:38] Elena: Ha. So staging has been failing the smoke tests roughly every third run this week. Two causes as far as I can tell: the shared queue infra, and the old Redis 5 instance that keeps evicting sessions.
+[00:07:53] Tara: Upgrading staging Redis is genuinely a one-hour job, we just never prioritized it.
+[00:07:59] Marcus: Then let's just do it. Tara, take the Redis upgrade this sprint.
+[00:08:05] Tara: Okay, but I want to note my plate: async validation, cert renewal, Redis upgrade, and owning the Pixelworks migration. Something will slip.
+[00:08:16] Marcus: Understood. Pixelworks is the priority after the reliability fixes. The migration timeline has slack.
+[00:08:24] Elena: Actually, on Pixelworks — before we fully commit, I want to see the pricing quote. If it's per-image, our volume matters a lot. Tara, what's our monthly image volume now?
+[00:08:37] Tara: Around forty million originals, and we generate four derivatives each, so two hundred million processed images a month, give or take.
+[00:08:48] Elena: Two hundred million. Okay, keep that number handy for when the quote comes in.
+[00:08:54] Marcus: It'll be fine, their sales rep knew our scale when they scoped the POC. Let's keep momentum.
+[00:09:02] Noah: One more data thing while I have you all — the events warehouse is at eighty-two percent disk. At current growth we hit the ceiling in about seven weeks.
+[00:09:14] Marcus: Options?
+[00:09:16] Noah: Either we extend the cluster, which is a purchase approval, or I implement the retention policy we designed last quarter and never turned on — drop raw events older than eighteen months.
+[00:09:29] Elena: The retention policy was already approved by legal, wasn't it?
+[00:09:33] Noah: Approved and documented. We just never flipped the switch because the migration kept getting bumped.
+[00:09:40] Marcus: Then flip the switch. No new spend if we can avoid it.
+[00:09:45] Noah: Will do, I'll run it in dry-run mode first and share the deletion estimate before the real run.
+[00:09:52] Marcus: Perfect. Okay — quick round of anything-else before we close?
+[00:09:58] Tara: Yes, one thing. The Pixelworks quote just landed in my inbox during this call, actually. Give me a second.
+[00:10:06] Marcus: Convenient timing.
+[00:10:09] Tara: Okay. So. At our volume, their standard tier prices out at roughly sixty-eight thousand dollars a month.
+[00:10:18] Elena: Sixty-eight thousand? A month?
+[00:10:21] Tara: With the volume discount tier. The list price would be higher. And that's before the enterprise support add-on they said we'd want.
+[00:10:31] Marcus: What does the in-house pipeline cost us today, all-in?
+[00:10:36] Tara: Infra is about nine thousand a month. The real cost is the engineering time — call it a third of my time and chunks of on-call, so maybe fifteen to twenty thousand a month in loaded cost if you're being honest about it.
+[00:10:50] Elena: So even being generous, in-house is under thirty and the vendor is sixty-eight plus. That changes the picture completely.
+[00:10:59] Marcus: It might still be worth it for the reliability and the roadmap velocity.
+[00:11:05] Elena: For more than double the cost? No. I'm reversing my position from earlier — we should not migrate to Pixelworks at that price. We stay on the in-house pipeline, we invest the two sprints in queue tuning we were trying to avoid, and we revisit vendors in Q4 with a proper RFP across at least three of them.
+[00:11:24] Marcus: Tara, you're the one who'd carry either path. What do you think?
+[00:11:29] Tara: Honestly, relieved. The migration risk was making me nervous, and the queue tuning is well-understood work. I'm with Elena.
+[00:11:38] Marcus: Okay. Then we're reversing this morning's call — no Pixelworks migration. In-house pipeline stays, queue tuning gets the two sprints, vendor question reopens in Q4 with an RFP. I'll tell the exec sync tomorrow since I'd floated the vendor route there.
+[00:11:54] Elena: Thank you. And to be clear, the earlier decision wasn't wrong with the information we had, the quote just changed it.
+[00:12:02] Noah: For the notes — should I mark the Pixelworks evaluation as closed in the tracker?
+[00:12:07] Marcus: Mark it closed-declined, with the quote attached. And actually, on your conversion numbers earlier, Noah — I was looking at the dashboard during the call and the topline says conversion is sitting at 6.1 percent, not 5.4. Which is it?
+[00:12:22] Noah: Which dashboard?
+[00:12:24] Marcus: The exec overview one, the Looker board.
+[00:12:27] Noah: That board computes conversion as landing-to-signup, not landing-to-activated. Different denominator, different window. I'd trust the 5.4 for what we actually care about, but I haven't audited the Looker board recently.
+[00:12:41] Marcus: We can't have two conversion numbers floating around exec meetings. Add reconciling those two boards to your list.
+[00:12:49] Noah: Added. I'll write up which metric means what and propose we retire one of the boards.
+[00:12:56] Elena: Good. Last thing from me — rotation proposal and alert-rule pass, I said this week, holding myself to it.
+[00:13:03] Marcus: Great sync, everyone. Recap lands in the channel in an hour. Same time next week.
+[00:13:10] Tara: Thanks all.
+[00:13:12] Noah: Bye.
