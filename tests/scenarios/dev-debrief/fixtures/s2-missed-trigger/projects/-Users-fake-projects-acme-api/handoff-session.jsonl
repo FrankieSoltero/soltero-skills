@@ -1,0 +1,8 @@
+{"type":"user","timestamp":"2026-07-21T17:50:12Z","message":{"role":"user","content":"Wrap up for today and hand off the invoice-export work so tomorrow's session can pick it up."}}
+{"type":"assistant","timestamp":"2026-07-21T17:50:31Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Skill","input":{"skill":"soltero-skills:agent-handoff"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T17:50:33Z","content":"Launching skill: soltero-skills:agent-handoff"}
+{"type":"assistant","timestamp":"2026-07-21T17:52:10Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Write","input":{"file_path":"/Users/fake/projects/acme-api/HANDOFF.md","content":"# Handoff — invoice export\n\nGoal: batch CSV export. Status: pagination done, streaming next. Next steps: 1) stream writer 2) integration test."}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T17:52:12Z","content":"File created: HANDOFF.md"}
+{"type":"assistant","timestamp":"2026-07-21T17:52:30Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"git add HANDOFF.md && git commit -m 'chore: handoff notes for invoice export'"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T17:52:32Z","content":"[invoice-export FAKE3c4d] chore: handoff notes for invoice export"}
+{"type":"user","timestamp":"2026-07-21T17:53:05Z","message":{"role":"user","content":"perfect, see you tomorrow"}}

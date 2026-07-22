@@ -1,0 +1,10 @@
+{"type":"user","timestamp":"2026-07-21T10:15:02Z","message":{"role":"user","content":"Add a loyaltyPoints integer to Customer and migrate."}}
+{"type":"assistant","timestamp":"2026-07-21T10:15:30Z","message":{"role":"assistant","content":[{"type":"text","text":"Adding the field to the schema."},{"type":"tool_use","name":"Edit","input":{"file_path":"/Users/fake/projects/fake-shop/prisma/schema.prisma","old_string":"model Customer {\n  id    String @id\n  email String @unique","new_string":"model Customer {\n  id            String @id\n  email         String @unique\n  loyaltyPoints Int    @default(0)"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T10:15:32Z","content":"Edit applied to prisma/schema.prisma"}
+{"type":"assistant","timestamp":"2026-07-21T10:15:50Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"npx prisma migrate dev --name add-loyalty-points"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T10:16:44Z","content":"Migration 20260721101601_add_loyalty_points applied.\nYour database is now in sync with your schema."}
+{"type":"assistant","timestamp":"2026-07-21T10:16:55Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"npm test"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T10:18:31Z","content":"Test Suites: 12 passed, 12 total\nTests: 42 passed, 42 total"}
+{"type":"assistant","timestamp":"2026-07-21T10:18:45Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Bash","input":{"command":"git commit -am 'feat: loyaltyPoints on Customer'"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T10:18:47Z","content":"[main FAKE1a2b] feat: loyaltyPoints on Customer"}
+{"type":"user","timestamp":"2026-07-21T10:19:30Z","message":{"role":"user","content":"thanks!"}}

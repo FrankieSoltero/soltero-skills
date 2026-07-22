@@ -1,0 +1,9 @@
+{"type":"user","timestamp":"2026-07-21T09:12:04Z","message":{"role":"user","content":"How does our rate limiter actually work? Walk me through it before the design review."}}
+{"type":"assistant","timestamp":"2026-07-21T09:12:31Z","message":{"role":"assistant","content":[{"type":"text","text":"I'll read the middleware and the token-bucket implementation."},{"type":"tool_use","name":"Read","input":{"file_path":"/Users/fake/projects/acme-api/src/middleware/rate-limit.ts"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T09:12:33Z","content":"export function rateLimit(opts: BucketOpts) { /* token bucket, 100 req/min per API key, bucket depth 20 */ }"}
+{"type":"assistant","timestamp":"2026-07-21T09:13:02Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Grep","input":{"pattern":"rateLimit\\(","path":"/Users/fake/projects/acme-api/src"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T09:13:04Z","content":"src/routes/orders.ts:12\nsrc/routes/webhooks.ts:8"}
+{"type":"assistant","timestamp":"2026-07-21T09:20:40Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"Read","input":{"file_path":"/Users/fake/projects/acme-api/src/lib/token-bucket.ts"}}]}}
+{"type":"tool_result","timestamp":"2026-07-21T09:20:42Z","content":"export class TokenBucket { refill() { /* monotonic clock, per-key state in Redis */ } }"}
+{"type":"assistant","timestamp":"2026-07-21T11:02:11Z","message":{"role":"assistant","content":[{"type":"text","text":"Summary for the review: token bucket per API key (100 req/min, burst 20), enforced on orders and webhooks routes; per-key state lives in Redis with a monotonic-clock refill, so limits survive process restarts."}]}}
+{"type":"user","timestamp":"2026-07-21T11:04:00Z","message":{"role":"user","content":"Great, exactly what I needed for the review. No changes needed."}}
