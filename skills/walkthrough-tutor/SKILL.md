@@ -30,6 +30,9 @@ Concepts are first-class, taught and reconnected — not footnotes inside the du
 
 - Reviewing a diff for bugs/quality — use `/code-review`.
 - A one-line "what does this do?" that a single sentence answers — just answer it.
+- Building NEW code the user wants to type with their own hands — that is
+  `code-by-hand` (navigator/driver pairing, user-invoked only, no quizzes); this skill
+  explains changes that already exist.
 
 ## The Loop
 
