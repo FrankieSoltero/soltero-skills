@@ -32,6 +32,10 @@ Then invoke skills as `soltero-skills:<skill-name>`.
 | `skill-gardener` | Periodic staleness/lifecycle audit of installed skills: structural validation, freshness spot-checks of external claims with live evidence, usage-informed retirement candidates — report-only, never edits audited skills. |
 | `skill-patcher` | Closed-loop meta-agent that clusters corrections/lessons across sessions and opens a PR patching the guilty skill/ruleset (itemized edits, Traced-To table) — PR review is the gate; never merges its own PRs. |
 | `evidence-gate` | Fail-closed verification receipts for lifecycle claims: tree-hash-bound JSON receipts produced by observed runs and mechanically re-verifiable via bundled scripts — prose "tests passed" is never evidence. |
+| `design-forge` | Living, license-verified catalog of free front-end design sources + apply mode: stack detection → aesthetic-direction Artifact previews with real content → explicit pick → branch-only implementation. |
+| `dev-debrief` | Nightly local scan of all sessions → daily work summary + skill telemetry (triggers/missed triggers), Sunday deep pass with evidence-cited skill grades; silent skip on no-coding days; hardened redaction. |
+| `transcript-reader` | Verified meeting-transcript extraction: bundled pipeline (deterministic ingest → parallel extractors → reduce → refute-verifiers → completeness critic) with cited items and a correction-fed rule pool. |
+| `code-by-hand` | User-invoked navigator/driver mode: you type every line, the agent presents blocks with per-line notes, verifies what you actually typed, and never edits code files itself. |
 
 Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`,
 `author-claude-md`.

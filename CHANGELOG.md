@@ -3,6 +3,33 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.11.0] - 2026-07-22
+### Added
+- `design-forge`: living, license-verified catalog of free front-end design
+  sources (agent-playbook-style three-file references + bundled sweep workflow
+  with an independent LICENSE-file verifier, default-reject) plus apply mode:
+  detect stack → 3-4 aesthetic-direction Artifact previews with real content →
+  explicit pick + confirmation → implement on a branch. Ships seeded (11
+  verified entries; React Bits/Aceternity/GSAP rejected on license evidence).
+- `dev-debrief`: nightly local transcript scan across all projects → daily
+  work summary + skill telemetry (triggers, missed triggers) in
+  `Docs/debriefs/`, Sunday deep pass with evidence-cited per-skill grades and
+  ledger-compatible improvement recommendations; silent skip on no-coding
+  days; hardened redaction (never cite a secret's value OR its location).
+- `transcript-reader`: verified meeting-transcript extraction via a bundled
+  Workflow pipeline on every transcript (deterministic ingest/chunk script →
+  parallel schema-forced extractors → cross-chunk reduce → per-item refute
+  verifiers → completeness critic → cited report); correction-fed ACE-style
+  rule pool. Battle-tested: 37/37 recall, 84/84 grounded citations, 0 broken,
+  4/4 planted traps caught on an answer-keyed 2h fixture.
+- `code-by-hand`: user-invoked-only navigator/driver mode — the user types
+  every line, the agent presents logical blocks with per-line notes, verifies
+  typed reality (drift explained, never silently accepted/reverted/fixed),
+  runs checkpoints; `.code-by-hand.md` session state; hard no-agent-edits rule
+  with delegation logging. RED baseline: 2/4 agents edited files themselves.
+- All four built test-first per `creating-a-skill` (honest RED baselines incl.
+  discarded contaminated probes, disk-verified GREEN, gates green).
+
 ## [0.10.0] - 2026-07-17
 ### Added
 - Memory & self-improvement suite — six skills built from the 2026-07-17 research
