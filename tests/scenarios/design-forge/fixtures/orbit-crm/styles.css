@@ -1,0 +1,11 @@
+body { font-family: sans-serif; margin: 0; color: #222; }
+.topbar { display: flex; gap: 16px; padding: 12px 20px; border-bottom: 1px solid #ddd; }
+.topbar .logo { font-weight: bold; }
+.topbar .user { margin-left: auto; color: #666; }
+main { padding: 24px; }
+.summary { color: #666; }
+.columns { display: flex; gap: 16px; }
+.col { flex: 1; }
+.card { border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin-bottom: 8px; }
+.card h3 { margin: 0 0 4px; font-size: 15px; }
+.card p { margin: 0; color: #555; font-size: 13px; }

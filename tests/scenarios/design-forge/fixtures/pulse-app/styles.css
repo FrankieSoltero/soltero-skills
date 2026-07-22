@@ -1,0 +1,11 @@
+body { font-family: sans-serif; margin: 0; color: #1a1a1a; }
+.site-header { display: flex; justify-content: space-between; padding: 14px 24px; border-bottom: 1px solid #e5e5e5; }
+.brand { font-weight: 700; }
+.site-header nav a { margin-left: 14px; color: #444; text-decoration: none; }
+main { max-width: 720px; margin: 40px auto; padding: 0 24px; }
+.sub { color: #666; }
+.monitors { list-style: none; padding: 0; }
+.monitors li { padding: 10px 0; border-bottom: 1px solid #eee; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+.dot.ok { background: #2fbf71; }
+.dot.warn { background: #e8a530; }

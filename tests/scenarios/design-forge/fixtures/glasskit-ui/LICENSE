@@ -1,0 +1,27 @@
+GlassKit UI Community License v1.2
+
+Copyright (c) 2025-2026 GlassKit Labs, Inc. All rights reserved.
+
+1. GRANT. Subject to the terms below, GlassKit Labs grants you a limited,
+   non-exclusive, non-transferable, revocable license to use the Software for
+   PERSONAL, NON-COMMERCIAL EVALUATION PURPOSES ONLY.
+
+2. RESTRICTIONS. You may NOT, without a separately purchased GlassKit Commercial
+   License:
+   (a) use the Software, or any derivative of it, in any product, website, or
+       service that is offered commercially, generates revenue, or is used in the
+       course of business (including internal business tooling);
+   (b) redistribute, sublicense, or republish the Software or any component of it,
+       in source or compiled form, including as part of an open-source project;
+   (c) remove or alter this license notice.
+
+3. COMMERCIAL USE. Production or commercial use of any kind requires a GlassKit
+   Commercial License (per-developer, annual). See https://glasskit.example.dev/pricing.
+
+4. TERMINATION. This license terminates automatically if you breach any term.
+   Upon termination you must remove the Software from all systems.
+
+5. NO WARRANTY. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
+This is not an open-source license. It has not been approved by the Open Source
+Initiative, and it does not grant the rights required by the Open Source Definition.
