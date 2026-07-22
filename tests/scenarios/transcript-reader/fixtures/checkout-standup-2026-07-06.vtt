@@ -1,0 +1,61 @@
+WEBVTT
+
+1
+00:00:02.000 --> 00:00:09.000
+<v Dana>Morning everyone. Quick round, we have the release call at half past. Ibrahim, go ahead.
+
+2
+00:00:09.500 --> 00:00:21.000
+<v Ibrahim>Yesterday I finished the retry logic for the payment webhook consumer. Today I'm on the idempotency keys. No blockers, but I need someone to review PR 482 before end of day or it misses the release train.
+
+3
+00:00:21.500 --> 00:00:26.000
+<v Dana>Ruth, can you take the review of 482 today?
+
+4
+00:00:26.500 --> 00:00:29.000
+<v Ruth>Yes, I'll review 482 before lunch.
+
+5
+00:00:29.500 --> 00:00:43.000
+<v Ruth>My update: the checkout error rate spike from Friday is understood now. It was the feature flag service timing out, not our code. Error rate peaked at 2.3 percent, back to baseline 0.4 since Saturday morning.
+
+6
+00:00:43.500 --> 00:00:49.000
+<v Dana>Is there a follow-up on the flag service, or is that platform's problem?
+
+7
+00:00:49.500 --> 00:00:57.000
+<v Ruth>Platform owns it, but I said we'd file a ticket with our timeline data. I'll file it today. Blocked on nothing.
+
+8
+00:00:57.500 --> 00:01:11.000
+<v Priyanka>I'm still blocked on the sandbox credentials for the tax provider. It's been three days. Until I get them I literally cannot test the tax calculation flow, so I've been picking up small bugs meanwhile.
+
+9
+00:01:11.500 --> 00:01:17.000
+<v Dana>Three days is too long. I'll escalate the credentials to Victor's team right after this call.
+
+10
+00:01:17.500 --> 00:01:24.000
+<v Priyanka>Thanks. Once I have them I need about two days for the test matrix, so the tax feature is at risk for the 15th.
+
+11
+00:01:24.500 --> 00:01:33.000
+<v Dana>Understood. Let's decide now rather than Friday: if credentials aren't in by Wednesday, tax calculation slips to the July 22nd release. Agreed?
+
+12
+00:01:33.500 --> 00:01:35.500
+<v Ibrahim>Agreed.
+
+13
+00:01:36.000 --> 00:01:37.500
+<v Ruth>Agreed.
+
+14
+00:01:38.000 --> 00:01:39.500
+<v Priyanka>Agreed, sadly.
+
+15
+00:01:40.000 --> 00:01:49.000
+<v Dana>Decision made then. Last thing from me: the release call moved to 10:30, same link. I'll post the new invite. That's it, back to work.
