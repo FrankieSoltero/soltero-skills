@@ -5,7 +5,7 @@ project adheres to Semantic Versioning.
 
 ## [0.12.0] - 2026-07-24
 ### Added
-- PRD & plan pipeline — seven skills covering idea → requirements → gated
+- PRD & plan pipeline — six skills covering idea → requirements → gated
   design handoff → gated execution:
   - `writing-prds`: brainstorming-style dialogue that turns an idea into a PRD
     at `docs/prds/` — hard gate (no design/code before approval), blocking vs
