@@ -51,10 +51,14 @@ Create a task per item and complete them in order:
    overrides).
 7. **Self-review** — scan for placeholders/TBDs, contradictions, ambiguity, scope creep,
    and any unconfirmed invented specific. Fix inline.
-8. **User review gate** — "PRD written to `<path>`. Please review before we move to
-   design." Wait. Revise until approved.
-9. **Hand off** — offer superpowers:brainstorming for technical design. That is the ONLY
-   next step; never jump to implementation.
+8. **Council review gate** — invoke soltero-skills:prd-review. The PRD must PASS its
+   council (overall ≥95 AND every dimension ≥80) before anything downstream; BLOCKED
+   means fix and re-review, never proceed.
+9. **User review gate** — "PRD written to `<path>` (council: PASS <score>). Please
+   review before we move to design." Wait. Revise until approved (revisions re-enter
+   step 8).
+10. **Hand off** — offer superpowers:brainstorming for technical design. That is the
+    ONLY next step; never jump to implementation.
 
 ## Blocking vs. defaultable — the anti-"flag-and-proceed" rule
 
