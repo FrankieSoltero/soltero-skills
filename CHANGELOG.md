@@ -3,6 +3,37 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.12.0] - 2026-07-24
+### Added
+- PRD & plan pipeline — seven skills covering idea → requirements → gated
+  design handoff → gated execution:
+  - `writing-prds`: brainstorming-style dialogue that turns an idea into a PRD
+    at `docs/prds/` — hard gate (no design/code before approval), blocking vs
+    defaultable question classes (bans assumption-flag-and-proceed),
+    decomposition before drafting, section-by-section approval, bundled PRD
+    template; hands off to superpowers:brainstorming.
+  - `prd-user-stories`: stories traceable to stated requirements with compact
+    Given/When/Then criteria that survive "keep it light" pressure; no invented
+    personas or thresholds.
+  - `prd-scoping`: decomposition-first scope sections, MoSCoW with a forced
+    Must budget, and an Out-of-scope list that gets reworded, never removed.
+  - `prd-success-metrics`: every metric carries baseline/target/timeframe/
+    measurement source; unsourced numbers marked `(proposed — confirm)`; 3–5
+    primary cap plus a guardrail.
+  - `prd-review`: 6-dimension grading council (bundled Workflow: band-anchored
+    graders → anti-inflation skeptics on ≥90 → regrade-min) with a hard gate —
+    overall ≥95 AND every dimension ≥80, else BLOCKED; fix→re-review loop where
+    the fixer never changes the verdict. Live-smoke-verified (flawed fixture →
+    43.7 BLOCKED, 6/6 graders).
+  - `plan-review`: sibling council for implementation plans (decomposition,
+    verifiability, spec fidelity, concreteness, risk/reversibility,
+    consistency) between superpowers:writing-plans and executing-plans; no
+    safe-subset carve-outs, no fix-author self-re-review. Live-smoke-verified
+    (41.9 BLOCKED).
+- All built test-first per `creating-a-skill`: 18 open-ended pressure
+  scenarios, honest RED baselines (including recorded baseline passes), GREEN
+  18/18 with skill-section citations, both council workflows smoke-run live.
+
 ## [0.11.0] - 2026-07-22
 ### Added
 - `design-forge`: living, license-verified catalog of free front-end design
