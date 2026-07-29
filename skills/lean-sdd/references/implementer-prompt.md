@@ -31,8 +31,14 @@ a file outside your list, STOP and report instead of touching it.
 
 ## Your Job
 
+Standing disciplines: soltero-skills:lean-tdd (failing test first — invoke it
+if it's in your skills list, follow its rules regardless) and
+soltero-skills:lean-verification (no claim in your report without fresh
+evidence from a run in this session).
+
 1. Write tests for the brief's behavior table (every row) and implement until
-   they pass — test-first where the plan requires TDD. While iterating, run
+   they pass — test-first: watch each test fail before implementing; code
+   written before its test gets deleted, not stashed. While iterating, run
    the focused test file; run the full suite once before committing.
 2. Follow existing codebase patterns. If a file you're creating grows well
    beyond the brief's intent, report DONE_WITH_CONCERNS rather than
@@ -52,7 +58,13 @@ Write your full report to [REPORT_FILE]: what you implemented, tests run with
 results (RED/GREEN evidence if TDD was required), files changed, self-review
 findings, concerns. If you are later resumed with review findings: fix, re-run
 the covering tests, APPEND a fix report (what changed, covering tests,
-command, output) to the same file.
+command, output) to the same file. Every claim in the report carries the
+command and output that proves it — never write the success line before the
+run.
+
+If you hit a bug or unexpected behavior mid-task: root cause before fixes
+(soltero-skills:lean-debugging) — trace the bad value to its origin; no
+symptom patches, not even as a fallback.
 
 Then reply with ONLY (under 10 lines):
 - Status: DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT

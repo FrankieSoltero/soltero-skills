@@ -3,6 +3,13 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.14.1] - 2026-07-29
+### Changed
+- lean-sdd implementer prompt now names the standing disciplines explicitly
+  (lean-tdd, lean-verification, lean-debugging) so dispatched coding agents —
+  which never receive the SessionStart hook — are pointed at the skills in
+  their own prompt.
+
 ## [0.14.0] - 2026-07-29
 ### Added
 - Superpowers replacement complete — five skills forking the remaining
