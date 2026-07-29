@@ -8,9 +8,9 @@ questions or exploring the codebase — check the available-skills list. If a
 skill plausibly applies, invoke it with the Skill tool FIRST. If it turns out
 wrong for the situation, you don't have to follow it.
 
-## Pipeline Routing
+## Routing
 
-For feature work, use the lean pipeline end to end:
+Feature work — the lean pipeline, end to end:
 
 - "Build/add/change X", no agreed design yet → `soltero-skills:lean-brainstorming`
   (product-level discovery → `soltero-skills:writing-prds` first, gated by
@@ -19,23 +19,30 @@ For feature work, use the lean pipeline end to end:
   `soltero-skills:plan-review`
 - Approved plan → `soltero-skills:lean-sdd` (pipelined subagent execution)
 
-These lean skills REPLACE superpowers:brainstorming, superpowers:writing-plans,
-superpowers:executing-plans, and superpowers:subagent-driven-development. If
-the superpowers plugin is also installed, its own session context claims those
-flows — this routing takes precedence for them. Superpowers skills the lean
-pipeline does not yet replace (systematic-debugging, test-driven-development,
-using-git-worktrees, verification-before-completion, finishing-a-development-branch,
-requesting/receiving-code-review) remain in effect while that plugin is
-installed; use them where they apply.
+Standing disciplines and procedures:
 
-Authoring or editing skills in the soltero-skills repo →
-`soltero-skills:creating-a-skill` (not superpowers:writing-skills).
+- Bug, test failure, unexpected behavior → `soltero-skills:lean-debugging`
+  before proposing any fix
+- Implementing any feature/bugfix → `soltero-skills:lean-tdd` before writing
+  implementation code
+- About to claim done/fixed/passing, commit, or PR → `soltero-skills:lean-verification`
+- Starting feature work needing isolation → `soltero-skills:lean-worktrees`
+- Branch complete, needs integrating → `soltero-skills:lean-finishing`
+- Authoring/editing skills in the soltero-skills repo → `soltero-skills:creating-a-skill`
+
+This lean suite fully replaces the superpowers plugin's pipeline (brainstorming,
+writing-plans, executing-plans, subagent-driven-development, systematic-debugging,
+test-driven-development, verification-before-completion, using-git-worktrees,
+finishing-a-development-branch, requesting-code-review's reviewer). If
+superpowers is still installed, prefer the lean skills wherever both claim a
+flow.
 
 ## Red Flags
 
 "This is too simple for the pipeline", "I'll just start coding", "they're in a
-hurry so skip the gate" — STOP and invoke the matching skill. Speed requests
-change round-trip count, never gates.
+hurry so skip the gate", "quick fix now, investigate later", "should pass —
+call it done" — STOP and invoke the matching skill. Speed requests change
+round-trip count, never gates.
 
 User instructions (CLAUDE.md, AGENTS.md, direct requests) override skills.
 </EXTREMELY_IMPORTANT>

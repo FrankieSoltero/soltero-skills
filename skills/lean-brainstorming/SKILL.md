@@ -79,10 +79,11 @@ design skipped:** if an answer would change what you build, it blocks.
 
 ## When NOT to Use
 
-- Bug fixes → superpowers:systematic-debugging. Pure questions → just answer.
+- Bug fixes → soltero-skills:lean-debugging. Pure questions → just answer.
 - Requirements already agreed/approved → soltero-skills:lean-plans.
 - Full product-level discovery → soltero-skills:writing-prds first.
-- User explicitly wants deep interactive exploration → superpowers:brainstorming.
+- User explicitly wants deep one-question-at-a-time exploration →
+  superpowers:brainstorming (if that plugin is installed).
 
 ---
 

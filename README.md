@@ -45,6 +45,11 @@ Then invoke skills as `soltero-skills:<skill-name>`.
 | `lean-brainstorming` | Batched-question requirements exploration with a hard no-code-before-approval gate — one question round, one design message, one combined approval pass (~2 round trips). |
 | `lean-plans` | Contract-level implementation plans: exact interfaces, behavior tables, and a dependency/risk-tier table for the executor; code only where exactness is the requirement. |
 | `lean-sdd` | Pipelined subagent execution: reviewer runs concurrently with the next disjoint implementer, risk-tiered review depth, 3-round fix cap, compaction-proof ledger. |
+| `lean-tdd` | Failing-test-first discipline: delete code written before its test (stash counts as keeping it), mandatory verify-RED/GREEN, first-run-pass tripwire. |
+| `lean-verification` | Evidence before claims: no completion claim without a fresh run in the same message; never pre-script the success message; subagent reports are claims to verify. |
+| `lean-debugging` | Root cause before fixes: trace to origin, one change at a time, no symptom patch even as "insurance" (revert is the honest fast exit), three failed fixes → question the architecture. |
+| `lean-worktrees` | Isolated-workspace procedure: detect existing isolation, prefer the native worktree tool, guarded gitignore-verified git fallback, clean test baseline. |
+| `lean-finishing` | Branch integration: fresh suite on the exact tree, options menu (unless explicitly delegated), typed-`discard` only, protected-main routing through PRs. |
 
 Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`,
 `author-claude-md`.
