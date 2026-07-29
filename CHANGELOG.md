@@ -3,6 +3,18 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.17.0] - 2026-07-29
+### Added
+- `multiplayer-game-dev` (lean-agency phase 3, scoped to the multiplayer_ai
+  project's browser/WebSocket TS stack — engine personas discarded):
+  knowledge-injection netcode reference (authority-first, fixed-timestep
+  accumulator loops, tick/snapshot/interpolation numbers, prediction/
+  reconciliation, determinism vs desync, validation/backpressure) plus an
+  unconditional ship-gate contract — simulated asymmetric latency, desync
+  harness, cheat probe, lifecycle — with no party-game exemption. RED 3/3
+  honest passes (gap: verification inconsistent — one run shipped with zero
+  latency testing); targeted GREEN 2/2 with the gate contract landing.
+
 ## [0.16.0] - 2026-07-29
 ### Added
 - Product-discovery pair (lean-agency phase 2) — the discovery front-end for

@@ -55,6 +55,7 @@ Then invoke skills as `soltero-skills:<skill-name>`.
 | `seo-aeo` | Search + answer-engine optimization: basis-labeled recommendations, mechanical audit first, citation baseline→recheck protocol, no promised rankings. |
 | `feedback-synthesis` | User-feedback synthesis under contract: exact ID-cited counts, verbatim quotes with edit disclosure, contradictions surfaced, absences reported. |
 | `trend-research` | Market/competitive research under an evidence protocol: per-claim source labels, no numbers from memory, premise checks, honest no-web degradation. |
+| `multiplayer-game-dev` | Browser/WebSocket multiplayer netcode: authority-first design, tick/snapshot/interpolation patterns with numbers, and unconditional ship-gates (latency sim, desync harness, cheat probe). |
 
 Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`,
 `author-claude-md`.
