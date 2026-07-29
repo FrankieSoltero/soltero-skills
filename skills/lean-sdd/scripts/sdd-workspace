@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Resolve and ensure the per-plan artifact directory lean-sdd uses for task
+# briefs, implementer reports, review packages, and the progress ledger.
+# Prints the plan directory's absolute path.
+#
+# One directory per plan (.soltero/lean-sdd/<plan-basename>/) so a follow-up
+# plan in the same working tree can never read or overwrite another plan's
+# artifacts. A self-ignoring .gitignore keeps every plan's workspace out of
+# git status without modifying any tracked file.
+#
+# Adapted from superpowers:subagent-driven-development scripts/sdd-workspace
+# (MIT License, Copyright (c) 2025 Jesse Vincent).
+#
+# Usage: sdd-workspace PLAN_FILE
+set -euo pipefail
+
+if [ $# -ne 1 ]; then
+  echo "usage: sdd-workspace PLAN_FILE" >&2
+  exit 2
+fi
+
+plan=$1
+[ -f "$plan" ] || { echo "no such plan file: $plan" >&2; exit 2; }
+
+slug=$(basename "$plan" .md)
+[ -n "$slug" ] && [ "$slug" != "." ] && [ "$slug" != ".." ] \
+  || { echo "cannot derive a workspace name from: $plan" >&2; exit 2; }
+
+root=$(git rev-parse --show-toplevel)
+base="$root/.soltero/lean-sdd"
+dir="$base/$slug"
+mkdir -p "$dir"
+printf '*\n' > "$base/.gitignore"
+cd "$dir" && pwd

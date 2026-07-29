@@ -42,6 +42,9 @@ Then invoke skills as `soltero-skills:<skill-name>`.
 | `prd-success-metrics` | Success metrics with baseline/target/timeframe/measurement source each, `(proposed — confirm)` markers on unsourced numbers, and a 3–5 primary cap plus guardrail. |
 | `prd-review` | 6-dimension PRD grading council (bundled Workflow: rubric-anchored graders, anti-inflation skeptics, regrade-min) gating at ≥95 overall AND ≥80 per dimension — BLOCKED means no design or build. |
 | `plan-review` | Implementation-plan grading council (decomposition, verifiability, spec fidelity, concreteness, risk/rollback, consistency) gating execution at ≥95/80 — no safe-subset starts, no fix-author self-approval. |
+| `lean-brainstorming` | Batched-question requirements exploration with a hard no-code-before-approval gate — one question round, one design message, one combined approval pass (~2 round trips). |
+| `lean-plans` | Contract-level implementation plans: exact interfaces, behavior tables, and a dependency/risk-tier table for the executor; code only where exactness is the requirement. |
+| `lean-sdd` | Pipelined subagent execution: reviewer runs concurrently with the next disjoint implementer, risk-tiered review depth, 3-round fix cap, compaction-proof ledger. |
 
 Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`,
 `author-claude-md`.

@@ -3,6 +3,30 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.13.0] - 2026-07-29
+### Added
+- Lean pipeline — three skills forking the superpowers spec→plan→execute flow
+  for speed at equal quality (MIT-attributed; built RED→GREEN, 9/9 scenarios,
+  zero refactor rounds):
+  - `lean-brainstorming`: batched-question requirements exploration (2–4
+    blocking questions in ONE round, one-shot design message, single combined
+    design+spec approval gate) with a hard no-code-before-approval gate; ~2
+    round trips instead of 8+. Hands off to `lean-plans`.
+  - `lean-plans`: contract-level implementation plans — exact interfaces,
+    behavior tables, exact values, and a Task Dependency Table with risk tiers
+    (mechanical/standard/judgment) that drives downstream scheduling and
+    review depth; code in the plan only where exactness is the requirement.
+    Bundled plan template. ~3× shorter than code-transcription plans.
+  - `lean-sdd`: pipelined subagent execution — reviewer(N) runs concurrently
+    with implementer(N+1) on disjoint files, SPEC_ONLY reviews on the cheapest
+    model for mechanical tasks (with escalation tripwire), 3-round fix cap
+    then adjudication, exact ledger line formats, file-based brief/report/diff
+    handover. Bundled prompt templates + workspace/brief/review-package
+    scripts (`.soltero/lean-sdd/`).
+- SessionStart hook (`hooks/`): injects the skill-first bootstrap and lean
+  pipeline routing into every session — first step toward replacing the
+  superpowers plugin's session hook entirely.
+
 ## [0.12.0] - 2026-07-24
 ### Added
 - PRD & plan pipeline — six skills covering idea → requirements → gated
