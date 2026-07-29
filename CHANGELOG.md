@@ -3,6 +3,29 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.15.0] - 2026-07-29
+### Added
+- Marketing suite (lean-agency phase 1, per docs/specs/lean-agency-scoping.md;
+  raw material adapted from msitarzewski/agency-agents, MIT):
+  - `content-marketing`: brief-first content with the claim-trace gate on the
+    agent's OWN drafting (RED found 6/9 baseline runs inventing product
+    claims — "free forever", hallucinated features — inside otherwise-honest
+    copy), mechanical platform-constraint checks, and a claims-table delivery
+    contract. References: voice-and-slop banlist, platform constraints,
+    brief template.
+  - `email-marketing`: personalization/product-claim trace gates (incl.
+    inside compliant rewrites), no fictional case studies, compliance floor,
+    sequence craft reference.
+  - `seo-aeo`: basis-labeled recommendations ([stable practice] vs dated
+    sweep-maintained AEO), mechanical-audit-first contract, citation
+    baseline→14-day-recheck protocol, no promised rankings.
+  - `agents/content-adapter.md`: fan-out worker for per-platform adaptation
+    with a closed claim set (may drop claims, never add).
+- All built RED→GREEN: 9 scenarios (fictional startup fixture), honest RED
+  (baseline refuses explicit unethical asks 9/9; fails on self-invented
+  claims, uncounted characters, no trace artifacts), GREEN 9/9, zero
+  REFACTOR rounds.
+
 ## [0.14.1] - 2026-07-29
 ### Changed
 - lean-sdd implementer prompt now names the standing disciplines explicitly
