@@ -50,6 +50,9 @@ Then invoke skills as `soltero-skills:<skill-name>`.
 | `lean-debugging` | Root cause before fixes: trace to origin, one change at a time, no symptom patch even as "insurance" (revert is the honest fast exit), three failed fixes → question the architecture. |
 | `lean-worktrees` | Isolated-workspace procedure: detect existing isolation, prefer the native worktree tool, guarded gitignore-verified git fallback, clean test baseline. |
 | `lean-finishing` | Branch integration: fresh suite on the exact tree, options menu (unless explicitly delegated), typed-`discard` only, protected-main routing through PRs. |
+| `content-marketing` | Brief-first marketing copy with a claim-trace gate on the agent's own drafting, platform-constraint checks, and a claims-table delivery contract. |
+| `email-marketing` | Customer-facing email with personalization/product-claim trace gates, no fictional case studies, compliance floor, and sequence craft. |
+| `seo-aeo` | Search + answer-engine optimization: basis-labeled recommendations, mechanical audit first, citation baseline→recheck protocol, no promised rankings. |
 
 Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`,
 `author-claude-md`.
