@@ -53,6 +53,8 @@ Then invoke skills as `soltero-skills:<skill-name>`.
 | `content-marketing` | Brief-first marketing copy with a claim-trace gate on the agent's own drafting, platform-constraint checks, and a claims-table delivery contract. |
 | `email-marketing` | Customer-facing email with personalization/product-claim trace gates, no fictional case studies, compliance floor, and sequence craft. |
 | `seo-aeo` | Search + answer-engine optimization: basis-labeled recommendations, mechanical audit first, citation baseline→recheck protocol, no promised rankings. |
+| `feedback-synthesis` | User-feedback synthesis under contract: exact ID-cited counts, verbatim quotes with edit disclosure, contradictions surfaced, absences reported. |
+| `trend-research` | Market/competitive research under an evidence protocol: per-claim source labels, no numbers from memory, premise checks, honest no-web degradation. |
 
 Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`,
 `author-claude-md`.

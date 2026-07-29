@@ -3,6 +3,28 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.16.0] - 2026-07-29
+### Added
+- Product-discovery pair (lean-agency phase 2) — the discovery front-end for
+  writing-prds:
+  - `feedback-synthesis`: mandatory synthesis contract — exact counts with
+    item IDs, verbatim quotes with per-edit disclosure, duplicates counted
+    once, contradictions surfaced not averaged, vivid anecdotes held at n=1
+    with survivorship caveats, and a REQUIRED expected-but-absent topics list
+    (the gap RED found: 0/3 baseline runs reported the planted zero-mention
+    topic).
+  - `trend-research`: evidence protocol — per-claim labels
+    ([verified: source, date] / [model memory — verify] / [estimate]), no
+    specific numbers from memory ([VERIFY] brackets), premise-check before
+    building, analyst-spread over single TAM, honest no-web degradation path
+    (the gap RED found: all baselines had web access), customer-alternatives
+    competitive ring.
+- Built RED→GREEN on a planted-ground-truth feedback fixture (28 items:
+  dupe user, praise-vs-complaint trap, 1-item vivid story, contradiction
+  pair, zero-mention topic). RED 6/6 honest passes with two gaps; targeted
+  GREEN 4/4 with both gaps closed; zero refactor rounds. Raw-material
+  keepers from msitarzewski/agency-agents product agents (MIT).
+
 ## [0.15.0] - 2026-07-29
 ### Added
 - Marketing suite (lean-agency phase 1, per docs/specs/lean-agency-scoping.md;
