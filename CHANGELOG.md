@@ -3,6 +3,37 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.14.0] - 2026-07-29
+### Added
+- Superpowers replacement complete — five skills forking the remaining
+  superpowers disciplines/procedures (MIT-attributed; built RED→GREEN with
+  two-tier baselines: session-default model 15/15 PASS, haiku probes exposed
+  the real failures the skills close):
+  - `lean-tdd`: failing-test-first with the stash/scratch-file loophole
+    closed (haiku RED kept the implementation "as reference via git stash"),
+    mandatory verify-RED/GREEN, first-run-pass tripwire, lean-plans
+    behavior-table integration.
+  - `lean-verification`: evidence-before-claims with the pre-scripted-success
+    counter (haiku RED authored "Done. 212/212" before any run), the gate
+    function, claims table, and the lean-sdd evidence chain.
+  - `lean-debugging`: root-cause-first with the no-patch-as-"insurance"
+    clause (haiku RED reintroduced the rejected symptom patch as fallback),
+    revert-as-honest-exit, and the three-fix architecture breaker.
+  - `lean-worktrees`: detect → native tool (EnterWorktree) → guarded
+    gitignore-verified fallback → clean baseline.
+  - `lean-finishing`: fresh-suite-on-the-exact-tree, integration menu with an
+    explicit-delegation conditional, typed-`discard` confirmation, and
+    protected-branch routing (GH013 → PR with required checks and the repo's
+    allowed merge method).
+- `lean-sdd` gains a bundled final whole-branch review template
+  (`references/final-review-prompt.md`, adapted from
+  superpowers:requesting-code-review) with ledger deferred/parked triage.
+### Changed
+- Lean-suite cross-references now point at the forks (lean-sdd →
+  lean-worktrees/lean-finishing/final-review template; lean-brainstorming →
+  lean-debugging); `hooks/session-context.md` rewritten to route all
+  disciplines to the lean suite — the superpowers plugin can now be disabled.
+
 ## [0.13.0] - 2026-07-29
 ### Added
 - Lean pipeline — three skills forking the superpowers spec→plan→execute flow

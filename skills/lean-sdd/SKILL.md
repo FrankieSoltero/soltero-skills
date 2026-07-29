@@ -27,7 +27,7 @@ equivalent.
 
 ## Setup
 
-1. Isolated workspace: superpowers:using-git-worktrees or a feature branch.
+1. Isolated workspace: soltero-skills:lean-worktrees or a feature branch.
    Never implement on main/master without explicit consent.
 2. Run this skill's `scripts/sdd-workspace PLAN_FILE` — it prints the plan's
    git-ignored artifact directory (`<repo-root>/.soltero/lean-sdd/<plan-basename>/`)
@@ -123,12 +123,12 @@ Task <N>: BLOCKED — <reason>
 
 After all tasks: `scripts/review-package PLAN_FILE MERGE_BASE HEAD`
 (MERGE_BASE = `git merge-base main HEAD`). Dispatch the whole-branch review on
-the most capable model — superpowers:requesting-code-review's code-reviewer
-template if available, else the FULL task-reviewer prompt over the branch —
+the most capable model using
+[references/final-review-prompt.md](references/final-review-prompt.md),
 pointed at the ledger's deferred and parked lines for triage. Findings → ONE
 fix dispatch with the complete list, one scoped re-review, adjudicate
 residuals. No second fix wave. When clean: delete the workspace
-(`rm -rf <workspace>`) and use superpowers:finishing-a-development-branch.
+(`rm -rf <workspace>`) and use soltero-skills:lean-finishing.
 
 ## Rationalization Table
 
