@@ -3,6 +3,21 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.18.0] - 2026-07-29
+### Added
+- `mini-game-craft`: browser mini-game mechanics + procedural art, grounded
+  in a line-level audit of the multiplayer_ai project's REAL doodle/tetris
+  engines (12 concrete bugs found and classed: frame-rate-dependent apex vs
+  GAP_MAX, swept-collision order, edge tunneling, pivot-less rotation, no
+  kicks, ceiling vanish, accumulator carryover, unused seed). Failure-class
+  catalog with fix patterns (references/mechanics.md), seeded art-layer rules
+  (references/art.md), and a four-line contract: name the class before
+  patching; fixes ship with a test that fails on the old code; game tests
+  vary dt; visual randomness derives from the session seed with engines kept
+  pure. Fixtures are the project's real engine files. RED 3/3 exceptional
+  passes; GREEN 2/2 with the contract landing (regression tests annotated
+  with the old line each kills; 500-seed contrast fuzz) and zero degradation.
+
 ## [0.17.0] - 2026-07-29
 ### Added
 - `multiplayer-game-dev` (lean-agency phase 3, scoped to the multiplayer_ai

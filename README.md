@@ -56,6 +56,7 @@ Then invoke skills as `soltero-skills:<skill-name>`.
 | `feedback-synthesis` | User-feedback synthesis under contract: exact ID-cited counts, verbatim quotes with edit disclosure, contradictions surfaced, absences reported. |
 | `trend-research` | Market/competitive research under an evidence protocol: per-claim source labels, no numbers from memory, premise checks, honest no-web degradation. |
 | `multiplayer-game-dev` | Browser/WebSocket multiplayer netcode: authority-first design, tick/snapshot/interpolation patterns with numbers, and unconditional ship-gates (latency sim, desync harness, cheat probe). |
+| `mini-game-craft` | Browser mini-game mechanics + seeded procedural art: failure-class catalog (timestep, swept collision, rotation, lockout), fixes ship with fail-on-old tests, dt-varying test discipline, art as a pure layer. |
 
 Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`,
 `author-claude-md`.
