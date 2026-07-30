@@ -3,6 +3,24 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.19.1] - 2026-07-30
+### Changed
+- `plan-review`: gate recalibrated from overall ≥95 to **overall ≥85 AND every
+  dimension ≥80 AND zero blocking-severity violations outstanding**. Field use
+  showed the 95 threshold was effectively unreachable — the rubric's own band
+  anchors define 85–94 as "sound; nothing that would send an executor down a
+  wrong or unsafe path", and with skeptics recording min(grade, regrade) on
+  every ≥90 score, genuinely sound plans plateau at 86–87, forcing repeated
+  fix→re-review loops that never converge. 85 aligns the gate with the band
+  the anchors already call execution-ready; the new blocking-violation
+  condition (previously implicit at 95, where any blocking flaw sank the
+  average) keeps a do-not-execute flaw blocking even when the weighted score
+  clears 85. Updated in SKILL.md (description, HARD-GATE, rationalization
+  rows), references/rubric.md (gate + rationale), workflows/review.mjs
+  (pass condition, gate object now reports `blockingViolationCount`, log
+  line), README row, and docs/specs/plan-review.md. `prd-review`'s identical
+  95 gate left unchanged pending the same field evidence.
+
 ## [0.19.0] - 2026-07-29
 ### Changed
 - Model-tier standard enforced at every dispatch point repo-wide: subagents
