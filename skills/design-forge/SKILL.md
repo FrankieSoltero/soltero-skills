@@ -102,7 +102,8 @@ release cycle).
 ### Inline verification (single entry, outside a sweep)
 
 When apply mode needs ONE source that isn't cataloged: dispatch an independent
-verifier subagent (never self-verify — you found it, so you don't judge it) that
+verifier subagent on sonnet, named explicitly — the same tier the sweep workflow
+uses (never self-verify — you found it, so you don't judge it) — that
 fetches the actual LICENSE file and returns SPDX id + LICENSE file URL + health, or a
 rejection. Write the outcome into `catalog.md` (if verified) AND `source-log.md`
 (either way, disposition + evidence) and commit — a correct verdict recorded in an ad

@@ -191,7 +191,7 @@ const evaluated = await pipeline(
     `benchmarks; Promising for a single credible result; Watch for plausible-but-unvalidated), ` +
     `and tool-specific notes if the tactic is tool-bound. If you cannot fetch/read the source, ` +
     `return readable=false with whyUnreadable and an empty tactics list.`,
-    { label: `read:${c.key}`.slice(0, 60), phase: 'Read', schema: TACTICS_SCHEMA, model: 'sonnet' }
+    { label: `read:${c.key}`.slice(0, 60), phase: 'Read', schema: TACTICS_SCHEMA, model: 'haiku' }
   ),
   async (read, c) => {
     if (!read) return { read: null, verdicts: [] }

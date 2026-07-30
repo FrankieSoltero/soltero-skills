@@ -3,8 +3,8 @@
 Two modes, chosen by the task's risk tier in the plan's dependency table:
 
 - **FULL** (standard/judgment tiers): spec compliance + code quality, model
-  scaled to the diff's risk.
-- **SPEC_ONLY** (mechanical tier): spec compliance only, cheapest model;
+  by tier — standard → sonnet, judgment → opus.
+- **SPEC_ONLY** (mechanical tier): spec compliance only, on haiku;
   quality is owned by the final whole-branch review.
 
 ```

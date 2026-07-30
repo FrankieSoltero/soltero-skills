@@ -42,7 +42,9 @@ and no category is left "flagged but not done."**
    If absent, GENERATE one by discovering the project's declared standards (CLAUDE.md/AGENTS.md,
    ESLint/Prettier/ruff/.editorconfig, observed file-size norms), write it, and ask the user to
    review before applying. It defines: verify commands, max file length, tools to run, exclude
-   paths, and the **public-API allowlist that must never be treated as dead**. The allowlist
+   paths, the model tiers for any delegated work (engineering → opus, grunt → sonnet,
+   reading → haiku, orchestration → fable — a dispatch never inherits the session model), and
+   the **public-API allowlist that must never be treated as dead**. The allowlist
    exists precisely so keep/delete decisions don't depend on someone reading and testing each
    symbol by hand — it is the mechanism that scales past a handful of files.
 3. **Green baseline.** Run the verify commands (test + typecheck + lint) and OBSERVE them pass.

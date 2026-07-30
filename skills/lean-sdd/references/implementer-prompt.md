@@ -1,8 +1,9 @@
 # Implementer Prompt Template
 
-Dispatch as a fresh general-purpose subagent. Always set the model explicitly
-(per the SKILL.md tier table — an omitted model silently inherits the
-session's most expensive one).
+Dispatch as a fresh general-purpose subagent. Always set the model explicitly:
+mechanical tier → sonnet, standard/judgment tiers → opus. An omitted model
+silently inherits the session's orchestrator model (fable), which is reserved
+for orchestration — never for dispatched work.
 
 ```
 You are implementing Task [N]: [task name].

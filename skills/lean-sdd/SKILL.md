@@ -18,6 +18,14 @@ anything. Implementers may overlap only when their file sets are disjoint per
 the plan's dependency table — and every implementer stages only its own
 explicit paths (never `git add -A` / `git add .` / `git commit -a`).
 
+**Model policy — no dispatch inherits the session model.** The controller
+session orchestrates on fable; fable is never dispatched. Every dispatch names
+its model explicitly: **opus** for engineering (standard/judgment implementers,
+judgment reviews, the final whole-branch review), **sonnet** for grunt work
+(mechanical implementers, standard FULL reviews), **haiku** for reading and
+summarizing (SPEC_ONLY reviews, scoped re-reviews). An omitted model silently
+inherits fable — the most expensive model — for work a cheaper tier owns.
+
 **The contract is not optional.** Baseline controllers make the right
 judgment calls but improvise artifacts — ad-hoc report paths, verdicts in
 final messages, one-off ledger formats — and none of it survives compaction
@@ -54,7 +62,7 @@ For each task, in dependency order:
    requirements"), interfaces/decisions from earlier tasks the brief can't
    know, the global constraints, the report-file path
    (`<workspace>/task-N-report.md`), and its exact allowed file list. Model by
-   tier: mechanical → cheapest; standard → mid; judgment → most capable.
+   tier: mechanical → sonnet; standard → opus; judgment → opus.
    Always name the model explicitly.
 2. **On DONE: review — and pipeline.** Run
    `scripts/review-package PLAN_FILE BASE HEAD` → diff file. Dispatch
@@ -75,9 +83,9 @@ For each task, in dependency order:
 
 | Plan risk tier | Review mode | Reviewer model |
 |----------------|-------------|----------------|
-| mechanical | SPEC_ONLY — exact names/values/scope vs brief; no quality verdict (final review owns it) | cheapest |
-| standard | FULL — spec compliance + code quality | mid |
-| judgment | FULL | most capable |
+| mechanical | SPEC_ONLY — exact names/values/scope vs brief; no quality verdict (final review owns it) | haiku |
+| standard | FULL — spec compliance + code quality | sonnet |
+| judgment | FULL | opus |
 
 The SPEC_ONLY template carries a tripwire: if the diff is not actually
 mechanical, the reviewer escalates and you re-dispatch a FULL review. The
@@ -92,7 +100,8 @@ loop.
 - **Rounds 1–2:** resume the original implementer with the open findings
   verbatim. It re-runs the covering tests and appends a fix report to its
   report file.
-- **Round 3:** fresh implementer on a more capable model, given brief path,
+- **Round 3:** fresh implementer on opus (a model bump for sonnet-tier tasks,
+  fresh eyes otherwise), given brief path,
   report path, findings, and "a prior implementer attempted this task; read
   the report file for what was tried."
 - **Every round** ends with a scoped re-review
@@ -123,7 +132,7 @@ Task <N>: BLOCKED — <reason>
 
 After all tasks: `scripts/review-package PLAN_FILE MERGE_BASE HEAD`
 (MERGE_BASE = `git merge-base main HEAD`). Dispatch the whole-branch review on
-the most capable model using
+opus using
 [references/final-review-prompt.md](references/final-review-prompt.md),
 pointed at the ledger's deferred and parked lines for triage. Findings → ONE
 fix dispatch with the complete list, one scoped re-review, adjudicate
@@ -138,7 +147,7 @@ residuals. No second fix wave. When clean: delete the workspace
 | "Tests pass — skip the review" | The implementer's tests are its own claim. A leaf defect discovered after the next task builds on it costs a rewrite, not a fix. |
 | "One more round will converge" | Round 3 already had fresh eyes and a model bump. Past it the failure is structural — adjudicate. |
 | "It's a two-line fix, faster to do it myself" | Controller fixes ship unreviewed and pollute coordination context. Dispatch or park. |
-| "Mechanical task — skip review entirely" | The compiler can't check exact names, extra exports, or README rows. SPEC_ONLY on the cheapest model is nearly free. |
+| "Mechanical task — skip review entirely" | The compiler can't check exact names, extra exports, or README rows. SPEC_ONLY on haiku is nearly free. |
 | "My improvised report/ledger format is equivalent" | It dies at compaction and the next session can't parse it. The contract exists so recovery is mechanical. |
 
 ## Red Flags — STOP

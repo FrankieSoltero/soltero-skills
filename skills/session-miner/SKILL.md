@@ -34,8 +34,9 @@ Full details, formats, and the reviewer prompt: `references/mining-protocol.md`.
 
 1. **Extract (cheap).** Enumerate sources — project transcript JSONL under
    `~/.claude/projects/<project>/`, `HANDOFF.md` files, chronological task logs. Pull
-   candidate multi-step procedures. Delegate per-file scans to cheap subagents when the
-   corpus is large.
+   candidate multi-step procedures. Delegate per-file scans to subagents on haiku
+   (reading/summarizing work — name the model explicitly, never inherit the session
+   model) when the corpus is large.
 2. **Verify success externally.** Keep a candidate only if the same session shows an
    **external success signal after the procedure**: a test run passing, a git
    commit/merged PR, or the user explicitly confirming it worked. Clean-looking output,

@@ -98,13 +98,13 @@ Read the rubric (${rubricPath}) and the PRD (${prdPath}). Re-grade the dimension
 phase('Grade')
 const results = await pipeline(
   DIMENSIONS,
-  d => agent(gradePrompt(d), { label: `grade:${d.key}`, phase: 'Grade', schema: GRADE_SCHEMA }),
+  d => agent(gradePrompt(d), { label: `grade:${d.key}`, phase: 'Grade', schema: GRADE_SCHEMA, model: 'opus' }),
   async (g, d) => {
     if (!g) return null
     if (g.score < 90) return { d, g, skeptic: null, regrade: null }
-    const s = await agent(skepticPrompt(d, g), { label: `skeptic:${d.key}`, phase: 'Skeptic', schema: SKEPTIC_SCHEMA })
+    const s = await agent(skepticPrompt(d, g), { label: `skeptic:${d.key}`, phase: 'Skeptic', schema: SKEPTIC_SCHEMA, model: 'sonnet' })
     if (!s || s.missedViolations.length === 0) return { d, g, skeptic: s, regrade: null }
-    const rg = await agent(regradePrompt(d, g, s), { label: `regrade:${d.key}`, phase: 'Regrade', schema: GRADE_SCHEMA })
+    const rg = await agent(regradePrompt(d, g, s), { label: `regrade:${d.key}`, phase: 'Regrade', schema: GRADE_SCHEMA, model: 'opus' })
     return { d, g, skeptic: s, regrade: rg }
   },
 )
