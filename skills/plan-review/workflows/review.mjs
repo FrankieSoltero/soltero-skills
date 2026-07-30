@@ -1,6 +1,6 @@
 export const meta = {
   name: 'plan-review-council',
-  description: 'Grade an implementation plan with a 6-dimension council: band-anchored graders, anti-inflation skeptics on high scores, deterministic weighted gate (>=95 overall AND >=80 per dimension)',
+  description: 'Grade an implementation plan with a 6-dimension council: band-anchored graders, anti-inflation skeptics on high scores, deterministic weighted gate (>=85 overall AND >=80 per dimension AND zero blocking violations)',
   phases: [
     { title: 'Grade', detail: 'one rubric-anchored grader per dimension, evidence-quoted scores' },
     { title: 'Skeptic', detail: 'adversarial miss-hunt on every score >= 90' },
@@ -136,18 +136,19 @@ const totalWeight = dims.reduce((a, x) => a + x.weight, 0)
 const overall = Math.round(dims.reduce((a, x) => a + x.finalScore * x.weight, 0) / totalWeight * 10) / 10
 const floorBreaches = dims.filter(x => x.finalScore < 80).map(x => `${x.label}: ${x.finalScore}`)
 const councilComplete = scored.length === DIMENSIONS.length
-const pass = councilComplete && overall >= 95 && floorBreaches.length === 0
+const blockingViolations = dims.flatMap(x => x.violations.filter(v => v.severity === 'blocking').map(v => ({ dimension: x.label, ...v })))
+const pass = councilComplete && overall >= 85 && floorBreaches.length === 0 && blockingViolations.length === 0
 
 const blockingFixes = dims.flatMap(x => x.violations.filter(v => v.severity === 'blocking' && v.fixKind === 'mechanical').map(v => ({ dimension: x.label, ...v })))
 const ownerQuestions = dims.flatMap(x => x.violations.filter(v => v.fixKind === 'owner-decision').map(v => ({ dimension: x.label, ...v })))
 const recommendedFixes = dims.flatMap(x => x.violations.filter(v => v.severity === 'minor' && v.fixKind === 'mechanical').map(v => ({ dimension: x.label, ...v })))
 
-log(`Round ${round}: overall ${overall}/100, verdict ${pass ? 'PASS' : 'BLOCKED'}${floorBreaches.length ? ' (floor breaches: ' + floorBreaches.join('; ') + ')' : ''}`)
+log(`Round ${round}: overall ${overall}/100, verdict ${pass ? 'PASS' : 'BLOCKED'}${floorBreaches.length ? ' (floor breaches: ' + floorBreaches.join('; ') + ')' : ''}${blockingViolations.length ? ` (${blockingViolations.length} blocking violation(s) outstanding)` : ''}`)
 
 return {
   round,
   overall,
-  gate: { threshold: 95, floor: 80, floorBreaches, councilComplete },
+  gate: { threshold: 85, floor: 80, floorBreaches, blockingViolationCount: blockingViolations.length, councilComplete },
   verdict: pass ? 'PASS' : 'BLOCKED',
   dimensions: dims,
   blockingFixes,

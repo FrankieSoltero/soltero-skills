@@ -1,6 +1,6 @@
 ---
 name: plan-review
-description: Use when an implementation/execution plan needs a quality verdict before anyone executes it ("review this plan", "ready to execute?", "grade the implementation plan"), after superpowers:writing-plans produces a plan, before superpowers:executing-plans or subagent-driven-development runs one, or when re-reviewing a revised plan — convenes a 6-dimension grading council (bundled workflow: rubric-anchored scores with plan-quoted evidence, anti-inflation skeptics, deterministic gate) instead of one agent's ungraded read, and enforces: overall ≥95 AND every dimension ≥80, else BLOCKED with no execution, no "bless the first few tasks", no absorb-as-we-go. Fix→re-review loop (max 3 rounds); the fixer never changes the verdict and never re-reviews its own fixes — only a fresh council round can. Sibling of soltero-skills:prd-review.
+description: Use when an implementation/execution plan needs a quality verdict before anyone executes it ("review this plan", "ready to execute?", "grade the implementation plan"), after superpowers:writing-plans produces a plan, before superpowers:executing-plans or subagent-driven-development runs one, or when re-reviewing a revised plan — convenes a 6-dimension grading council (bundled workflow: rubric-anchored scores with plan-quoted evidence, anti-inflation skeptics, deterministic gate) instead of one agent's ungraded read, and enforces: overall ≥85 AND every dimension ≥80 AND zero blocking violations, else BLOCKED with no execution, no "bless the first few tasks", no absorb-as-we-go. Fix→re-review loop (max 3 rounds); the fixer never changes the verdict and never re-reviews its own fixes — only a fresh council round can. Sibling of soltero-skills:prd-review.
 ---
 
 # Plan Review Council
@@ -14,8 +14,8 @@ proposes a 10-minute diff-confirm (by itself) instead of a review round. This sk
 replaces prose verdicts with a scored council and a gate only the council can open.
 
 <HARD-GATE>
-A plan that has not PASSED (overall ≥95 AND every dimension ≥80, from an actual council
-run) must not be executed — not by superpowers:executing-plans, not by
+A plan that has not PASSED (overall ≥85 AND every dimension ≥80 AND zero
+blocking-severity violations, from an actual council run) must not be executed — not by superpowers:executing-plans, not by
 subagent-driven-development, not by a human "picking up task 1". There is no safe
 subset: severity and task-safety come from the rubric, not from a deadline, a loaded
 sprint board, or who skimmed it. You never green-light on your own read, you never
@@ -71,7 +71,8 @@ adjust or estimate a score, and you never re-review your own fixes.
 | "I'll do the confirming pass myself in a separate turn." | Fixer and checker must be different runs of the COUNCIL, not the same agent in a new message. |
 | "Both seniors skimmed it and said it's fine." | Skims miss exactly what councils catch (the fixture's schema bomb read as a one-liner). Note the sign-off in the report; run the council. |
 | "It's an internal tool; auth can fast-follow." | 'Internal-ish' is not a security boundary. D5 grades it; you don't waive it. |
-| "It scored 94.6 — that rounds to 95." | The script's number is the number. 94.6 is BLOCKED. |
+| "It scored 84.6 — that rounds to 85." | The script's number is the number. 84.6 is BLOCKED. |
+| "It's at 88 overall; the one blocking violation is basically mechanical." | Blocking means blocking. Apply the fix, re-convene; the next round passes it in minutes. |
 
 ## Red Flags — STOP
 

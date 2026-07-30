@@ -77,8 +77,16 @@ checklist item explicitly.
 
 ## Gate
 
-- **PASS:** weighted overall ≥95 AND every dimension ≥80.
-- **BLOCKED:** anything else. A BLOCKED plan must not be executed — not by
+- **PASS:** weighted overall ≥85 AND every dimension ≥80 AND zero blocking-severity
+  violations outstanding.
+- **BLOCKED:** anything else.
+
+The 85 threshold is anchored to the 85–94 band on purpose: PASS means every dimension
+is at least "usable" and the plan as a whole is "sound — nothing that would send an
+executor down a wrong or unsafe path". The blocking-violation condition is what keeps
+the bar honest at this threshold: a plan can average 85+ while one dimension still
+carries a do-not-execute flaw, and that flaw must be fixed (and re-reviewed) before
+PASS — the score cannot outvote it. A BLOCKED plan must not be executed — not by
   superpowers:executing-plans, not by subagent-driven-development, not "just the
   early safe tasks" — regardless of sprint boards, deadlines, or prior informal
   sign-offs.
