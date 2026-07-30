@@ -79,6 +79,11 @@ exclude:           # globs never touched by any category
 publicApiAllowlist: # symbols/paths never treated as dead even if callerless
   - "src/index.ts"
   - "handleLegacyWebhook"
+models:            # model tier per work class — delegated work NEVER inherits the session model
+  engineering: opus     # code-writing dispatches: file splits, dedupe extractions, hand-applied fixes
+  grunt: sonnet         # tool-output triage, candidate confirmation, verification passes
+  reading: haiku        # pure reading/summarizing: per-file scans, report summarization
+  orchestration: fable  # the controlling session only — never assigned to dispatched work
 ```
 
 Key reference:
@@ -99,6 +104,12 @@ Key reference:
   as dead, no matter what a tool reports. This is the mechanism that replaces one-off "let me check
   if this is really used" detective work — anything matching an allowlist entry (by path or symbol
   name) is skipped in the dead-code category and left untouched.
+- **`models`** — the model-tier standard for any work delegated during a pass (subagents or
+  workflow `agent()` calls). Every dispatch names its model explicitly from this map — an omitted
+  model silently inherits the orchestrating session's model (the `orchestration` tier, `fable`),
+  which is reserved for coordination and never assigned to dispatched work. Defaults (a fixed
+  standard, not auto-detected): `engineering: opus` (code-writing), `grunt: sonnet` (triage,
+  confirmation, verification), `reading: haiku` (reading/summarizing), `orchestration: fable`.
 
 ## Config bootstrap procedure (when `.code-optimizer.yml` is absent)
 
@@ -119,7 +130,10 @@ Key reference:
    (`main`, `index`), anything exported from a package's public surface (`package.json` `main`/
    `exports`), and anything CLAUDE.md/AGENTS.md calls out as intentionally-unreferenced (webhooks,
    dynamic dispatch targets, plugin entry points).
-6. **Write the file and stop for review.** Write the drafted `.code-optimizer.yml` to the repo
+6. **Seed `models` with the standard defaults** — `engineering: opus`, `grunt: sonnet`,
+   `reading: haiku`, `orchestration: fable`. This block is a fixed corporate standard, not
+   something to auto-detect or tune per repo.
+7. **Write the file and stop for review.** Write the drafted `.code-optimizer.yml` to the repo
    root, then show its full contents to the user and ask them to review/edit it **before** any
    Phase 1 detection or Phase 2 apply step runs against it. Never proceed on a bootstrapped config
    without that explicit human review — an unreviewed allowlist is exactly the class of unverified

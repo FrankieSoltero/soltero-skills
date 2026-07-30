@@ -3,6 +3,30 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.19.0] - 2026-07-29
+### Changed
+- Model-tier standard enforced at every dispatch point repo-wide: subagents
+  and workflow `agent()` calls never inherit the session model. Tiers —
+  **opus** for engineering (lean-sdd standard/judgment implementers,
+  judgment/final reviews; prd-review and plan-review graders/re-graders,
+  which previously inherited the session model), **sonnet** for grunt work
+  (mechanical implementers, standard FULL reviews, council skeptics,
+  sweep/verify workers; `model: sonnet` pinned in content-adapter,
+  finding-skeptic, memory-skeptic, and security-auditor agent frontmatter),
+  **haiku** for reading/summarizing (SPEC_ONLY reviews, scoped re-reviews,
+  agent-playbook deep-reads, transcript-reader ingest/extract, session-miner
+  per-file scans), **fable** reserved for orchestration (the controller
+  session — never dispatched). lean-sdd's vague "cheapest/mid/most capable"
+  tier language replaced with explicit model names in SKILL.md and all four
+  reference prompts; prd-/plan-review and design-forge fallback dispatch
+  prose names the same models as the bundled scripts.
+### Added
+- `code-optimizer`: `models:` block in the `.code-optimizer.yml` schema
+  codifying the tier standard (`engineering: opus`, `grunt: sonnet`,
+  `reading: haiku`, `orchestration: fable`) as a fixed default — with a key
+  reference entry, a config-bootstrap step that seeds it, and a SKILL.md
+  guardrail mention.
+
 ## [0.18.0] - 2026-07-29
 ### Added
 - `mini-game-craft`: browser mini-game mechanics + procedural art, grounded

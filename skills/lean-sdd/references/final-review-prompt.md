@@ -1,8 +1,8 @@
 # Final Whole-Branch Review Prompt Template
 
-Dispatch once, after all tasks are complete, on the MOST CAPABLE available
-model. This is the merge-gate review: it sees the whole branch in context and
-triages everything the task loop deferred.
+Dispatch once, after all tasks are complete, on opus — named explicitly, never
+inherited. This is the merge-gate review: it sees the whole branch in context
+and triages everything the task loop deferred.
 
 ```
 You are the final whole-branch reviewer for completed work. Review the entire

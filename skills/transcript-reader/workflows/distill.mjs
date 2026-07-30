@@ -168,7 +168,7 @@ const ing = await agent(
   `paths and line ranges, warnings). Return ok=true with the manifest fields mapped into ` +
   `the schema. If the command fails, return ok=false with the error text. Do not summarize, ` +
   `edit, or re-chunk anything yourself — the script's output is the ground truth.`,
-  { label: 'ingest', phase: 'Ingest', schema: INGEST_SCHEMA, model: 'sonnet' }
+  { label: 'ingest', phase: 'Ingest', schema: INGEST_SCHEMA, model: 'haiku' }
 )
 if (!ing || !ing.ok || !ing.chunks || !ing.chunks.length) {
   throw new Error(`Ingest failed: ${ing && ing.error ? ing.error : 'no manifest returned'}`)
@@ -189,7 +189,7 @@ const extractions = await parallel(ing.chunks.map(c => () =>
     `questions, key facts & numbers (verbatim values), disagreements (positions + holders), ` +
     `and timeline entries (major topic starts). ${overlay} ` + EVIDENCE_RULES + rulePoolBlock +
     `Cite citationLines as "L<start>-L<end>". Return structured items only — no prose report.`,
-    { label: `extract:${c.id}`, phase: 'Extract', schema: EXTRACT_SCHEMA, model: 'sonnet' }
+    { label: `extract:${c.id}`, phase: 'Extract', schema: EXTRACT_SCHEMA, model: 'haiku' }
   )
 ))
 const failedChunks = ing.chunks.filter((c, i) => !extractions[i])

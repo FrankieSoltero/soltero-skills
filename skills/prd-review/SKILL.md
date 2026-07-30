@@ -42,6 +42,8 @@ score yourself.
    the script. *Fallback (no Workflow tool):* dispatch the same six graders as parallel
    subagents with the same prompts + rubric, skeptic any ≥90, compute the weighted
    total yourself with the same formula — never merge the six into one reviewer.
+   Models as in the script — graders/re-graders on opus, skeptics on sonnet; never
+   let a dispatch inherit the session model.
 2. **Write the report** — `docs/prd-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
    banner (PASS / **BLOCKED — do not proceed to design or implementation**), score
    table (dimension, weight, grader score, skeptic misses, final), evidence-quoted

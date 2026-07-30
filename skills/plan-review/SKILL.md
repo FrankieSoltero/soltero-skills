@@ -42,7 +42,9 @@ adjust or estimate a score, and you never re-review your own fixes.
    ≥90, re-grade on confirmed misses (script records the min), deterministic weighted
    total. *Fallback (no Workflow tool):* the same six graders as parallel subagents
    with the same prompts + rubric, skeptic any ≥90, same formula — never merge the six
-   into one reviewer. If you also cannot dispatch subagents, run the six rubric passes
+   into one reviewer. Models as in the script — graders/re-graders on opus, skeptics
+   on sonnet; never let a dispatch inherit the session model. If you also cannot
+   dispatch subagents, run the six rubric passes
    separately yourself and DISCLOSE that it's a stand-in, not the council.
 2. **Write the report** — `docs/plan-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
    banner (PASS / **BLOCKED — do not execute**), score table (dimension, weight,

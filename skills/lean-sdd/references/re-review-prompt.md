@@ -1,6 +1,7 @@
 # Scoped Re-Review Prompt Template
 
-Dispatch after each fix round. Cheap-to-mid model for small fix diffs. This is
+Dispatch after each fix round. Haiku for small fix diffs; sonnet when the fix
+touched standard/judgment-tier code. This is
 not a fresh review — the full review already happened.
 
 ```
