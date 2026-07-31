@@ -168,7 +168,7 @@ const ing = await agent(
   `paths and line ranges, warnings). Return ok=true with the manifest fields mapped into ` +
   `the schema. If the command fails, return ok=false with the error text. Do not summarize, ` +
   `edit, or re-chunk anything yourself — the script's output is the ground truth.`,
-  { label: 'ingest', phase: 'Ingest', schema: INGEST_SCHEMA, model: 'haiku' }
+  { label: 'ingest', phase: 'Ingest', schema: INGEST_SCHEMA, model: 'haiku', effort: 'low' }
 )
 if (!ing || !ing.ok || !ing.chunks || !ing.chunks.length) {
   throw new Error(`Ingest failed: ${ing && ing.error ? ing.error : 'no manifest returned'}`)
@@ -239,7 +239,7 @@ const verifyBatch = (items, tag) => parallel(items.map(it => () =>
     `correctedItem with accurate citations), "refuted" (citation does not resolve, quote not ` +
     `in transcript, or claim unsupported and not fixable). When uncertain, do not confirm. ` +
     (rulePoolBlock ? `\nIf the item lists appliedRuleIds, report ruleFeedback: "helpful" if the rule led it right, "harmful" if the rule caused an error you found.\n${rulePoolBlock}` : ''),
-    { label: `verify:${tag}:${it.id || it.type}`.slice(0, 60), phase: 'Verify', schema: VERDICT_SCHEMA, model: 'sonnet' }
+    { label: `verify:${tag}:${it.id || it.type}`.slice(0, 60), phase: 'Verify', schema: VERDICT_SCHEMA, model: 'sonnet', effort: 'low' }
   ).then(v => ({ item: it, verdict: v }))
 ))
 

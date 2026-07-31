@@ -3,6 +3,11 @@
 A public [Claude Code](https://code.claude.com) skills library — reusable `SKILL.md` modules
 for scaffolding, security/compliance review, AI-agent engineering, and docs/knowledge capture.
 
+Working in this repo with a coding agent other than Claude Code (Codex, Kimi, etc.)? See
+[`AGENTS.md`](AGENTS.md) — every `SKILL.md` is plain markdown any file-reading agent can follow;
+`AGENTS.md` is the portable routing layer that replaces Claude Code's `Skill`/`Workflow` tools and
+session hook.
+
 ## Install
 
 ```

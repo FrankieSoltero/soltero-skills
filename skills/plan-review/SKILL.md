@@ -1,9 +1,17 @@
 ---
 name: plan-review
-description: Use when an implementation/execution plan needs a quality verdict before anyone executes it ("review this plan", "ready to execute?", "grade the implementation plan"), after superpowers:writing-plans produces a plan, before superpowers:executing-plans or subagent-driven-development runs one, or when re-reviewing a revised plan — convenes a 6-dimension grading council (bundled workflow: rubric-anchored scores with plan-quoted evidence, anti-inflation skeptics, deterministic gate) instead of one agent's ungraded read, and enforces: overall ≥85 AND every dimension ≥80 AND zero blocking violations, else BLOCKED with no execution, no "bless the first few tasks", no absorb-as-we-go. Fix→re-review loop (max 3 rounds); the fixer never changes the verdict and never re-reviews its own fixes — only a fresh council round can. Sibling of soltero-skills:prd-review.
+description: Use when an implementation/execution plan needs a quality verdict before anyone executes it ("review this plan", "ready to execute?", "grade the implementation plan"), after superpowers:writing-plans produces a plan, before superpowers:executing-plans or subagent-driven-development runs one, or when re-reviewing a revised plan — convenes a 6-dimension grading council (bundled workflow: rubric-anchored scores with plan-quoted evidence, anti-inflation skeptics, deterministic gate) instead of one agent's ungraded read, and enforces: overall ≥85 AND every dimension ≥80 AND zero blocking violations, else BLOCKED with no execution, no "bless the first few tasks", no absorb-as-we-go. Fix→re-review loop (max 3 rounds, re-grading only the dimensions that failed); the fixer never changes the verdict and never re-reviews its own fixes — only a fresh council round can. Small all-mechanical-tier plans get a lite single-reviewer mode instead of the full council. Sibling of soltero-skills:prd-review.
 ---
 
 # Plan Review Council
+
+> **Portability note (non-Claude-Code agents):** the graded verdict here comes from an
+> independent multi-agent council (rubric-anchored scorers plus anti-inflation
+> skeptics), run via Claude Code's `Workflow` tool — not available on other CLIs.
+> Without it you can still apply the same rubric and gate (overall ≥85, every dimension
+> ≥80, zero blocking violations) as a solo reviewer, but a self-graded review is exactly
+> the failure mode this skill exists to prevent — treat your own verdict as provisional,
+> not a real pass.
 
 ## Overview
 
@@ -33,7 +41,17 @@ adjust or estimate a score, and you never re-review your own fixes.
 
 ## The Loop
 
-1. **Convene the council** — run the bundled workflow:
+1. **Size gate, then convene.** Before spending a full council, check the plan's own
+   risk-tier table: if it lists 5 or fewer tasks AND every task is tier "mechanical",
+   run the bundled workflow in **lite mode** instead of the full council:
+   `Workflow({scriptPath: "${CLAUDE_SKILL_DIR}/workflows/review.mjs", args: {planPath,
+   rubricPath: "${CLAUDE_SKILL_DIR}/references/rubric.md", date, round, mode: "lite"}})`.
+   Lite mode is one sonnet reviewer grading all six dimensions in a single pass, no
+   skeptic escalation — appropriate only because a small all-mechanical plan has
+   little room for the graded-inflation failure mode the skeptic exists to catch. Any
+   plan with a "standard" or "judgment" tier task, or more than 5 tasks, always gets
+   the full council below.
+2. **Convene the council** — run the bundled workflow:
    `Workflow({scriptPath: "${CLAUDE_SKILL_DIR}/workflows/review.mjs", args: {planPath,
    rubricPath: "${CLAUDE_SKILL_DIR}/references/rubric.md", date, round}})`.
    Six graders — decomposition & ordering (15), verifiability (20), spec fidelity &
@@ -42,23 +60,28 @@ adjust or estimate a score, and you never re-review your own fixes.
    ≥90, re-grade on confirmed misses (script records the min), deterministic weighted
    total. *Fallback (no Workflow tool):* the same six graders as parallel subagents
    with the same prompts + rubric, skeptic any ≥90, same formula — never merge the six
-   into one reviewer. Models as in the script — graders/re-graders on opus, skeptics
-   on sonnet; never let a dispatch inherit the session model. If you also cannot
-   dispatch subagents, run the six rubric passes
+   into one reviewer. Models as in the script — graders on sonnet, skeptics and
+   re-graders on opus (the skeptic only fires on a score ≥90, so the expensive tier is
+   reserved for plans that need the extra scrutiny); never let a dispatch inherit the
+   session model. If you also cannot dispatch subagents, run the six rubric passes
    separately yourself and DISCLOSE that it's a stand-in, not the council.
-2. **Write the report** — `docs/plan-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
+3. **Write the report** — `docs/plan-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
    banner (PASS / **BLOCKED — do not execute**), score table (dimension, weight,
    grader score, skeptic misses, final), evidence-quoted violations, then blocking
    fixes (mechanical), owner questions, recommended fixes.
-3. **If BLOCKED → fix round:** apply mechanical fixes to the plan (rewording,
+4. **If BLOCKED → fix round:** apply mechanical fixes to the plan (rewording,
    reordering, adding verification/rollback steps, cutting out-of-scope tasks the spec
    already rules out); present owner questions to the user and WAIT — never answer
    them yourself. No verdict edits, no "provisionally ready".
-4. **Re-convene** the council on the edited plan (round N+1). A diff-confirm against
+5. **Re-convene** the council on the edited plan (round N+1), passing the previous
+   round's returned `dimensions` array as `args.priorDimensions` — the script re-grades
+   only the dimensions that failed (score < 80 or a blocking violation) and carries the
+   rest forward unchanged, since a fix scoped to one dimension's violations doesn't
+   need to re-litigate a dimension that already passed clean. A diff-confirm against
    the previous findings is NOT a round — new flaws enter through fixes, and the fix
    author cannot be the checker. Maximum 3 rounds; still BLOCKED → report what blocks
    and send the plan back to superpowers:writing-plans.
-5. **On PASS:** record the score and hand off to execution
+6. **On PASS:** record the score and hand off to execution
    (superpowers:executing-plans or subagent-driven-development).
 
 ## Rationalization Table

@@ -5,6 +5,15 @@ description: Use when asked to extract, distill, summarize, or make minutes/acti
 
 # Transcript Reader
 
+> **Portability note (non-Claude-Code agents):** this skill's citation-backed guarantee
+> comes from a deterministic ingest pipeline plus independent per-item refute-verifiers
+> and a completeness critic, run via Claude Code's `Workflow` tool on every invocation —
+> not available on other CLIs. On a different agent you can still work through the same
+> stages yourself (chunk the transcript, extract cited items, check owners/reversals
+> across chunks, sweep for omissions), but a self-reviewed extraction is exactly the
+> failure mode (self-approved paraphrase corruption) this skill exists to catch — flag
+> your report as unverified rather than citing it as verified.
+
 ## Overview
 
 A capable agent asked nicely will read a transcript once, write a plausible report, and

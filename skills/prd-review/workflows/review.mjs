@@ -1,18 +1,22 @@
 export const meta = {
   name: 'prd-review-council',
-  description: 'Grade a PRD with a 6-dimension council: band-anchored graders, anti-inflation skeptics on high scores, deterministic weighted gate (>=95 overall AND >=80 per dimension)',
+  description: 'Grade a PRD with a 6-dimension council: band-anchored graders (sonnet, escalating to opus only on contested high scores), deterministic weighted gate (>=95 overall AND >=80 per dimension)',
   phases: [
-    { title: 'Grade', detail: 'one rubric-anchored grader per dimension, evidence-quoted scores' },
-    { title: 'Skeptic', detail: 'adversarial miss-hunt on every score >= 90' },
-    { title: 'Regrade', detail: 're-grade contested dimensions; take min(grade, regrade)' },
+    { title: 'Grade', detail: 'one rubric-anchored grader per dimension (sonnet), evidence-quoted scores' },
+    { title: 'Skeptic', detail: 'adversarial miss-hunt (opus) on every score >= 90' },
+    { title: 'Regrade', detail: 're-grade contested dimensions (opus); take min(grade, regrade)' },
   ],
 }
 
-// args: { prdPath, rubricPath, date, round }
+// args: { prdPath, rubricPath, date, round, priorDimensions }
+// priorDimensions: the `dimensions` array returned by the previous round's run — when
+// present, only dimensions that failed (score < 80 or a blocking violation) are re-graded;
+// the rest carry their prior-round result forward unchanged. Omit on round 1.
 const opts = typeof args === 'string' ? JSON.parse(args) : (args || {})
 const prdPath = opts.prdPath
 const rubricPath = opts.rubricPath
 const round = opts.round || 1
+const priorDimensions = opts.priorDimensions || null
 if (!prdPath || !rubricPath) throw new Error('args.prdPath and args.rubricPath are required')
 
 const DIMENSIONS = [
@@ -95,26 +99,35 @@ ${JSON.stringify(s.missedViolations, null, 2)}
 
 Read the rubric (${rubricPath}) and the PRD (${prdPath}). Re-grade the dimension from scratch with the full violation set (grader's + skeptic's) in view. Same rules: band-anchored, lower band when torn, quotes for every violation, excellenceEvidence required for >= 90. Return via the schema.`
 
+const failedKeys = priorDimensions
+  ? new Set(priorDimensions.filter(x => x.finalScore < 80 || x.violations.some(v => v.severity === 'blocking')).map(x => x.key))
+  : null
+const toGrade = failedKeys ? DIMENSIONS.filter(d => failedKeys.has(d.key)) : DIMENSIONS
+const carried = failedKeys ? priorDimensions.filter(x => !failedKeys.has(x.key)) : []
+if (failedKeys) {
+  log(`Round ${round}: re-grading ${toGrade.length}/${DIMENSIONS.length} dimension(s) that failed round ${round - 1} (${toGrade.map(d => d.key).join(', ') || 'none'}); ${carried.length} carried forward unchanged`)
+}
+
 phase('Grade')
-const results = await pipeline(
-  DIMENSIONS,
-  d => agent(gradePrompt(d), { label: `grade:${d.key}`, phase: 'Grade', schema: GRADE_SCHEMA, model: 'opus' }),
+const results = toGrade.length ? await pipeline(
+  toGrade,
+  d => agent(gradePrompt(d), { label: `grade:${d.key}`, phase: 'Grade', schema: GRADE_SCHEMA, model: 'sonnet' }),
   async (g, d) => {
     if (!g) return null
     if (g.score < 90) return { d, g, skeptic: null, regrade: null }
-    const s = await agent(skepticPrompt(d, g), { label: `skeptic:${d.key}`, phase: 'Skeptic', schema: SKEPTIC_SCHEMA, model: 'sonnet' })
+    const s = await agent(skepticPrompt(d, g), { label: `skeptic:${d.key}`, phase: 'Skeptic', schema: SKEPTIC_SCHEMA, model: 'opus', effort: 'low' })
     if (!s || s.missedViolations.length === 0) return { d, g, skeptic: s, regrade: null }
     const rg = await agent(regradePrompt(d, g, s), { label: `regrade:${d.key}`, phase: 'Regrade', schema: GRADE_SCHEMA, model: 'opus' })
     return { d, g, skeptic: s, regrade: rg }
   },
-)
+) : []
 
 const scored = results.filter(Boolean)
-if (scored.length < DIMENSIONS.length) {
-  log(`WARNING: ${DIMENSIONS.length - scored.length} dimension(s) returned no grade — verdict computed on partial council; treat as BLOCKED`)
+if (scored.length < toGrade.length) {
+  log(`WARNING: ${toGrade.length - scored.length} dimension(s) returned no grade — verdict computed on partial council; treat as BLOCKED`)
 }
 
-const dims = scored.map(({ d, g, skeptic, regrade }) => {
+const fresh = scored.map(({ d, g, skeptic, regrade }) => {
   const final = regrade ? Math.min(g.score, regrade.score) : g.score
   const violations = [
     ...g.violations,
@@ -132,10 +145,13 @@ const dims = scored.map(({ d, g, skeptic, regrade }) => {
   }
 })
 
+const byKey = new Map([...carried, ...fresh].map(x => [x.key, x]))
+const dims = DIMENSIONS.map(d => byKey.get(d.key)).filter(Boolean)
+
 const totalWeight = dims.reduce((a, x) => a + x.weight, 0)
-const overall = Math.round(dims.reduce((a, x) => a + x.finalScore * x.weight, 0) / totalWeight * 10) / 10
+const overall = dims.length ? Math.round(dims.reduce((a, x) => a + x.finalScore * x.weight, 0) / totalWeight * 10) / 10 : 0
 const floorBreaches = dims.filter(x => x.finalScore < 80).map(x => `${x.label}: ${x.finalScore}`)
-const councilComplete = scored.length === DIMENSIONS.length
+const councilComplete = dims.length === DIMENSIONS.length
 const pass = councilComplete && overall >= 95 && floorBreaches.length === 0
 
 const blockingFixes = dims.flatMap(x => x.violations.filter(v => v.severity === 'blocking' && v.fixKind === 'mechanical').map(v => ({ dimension: x.label, ...v })))

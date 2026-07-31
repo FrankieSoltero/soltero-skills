@@ -1,10 +1,10 @@
 export const meta = {
   name: 'audit-swarm',
-  description: 'Whole-repo security + legal audit: scout, adaptive finder swarm, 3-skeptic verification, synthesized report',
+  description: 'Whole-repo security + legal audit: scout, adaptive finder swarm, severity-scaled skeptic verification (1 lens for low/medium, 3-lens majority vote for high/critical), synthesized report',
   phases: [
     { title: 'Scout', detail: 'inventory stack, deps, licenses, attack surface (real commands)' },
     { title: 'Find', detail: 'one read-only specialist finder per applicable dimension' },
-    { title: 'Verify', detail: '3-skeptic majority-vote panel per deduped finding' },
+    { title: 'Verify', detail: 'severity-scaled skeptic panel per deduped finding' },
     { title: 'Report', detail: 'synthesize severity-ranked report into Docs/' },
   ],
 }
@@ -169,35 +169,46 @@ do {
   fresh.forEach(f => seen.add(keyOf(f)))
   log(`Round ${round}: ${found.length} raw findings, ${fresh.length} new — sending to skeptic panels`)
 
-  const judged = await parallel(fresh.map(f => () =>
-    parallel(LENSES.map(lens => () =>
+  // Severity-scaled panel: high/critical findings get the full 3-lens majority vote;
+  // low/medium findings get a single reproduce-lens check (does the cited file:line and
+  // evidence actually exist) since a false positive there costs report noise, not a missed
+  // real risk — the expensive adversarial panel is reserved for where it changes the outcome.
+  const lensesFor = f => (f.severity === 'critical' || f.severity === 'high') ? LENSES : LENSES.slice(0, 1)
+
+  const judged = await parallel(fresh.map(f => () => {
+    const lenses = lensesFor(f)
+    return parallel(lenses.map(lens => () =>
       agent(skepticPrompt(f, lens), {
         label: `verify:${lens.key}:${f.category}`,
         phase: 'Verify',
         schema: VERDICT_SCHEMA,
         agentType: 'finding-skeptic',
         model: 'sonnet',
+        effort: 'low',
       })
     )).then(votes => {
       const cast = votes.filter(Boolean)
       const kills = cast.filter(v => v.refuted).length
-      // Quorum: without at least 2 skeptics reporting, the panel did not actually verify
-      // this finding. Defaulting to "confirmed" there would invert the skill's promise
+      // Quorum: a panel that reports fewer than it was sent did not actually verify this
+      // finding. Defaulting to "confirmed" there would invert the skill's promise
       // ("verified before reported") and the skeptics' own default-to-refuted posture, so
-      // an under-quorum panel refutes.
-      const hasQuorum = cast.length >= 2
-      const survives = hasQuorum && kills < 2
+      // an under-quorum panel refutes. Full panels need 2-of-3; a single-lens panel needs
+      // its one vote to actually come back.
+      const requiredQuorum = lenses.length >= 3 ? 2 : 1
+      const hasQuorum = cast.length >= requiredQuorum
+      const survives = hasQuorum && (lenses.length >= 3 ? kills < 2 : kills === 0)
       return {
         ...f,
         panelVotes: cast.length,
+        panelSize: lenses.length,
         panelRefutes: kills,
         panelReasons: hasQuorum
           ? cast.map(v => `${v.refuted ? 'REFUTED' : 'STANDS'}: ${v.reasoning}`)
-          : [`REFUTED (no quorum): only ${cast.length} of ${LENSES.length} skeptics reported; cannot confirm without a panel.`],
+          : [`REFUTED (no quorum): only ${cast.length} of ${lenses.length} skeptic(s) reported; cannot confirm without a panel.`],
         survives,
       }
     })
-  ))
+  }))
   for (const j of judged.filter(Boolean)) {
     (j.survives ? confirmed : refuted).push(j)
   }

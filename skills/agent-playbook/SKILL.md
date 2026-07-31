@@ -5,6 +5,13 @@ description: Use when doing agent-engineering work — writing CLAUDE.md/AGENTS.
 
 # Agent Playbook
 
+> **Portability note (non-Claude-Code agents):** advisor mode (reading
+> `references/playbook.md` and applying tiered guidance) needs nothing beyond reading a
+> file — works on any agent. Only *update* mode (the research sweep across
+> arXiv/lab-blog/OSS lanes with independent skeptic tiering) runs via Claude Code's
+> `Workflow` tool and can't execute elsewhere; it's also gated to only run inside the
+> soltero-skills repo regardless of which agent invokes it.
+
 ## Overview
 
 Coding-agent research moves faster than model memory. Left to itself, an agent asked
