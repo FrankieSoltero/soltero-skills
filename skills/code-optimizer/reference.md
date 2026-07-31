@@ -1,6 +1,6 @@
 # Code Optimizer — Reference
 
-Lookup doc for `SKILL.md`: the per-category/per-ecosystem static-analysis tool matrix and the
+Lookup doc for `SKILL.md`: the per-category/per-ecosystem detection tool matrix and the
 `.code-optimizer.yml` config schema. Read this during Phase 1 (Detect) and when bootstrapping a
 missing config.
 
@@ -60,6 +60,25 @@ rules in CLAUDE.md/AGENTS.md) — never a generic style preference from memory. 
 `--fix`/`--write` mode where the table above marks it safe; hand-fix only what the tool reports but
 can't apply itself, then gate-verify same as any other change.
 
+### 5. Repeated string literals
+
+No stock tool in this matrix detects cross-file literal repetition — knip is about exports and
+jscpd's defaults (≈5 lines / 50 tokens) never see a one-token literal. This category's counted pass
+IS the tool evidence: it must emit an occurrence count and `file:line` per distinct value, and
+counts are never estimated or eyeballed.
+
+| Ecosystem | Tool | Invocation | Reading the output |
+|---|---|---|---|
+| Any | ripgrep (counts) | `rg -o --no-filename -g '!**/*.test.*' "\"[^\"]{4,}\"" \| sort \| uniq -c \| sort -rn` | One line per distinct literal: `count value`. Everything at ≥ `minRepeats` is a candidate to triage. |
+| Any | ripgrep (sites) | `rg -n --fixed-strings '"pending"'` | The `file:line` evidence for one candidate. Run per candidate; these lines go in the deliverable table. |
+| JS/TS | ast-grep (precise) | `ast-grep run -p '"$V"' -l ts --json` (or `-p "'$V'"` for single quotes) | Matches string-literal AST nodes only, so comments/identifiers can't inflate a count. Prefer over raw ripgrep when installed; pipe through `jq` to group by value. |
+| Python | ast-grep (precise) | `ast-grep run -p '"$V"' -l python --json` | Same; falls back to the ripgrep pair above if ast-grep isn't installed. |
+| JS/TS | ESLint `no-magic-strings`-style rule | whatever rule the repo already enables | If present, this is BOTH a detector and one of the three declarations that authorize applying. |
+
+Neither pass auto-fixes; extraction is a manual, value-preserving edit. **Degrade path:** if
+neither ripgrep nor ast-grep is available, report that the counted pass could not run and apply
+nothing — never substitute a read-through-and-eyeball count.
+
 ## `.code-optimizer.yml` schema
 
 Lives at the repo root. All keys optional — omitted keys are auto-detected/defaulted as noted.
@@ -79,6 +98,20 @@ exclude:           # globs never touched by any category
 publicApiAllowlist: # symbols/paths never treated as dead even if callerless
   - "src/index.ts"
   - "handleLegacyWebhook"
+stringConstants:     # PRESENCE OF THIS BLOCK IS ONE OF THE THREE DECLARATIONS THAT AUTHORIZE
+                     # category 5 to apply. Absent (and no CLAUDE.md/AGENTS.md rule, no lint rule)
+                     # → detect + report + draft this block; never edit literals.
+  minRepeats: 3      # literal must appear at >= N distinct sites (default 3)
+  minLength: 4       # ignore trivially short literals (default 4 chars)
+  destination: src/constants.ts  # the ONE centralization home; required in order to apply
+  style: enum        # 'enum' | 'const' — as the project declared it; no default guess
+  exclude:           # globs never scanned by this category
+    - "**/*.test.*"
+    - "**/__fixtures__/**"
+    - "**/*.generated.*"
+  literalAllowlist:  # values that stay literal wherever they appear
+    - "application/json"
+    - "user.created"
 models:            # model tier per work class — delegated work NEVER inherits the session model
   engineering: opus     # code-writing dispatches: file splits, dedupe extractions, hand-applied fixes
   grunt: sonnet         # tool-output triage, candidate confirmation, verification passes
@@ -104,6 +137,17 @@ Key reference:
   as dead, no matter what a tool reports. This is the mechanism that replaces one-off "let me check
   if this is really used" detective work — anything matching an allowlist entry (by path or symbol
   name) is skipped in the dead-code category and left untouched.
+- **`stringConstants`** — the declaration gate and knobs for category 5. Its **presence** is one of
+  the three things that authorize applying (the others: an explicit rule in CLAUDE.md/AGENTS.md, or
+  an enabled lint rule); with none of the three, the category still runs its counted pass but
+  applies nothing and the deliverable carries the counted table plus a drafted version of this
+  block. Knobs: `minRepeats` (default `3`), `minLength` (default `4`), `destination` (the one
+  constants/enum home — required to apply; never mint a second home), `style` (`enum` | `const`, as
+  declared — never guessed), `exclude` (globs this category never scans; seed with tests and
+  fixtures), and `literalAllowlist` (values that stay literal everywhere — wire/persisted/contract
+  strings, MIME types, bus event names). `exclude` and `literalAllowlist` are this category's record
+  of a decision, the role `publicApiAllowlist` plays for dead code: a literal left alone is logged
+  with its reason, never silently dropped.
 - **`models`** — the model-tier standard for any work delegated during a pass (subagents or
   workflow `agent()` calls). Every dispatch names its model explicitly from this map — an omitted
   model silently inherits the orchestrating session's model (the `orchestration` tier, `fable`),
@@ -129,7 +173,9 @@ Key reference:
    found in `.gitignore` or build config. Seed `publicApiAllowlist` conservatively — entry points
    (`main`, `index`), anything exported from a package's public surface (`package.json` `main`/
    `exports`), and anything CLAUDE.md/AGENTS.md calls out as intentionally-unreferenced (webhooks,
-   dynamic dispatch targets, plugin entry points).
+   dynamic dispatch targets, plugin entry points). Include a `stringConstants` block only if step 1
+   found the project actually declaring the rule — a block you invented is not a declaration, and a
+   bootstrapped config never authorizes category 5 to apply before the human review in step 7.
 6. **Seed `models` with the standard defaults** — `engineering: opus`, `grunt: sonnet`,
    `reading: haiku`, `orchestration: fable`. This block is a fixed corporate standard, not
    something to auto-detect or tune per repo.
