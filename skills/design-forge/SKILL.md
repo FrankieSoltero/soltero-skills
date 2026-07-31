@@ -5,6 +5,13 @@ description: Use for front-end design work — "give me design options for X", "
 
 # Design Forge
 
+> **Portability note (non-Claude-Code agents):** apply mode (detecting the stack,
+> composing design directions from `references/catalog.md`, rendering previews) needs
+> nothing beyond reading files — works on any agent. Only *catalog* mode (the
+> license-verification research sweep) runs via Claude Code's `Workflow` tool and can't
+> execute elsewhere; it's also gated to only run inside the soltero-skills repo
+> regardless of which agent invokes it.
+
 ## Overview
 
 Front-end design with an agent fails two ways, both observed at baseline: libraries get

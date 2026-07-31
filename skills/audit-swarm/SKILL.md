@@ -1,9 +1,17 @@
 ---
 name: audit-swarm
-description: Use when asked for a security audit, legal/compliance review, license check, or full-project risk assessment ("audit this repo", "security once-over", "are we GDPR/SOC 2 ready", "check our dependency licenses", "is this safe to open-source") — dispatches a bundled scout-then-swarm Workflow over the whole repo (adaptive specialist finders, 3-skeptic majority-vote verification per finding) and writes a severity-ranked, evidence-backed report to Docs/audit-YYYY-MM-DD.md. Findings only, verified by a skeptic panel; never edits code and never audits inline without the workflow.
+description: Use when asked for a security audit, legal/compliance review, license check, or full-project risk assessment ("audit this repo", "security once-over", "are we GDPR/SOC 2 ready", "check our dependency licenses", "is this safe to open-source") — dispatches a bundled scout-then-swarm Workflow over the whole repo (adaptive specialist finders, severity-scaled skeptic verification: 1 lens for low/medium findings, 3-lens majority vote for high/critical) and writes a severity-ranked, evidence-backed report to Docs/audit-YYYY-MM-DD.md. Findings only, verified by a skeptic panel; never edits code and never audits inline without the workflow.
 ---
 
 # Audit Swarm
+
+> **Portability note (non-Claude-Code agents):** this skill's coverage guarantee comes
+> from parallel specialist finders plus a severity-scaled skeptic panel, run via Claude
+> Code's `Workflow` tool — not available on other CLIs. On a different agent you can
+> still serve this skill's purpose: work through the same finding categories a
+> scout/finder pass would cover, hold every finding to the same bar (findings only,
+> never fix inline, cite real evidence) — but treat a solo pass as unverified, since you
+> lose the independent skeptic panel that catches false positives.
 
 ## Overview
 
@@ -48,10 +56,12 @@ time there is.**
    `mode: "standard"` runs one finder round; use `"thorough"` only if the user explicitly
    asked for an exhaustive/deep pass, since it loops rounds until dry and costs more.
 
-   **Cost note:** even standard mode is not cheap — the 3-skeptic panel spawns three
-   verifiers per unique finding, so a swarm of dozens of agents is normal (a tiny repo can
-   still run ~50+ agents). That's the price of verified, low-false-positive findings; it is
-   expected, not a malfunction. Reserve `"thorough"` for when the user has accepted that cost.
+   **Cost note:** even standard mode is not cheap — every high/critical finding still gets
+   the full 3-lens majority-vote panel; low/medium findings get a cheaper 1-lens check
+   (a false positive there costs report noise, not a missed real risk). A swarm of dozens of
+   agents is still normal on a repo with many findings. That's the price of verified,
+   low-false-positive findings; it is expected, not a malfunction. Reserve `"thorough"` for
+   when the user has accepted that cost.
 3. **Relay the result.** Read the returned `reportPath`, present the summary and the top
    confirmed findings (severity, file:line, one-line impact) in chat, and point at the report
    file. Do not start fixing anything, even trivially.
