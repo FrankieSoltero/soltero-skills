@@ -1,6 +1,6 @@
 ---
 name: code-optimizer
-description: Use when asked to clean up, optimize, or slim down a codebase — remove dead and redundant code, dedupe, split oversized files (including ones still in live use), and enforce the project's coding guidelines across the whole repo. Applies changes on a branch driven by a `.code-optimizer.yml` config with a public-API allowlist, one gate-verified commit per category (serial, revert-on-red), so cleanup is systematic and reproducible instead of ad hoc detective work. Whole-repo; not a diff reviewer (use /simplify or /code-review for a diff).
+description: Use when asked to clean up, optimize, or slim down a codebase — remove dead and redundant code, dedupe, split oversized files (including ones still in live use), centralize repeated string literals / magic strings where the project has declared that rule, and enforce the project's coding guidelines across the whole repo. Applies changes on a branch driven by a `.code-optimizer.yml` config with a public-API allowlist, one gate-verified commit per category (serial, revert-on-red), so cleanup is systematic and reproducible instead of ad hoc detective work. Whole-repo; not a diff reviewer (use /simplify or /code-review for a diff).
 ---
 
 # Code Optimizer
@@ -16,8 +16,9 @@ and the harder categories — splitting an oversized file that's still imported,
 block — get flagged and left for later instead of executed. This skill closes those specific
 gaps: a `.code-optimizer.yml` config with a public-API allowlist replaces per-symbol detective
 work, every category is applied as its own commit behind an observed green/red test gate with
-revert-on-red, and all four categories run to completion in every pass — including splitting a
-LIVE oversized file, not just deleting orphaned ones.
+revert-on-red, and all five categories run to completion in every pass — including splitting a
+LIVE oversized file, not just deleting orphaned ones, and the counted string-literal pass whose
+outcome is fixed by whether the project declared the rule rather than by what this run improvised.
 
 Core principle: **config-driven, gate-enforced, serial-per-category — a change is kept only
 after the project's own verify commands pass with observed output for that commit alone; a
@@ -59,6 +60,13 @@ never eyeballed-only.** "No static caller" is a candidate, not a verdict — che
 string-based references and allowlisted entry points before treating anything as dead, and record
 the decision in the allowlist rather than relying on having personally verified it this one time.
 
+Repeated string literals have **no stock detector in the matrix** — knip has nothing to say about
+them and jscpd's defaults (≈5 lines / 50 tokens) can't see a one-token literal — so the skill runs
+that counted pass itself: ripgrep/ast-grep occurrence counting emitting a count plus `file:line`
+per distinct value (commands in `reference.md`). That counted output **is** the tool evidence, so
+running it is not a violation of "tool-flagged, never eyeballed" — eyeballing would be reporting
+counts you never ran a command to obtain. Run it every pass, declared or not.
+
 ## Phase 2 — Apply (serial, one commit per category, gate after each)
 
 In this order, each its own commit:
@@ -70,6 +78,23 @@ In this order, each its own commit:
 4. **Guideline fixes** — apply the rules the project has *declared* (in `.code-optimizer.yml`,
    CLAUDE.md/AGENTS.md, and its linter/formatter configs) that tools can't auto-fix — never
    general language conventions you happen to know from memory.
+5. **String-constant centralization** — repeated string literals become members of the project's
+   ONE constants/enum home, byte-for-byte value-preserving. **Declaration-gated**: it APPLIES only
+   when the project has declared the rule — a `stringConstants` block in `.code-optimizer.yml`, a
+   rule in CLAUDE.md/AGENTS.md, or an enabled lint rule to that effect. Declared → extract values
+   at ≥ `minRepeats` distinct sites, reusing the constant that already holds a value instead of
+   minting a second home. **Not declared → the counted pass still runs and applies nothing**: the
+   deliverable carries the counted table (value, count, `file:line` sites) plus a drafted
+   `stringConstants` block for review, the same "write it and stop for review" contract the config
+   bootstrap uses. Reported-and-drafted is the finished state when the authority to edit is
+   missing — silence is not, and neither is applying it because the fix looks obvious.
+   **Never candidates**, declared or not: wire/persisted/contract strings (header names, MIME
+   types, SQL table/column names, serialized JSON keys, env-var names, URL paths, bus event names)
+   — bind them only to a constant holding the identical value, otherwise leave them literal and
+   record them in `literalAllowlist` with the reason; user-facing copy / i18n; test assertion
+   literals (a test restates the value so a wrong constant fails it); near-matches differing by
+   case, whitespace, punctuation, or pluralization (merging them is a behavior change, not a
+   cleanup); values already centralized; anything under `minRepeats`/`minLength` or `exclude`.
 
 After EACH change: run the verify commands and OBSERVE the output. Green → commit. Red → discard
 the change and continue. The failing change is still UNCOMMITTED (you commit only on green), so
@@ -77,16 +102,19 @@ discard it with `git restore .` (or `git checkout -- .` / `git reset --hard HEAD
 edits, plus `git clean -fd` if you added files) — do NOT run `git revert`, which inverts the
 previous *good* commit. Log the discarded change as skipped. Never batch categories into one commit.
 
-All four categories run to completion every pass. A category that only produces a flag — "this
+All five categories run to completion every pass. A category that only produces a flag — "this
 file is over the limit," "this block looks duplicated" — is not finished; apply the split or the
-dedupe and gate-verify it. Only a gate failure or an explicit allowlist entry justifies leaving a
-candidate untouched; "I noted it for later" is not a valid stopping point.
+dedupe and gate-verify it. Only a gate failure, an explicit allowlist entry, or category 5's
+missing declaration (which still owes the counted table and the drafted config block) justifies
+leaving a candidate untouched; "I noted it for later" is not a valid stopping point.
 
 ## Deliverable
 
 A branch of verified commits + a summary: removed/shortened/split/fixed, what was skipped and why
 (gate failure or allowlisted), before/after metrics (LOC, file count, largest file), and changes
-that couldn't be automated safely for manual follow-up. Open a PR.
+that couldn't be automated safely for manual follow-up. Always — declared or not — the counted
+string-literal table (value, count, `file:line` sites, action or reason-if-skipped), plus the
+drafted `stringConstants` block when the rule wasn't declared. Open a PR.
 
 ## Rationalization Table
 
@@ -96,6 +124,7 @@ that couldn't be automated safely for manual follow-up. Open a PR.
 | "I'll just read the code and try invoking it myself to see if it's really used." | Do the reachability check once (dynamic/string refs, entry points) — that's required for any callerless candidate. Then *persist* the keep decision in the config's public-API allowlist so the next run doesn't redo it. The allowlist records the decision; it does not replace the first-time check, and a bare tool flag alone never justifies deleting a callerless symbol. |
 | "Move fast — delete, shorten, and split in one commit." | Serial, one category per commit, gate after each. A batched commit means a broken test can't be traced and the whole cleanup is suspect. |
 | "The change is obviously safe, I don't need to re-run tests." | Every change re-runs the gate with observed output, per commit. "Obviously safe" refactors are precisely the ones that silently break dynamic paths. |
+| "No `stringConstants` block and nothing declared — I'll just skip the string literals silently." / "Nothing's declared, but the fix is obvious, so I'll apply it." | Same improvisation, opposite directions — and it's why the same repo gets a different pass every time. Undeclared has ONE shape: run the counted pass, put the table in the deliverable, draft the config block, apply nothing. Never silent, never applied. |
 | "I flagged the oversized file / the duplication — that's a good result, I'll leave the actual split for later." | Flag-then-skip leaves a whole category incomplete. A tool-flagged oversized file that's still imported must be split, and the duplication deduped, gate-verified the same as any other change — not merely noted. |
 
 ## Red Flags — STOP
@@ -108,3 +137,6 @@ that couldn't be automated safely for manual follow-up. Open a PR.
   observing it pass.
 - About to leave the file-splitting or deduplication category as "flagged" instead of applying and
   gate-verifying it — including on a file that's still live/imported.
+- About to settle category 5 by improvisation: skipping the counted pass, leaving the literal table
+  out of the deliverable because nothing was declared, or editing literals without a declaration
+  (config block, CLAUDE.md/AGENTS.md rule, or enabled lint rule).
