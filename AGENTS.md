@@ -66,7 +66,12 @@ under `skills/` with a `SKILL.md` you can open directly.
 
 - **`Skill` tool** (surfaces skills via an `available-skills` list) → you
   don't have this tool; just open `skills/<name>/SKILL.md` directly and
-  read it.
+  read it. If your agent speaks MCP, the portable alternative is this repo's
+  MCP server (`npx soltero-skills`, or `node mcp/dist/stdio.js` from a
+  checkout): its `list_skills`/`get_skill`/`search_skills` tools and
+  `skill://<name>` resources serve the same content programmatically, and its
+  `route-task` prompt delivers this file's routing rule plus the current
+  skill index on demand (the portable stand-in for the `SessionStart` hook).
 - **`SessionStart` hook** (auto-injects the routing rule above every
   session) → no equivalent exists for you; that's why this file exists —
   read it once, then keep applying it yourself.

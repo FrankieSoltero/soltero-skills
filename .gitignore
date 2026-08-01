@@ -7,3 +7,6 @@ private-notes/
 
 # agent worktrees (session-local, never committed)
 .claude/worktrees/
+
+# MCP server build output (built by `npm run build`, shipped via `prepack`)
+mcp/dist/

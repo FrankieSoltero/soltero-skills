@@ -16,6 +16,11 @@ jobs:
         run: node tools/lint-frontmatter.mjs
       - name: Unit tests (hard gate, no deps)
         run: npm test
+      - name: MCP server typecheck + build + tests (hard gate)
+        run: |
+          npm ci
+          npm run typecheck
+          npm run test:mcp
       - name: Markdown lint (best-effort)
         run: npx --yes markdownlint-cli2 "**/*.md" "#node_modules" || echo "markdownlint unavailable — skipped"
       - name: Plugin validate (best-effort; CLI may be unavailable)
