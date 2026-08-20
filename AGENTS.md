@@ -39,6 +39,8 @@ Feature work — the lean pipeline, end to end:
   `skills/prd-review/SKILL.md`)
 - Approved spec/design → open `skills/lean-plans/SKILL.md`, then gate the
   plan with `skills/plan-review/SKILL.md`
+- "Visualize / diagram the plan", "what runs in parallel?" →
+  `skills/plan-visualizer/SKILL.md` (read-only; never edits the plan)
 - Approved plan → open `skills/lean-sdd/SKILL.md` (pipelined subagent
   execution)
 

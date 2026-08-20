@@ -83,6 +83,7 @@ Set `SOLTERO_SKILLS_DIR` to serve a different skills directory;
 | `plan-review` | Implementation-plan grading council (decomposition, verifiability, spec fidelity, concreteness, risk/rollback, consistency) gating execution at ≥85/80 + zero blocking violations — no safe-subset starts, no fix-author self-approval. |
 | `lean-brainstorming` | Batched-question requirements exploration with a hard no-code-before-approval gate — one question round, one design message, one combined approval pass (~2 round trips). |
 | `lean-plans` | Contract-level implementation plans: exact interfaces, behavior tables, and a dependency/risk-tier table for the executor; code only where exactness is the requirement. |
+| `plan-visualizer` | Read-only plan visualization: bundled parser renders a risk-tier-colored dependency graph with derived waves and an integrity panel (table↔block drift, undeclared consumes, same-wave file overlaps, cycles, missing tiers) to `<plan>.viz.md`; reports defects, never repairs or schedules. |
 | `lean-sdd` | Pipelined subagent execution: reviewer runs concurrently with the next disjoint implementer, risk-tiered review depth, 3-round fix cap, compaction-proof ledger. |
 | `lean-tdd` | Failing-test-first discipline: delete code written before its test (stash counts as keeping it), mandatory verify-RED/GREEN, first-run-pass tripwire. |
 | `lean-verification` | Evidence before claims: no completion claim without a fresh run in the same message; never pre-script the success message; subagent reports are claims to verify. |

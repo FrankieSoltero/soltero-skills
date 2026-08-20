@@ -3,6 +3,35 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.21.0] - 2026-08-20
+### Added
+- **plan-visualizer** skill: read-only visualization of lean-plans plans. Bundled
+  `scripts/plan-graph.mjs` (unit-tested, 13 cases) parses the Task Dependency
+  Table and contract blocks, derives waves from declared dependencies only, and
+  renders a risk-tier-colored mermaid graph plus an integrity panel — `file-drift`,
+  `consumes-without-dependency`, `concurrent-file-overlap` (lean-sdd's one-writer
+  invariant), `cycle`, `dangling-dependency`, `missing-risk-tier`,
+  `no-dependency-table` — into `<plan>.viz.md` (publishable as an Artifact; mermaid
+  renders natively). Hard rules: plan file stays byte-identical; no model picks,
+  review order, or dispatch instructions anywhere; no dependency table → no graph
+  (no inferred edges, even labelled). RED baseline (3 sonnet runs): one run missed
+  both blocking defects by hand-checking and leaked model/review-order columns;
+  one drew the inferred four-wave slide the PM asked for. Routing rows added to
+  README, AGENTS.md and the session-start hook context.
+- `scripts/install-schedules.sh` + `scripts/launchd/*.plist.tmpl`: the local
+  dev-debrief (nightly) and session-miner (1st/15th) runs move from crontab to
+  launchd LaunchAgents. Root cause: cron runs outside the login session, so
+  headless `claude -p` could not reach Keychain credentials — 21 consecutive
+  `Not logged in` nights (2026-07-25 → 08-20), zero debriefs; cron also dropped
+  the sleep-missed session-miner fires. Installer retires the crontab lines
+  (backup kept) and kick-starts a debrief as the auth smoke test. Both invocations pass
+  `--add-dir ~/.claude/projects` so the headless sandbox can read every project's
+  transcripts (first launchd run covered only this repo without it).
+### Changed
+- `npm test` now also runs `skills/*/scripts/*.test.mjs`.
+- dev-debrief `references/scan-protocol.md` and `docs/specs/dev-debrief.md`
+  scheduling sections now document launchd instead of cron.
+
 ## [0.20.0] - 2026-08-01
 ### Added
 - **MCP server** (`mcp/`): the skills library is now served to any MCP-capable

@@ -44,7 +44,7 @@ test('integration: lists all tools, resources templates, and prompts', async () 
 test('integration: list_skills returns the real library, then get_skill fetches one', async () => {
   const { client, server } = await connectedClient();
   const list = json(await client.callTool({ name: 'list_skills', arguments: {} }));
-  assert.equal(list.skills.length, 41);
+  assert.equal(list.skills.length, 42);
   assert.deepEqual(list.warnings, []);
   assert.ok(list.skills.every(s => s.name && s.description && s.path));
 
