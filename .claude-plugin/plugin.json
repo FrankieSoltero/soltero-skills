@@ -3,7 +3,7 @@
   "name": "soltero-skills",
   "displayName": "Soltero Skills",
   "description": "Skills for scaffolding, security/compliance review, AI-agent engineering, and docs/knowledge capture",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "author": {
     "name": "Francisco Soltero"
   },

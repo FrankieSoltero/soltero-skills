@@ -29,7 +29,7 @@ const VALID = '---\nname: demo-skill\ndescription: Use when testing.\n---\n# Dem
 
 test('loads the real repo library with no warnings', () => {
   const index = loadSkills(repoSkills);
-  assert.equal(index.skills.length, 41);
+  assert.equal(index.skills.length, 42);
   assert.deepEqual(index.warnings, []);
   const leanTdd = findSkill(index, 'lean-tdd');
   assert.ok(leanTdd.body.includes('name: lean-tdd'));

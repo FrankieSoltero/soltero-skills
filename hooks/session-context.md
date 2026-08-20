@@ -17,6 +17,8 @@ Feature work — the lean pipeline, end to end:
   `soltero-skills:prd-review`)
 - Approved spec/design → `soltero-skills:lean-plans`, then gate the plan with
   `soltero-skills:plan-review`
+- "Visualize / diagram the plan", "what runs in parallel?" →
+  `soltero-skills:plan-visualizer` (read-only; never edits the plan)
 - Approved plan → `soltero-skills:lean-sdd` (pipelined subagent execution)
 
 Standing disciplines and procedures:

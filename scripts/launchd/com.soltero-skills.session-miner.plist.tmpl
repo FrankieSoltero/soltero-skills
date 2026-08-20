@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.soltero-skills.session-miner</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__CLAUDE__</string>
+    <string>-p</string>
+    <string>Scheduled session-miner run. PRECONDITION: if skills/session-miner/SKILL.md does not exist, print 'session-miner not yet merged; skipping' and stop. Otherwise read skills/session-miner/SKILL.md and references/mining-protocol.md in full and follow them exactly: mine local transcripts under ~/.claude/projects/ for procedures that succeeded (external success signals only) in &gt;=2 independent sessions, apply the redaction checklist, and write proposals ONLY under Docs/mining/proposals/&lt;today&gt;/ with independent-reviewer verdicts recorded. Never write to CLAUDE.md, live skills directories, or any memory surface. Summarize what was proposed at the end.</string>
+    <string>--permission-mode</string>
+    <string>acceptEdits</string>
+    <string>--add-dir</string>
+    <string>__HOME__/.claude/projects</string>
+  </array>
+  <key>WorkingDirectory</key><string>__REPO__</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>__HOME__/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <key>HOME</key><string>__HOME__</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Day</key><integer>1</integer><key>Hour</key><integer>9</integer><key>Minute</key><integer>23</integer></dict>
+    <dict><key>Day</key><integer>15</integer><key>Hour</key><integer>9</integer><key>Minute</key><integer>23</integer></dict>
+  </array>
+  <key>StandardOutPath</key><string>__HOME__/.claude/logs/session-miner.log</string>
+  <key>StandardErrorPath</key><string>__HOME__/.claude/logs/session-miner.log</string>
+  <key>RunAtLoad</key><false/>
+</dict>
+</plist>

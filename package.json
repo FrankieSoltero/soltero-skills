@@ -1,6 +1,6 @@
 {
   "name": "soltero-skills",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "A public Claude Code skills library",
   "type": "module",
   "private": false,
@@ -15,7 +15,7 @@
     "AGENTS.md"
   ],
   "scripts": {
-    "test": "node --test tools/*.test.mjs",
+    "test": "node --test tools/*.test.mjs skills/*/scripts/*.test.mjs",
     "test:mcp": "npm run build && node --test mcp/test/*.test.mjs",
     "build": "tsc -p mcp/tsconfig.json",
     "prepack": "npm run build",
