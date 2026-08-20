@@ -102,13 +102,13 @@ silently. The push never gates, delays, or fails the report; skip days push noth
 
 ## Scheduling (documented here; installed at integration time, never by this skill)
 
-Nightly local crontab, same pattern as session-miner — headless `claude -p` from this
-repo, accept-edits permission mode, appending to a log:
+Nightly **launchd LaunchAgent** (not cron), same pattern as session-miner — headless
+`claude -p` from this repo, accept-edits permission mode, appending to a log. Install
+with `scripts/install-schedules.sh` (templates in `scripts/launchd/`); it also
+kick-starts one run as an auth smoke test.
 
-```cron
-40 21 * * * cd $HOME/Desktop/Code/soltero-skills && claude -p "Invoke the soltero-skills:dev-debrief skill and run tonight's debrief" --permission-mode acceptEdits >> $HOME/.claude/logs/dev-debrief.log 2>&1
-```
-
-Install notes for integration: `mkdir -p ~/.claude/logs` first; cron's PATH is minimal,
-so replace `claude` with the absolute path from `command -v claude` if the plain name
-does not resolve. The skill itself never installs, edits, or removes crontab entries.
+Why not cron: cron jobs run outside the user's login session, so `claude -p` cannot
+reach Keychain-stored credentials and every run logs `Not logged in · Please run
+/login` (observed 2026-07-25 → 2026-08-20, 21 failures, zero reports). cron also
+drops runs missed while the Mac sleeps; launchd fires them on wake. The skill itself
+never installs, edits, or removes LaunchAgents or crontab entries.

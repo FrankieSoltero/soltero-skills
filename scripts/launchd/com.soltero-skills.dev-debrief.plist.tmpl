@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.soltero-skills.dev-debrief</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__CLAUDE__</string>
+    <string>-p</string>
+    <string>Invoke the soltero-skills:dev-debrief skill and run tonight's debrief</string>
+    <string>--permission-mode</string>
+    <string>acceptEdits</string>
+    <string>--add-dir</string>
+    <string>__HOME__/.claude/projects</string>
+  </array>
+  <key>WorkingDirectory</key><string>__REPO__</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>__HOME__/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <key>HOME</key><string>__HOME__</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>21</integer><key>Minute</key><integer>40</integer></dict>
+  <key>StandardOutPath</key><string>__HOME__/.claude/logs/dev-debrief.log</string>
+  <key>StandardErrorPath</key><string>__HOME__/.claude/logs/dev-debrief.log</string>
+  <key>RunAtLoad</key><false/>
+</dict>
+</plist>

@@ -83,10 +83,12 @@ to `Docs/debriefs/skip-log.md` and exit. Quiet days stay quiet.
 
 ## Scheduling
 
-Local crontab (same pattern as session-miner): nightly ~21:40 local, headless
-`claude -p` from this repo with `--permission-mode acceptEdits`, logging to
-`~/.claude/logs/dev-debrief.log`. Installed at build-integration time, not by
-the skill itself.
+Local launchd LaunchAgent (same pattern as session-miner; was crontab until
+2026-08-20 — cron runs outside the login session and could not authenticate):
+nightly ~21:40 local, headless `claude -p` from this repo with
+`--permission-mode acceptEdits`, logging to `~/.claude/logs/dev-debrief.log`.
+Installed via `scripts/install-schedules.sh` at integration time, not by the
+skill itself.
 
 ## Testing (creating-a-skill process)
 
