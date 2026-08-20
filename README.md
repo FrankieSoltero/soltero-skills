@@ -17,6 +17,40 @@ session hook.
 
 Then invoke skills as `soltero-skills:<skill-name>`.
 
+## Use from any agent (MCP)
+
+The library also ships as an MCP (Model Context Protocol) server over stdio,
+so any MCP-capable agent (Kimi, Cursor, Codex, Gemini, …) can discover and
+fetch skills programmatically:
+
+```sh
+npx soltero-skills
+```
+
+Or point your agent's MCP config at a local checkout:
+
+```json
+{
+  "mcpServers": {
+    "soltero-skills": {
+      "command": "node",
+      "args": ["/path/to/soltero-skills/mcp/dist/stdio.js"]
+    }
+  }
+}
+```
+
+(Build first with `npm run build` when running from a checkout.)
+
+Tools: `list_skills`, `get_skill` (full `SKILL.md` body, `include_files` to
+inline bundled reference/templates/workflows files), `search_skills`,
+`lint_skill`, `scaffold_skill`. Resources: `skill://<name>` and
+`skill://<name>/file/<path>`. Prompts: `route-task(task)` (the `AGENTS.md`
+routing rule plus the current skill index) and `use-skill(name)`.
+
+Set `SOLTERO_SKILLS_DIR` to serve a different skills directory;
+`SOLTERO_SKILLS_LOG_LEVEL` (or `LOG_LEVEL`) controls stderr logging.
+
 ## Skills
 
 | Skill | What it does |

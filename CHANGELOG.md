@@ -3,6 +3,34 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.20.0] - 2026-08-01
+### Added
+- **MCP server** (`mcp/`): the skills library is now served to any MCP-capable
+  agent over stdio — `npx soltero-skills` (bin: `soltero-skills`, entry
+  `mcp/dist/stdio.js`). Tools: `list_skills`, `get_skill` (with
+  `include_files` for bundled reference/templates/workflows files),
+  `search_skills` (case-insensitive substring, ranked name > description >
+  body), `lint_skill` (by name or raw draft content), and `scaffold_skill`
+  (writes a `creating-a-skill`-convention skeleton). Resource templates
+  `skill://<name>` and `skill://<name>/file/<path>` share the tool read path;
+  prompts `route-task(task)` (AGENTS.md routing rule + live skill index) and
+  `use-skill(name)`. Skills dir resolves relative to the server
+  (`SOLTERO_SKILLS_DIR` overrides; fail fast at startup if missing), Zod at
+  every tool boundary, `{ isError: true }` instead of throws, stderr-only
+  structured logging, unknown names answered with close matches, frontmatter
+  parse failures omitted from listings and surfaced in `warnings`. Built on
+  `@modelcontextprotocol/sdk` 1.30.0 (API re-verified against installed types
+  per `build-mcp-server` Rule 0). README gains a "Use from any agent (MCP)"
+  section; `AGENTS.md` documents MCP as the portable alternative to the
+  `Skill` tool. Tests: unit per handler + discovery, one in-memory-transport
+  integration test, and a stdio smoke test asserting stdout stays pure
+  JSON-RPC; CI runs typecheck + build + mcp tests.
+### Changed
+- Frontmatter parse/validate logic extracted from `tools/lint-frontmatter.mjs`
+  into shared `tools/frontmatter.mjs` (+ `tools/frontmatter.d.mts` types) —
+  one implementation now backs both the CI gate and the MCP `lint_skill`
+  tool. CLI behavior and existing tests unchanged.
+
 ## [0.19.1] - 2026-07-30
 ### Changed
 - `plan-review`: gate recalibrated from overall ≥95 to **overall ≥85 AND every
