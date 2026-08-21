@@ -2,6 +2,14 @@
 
 A running log of bugs, root causes, fixes, and lessons.
 
+## 2026-08-21 — all three cloud routines (skill-gardener, memory-gardener, skill-patcher) failed every fire since creation; the routine objects themselves were broken
+
+- **Symptom:** Aug 1 / Aug 8 / Aug 15 fires each ended `error_during_execution turns=0` ~3 s after "Claude Code process started"; a manual `run` on Aug 21 hung at the same point with zero events. No PRs, no reports, for a month.
+- **Root cause:** not the repo, model, tools, or MCP connectors — four fresh one-off routines (minimal config; sonnet + Task/Agent; opus-5 + basic tools; opus-5 + the exact gardener tool list) all ran fine, and a fresh copy of the gardener with its verbatim prompt ran the full audit. Only the July-21-created routine objects fail (their runs still say "Cloning repository" where current runs say "Fetching" — the platform changed underneath them and the old records did not survive it).
+- **Fix:** recreated the three routines with identical prompts/schedules (`trig_016dfZWZF9QNdoxXp3RGcdhn` gardener `7 13 1 * *`, `trig_01JEndZ4JEe8RusaVWQVw3hg` memory-gardener `11 13 8 * *`, `trig_019MmZYBMebpkyXhRpspRMpE` patcher `13 13 15 * *`); disabled and renamed the stale ones `[STALE … delete]` (delete is UI-only at claude.ai/code/routines). Verified with a one-off copy that completed the real audit.
+- **Lesson:** "the routine fired" proves nothing — check `list_runs` → `get_run_log` for `init:` and `turns>0` after every new or migrated routine, and bisect with cheap `run_once_at` copies before touching the repo; when a fresh copy of the identical config works, recreate rather than debug the old object.
+- **Regression test:** on Sep 1 the gardener run log shows `init: model=claude-opus-5` and a `chore: skill-garden report 2026-09` PR appears.
+
 ## 2026-08-20 — dev-debrief cron fired nightly for 4 weeks but every run failed "Not logged in"; session-miner cron never fired at all
 
 - **Symptom:** `~/.claude/logs/dev-debrief.log` holds 21 lines of `Not logged in · Please run /login` (2026-07-25 → 2026-08-20); zero debriefs after 2026-07-22. `~/.claude/logs/session-miner.log` never created despite Aug 1 / Aug 15 schedule.
