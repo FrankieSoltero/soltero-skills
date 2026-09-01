@@ -29,20 +29,26 @@ Core principle: **verify the API, then build to the floor — every time, regard
 
 ## Rule 0 — Verify the SDK API; never author it from memory
 
-The TS SDK is actively migrating. As of June 2026 the published **stable** package is
-`@modelcontextprotocol/sdk` (v1.29.x) with **subpath imports** and a **raw-shape** `inputSchema`.
-A **v2.0.0-alpha** exists that splits into scoped packages (`@modelcontextprotocol/server`,
-`/node`, `/express`) and changes signatures. Most tutorials — and your own memory — mix these.
+The TS SDK ships under two package families whose APIs differ: the **monolith**
+`@modelcontextprotocol/sdk` (subpath imports, raw-shape `inputSchema`) and the **scoped**
+`@modelcontextprotocol/server` / `/node` / `/express` (different imports and signatures).
+Both are published; which one is current, and which the docs you are reading describe, changes
+between releases. Tutorials — and your own memory — mix them. Recognizing these package names is
+not the same as knowing their current state, so check both before writing a line.
 
 So, before writing server code:
 
-1. Run `npm view @modelcontextprotocol/sdk version` to see what `npm i` gives you today.
-2. Read **that version's** docs/README (pin the git tag, e.g. `?ref=v1.29.0`) — NOT the main
-   branch, which is the unreleased v2 alpha.
+1. Run `npm view @modelcontextprotocol/sdk version` **and**
+   `npm view @modelcontextprotocol/server dist-tags` — the second is the one that tells you
+   whether the scoped family has shipped past prerelease. Decide which family you are on, and
+   say which, before installing.
+2. Read the docs for **that exact version**, pinned by git tag (`?ref=v<version>`), never the
+   main branch — main tracks whatever is unreleased at the time you read it.
 3. Match imports and the `registerTool`/`registerResource` signatures to that version.
 
-`reference.md` holds the verified v1.29.x API and the v2-alpha delta. If the installed version has
-moved past it, re-verify — do not assume.
+`reference.md` holds a dated, verified snapshot of the monolith API. Check its verification date
+against what step 1 returned: if the installed version has moved past it, or step 1 puts you on
+the scoped family, the snapshot is a starting point to re-verify, not an answer.
 
 ## The Flow
 
@@ -109,7 +115,7 @@ moved past it, re-verify — do not assume.
 | "They only asked for a working server." | The floor is the default. Deliver it (or have them scope it down on purpose), don't silently ship the toy. |
 | "console.log is fine, it's just one log line." | On stdio that one line corrupts the protocol stream. stderr only. |
 | "Everything can be a tool." | Read-only context belongs in resources — cacheable, side-effect-free, auditable separation. |
-| "The README example is current." | The main-branch README is the unreleased v2 alpha. Pin the tag of the version you install. |
+| "The README example is current." | The main branch tracks unreleased work and may describe a different package family than the one you installed. Pin the git tag of the version `npm view` reported. |
 
 See `reference.md` for the verified-current API, both transport setups, auth, the Inspector, and
 `claude mcp add`. Bundled `templates/` provide the production floor (server, both entries, env,

@@ -79,6 +79,22 @@ label is still an install: the line is in force for the very next session. An em
 `.claude/skills/` directory is not "the natural destination" for a draft — it is exactly
 the surface a proposal must stay out of.
 
+## Autonomous run
+
+A scheduled pass is a headless `claude -p` LaunchAgent: nobody is watching, and pausing to
+ask "shall I propose this?" blocks the pass until someone notices. Everything in the
+pipeline — mining, redacting, reviewing, writing under `Docs/mining/proposals/` — is
+reversible and covered by the request, so proceed without asking. The one decision that
+stays human is installation, and that is not yours to ask about either: it is out of scope
+by construction. Before ending the turn, check the last paragraph — if it is a plan or a
+promise ("I'll draft the proposals now"), do that work with tool calls instead.
+
+Audit every evidence claim against a tool result from this run before writing it: the
+session file you actually read, the passing-test or commit or confirmation line you
+actually saw and can quote. "Verified" describes a transcript line you can point at, not
+how the pass felt; anything you cannot point at is parked as unverified, and a source you
+could not read is named as unread rather than omitted.
+
 ## Rationalization Table
 
 | Excuse | Reality |

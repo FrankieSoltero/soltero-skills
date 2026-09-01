@@ -15,7 +15,8 @@
      Next.js (App Router) · Vite + React (SPA) · Astro · Expo / React Native.
   2. Present the **UI/component layer** for the chosen framework and let the user pick:
      - Web (Next/Vite/Astro): **Tailwind v4** base → **shadcn/ui** primitives → optional
-       **ReactBits** add-on for animated components.
+       **Magic UI** add-on for animated components (license-verified in design-forge's
+       catalog; ReactBits was rejected there — Commons Clause).
      - Mobile (Expo): **NativeWind** (Tailwind for RN) → **react-native-reusables** ("shadcn
        for RN"). Web shadcn/ui is DOM-only and does not apply to Expo; the skill routes to the
        RN equivalent.
@@ -33,7 +34,7 @@
   distinctive UI *design*) — this is *infra*; they compose. Mobile is covered via Expo only.
 
 - **Mechanism note:** Ride the maintained official scaffolders rather than freezing our own
-  boilerplate; keep the exact current commands/registries (shadcn init, ReactBits,
+  boilerplate; keep the exact current commands/registries (shadcn init, Magic UI,
   react-native-reusables, Tailwind v4) in `reference.md` so they are cheap to update as CLIs
   drift. Verify all commands against current docs before shipping.
 

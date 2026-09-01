@@ -336,7 +336,10 @@ const rep = await agent(
   `Copy quotes and citations exactly from the data — do not invent, merge, drop, or reword ` +
   `items. DATA:\nVERIFIED ITEMS:\n${JSON.stringify(finalItems)}\n` +
   `FLAGGED UNVERIFIED:\n${JSON.stringify(flaggedUnverified)}\nTIMELINE:\n${JSON.stringify(red.timeline)}\n` +
-  `After writing, return the report path and a 5-line-max summary.`,
+  `After writing, read the file back to confirm it exists and contains every section, then ` +
+  `return its path and a summary — long enough that a reader who sees only the summary ` +
+  `learns the headline decisions and that anything was flagged unverified. Never return a ` +
+  `path you have not confirmed on disk; if the write failed, say so instead.`,
   { label: 'report', phase: 'Report', schema: REPORT_SCHEMA, model: 'sonnet' }
 )
 if (!rep) {

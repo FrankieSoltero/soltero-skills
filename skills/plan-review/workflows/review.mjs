@@ -21,7 +21,13 @@ const rubricPath = opts.rubricPath
 const round = opts.round || 1
 const priorDimensions = opts.priorDimensions || null
 const lite = opts.mode === 'lite'
+const structuralFindings = opts.structuralFindings || []
 if (!planPath || !rubricPath) throw new Error('args.planPath and args.rubricPath are required')
+
+const MAX_ROUNDS = 3
+if (round > MAX_ROUNDS) {
+  throw new Error(`Round ${round} exceeds the ${MAX_ROUNDS}-round cap. A plan still BLOCKED after ${MAX_ROUNDS} rounds goes back to soltero-skills:lean-plans for a rewrite; report what blocks and stop. Do not convene another council round.`)
+}
 
 const DIMENSIONS = [
   { key: 'decomposition', label: 'D1 Task decomposition & ordering', weight: 15 },
@@ -97,26 +103,32 @@ const SKEPTIC_SCHEMA = {
   required: ['missedViolations', 'reasoning'],
 }
 
+const structuralBlock = structuralFindings.length
+  ? `\nA deterministic parser has already analyzed this plan's dependency table and contract blocks. These findings are established facts with plan line numbers — do not re-derive them, and do not contradict them. Count any that fall under your dimension's checklist as violations you did not have to find, and spend your pass on what the parser cannot judge:\n${JSON.stringify(structuralFindings, null, 2)}\n`
+  : ''
+
 const gradePrompt = (d) => `You are one grader on an implementation-plan review council. Grade EXACTLY ONE dimension: ${d.label}.
 
 Read these two files:
 1. The rubric: ${rubricPath} — your dimension's checklist and the band anchors. Follow it exactly.
 2. The plan under review: ${planPath}
-
-Rules (from the rubric, non-negotiable):
-- Score 0-100 anchored to the bands; when torn between two bands take the LOWER.
-- Every violation must quote the offending plan line(s) verbatim (or name the absent task/section) and cite the checklist item.
+${structuralBlock}
+Rules (from the rubric):
+- Score 0-100 anchored to the bands. The bands run in both directions: a section that meets a band's description earns that band's score, and when you are genuinely torn between two bands take the lower one. Do not withhold a score the plan has earned, and do not deduct for anything you cannot quote.
+- Every violation must quote the offending plan line(s) verbatim — copied from the file you read in this session, not recalled or paraphrased — or name the absent task/section, and cite the checklist item.
 - A score >= 90 requires affirmative excellenceEvidence quotes; absence of noticed flaws is not evidence.
 - For each violation, propose a concrete fix and classify it: "mechanical" (rewording, reordering, adding verification steps or rollback notes — appliable without a product/ops decision) or "owner-decision" (scope calls, prod-migration strategy, ownership, targets — needs the plan owner).
 - Grade ONLY your dimension; ignore flaws that belong to other dimensions.
 
 Return via the structured output schema. This is round ${round} of review.`
 
-const skepticPrompt = (d, g) => `You are an adversarial skeptic on an implementation-plan review council. A grader scored dimension "${d.label}" at ${g.score}/100 — suspiciously high. Your ONLY job is to find checklist violations the grader MISSED.
+const skepticPrompt = (d, g) => `You are the independent verifier on an implementation-plan review council. A grader scored dimension "${d.label}" at ${g.score}/100. Scores in this band get a second pass because a generous grade and a genuinely excellent plan read the same way from one pass; your job is to tell those two apart by re-checking the checklist yourself.
 
 Read the rubric (${rubricPath}) — dimension ${d.label}'s checklist — and the plan (${planPath}). Check every checklist item explicitly against the plan. The grader already found these violations (do NOT re-report them): ${JSON.stringify(g.violations.map(v => v.checklistItem + ': ' + v.quote.slice(0, 80)))}
 
-Report only NEW missed violations, each with a verbatim plan quote and the checklist item it breaks. If after checking every item you genuinely find nothing new, return an empty missedViolations array — but only then.`
+Report a missed violation only when you can name the checklist item it breaks and quote the plan line that breaks it, copied verbatim from the file you read in this session — not paraphrased, not inferred from what the plan omits unless the checklist item is about an omission, and never a stylistic preference. Where a checklist item is satisfied, or the evidence is ambiguous, that item yields nothing.
+
+Both outcomes are correct results. An empty missedViolations array is the right answer when the grade was earned; say so in reasoning, naming the items you checked.`
 
 const regradePrompt = (d, g, s) => `You are a fresh re-grader on an implementation-plan review council for dimension "${d.label}". A prior grader scored it ${g.score}/100, but a skeptic then confirmed these MISSED violations:
 ${JSON.stringify(s.missedViolations, null, 2)}
@@ -133,8 +145,8 @@ Read the rubric (${rubricPath}) and the plan (${planPath}).
 
 Dimensions: ${DIMENSIONS.map(d => `${d.key} — ${d.label}`).join('; ')}.
 
-Rules (from the rubric, non-negotiable):
-- Score each dimension 0-100 anchored to the bands; when torn between two bands take the LOWER.
+Rules (from the rubric):
+- Score each dimension 0-100 anchored to the bands. The bands run in both directions: a section that meets a band's description earns that band's score, and when you are genuinely torn between two bands take the lower one. Do not withhold a score the plan has earned, and do not deduct for anything you cannot quote.
 - Every violation must quote the offending plan line(s) verbatim (or name the absent task/section) and cite the checklist item.
 - For each violation, propose a concrete fix and classify it: "mechanical" or "owner-decision" (see rubric).
 - Grade every dimension independently — do not let one low score bleed into another.

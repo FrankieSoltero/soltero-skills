@@ -73,8 +73,8 @@ picture may be inferred, suggested, or repaired.**
 ## Red Flags — STOP
 
 - You are typing a mermaid graph or findings list without having run the parser.
-- The word "suggested", "assign", "opus", "sonnet", or "review order" is in your
-  visualization.
+- Your visualization names a model or model tier, assigns a task to an agent, or
+  states a review order — under any wording, in any column.
 - You are about to draw an edge that has no `Depends on` cell behind it.
 - `git status` shows the plan file modified.
 - The output is named anything other than `<plan>.viz.md` beside the plan.

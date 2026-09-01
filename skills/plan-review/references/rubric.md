@@ -87,6 +87,5 @@ executor down a wrong or unsafe path". The blocking-violation condition is what 
 the bar honest at this threshold: a plan can average 85+ while one dimension still
 carries a do-not-execute flaw, and that flaw must be fixed (and re-reviewed) before
 PASS — the score cannot outvote it. A BLOCKED plan must not be executed — not by
-  superpowers:executing-plans, not by subagent-driven-development, not "just the
-  early safe tasks" — regardless of sprint boards, deadlines, or prior informal
-  sign-offs.
+  soltero-skills:lean-sdd, not by any other executor, not "just the early safe
+  tasks" — regardless of sprint boards, deadlines, or prior informal sign-offs.

@@ -1,6 +1,6 @@
 ---
 name: lean-sdd
-description: Use when executing an implementation plan with subagents in the current session and wall-clock or token cost matters — pipelined subagent-driven development: fresh implementer per task, read-only reviewer running CONCURRENTLY with the next disjoint task's implementer, risk-tiered review depth (mechanical → spec-only on a cheap model), a 3-round fix-loop cap with adjudication, file-based brief/report/diff handover, and a compaction-proof ledger with fixed line formats. Lean variant of superpowers:subagent-driven-development; consumes the dependency/risk-tier table from soltero-skills:lean-plans. Never runs two writers on overlapping files.
+description: Use when executing an implementation plan with subagents in the current session and wall-clock or token cost matters — pipelined subagent-driven development: fresh implementer per task, read-only reviewer running CONCURRENTLY with the next disjoint task's implementer, risk-tiered review depth (mechanical → spec-only on a cheap model), a 3-round fix-loop cap with adjudication, file-based brief/report/diff handover, and a compaction-proof ledger with fixed line formats. Lean variant of subagent-driven development; consumes the dependency/risk-tier table from soltero-skills:lean-plans. Never runs two writers on overlapping files.
 ---
 
 # Lean SDD
@@ -25,6 +25,18 @@ judgment reviews, the final whole-branch review), **sonnet** for grunt work
 (mechanical implementers, standard FULL reviews), **haiku** for reading and
 summarizing (SPEC_ONLY reviews, scoped re-reviews). An omitted model silently
 inherits fable — the most expensive model — for work a cheaper tier owns.
+
+**Operating mode — the run is unattended.** This pipeline is a long
+autonomous run: the human is not watching each dispatch and cannot answer
+mid-loop, so asking "shall I dispatch the next task?" blocks everything
+behind it. Dispatches that follow from the plan proceed without asking. Stop
+only for the escalations this skill names: a plan conflict, a BLOCKED task,
+an adjudication that needs the human's call. Before ending a turn, read your
+last paragraph: if it states an intention ("I'll dispatch Task 3's
+implementer next", "next I'll run the final review") rather than reporting a
+completed action, make that dispatch now instead of ending. A turn that ends
+on an intention leaves no ledger line, so the next session cannot tell it
+apart from a finished one.
 
 **The contract is not optional.** Baseline controllers make the right
 judgment calls but improvise artifacts — ad-hoc report paths, verdicts in

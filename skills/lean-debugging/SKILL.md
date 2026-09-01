@@ -1,6 +1,6 @@
 ---
 name: lean-debugging
-description: Use for any bug, test failure, or unexpected behavior, before proposing a fix — especially under time pressure, after a fix that didn't stick, or when a "quick patch" looks obvious. Root cause before fixes, one change at a time, symptom patches never ship (not even as "insurance" or a "fallback" when time runs out — the honest fast path is a revert), and three failed fixes means stop and question the architecture. Lean variant of superpowers:systematic-debugging.
+description: Use for any bug, test failure, or unexpected behavior, before proposing a fix — especially under time pressure, after a fix that didn't stick, or when a "quick patch" looks obvious. Root cause before fixes, one change at a time, symptom patches never ship (not even as "insurance" or a "fallback" when time runs out — the honest fast path is a revert), and three failed fixes means stop and question the architecture. Lean, time-boxed variant of the systematic-debugging discipline.
 ---
 
 # Lean Debugging

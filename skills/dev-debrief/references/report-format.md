@@ -38,8 +38,9 @@ Append exactly one line to `Docs/debriefs/skip-log.md`:
 
 ## Workflow observations
 
-- At most 2, each with concrete transcript evidence (session + moment). No generic
-  advice; `None observed.` is the common, correct value.
+- Only observations with concrete transcript evidence (session + moment), and only ones
+  that would change what the reader does next. No generic advice; `None observed.` is the
+  common, correct value.
 
 ## Redactions
 

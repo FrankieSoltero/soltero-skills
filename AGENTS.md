@@ -90,9 +90,9 @@ under `skills/` with a `SKILL.md` you can open directly.
   conclusions in the places where the skill would normally have used one.
   Auto-translating that orchestration to run on other CLIs is a separate,
   not-yet-attempted investigation.
-- **Named subagent types** (`Explore`, `general-purpose`, `code-reviewer`,
-  etc.) referenced in `SKILL.md` prose → there is no dispatchable subagent
-  of that name outside Claude Code; do that piece of work yourself, inline.
+- **Named subagent types** (`Explore`, `general-purpose`, etc.) referenced in
+  `SKILL.md` prose → there is no dispatchable subagent of that name outside
+  Claude Code; do that piece of work yourself, inline.
 
 ## Precedence
 

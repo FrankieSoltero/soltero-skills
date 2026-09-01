@@ -81,7 +81,14 @@ const VERDICT_SCHEMA = {
 const TOOL_HINT =
   'You have WebSearch and WebFetch available — load them via ToolSearch ' +
   '(query "select:WebSearch,WebFetch") before searching. Never fabricate a source or a ' +
-  'license: every claim must come from a page or file you actually retrieved. '
+  'license: every claim must come from a page or file you actually retrieved. Before you ' +
+  'return a result, audit each field against a tool result from this session — if you did not ' +
+  'retrieve the evidence for a field, report that rather than asserting it. Recognizing a ' +
+  'project name is not the same as knowing its current license or release state, so search ' +
+  'even when the name is familiar. You are operating autonomously: nobody is watching and ' +
+  'nobody can answer a question mid-task. Do not end your turn on a plan or a promise ' +
+  '("I will now fetch..."); make the call and return the structured result. End only when the ' +
+  'result is complete, or when a retrieval definitively failed — which you report as a rejection. '
 
 phase('Sweep')
 

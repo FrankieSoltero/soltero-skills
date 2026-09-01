@@ -5,12 +5,16 @@
 `hooks/context-watch.mjs` is a `UserPromptSubmit` hook. On every turn it reads the transcript the
 hook receives, estimates token usage (size ÷ ~4), and — at/over the threshold — emits a
 `UserPromptSubmit` `additionalContext` reminder telling the model to run `agent-handoff`. It
-de-dupes to one reminder per ~10% band per session.
+de-dupes to one reminder per ~10% band and at most two reminders per session. The
+reminder deliberately carries no percentage or token count — a rendered budget countdown
+is a known trigger for premature wrap-up — only the instruction to refresh HANDOFF.md and
+carry on.
 
 ### Why this design (and its limits)
 
-Claude Code has **no native context-% trigger**. The only context-aware hooks (`PreCompact`/
-`PostCompact`) fire at auto-compaction (~83.5% full) and that threshold isn't lowerable. So this
+Claude Code has **no native context-% trigger**. The compaction-aware events (`PreCompact`, and
+`SessionStart` with source `compact`) fire only when auto-compaction is already happening, and
+the compaction threshold is not configurable. So this
 hook is the most reliable approximation: it runs every turn, estimates usage, and injects a
 reminder. Limits to accept: the token count is **estimated** (transcript bytes ÷ 4, not the API's
 tokenizer), the reminder is injected for the **next** model turn, and it **reminds** rather than
@@ -46,8 +50,11 @@ Tune with env on the same entry (defaults: window 200000, threshold 40):
   "timeout": 10 }
 ```
 
-> On a 1M-context model, 40% ≈ 400K tokens — set `HANDOFF_CONTEXT_WINDOW=1000000`. Lower
-> `HANDOFF_THRESHOLD_PCT` if you want to hand off earlier.
+> Set `HANDOFF_CONTEXT_WINDOW` to match the model you actually run: on a 1M-context model,
+> 40% is ~400K tokens, so leaving the 200000 default makes the estimate pass 100% early and
+> the reminder fire far sooner than intended (the script caps it at two reminders per session
+> so a mismatch degrades to a nudge rather than a cadence). Lower `HANDOFF_THRESHOLD_PCT` if
+> you want to hand off earlier.
 
 ### Enable it (as a plugin hook)
 
@@ -61,7 +68,7 @@ a per-turn hook.
 On exit 0 the script prints either nothing (under threshold / de-duped) or:
 
 ```json
-{ "hookSpecificOutput": { "hookEventName": "UserPromptSubmit", "additionalContext": "⚠️ Context is at ~N% …" } }
+{ "hookSpecificOutput": { "hookEventName": "UserPromptSubmit", "additionalContext": "This session has passed the configured handoff checkpoint. You have ample context remaining: … run the agent-handoff skill to write or refresh HANDOFF.md …, then carry on with the task. …" } }
 ```
 
 `additionalContext` is appended to the model's input for the turn. (For `UserPromptSubmit`, plain

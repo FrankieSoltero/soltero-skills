@@ -1,6 +1,6 @@
 ---
 name: dev-debrief
-description: Use when the nightly dev-debrief cron fires or when explicitly asked for a daily work debrief ("run the dev debrief", "what did I actually do today across projects") — scans ~/.claude/projects transcripts from the last 24h across ALL projects; on days with no coding signals (no Edit/Write/NotebookEdit, no git commit) it skips silently (one skip-log line, no report, no push), otherwise writes Docs/debriefs/YYYY-MM-DD.md in canonical format: redacted per-project what-you-did summaries, skill telemetry with trigger kind + outcome per invocation, missed-trigger findings with cited session evidence, max 2 evidence-backed workflow observations, push headline when available. Sundays append the weekly deep section (evidence-cited A–F grades, N/A for zero-opportunity skills, corrections-ledger-compatible recommendations for skill-patcher, coverage gaps). Read-only everywhere except Docs/debriefs/; recommendations only — it never edits skills, ledgers, or CLAUDE.md.
+description: Use when the scheduled nightly dev-debrief run fires or when explicitly asked for a daily work debrief ("run the dev debrief", "what did I actually do today across projects") — scans ~/.claude/projects transcripts from the last 24h across ALL projects; on days with no coding signals (no Edit/Write/NotebookEdit, no git commit) it skips silently (one skip-log line, no report, no push), otherwise writes Docs/debriefs/YYYY-MM-DD.md in canonical format: redacted per-project what-you-did summaries, skill telemetry with trigger kind + outcome per invocation, missed-trigger findings with cited session evidence, evidence-backed workflow observations, push headline when available. Sundays append the weekly deep section (evidence-cited A–F grades, N/A for zero-opportunity skills, corrections-ledger-compatible recommendations for skill-patcher, coverage gaps). Read-only everywhere except Docs/debriefs/; recommendations only — it never edits skills, ledgers, or CLAUDE.md.
 ---
 
 # Dev Debrief
@@ -21,7 +21,8 @@ The contract in `references/report-format.md` is the product.
 
 ## When to Use
 
-- The scheduled nightly run (crontab line: `references/scan-protocol.md`).
+- The scheduled nightly run (launchd LaunchAgent — install and rationale in
+  `references/scan-protocol.md`; it is deliberately not cron).
 - Explicit requests: "run the dev debrief", "what did I do today across projects",
   "how is the skill portfolio tracking my work".
 
@@ -55,6 +56,22 @@ The contract in `references/report-format.md` is the product.
    zero-relevant-opportunity skills grade **N/A with one line of reasoning**, never F,
    never a made-up middle grade.
 
+## Autonomous run
+
+The production path is a headless `claude -p` LaunchAgent: nobody is watching, nobody can
+answer a question mid-run, and there is no menu of options — the Hard Rules above are the
+decision. Proceed without asking on everything the debrief covers. Before ending the turn,
+check the last paragraph: if it is a plan, a question, or a promise about work not yet done
+("I'll write the report next"), do that work now with tool calls instead. End the turn only
+when the report — or the skip-log line — is on disk.
+
+Audit every claim in the report against a tool result from this run before writing it: the
+session files actually read, the invocations actually found, the evidence actually quoted.
+Report what you can point at. A project whose transcripts could not be read is stated as
+unread, not silently dropped and never counted as zero — **a blocked scan is not a skip
+day**: if the window could not be scanned, say so in the log and write nothing, rather than
+recording a skip that claims there was no work.
+
 ## How to Run
 
 Scan mechanics (window, JSONL shapes, signal detection, classification tables):
@@ -80,8 +97,10 @@ Scan mechanics (window, JSONL shapes, signal detection, classification tables):
    corrections-ledger-compatible entry template (Rule-ID-less, full field set — "close
    enough" breaks `skill-patcher`), coverage-gap analysis naming new-skill candidates
    only for *recurring* unmatched work.
-6. **Push a one-line headline** if a PushNotification capability exists in this
-   context; if not, skip the push silently — never fail the report over it.
+6. **Push a one-line headline** only if this context actually exposes a notification tool
+   (check the available tools, deferred ones included, before assuming one). Headless
+   LaunchAgent runs normally expose none — skip silently then, and never let a missing or
+   failed push delay, degrade, or abort the report.
 
 ## Rationalization Table
 

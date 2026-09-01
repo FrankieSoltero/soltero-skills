@@ -1,20 +1,25 @@
 # Build MCP Server — Reference
 
-Verified against **`@modelcontextprotocol/sdk` v1.29.0** (npm `latest`) on 2026-06-14, sourced from
-the SDK repo at tag `v1.29.0` (`docs/server.md`, `src/examples/server/`). MCP spec: `2025-11-25`.
-**Re-verify** with `npm view @modelcontextprotocol/sdk version` before trusting any signature below.
+Every code block below was verified against **`@modelcontextprotocol/sdk` v1.29.0** on
+**2026-06-14**, sourced from the SDK repo at tag `v1.29.0` (`docs/server.md`,
+`src/examples/server/`). MCP spec: `2025-11-25`. That date is the shelf life of this file:
+**re-verify** with `npm view @modelcontextprotocol/sdk version` before trusting any signature
+here, and treat anything published since as unrepresented.
 
 ## Version landscape (why Rule 0 exists)
 
-| | Stable **v1.29.x** (use this) | **v2.0.0-alpha** (pre-release) |
+Two package families, both published. Run Rule 0's two `npm view` commands to find out which is
+current today — this table describes how they *differ*, not which one to pick:
+
+| | Monolith `@modelcontextprotocol/sdk` | Scoped `@modelcontextprotocol/server` |
 |---|---|---|
-| Package(s) | `@modelcontextprotocol/sdk` (one) | `@modelcontextprotocol/server`, `/node`, `/express` |
+| Package(s) | one package | `@modelcontextprotocol/server`, `/node`, `/express` |
 | Imports | subpaths: `@modelcontextprotocol/sdk/server/mcp.js` | scoped packages |
 | `inputSchema` | **raw shape** `{ x: z.string() }` | `z.object({ x: z.string() })` |
 | Zod | `zod` peer dep; SDK uses `zod/v4` (v3.25+ compatible) | `zod/v4` |
 
-The main-branch README/docs describe the **alpha**. Pin the git tag of your installed version.
-Build resume/production work on **stable v1**, not the alpha.
+The code in the rest of this file is the monolith form. If Rule 0 puts you on the scoped family,
+read that family's docs at its released tag — do not port these snippets by analogy.
 
 ## Install & project shape
 

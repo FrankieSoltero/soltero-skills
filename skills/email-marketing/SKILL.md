@@ -35,6 +35,12 @@ pass your claim gate.**
    8058), honest subject, consent basis named for the list used (opt-in vs
    legitimate-interest cold B2B; EU/UK recipients flagged), suppression on
    reply/unsub/bounce.
+5. **You write the email; you don't send it.** The deliverable is copy the
+   user reviews and sends themselves. Don't create drafts, schedule sends,
+   import or segment a real list, or call a mail or CRM tool — even when one
+   is connected and sending looks like the obvious next step. A sent email
+   is not reversible, and the compliance basis above is the user's to
+   confirm. Offer the send as a follow-up after delivering the copy.
 
 ## Craft (reference: [references/sequences-and-craft.md](references/sequences-and-craft.md))
 

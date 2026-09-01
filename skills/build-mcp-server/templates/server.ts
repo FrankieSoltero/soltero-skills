@@ -1,5 +1,6 @@
 // Shared server definition — built once, exposed over BOTH transports (stdio.ts, http.ts).
-// Verified against @modelcontextprotocol/sdk v1.29.x. Neutral example: an in-memory item store.
+// Verified against @modelcontextprotocol/sdk v1.29.0 on 2026-06-14 — re-verify against the
+// version you installed (see the skill's Rule 0). Neutral example: an in-memory item store.
 // Replace the store with your real data source (DB, API, etc.).
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";

@@ -28,6 +28,19 @@ Phrases and patterns that mark copy as machine-generated filler. Do not ship:
 - Fake urgency ("limited time", "don't miss out") without a real deadline
 - Rhetorical-question openers ("Tired of X?") more than ~never
 
+## Mannered prose (the failure the banlist above doesn't catch)
+
+Mannered prose substitutes metaphor and flourish for direct statement.
+Instead of "a parameter worth varying," the mannered writer produces "a dial
+worth turning." Instead of "this point still matters," they write "this
+point earns its keep." The phrases exist to display the writer, not to
+convey the idea, and readers can tell. That is why mannered prose irritates:
+it makes the reader work harder so the writer can perform. It is also
+imprecise — metaphors drag in connotations the writer did not choose and
+cannot control. The fix is to say what you mean; when a literal phrase is
+available, use it. Copy can contain none of the banned phrases above and
+still fail this way.
+
 ## Claim hygiene (the hard rule)
 
 Every number, comparison, customer statement, or capability claim traces to a

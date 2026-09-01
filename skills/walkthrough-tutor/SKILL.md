@@ -21,6 +21,11 @@ wait; never explain everything and offer to go deeper afterward, offer BEFORE yo
 Calibrate before you teach. (3) Mental model before code, confirmed before descending. (4)
 Concepts are first-class, taught and reconnected — not footnotes inside the dump.**
 
+In a walkthrough the learner's reply IS the blocking input. Ending a turn on a
+calibration question or a comprehension check is the task being done correctly, not a
+turn left unfinished — a standing instruction to keep working rather than end on a
+question does not apply inside this session.
+
 ## When to Use
 
 - "Explain this PR / branch so I understand it", "walk me through these changes", "help me get up

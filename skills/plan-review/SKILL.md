@@ -1,6 +1,6 @@
 ---
 name: plan-review
-description: Use when an implementation/execution plan needs a quality verdict before anyone executes it ("review this plan", "ready to execute?", "grade the implementation plan"), after superpowers:writing-plans produces a plan, before superpowers:executing-plans or subagent-driven-development runs one, or when re-reviewing a revised plan — convenes a 6-dimension grading council (bundled workflow: rubric-anchored scores with plan-quoted evidence, anti-inflation skeptics, deterministic gate) instead of one agent's ungraded read, and enforces: overall ≥85 AND every dimension ≥80 AND zero blocking violations, else BLOCKED with no execution, no "bless the first few tasks", no absorb-as-we-go. Fix→re-review loop (max 3 rounds, re-grading only the dimensions that failed); the fixer never changes the verdict and never re-reviews its own fixes — only a fresh council round can. Small all-mechanical-tier plans get a lite single-reviewer mode instead of the full council. Sibling of soltero-skills:prd-review.
+description: Use when an implementation/execution plan needs a quality verdict before anyone executes it ("review this plan", "ready to execute?", "grade the implementation plan"), after soltero-skills:lean-plans produces a plan, before soltero-skills:lean-sdd runs one, or when re-reviewing a revised plan — convenes a 6-dimension grading council (bundled workflow: rubric-anchored scores with plan-quoted evidence, anti-inflation skeptics, deterministic gate) instead of one agent's ungraded read, and enforces: overall ≥85 AND every dimension ≥80 AND zero blocking violations, else BLOCKED with no execution, no "bless the first few tasks", no absorb-as-we-go. Fix→re-review loop (max 3 rounds, re-grading only the dimensions that failed); the fixer never changes the verdict and never re-reviews its own fixes — only a fresh council round can. Small all-mechanical-tier plans get a lite single-reviewer mode instead of the full council. Sibling of soltero-skills:prd-review.
 ---
 
 # Plan Review Council
@@ -23,8 +23,8 @@ replaces prose verdicts with a scored council and a gate only the council can op
 
 <HARD-GATE>
 A plan that has not PASSED (overall ≥85 AND every dimension ≥80 AND zero
-blocking-severity violations, from an actual council run) must not be executed — not by superpowers:executing-plans, not by
-subagent-driven-development, not by a human "picking up task 1". There is no safe
+blocking-severity violations, from an actual council run) must not be executed — not by
+soltero-skills:lean-sdd, not by any other executor, not by a human "picking up task 1". There is no safe
 subset: severity and task-safety come from the rubric, not from a deadline, a loaded
 sprint board, or who skimmed it. You never green-light on your own read, you never
 adjust or estimate a score, and you never re-review your own fixes.
@@ -33,14 +33,25 @@ adjust or estimate a score, and you never re-review your own fixes.
 ## When to Use / When NOT to Use
 
 - **Use:** any request to review/grade/approve an implementation or execution plan;
-  after superpowers:writing-plans; before superpowers:executing-plans or
-  subagent-driven-development; re-review after revisions.
-- **Don't use:** authoring plans (superpowers:writing-plans), PRDs
+  after soltero-skills:lean-plans; before soltero-skills:lean-sdd; re-review after
+  revisions.
+- **Don't use:** authoring plans (soltero-skills:lean-plans), PRDs
   (soltero-skills:prd-review), code diffs (/code-review), or design docs
-  (superpowers:brainstorming).
+  (soltero-skills:lean-brainstorming).
 
 ## The Loop
 
+0. **Structural pre-pass (deterministic).** If the plan has a `## Task Dependency
+   Table`, run the bundled parser before convening anyone:
+   `node ${CLAUDE_PLUGIN_ROOT}/skills/plan-visualizer/scripts/plan-graph.mjs <plan.md>`
+   (JSON on stdout; exit 1 means blocking findings exist). Pass the `findings` array
+   through to the workflow as `args.structuralFindings`. Cycles, dangling
+   dependencies, interfaces consumed without a declared dependency, same-wave file
+   overlaps, table↔block file drift and missing risk tiers are facts the parser
+   establishes with plan line numbers — the council's job is the judgment the parser
+   cannot do, not re-deriving these by hand (which the plan-visualizer RED baseline
+   records as unreliable: same model, same plan, one agent found both blocking
+   defects and another found none).
 1. **Size gate, then convene.** Before spending a full council, check the plan's own
    risk-tier table: if it lists 5 or fewer tasks AND every task is tier "mechanical",
    run the bundled workflow in **lite mode** instead of the full council:
@@ -80,9 +91,9 @@ adjust or estimate a score, and you never re-review your own fixes.
    need to re-litigate a dimension that already passed clean. A diff-confirm against
    the previous findings is NOT a round — new flaws enter through fixes, and the fix
    author cannot be the checker. Maximum 3 rounds; still BLOCKED → report what blocks
-   and send the plan back to superpowers:writing-plans.
+   and send the plan back to soltero-skills:lean-plans.
 6. **On PASS:** record the score and hand off to execution
-   (superpowers:executing-plans or subagent-driven-development).
+   (soltero-skills:lean-sdd).
 
 ## Rationalization Table
 
@@ -106,7 +117,7 @@ adjust or estimate a score, and you never re-review your own fixes.
 - Your proposed re-check reviews the diff or the findings list instead of the whole
   plan.
 - You answered an owner question yourself to keep the round moving.
-- Round 4. (Stop; back to superpowers:writing-plans.)
+- Round 4. (Stop; back to soltero-skills:lean-plans.)
 
 ## Bundled assets
 

@@ -3,6 +3,43 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.22.0] - 2026-09-01
+### Changed
+- **Fable 5.1 prompt audit applied** across the library (report:
+  `docs/audits/2026-09-01-fable-5.1-skill-audit.md`; per-cluster diffs under
+  `docs/audits/2026-09-01-fable-5.1/`). 32 High/Medium findings addressed, in four groups:
+  - *Autonomous-run guidance added* to every headless or dispatched prompt surface —
+    lean-sdd controller and implementer prompt (scope/test-sprawl, targeted-edit,
+    don't-end-on-a-promise), dev-debrief, session-miner, skill-gardener, memory-gardener,
+    skill-patcher, design-forge verifiers, audit-swarm and transcript-reader report agents
+    (report path must be confirmed on disk; numeric summary caps removed).
+  - *Superpowers fossils removed*: the session-start hook no longer injects the
+    "replaces superpowers" paragraph; plan-review / prd-review / writing-prds /
+    lean-plans / lean-brainstorming route to lean-* skills instead of the disabled plugin.
+  - *Version rot fixed*: build-mcp-server no longer calls `@modelcontextprotocol/server`
+    v2 an unreleased alpha (GA 2026-07-28) and checks both package families;
+    scaffold-frontend looks up the Expo SDK major instead of pinning `sdk-56`, and
+    recommends Magic UI (license-verified) instead of ReactBits (rejected by design-forge's
+    verifier, Commons Clause); Astro/Node baseline de-pinned.
+  - *Harness fixes*: agent-handoff's context-watch hook no longer renders a token-percentage
+    countdown (a documented Fable 5.1 context-anxiety trigger) and caps itself at two
+    reminders per session; its reference names the real compaction hook events.
+    plan-review and prd-review enforce the 3-round cap in code (`MAX_ROUNDS`), use a
+    symmetric skeptic frame with an evidence floor, restate the rubric bands two-sidedly,
+    and plan-review runs plan-visualizer's deterministic parser as a structural pre-pass.
+  - Also: lean-worktrees loads the deferred `EnterWorktree` via ToolSearch before falling
+    back to git; capture-lesson gains dedupe/update/retract rules; content-adapter no longer
+    asserts character counts it cannot compute; email-marketing gains a "write, don't send"
+    gate; trend-research gains name-verification for low-effort search; content-marketing
+    routes multi-platform work to the content-adapter agent and names mannered prose;
+    evidence-gate cost figures are dated; CONTRIBUTING requires the baseline model + date
+    in RED records.
+- Not changed (flagged for the owner in the audit): skeptic `effort: 'low'` in three
+  workflows; prd-review's gate lacking the blocking-violation term its selector uses; the
+  "fable is never dispatched" cost policy pending a low-effort Fable re-baseline.
+- Follow-ups: build-mcp-server needs an authored section for the scoped v2 SDK family; the
+  agent-playbook is six weeks stale with no Fable 5.1 content (update sweep pending).
+
 ## [0.21.0] - 2026-08-20
 ### Added
 - **plan-visualizer** skill: read-only visualization of lean-plans plans. Bundled

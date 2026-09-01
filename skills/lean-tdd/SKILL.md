@@ -1,6 +1,6 @@
 ---
 name: lean-tdd
-description: Use when implementing any feature or bugfix, before writing implementation code — the failing-test-first discipline: no production code without a test you watched fail, code written before its test gets deleted (stashing or keeping it "as reference" counts as keeping it), and a test that passes on its first run is distrusted until proven able to fail. Lean variant of superpowers:test-driven-development; the standing discipline for lean-sdd implementers, fed by lean-plans behavior tables.
+description: Use when implementing any feature or bugfix, before writing implementation code — the failing-test-first discipline: no production code without a test you watched fail, code written before its test gets deleted (stashing or keeping it "as reference" counts as keeping it), and a test that passes on its first run is distrusted until proven able to fail. Lean variant of the test-driven-development discipline; the standing discipline for lean-sdd implementers, fed by lean-plans behavior tables.
 ---
 
 # Lean TDD

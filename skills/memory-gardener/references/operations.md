@@ -71,8 +71,10 @@ Handling verdicts:
   skeptic's reason to `Docs/memory-garden-queue.md` for a human or a later pass).
 - No response / cannot dispatch → treat as REJECT for every pending destructive edit.
 
-Never batch multiple edits into one dispatch (a single verdict over a batch hides
-per-edit failures). If `soltero-skills:memory-skeptic` is not a registered agent type in
+Never batch multiple edits into one dispatch — a single verdict over a batch hides per-edit
+failures. Separate dispatches, however, go out together: send them in one message so the
+skeptics run concurrently and collect the verdicts as they land, rather than waiting on each
+one in turn. If `soltero-skills:memory-skeptic` is not a registered agent type in
 the current session (e.g. running from a repo checkout rather than the installed
 plugin), dispatch a fresh subagent whose prompt begins with the **full contents of
 `agents/memory-skeptic.md`** followed by the edit block — the pinned definition travels

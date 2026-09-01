@@ -32,13 +32,6 @@ Standing disciplines and procedures:
 - Branch complete, needs integrating → `soltero-skills:lean-finishing`
 - Authoring/editing skills in the soltero-skills repo → `soltero-skills:creating-a-skill`
 
-This lean suite fully replaces the superpowers plugin's pipeline (brainstorming,
-writing-plans, executing-plans, subagent-driven-development, systematic-debugging,
-test-driven-development, verification-before-completion, using-git-worktrees,
-finishing-a-development-branch, requesting-code-review's reviewer). If
-superpowers is still installed, prefer the lean skills wherever both claim a
-flow.
-
 ## Red Flags
 
 "This is too simple for the pipeline", "I'll just start coding", "they're in a

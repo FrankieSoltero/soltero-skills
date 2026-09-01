@@ -37,7 +37,8 @@ Library: <path>   Skills audited: N   Gates run: <e.g. npm run lint:fm (exit 1)>
 Config: verify-horizon-days=180 (default — unvalidated), spot-check-sample=5 (…), …
 
 ## Summary
-<2–4 lines: counts per risk class, the single most urgent item>
+<counts per risk class, then the single most urgent item and why it is urgent — short
+enough that a maintainer gets the picture before reading the findings>
 
 ## Findings
 
