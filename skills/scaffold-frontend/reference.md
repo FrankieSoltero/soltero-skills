@@ -6,7 +6,7 @@ version-sensitive lines against the linked docs before a release.
 ## Table of contents
 1. Framework tradeoffs
 2. Scaffold commands (per framework)
-3. UI layer — web (Tailwind v4 + shadcn/ui + ReactBits)
+3. UI layer — web (Tailwind v4 + shadcn/ui + Magic UI)
 4. UI layer — mobile (NativeWind + react-native-reusables)
 5. Standards layer notes (lint, headers, env, tests, CI)
 6. Current gotchas
@@ -22,7 +22,9 @@ version-sensitive lines against the linked docs before a release.
 | **Astro** | Content/marketing/docs; ships ~zero JS by default; islands for interactivity | A highly interactive app — you'll fight the islands model |
 | **Expo / React Native** | Native iOS + Android from one codebase | Web-only — use a web route instead |
 
-Node baselines: Vite 8 needs Node 20.19+ / 22.12+; Astro 6 needs Node 22.12+ (no odd versions); Next 16 and Expo SDK 56 target current LTS.
+Node baselines drift with each framework major, and the majors move faster than this file. All
+four routes currently want an even-numbered active LTS (Node 22+); Astro additionally rejects odd
+Node versions outright. Confirm against the installed major's release notes before pinning CI.
 
 ## 2. Scaffold commands (per framework)
 
@@ -38,12 +40,13 @@ npm create vite@latest my-app -- --template react-ts
 npm create astro@latest my-app
 cd my-app && npx astro add react tailwind     # @tailwindcss/vite (v4); deprecates @astrojs/tailwind
 
-# Expo (TS + Expo Router preconfigured). Pin the SDK during transitions or you may get an older one.
-npx create-expo-app@latest my-app --template default@sdk-56
+# Expo (TS + Expo Router preconfigured). Look up the current SDK major, then pin it:
+npm view expo version                  # e.g. 57.x -> use sdk-57
+npx create-expo-app@latest my-app --template default@sdk-<major>
 ```
 Docs: nextjs.org/docs/app/api-reference/cli/create-next-app · vite.dev/guide · docs.astro.build/en/install-and-setup · docs.expo.dev/get-started/create-a-project
 
-## 3. UI layer — web (Tailwind v4 + shadcn/ui + ReactBits)
+## 3. UI layer — web (Tailwind v4 + shadcn/ui + Magic UI)
 
 **Tailwind v4 — different package per build tool:**
 ```bash
@@ -72,13 +75,15 @@ npx shadcn@latest add button  # or: add (interactive) / add -a (all) / --overwri
 Prereq for **Vite/Astro**: the `@/*` → `./src` alias must exist in BOTH the bundler config and
 `tsconfig(.app).json` *before* `init`, or alias resolution fails. (Next sets this up already.)
 
-**ReactBits** (animated components — NOT an npm dependency; add per component):
+**Magic UI** (animated components — NOT an npm dependency; add per component). MIT, verified
+2026-07-21 from the project's LICENSE file; see `design-forge/references/catalog.md`:
 ```bash
-# Variant suffix matches your stack: JS-CSS | JS-TW | TS-CSS | TS-TW (TW requires Tailwind installed)
-npx shadcn@latest add @react-bits/BlurText-TS-TW
-#   or: npx shadcn@latest add "https://reactbits.dev/r/BlurText-TS-TW.json"
-#   components.json registry: "registries": { "@react-bits": "https://reactbits.dev/r/{name}.json" }
+npx shadcn@latest add "https://magicui.design/r/<component>.json"
 ```
+> **Not ReactBits.** design-forge's license verifier fetched its LICENSE.md on 2026-07-21 and
+> rejected it: "MIT + Commons Clause License Condition v1.0", GitHub SPDX `NOASSERTION`, not
+> OSI-approved. Copying its component source counts as an install of that source. Any other
+> animation library needs its own LICENSE-file verification before it enters a repo.
 
 ## 4. UI layer — mobile (NativeWind + react-native-reusables)
 
@@ -100,7 +105,7 @@ npx @react-native-reusables/cli@latest init          # -t minimal | minimal-uniw
 npx @react-native-reusables/cli@latest add button    # add (interactive) / add -a / --overwrite
 npx @react-native-reusables/cli@latest doctor        # diagnose an existing setup
 ```
-Docs: tailwindcss.com · ui.shadcn.com · reactbits.dev · nativewind.dev · reactnativereusables.com
+Docs: tailwindcss.com · ui.shadcn.com · magicui.design · nativewind.dev · reactnativereusables.com
 
 ## 5. Standards layer notes
 
@@ -138,5 +143,5 @@ Docs: tailwindcss.com · ui.shadcn.com · reactbits.dev · nativewind.dev · rea
   gray-200→currentColor, `outline-none`→`outline-hidden`, `bg-[--x]`→`bg-(--x)`.
 - React Native (NativeWind/RNR) is Tailwind **v3** — pin `tailwindcss@^3.4.17`.
 - `npm create vite` needs the standalone `--` before flags; template is exactly `react-ts`.
-- Pin Expo SDK (`--template default@sdk-56`) during transition windows.
+- Pin the Expo SDK to the major `npm view expo version` reports — never to a number copied from here.
 - shadcn init on Vite/Astro needs the `@/*` alias configured first, in both bundler + tsconfig.

@@ -54,7 +54,8 @@ reference by name only — no file dependencies):
 
 ## Cost model
 
-Measured expectation: ~1.2x token/time overhead versus a plain retry loop; up to ~3.8x
-versus fully ungated operation. Budget for it at lifecycle gates; keep everything else
+Measured 2026-07 against Sonnet-class agents, not re-baselined since: ~1.2x token/time
+overhead versus a plain retry loop; up to ~3.8x versus fully ungated operation. Treat them
+as an order of magnitude. Budget for it at lifecycle gates; keep everything else
 advisory-only. If you find yourself gating more than a handful of claims per ticket,
 the scope is wrong, not the budget.

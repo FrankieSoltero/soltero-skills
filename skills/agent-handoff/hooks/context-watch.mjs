@@ -41,28 +41,40 @@ const tokens = Math.floor(statSync(transcript).size / 4);
 const pct = Math.round((tokens / WINDOW) * 100);
 if (pct < THRESHOLD) process.exit(0);
 
-// De-dup: only remind once per 10% band per session, so it nudges instead of nagging every turn.
+// De-dup: once per 10% band, and never more than MAX_REMINDERS times per session. The cap
+// matters when HANDOFF_CONTEXT_WINDOW is smaller than the session's real window (e.g. the
+// 200000 default on a 1M-context model): pct then runs far past 100, every band clears the
+// check, and the same instruction gets re-injected every few turns.
+const MAX_REMINDERS = 2;
 const band = Math.floor(pct / 10);
 const marker = join(tmpdir(), `handoff-notify-${sessionId}.json`);
 let last = -1;
+let sent = 0;
 if (existsSync(marker)) {
   try {
-    last = JSON.parse(readFileSync(marker, "utf8")).band ?? -1;
+    const prev = JSON.parse(readFileSync(marker, "utf8"));
+    last = prev.band ?? -1;
+    sent = prev.sent ?? 0;
   } catch {
     /* ignore */
   }
 }
-if (band <= last) process.exit(0);
+if (band <= last || sent >= MAX_REMINDERS) process.exit(0);
 try {
-  writeFileSync(marker, JSON.stringify({ band }));
+  writeFileSync(marker, JSON.stringify({ band, sent: sent + 1 }));
 } catch {
   /* best effort */
 }
 
+// The percentage stays internal (threshold + de-dup band). Rendering a remaining-budget
+// count into the model's context is a known trigger for premature wrap-up, so the reminder
+// says what to do and explicitly rules out stopping.
 const msg =
-  `⚠️ Context is at ~${pct}% (~${Math.round(tokens / 1000)}k est. tokens; threshold ${THRESHOLD}%). ` +
-  `Before continuing, run the agent-handoff skill to write/refresh HANDOFF.md so this work can ` +
-  `continue cleanly in a fresh session. If HANDOFF.md already reflects the latest state, say so and proceed.`;
+  `This session has passed the configured handoff checkpoint. You have ample context ` +
+  `remaining: do not stop, summarize, wrap up early, or suggest a new session on account of ` +
+  `context limits. At the next natural break, run the agent-handoff skill to write or refresh ` +
+  `HANDOFF.md so this work stays resumable, then carry on with the task. If HANDOFF.md already ` +
+  `reflects the latest state, say so and keep going.`;
 
 process.stdout.write(
   JSON.stringify({

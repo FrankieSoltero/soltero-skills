@@ -17,6 +17,12 @@ memory recitation masquerades as research, and for the pressure cases
 1. **Search first when you can.** If WebSearch/WebFetch are available, use
    them — verify premises, fetch numbers, triangulate (≥2 independent
    sources before calling anything a trend). List sources with dates.
+   Recognizing a company, product, round, or price is not the same as
+   knowing its current state: search the name as the user wrote it in at
+   least one query, alongside any reformulation, even when you already have
+   background on it. Partial background is exactly what makes an
+   out-of-date answer sound authoritative — familiarity is not a reason to
+   skip the search.
 2. **Degrade honestly when you can't.** No web access → the ENTIRE answer is
    memory-tier: say so at the top, date it to training, put every specific
    number as [VERIFY: what to look up, where — analyst reports, funding

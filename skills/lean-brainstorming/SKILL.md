@@ -1,6 +1,6 @@
 ---
 name: lean-brainstorming
-description: Use when someone asks to build/add/change functionality and the requirements or design haven't been agreed yet — especially under "just build it" / "keep it quick" / "I've got 15 minutes" pressure — and the fast pipeline is wanted. Batches 2–4 blocking questions in ONE round, presents the complete design in ONE message, and enforces a hard no-implementation-before-approval gate with a single combined design+spec approval pass (2 round trips instead of 8+). Lean variant of superpowers:brainstorming; writes the spec file and hands off to soltero-skills:lean-plans. Not for bug fixes, pure questions, or already-approved designs.
+description: Use when someone asks to build/add/change functionality and the requirements or design haven't been agreed yet — especially under "just build it" / "keep it quick" / "I've got 15 minutes" pressure — and the fast pipeline is wanted. Batches 2–4 blocking questions in ONE round, presents the complete design in ONE message, and enforces a hard no-implementation-before-approval gate with a single combined design+spec approval pass (2 round trips instead of 8+). Lean, batched-question variant of the brainstorming step; writes the spec file and hands off to soltero-skills:lean-plans. Not for bug fixes, pure questions, or already-approved designs.
 ---
 
 # Lean Brainstorming
@@ -53,8 +53,7 @@ design skipped:** if an answer would change what you build, it blocks.
    path and ONE ask — "Approve, or tell me what to change." Design approval
    and spec-file review are the same pass. Then STOP and wait. Approval must
    be an explicit reply; silence or "veto async if wrong" is not approval.
-5. **Hand off:** on approval, invoke soltero-skills:lean-plans (or
-   superpowers:writing-plans if the lean pipeline isn't wanted). Never jump
+5. **Hand off:** on approval, invoke soltero-skills:lean-plans. Never jump
    from approval straight into implementation code.
 
 ## Rationalization Table
@@ -82,8 +81,8 @@ design skipped:** if an answer would change what you build, it blocks.
 - Bug fixes → soltero-skills:lean-debugging. Pure questions → just answer.
 - Requirements already agreed/approved → soltero-skills:lean-plans.
 - Full product-level discovery → soltero-skills:writing-prds first.
-- User explicitly wants deep one-question-at-a-time exploration →
-  superpowers:brainstorming (if that plugin is installed).
+- User explicitly wants deep one-question-at-a-time exploration → ask one
+  question per message and skip the batching, keeping the approval gate.
 
 ---
 

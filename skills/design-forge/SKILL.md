@@ -112,7 +112,12 @@ When apply mode needs ONE source that isn't cataloged: dispatch an independent
 verifier subagent on sonnet, named explicitly — the same tier the sweep workflow
 uses (never self-verify — you found it, so you don't judge it) — that
 fetches the actual LICENSE file and returns SPDX id + LICENSE file URL + health, or a
-rejection. Write the outcome into `catalog.md` (if verified) AND `source-log.md`
+rejection. Give it the same operating conditions the workflow's verifiers get: it runs
+autonomously with nobody to ask, every field it returns must trace to a page it actually
+retrieved this session (recognizing the project name is not evidence), and it must not end
+its turn on "I'll fetch the LICENSE next" — make the call, then answer. A verifier that
+returns without a fetched LICENSE URL is a rejection, not a pending result.
+Write the outcome into `catalog.md` (if verified) AND `source-log.md`
 (either way, disposition + evidence) and commit — a correct verdict recorded in an ad
 hoc file, or left uncommitted, is a verdict the next session re-litigates from the
 same marketing page. Rejected means rejected: preview-only or a verified alternative.

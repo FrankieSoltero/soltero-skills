@@ -90,9 +90,12 @@ waits; that is what fail-closed means.
 
 ## Cost (honest)
 
-Expect roughly ~1.2x token/time overhead versus a plain retry loop and up to ~3.8x
-versus fully ungated operation. That is the price of machine-checkable lifecycle state;
-pay it only at lifecycle gates (see When NOT to Use).
+The gate costs real tokens and wall-clock: a scripted run, a stored output, and a
+re-verification on top of the work itself. The figures behind that — roughly 1.2x a plain
+retry loop, up to 3.8x fully ungated — were measured in July 2026 against Sonnet-class
+agents and have not been re-baselined since, so treat them as an order of magnitude rather
+than a budget. It is the price of machine-checkable lifecycle state; pay it only at
+lifecycle gates (see When NOT to Use).
 
 ## Rationalization table
 

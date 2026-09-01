@@ -85,6 +85,20 @@ unverified; everything lands in one standard report the human acts on.
    and template: `references/output-template.md`. Then relay the top findings in chat
    and point at the file. Fix nothing.
 
+## Unattended runs (scheduled / cloud routine)
+
+This skill runs on a monthly cloud routine with nobody watching. The user cannot answer
+questions mid-run, so "shall I audit the reference docs too?" or "want the report at a
+different path?" just ends the run with nothing written. Make the routine judgment calls
+yourself and proceed: the process in How to Run is the scope, and the run is complete when
+`Docs/skill-garden-report-YYYY-MM-DD.md` exists on disk. Before ending your turn, read your
+last paragraph — if it is a plan, a question, or a promise about work you have not done
+("I'll check those URLs next"), do that work now with tool calls instead of announcing it.
+
+Every count and verdict in the closing summary must trace to a tool result from this run.
+A gate you could not run is reported as not run, not as clean; a claim you cannot point at
+evidence for goes in the `Unverified` section.
+
 ## Freshness metadata (audited, not applied)
 
 The gardener audits a lightweight convention — `last-verified: YYYY-MM-DD` in doc

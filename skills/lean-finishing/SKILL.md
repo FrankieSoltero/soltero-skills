@@ -1,6 +1,6 @@
 ---
 name: lean-finishing
-description: Use when implementation is complete and a feature branch needs integrating — after lean-sdd's final review or any finished work. Fresh full-suite run on the exact tree first, then the integration menu (merge locally / push + PR / keep) unless the user already explicitly delegated the choice; discard only on the typed word `discard`; protected mains (PR-only, required checks, squash-only) get routed through a PR instead of force-pushed. Lean variant of superpowers:finishing-a-development-branch.
+description: Use when implementation is complete and a feature branch needs integrating — after lean-sdd's final review or any finished work. Fresh full-suite run on the exact tree first, then the integration menu (merge locally / push + PR / keep) unless the user already explicitly delegated the choice; discard only on the typed word `discard`; protected mains (PR-only, required checks, squash-only) get routed through a PR instead of force-pushed. Lean variant of the finish-a-development-branch step.
 ---
 
 # Lean Finishing

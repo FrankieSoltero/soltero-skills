@@ -45,5 +45,5 @@ Blocking questions live here until answered, each with its owner. Answered ones
 move up into the doc and get a one-line decision entry (date, decider, choice).
 
 ## 9. Out of the PRD's hands
-Explicit pointer: technical design → superpowers:brainstorming, after approval.
+Explicit pointer: technical design → soltero-skills:lean-brainstorming, after approval.
 ```

@@ -47,7 +47,15 @@ scenarios are fine when framed as hypothetical.
    [references/platform-constraints.md](references/platform-constraints.md)
    for every platform-bound artifact. A "Twitter version" you never counted
    is not a Twitter version.
-5. **Deliver with the contract** (required, per artifact):
+5. **Fan out when there is more than one platform.** Once the source
+   artifact and its claims table exist, dispatch one
+   `soltero-skills:content-adapter` subagent per target platform and keep
+   working while they run. Each gets the approved artifact, its claims
+   table, that platform's constraint row, and the voice rules; each may drop
+   claims and may not add one. A single platform, or an artifact whose
+   claims table isn't settled yet, stays inline — the adapter blocks without
+   a claims table by design.
+6. **Deliver with the contract** (required, per artifact):
 
 ```
 Claims: <claim> ← <source|PLACEHOLDER|cut>   (one line per claim; "none" ok)
@@ -62,7 +70,7 @@ Open: <placeholders the user must fill before publishing>
 | "It's obviously implied — self-hostable means nothing phones home" | Inference isn't fact. Trace it or bracket it. |
 | "'Forever/no card' is standard free-tier language" | It's a policy commitment the founder never made. CONFIRM-bracket it. |
 | "The case study is just a template" | A fixed fictional story with a fill-in name becomes a lie the moment it's filled. Placeholder the story itself. |
-| "I kept it honest — no need for the claims table" | The table is how invented specifics get CAUGHT. Six of nine baseline runs shipped one while writing honestly. |
+| "I kept it honest — no need for the claims table" | The table is how invented specifics get CAUGHT. Honest intent is exactly the state in which they ship unnoticed. |
 | "Rough char count is fine" | Count exactly. The baseline's 'Twitter version' was 3× over the limit. |
 
 ## When NOT to Use
@@ -70,6 +78,9 @@ Open: <placeholders the user must fill before publishing>
 Search-specific optimization → soltero-skills:seo-aeo. Email/sequences →
 soltero-skills:email-marketing. Internal docs, README prose → just write.
 Product claims verification for legal review → flag for counsel, don't rule.
+Publishing is out of scope: deliver the copy and let the user ship it — no
+posting, scheduling, or sending it anywhere, and no publishing it as a page
+or artifact unless the user asked for one.
 
 ---
 

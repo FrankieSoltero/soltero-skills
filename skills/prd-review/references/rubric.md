@@ -74,5 +74,5 @@ checklist item explicitly.
 
 - **PASS:** weighted overall ≥95 AND every dimension ≥80.
 - **BLOCKED:** anything else. A BLOCKED PRD must not proceed to design
-  (superpowers:brainstorming), planning, or implementation — no exceptions for
+  (soltero-skills:lean-brainstorming), planning, or implementation — no exceptions for
   deadlines, sunk contractor costs, or prior informal sign-offs.

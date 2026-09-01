@@ -208,7 +208,10 @@ const evaluated = await pipeline(
         `independent sources or rigorous benchmark results you can point at. Return ` +
         `survives=false for vacuous, unsupported, or redundant tactics. If it survives, assign ` +
         `the final tier — WHEN UNCERTAIN, DEMOTE (Watch, not Promising; Promising, not Proven).`,
-        { label: `verify:${t.topic}`.slice(0, 60), phase: 'Verify', schema: VERDICT_SCHEMA, model: 'sonnet', effort: 'low' }
+        // Default effort, deliberately: this agent has to corroborate claims about models,
+        // harnesses and dev tools by searching, and low effort answers such questions from
+        // memory instead of calling the search tool.
+        { label: `verify:${t.topic}`.slice(0, 60), phase: 'Verify', schema: VERDICT_SCHEMA, model: 'sonnet' }
       ).then(v => ({ tactic: t, verdict: v }))
     ))
     return { read, verdicts: verdicts.filter(Boolean) }

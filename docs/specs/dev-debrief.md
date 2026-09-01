@@ -44,8 +44,9 @@ to `Docs/debriefs/skip-log.md` and exit. Quiet days stay quiet.
    portfolio-vs-work signal.
 4. **Workflow observations** — at most 2, only with concrete transcript
    evidence; no generic advice.
-5. Push notification with a one-line headline (PushNotification when run in a
-   context that has it; else skip the push, never fail the report).
+5. Push notification with a one-line headline (only when the running context actually
+   exposes a notification tool — check the available tools, deferred ones included;
+   headless runs normally have none, so skip the push, never fail the report).
 
 ## Weekly deep (Sundays, same run, appended section)
 

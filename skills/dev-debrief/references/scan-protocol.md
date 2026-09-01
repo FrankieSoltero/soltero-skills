@@ -12,9 +12,10 @@
 - **Installed portfolio:** the report repo's `skills/*/SKILL.md` frontmatter
   (`name` + `description`), plus plugin skills visible in the session's
   available-skills listing when present.
-- Large corpora may be scanned by cheap read-only subagents (one per project); the
-  orchestrating run merges their extractions. Subagents inherit every hard rule —
-  read-only, no writes anywhere.
+- Delegate the per-project scans to read-only subagents on a cheap model — one per
+  project — and merge their extractions in the orchestrating run. That is the default
+  past a couple of projects; keep merging what has come back rather than waiting on each
+  subagent in turn. Subagents inherit every hard rule — read-only, no writes anywhere.
 
 ## JSONL shapes
 
@@ -95,10 +96,11 @@ finished report with the checklist's grep pass (`Bearer `, `sk_`, `ghp_`, `AKIA`
 
 ## Push notification
 
-After the report is written (never before): if a PushNotification capability exists in
-the running context, send one line — `Dev debrief YYYY-MM-DD: <n> projects, <m> skill
-invocations, <k> missed triggers`. If the capability is absent or the send fails, skip
-silently. The push never gates, delays, or fails the report; skip days push nothing.
+After the report is written (never before): if the running context exposes a notification
+tool — check the actual available tools, deferred ones included, rather than assuming one
+exists — send one line: `Dev debrief YYYY-MM-DD: <n> projects, <m> skill invocations, <k>
+missed triggers`. Headless runs normally expose none; skip silently then, as on a failed
+send. The push never gates, delays, or fails the report; skip days push nothing.
 
 ## Scheduling (documented here; installed at integration time, never by this skill)
 

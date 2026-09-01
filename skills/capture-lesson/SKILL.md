@@ -36,6 +36,13 @@ node ${CLAUDE_SKILL_DIR}/scripts/append-lesson.mjs \
 
 If the lesson warrants a regression test, scaffold it now (don't defer) — see `reference.md`.
 
+This file is read by future sessions, so keep it worth reading. Before appending, skim the
+existing entries: if one already covers this root cause, edit that entry in place instead of
+adding a near-duplicate, and note the new occurrence there. Don't record what the repo or the
+commit history already states plainly — the entry earns its place by carrying the lesson, not
+the event. If an entry is later proven wrong, delete it rather than leaving it to teach the
+next session the wrong thing.
+
 ## Red Flags — STOP
 
 | Thought | Reality |

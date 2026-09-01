@@ -23,7 +23,7 @@ only the council can open.
 
 <HARD-GATE>
 A PRD that has not PASSED (overall ≥95 AND every dimension ≥80, from an actual council
-run) must not proceed to design (superpowers:brainstorming), planning, implementation,
+run) must not proceed to design (soltero-skills:lean-brainstorming), planning, implementation,
 or "just the safe parts in parallel." Deadlines, contractor retainers, prior informal
 sign-offs, and "we'll fix in flight" do not open the gate. Only a fresh council round
 does. You never green-light a PRD on your own read, and you NEVER change or estimate a
@@ -35,7 +35,7 @@ score yourself.
 - **Use:** any request to review/grade/approve a PRD; step 8 of
   soltero-skills:writing-prds; re-review after revisions.
 - **Don't use:** reviewing code diffs (/code-review), design docs
-  (superpowers:brainstorming owns those), or writing PRD content
+  (soltero-skills:lean-brainstorming owns those), or writing PRD content
   (soltero-skills:writing-prds and its children).
 
 ## The Loop
@@ -67,7 +67,7 @@ score yourself.
    blocking and stop — the PRD goes back to soltero-skills:writing-prds, not onward to
    design.
 5. **On PASS:** record the score in the report and hand back to the writing-prds flow
-   (user review gate → superpowers:brainstorming).
+   (user review gate → soltero-skills:lean-brainstorming).
 
 ## Rationalization Table
 

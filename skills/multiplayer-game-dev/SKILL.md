@@ -8,8 +8,9 @@ description: Use when building or reviewing real-time multiplayer game features 
 ## Overview
 
 Netcode judgment is strong when the problem is in view; what slips is the
-STANDING discipline — s1-style features ship with zero latency testing when
-nothing in the ask smells broken. This skill injects the patterns with
+STANDING discipline — a feature that looks routine (a shared timer, a tap race,
+a score sync) ships with zero latency or clock-skew testing because nothing in the
+ask smelled broken. This skill injects the patterns with
 numbers ([references/netcode.md](references/netcode.md) — read it before
 designing) and makes the gates unconditional.
 

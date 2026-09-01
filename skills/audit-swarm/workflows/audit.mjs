@@ -231,7 +231,10 @@ const report = await agent(
   `appears in the data below, mask it in the report (keep the name, file:line, and key type). ` +
   `Data follows as JSON.\n\nCONFIRMED:\n${JSON.stringify(confirmed, null, 2)}\n\nREFUTED:\n` +
   `${JSON.stringify(refuted, null, 2)}\n\nINVENTORY:\n${JSON.stringify(inv, null, 2)}\n\n` +
-  `After writing the file, return the report path and a 5-line-max summary of the top findings.`,
+  `After writing the file, read it back to confirm it exists and contains every section, ` +
+  `then return its path and a summary of the top findings — as long as it needs to be for ` +
+  `a reader who sees only that summary, and no longer. Never return a path you have not ` +
+  `confirmed on disk; if the write failed, say so instead of returning a path.`,
   { label: 'synthesize', phase: 'Report', schema: REPORT_SCHEMA, model: 'opus' }
 )
 

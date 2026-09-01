@@ -11,9 +11,8 @@ Given vague goals ("better UX", "more engagement") and a deadline, the observed 
 is confident fabrication: precise targets ("90% within 7 days", "40% WAU/MAU"), owners
 ("Product Analytics"), and instrumentation (funnels, surveys, ticket tagging) invented
 wholesale and presented as fact — across a sprawl of a dozen-plus metrics so success is
-never falsifiable. Notably, the default resists fabrication when someone *names* the trap
-("just make up numbers"); it fails on the plain everyday ask. This skill applies the same
-discipline to the everyday ask.
+never falsifiable. The rules below apply to the plain, everyday ask, where nobody has
+named the trap and nothing in the request signals that the numbers are being invented.
 
 ## The Rules
 

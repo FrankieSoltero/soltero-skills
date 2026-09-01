@@ -1,8 +1,7 @@
 # [Feature Name] Implementation Plan
 
-> **For executors:** execute with soltero-skills:lean-sdd (or
-> superpowers:subagent-driven-development). The Task Dependency Table below is
-> the scheduling and review-depth contract.
+> **For executors:** execute with soltero-skills:lean-sdd. The Task Dependency
+> Table below is the scheduling and review-depth contract.
 
 **Goal:** [one sentence]
 

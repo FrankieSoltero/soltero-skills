@@ -71,6 +71,20 @@ convenience never do.
 5. **Never patch your own SKILL.md in the same PR that patches others.**
    Self-modification ships as a separate PR titled with `[self-modification]`.
 
+## Unattended runs (scheduled / cloud routine)
+
+This pass runs on a monthly cloud routine with nobody watching. Nobody will answer "should
+I patch this cluster?" mid-run, so apply the step-3 gate yourself and carry through to the
+branch and the PR rather than stopping to ask. Before ending your turn, read your last
+paragraph — if it describes a PR you intend to open or edits you intend to make, make them
+now with tool calls; a turn that ends on "I'll open the PR next" leaves the pass undone.
+
+The open PR is the finish line, not a blocker. An unreviewed PR sitting there is the
+expected end state of an unattended run, never a reason to merge, to schedule a merge, or
+to write a merge plan into the description (Hard Rule 1). Every claim in the closing
+summary — branch created, commits made, PR opened, clusters routed back — must trace to a
+tool result from this run.
+
 ## Rationalization Table
 
 | Excuse | Reality |

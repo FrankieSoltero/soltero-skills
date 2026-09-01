@@ -5,7 +5,9 @@ All skills are authored with the `creating-a-skill` skill — test-driven docume
 ## The loop
 1. Spec → `docs/specs/<skill>.md`.
 2. RED → 3 pressure scenarios in `tests/scenarios/<skill>/`; run a fresh subagent without the
-   skill and record the baseline failure.
+   skill and record the baseline failure. Record the model identifier and the date at the top of
+   `RED-baseline.md` — a baseline is a per-model fact, and "the baseline already does X" claims in
+   a SKILL.md are only re-checkable if a later reader knows which model was measured, and when.
 3. GREEN → minimal `skills/<skill>/SKILL.md` (+ optional `reference.md`, `scripts/`).
 4. Verify → re-run scenarios with the skill; confirm compliance.
 5. REFACTOR → close loopholes; re-verify.

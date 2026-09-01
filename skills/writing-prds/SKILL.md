@@ -1,6 +1,6 @@
 ---
 name: writing-prds
-description: Use when asked for a PRD, requirements doc, or product spec, or when a raw product idea needs requirements before any design or code ("we should build…", "write up the requirements for…") — turns the idea into a PRD through collaborative dialogue instead of one-shotting a document full of invented decisions. Asks one question at a time, makes owner decisions blocking (no assumption-flag-and-proceed), forces decomposition of multi-subsystem bundles, builds the PRD section by section with approval, and delegates stories/scope/metrics to its child skills (prd-user-stories, prd-scoping, prd-success-metrics). Hard gate — no design, tech-stack, or implementation work until the PRD is approved. Sits upstream of superpowers:brainstorming (PRD = what and why; brainstorming = technical design = how).
+description: Use when asked for a PRD, requirements doc, or product spec, or when a raw product idea needs requirements before any design or code ("we should build…", "write up the requirements for…") — turns the idea into a PRD through collaborative dialogue instead of one-shotting a document full of invented decisions. Asks one question at a time, makes owner decisions blocking (no assumption-flag-and-proceed), forces decomposition of multi-subsystem bundles, builds the PRD section by section with approval, and delegates stories/scope/metrics to its child skills (prd-user-stories, prd-scoping, prd-success-metrics). Hard gate — no design, tech-stack, or implementation work until the PRD is approved. Sits upstream of soltero-skills:lean-brainstorming (PRD = what and why; brainstorming = technical design = how).
 ---
 
 # Writing PRDs
@@ -13,7 +13,7 @@ and park the questions at the bottom where they block nothing. The result reads 
 requirements but is fiction — and the team designs and builds against it.
 
 This skill replaces that with dialogue: requirements are **elicited, not defaulted**. The
-PRD says what to build and why; how to build it belongs to superpowers:brainstorming,
+PRD says what to build and why; how to build it belongs to soltero-skills:lean-brainstorming,
 which this skill hands off to at the end.
 
 <HARD-GATE>
@@ -28,8 +28,8 @@ asking.
 
 - **Use:** any request for a PRD / requirements doc / product spec; any raw feature or
   product idea that needs requirements agreed before design.
-- **Don't use:** technical design of an already-agreed feature (superpowers:brainstorming),
-  implementation planning (superpowers:writing-plans), or filling in a single PRD section
+- **Don't use:** technical design of an already-agreed feature (soltero-skills:lean-brainstorming),
+  implementation planning (soltero-skills:lean-plans), or filling in a single PRD section
   when a PRD already exists (use the matching child skill directly).
 
 ## Checklist
@@ -57,7 +57,7 @@ Create a task per item and complete them in order:
 9. **User review gate** — "PRD written to `<path>` (council: PASS <score>). Please
    review before we move to design." Wait. Revise until approved (revisions re-enter
    step 8).
-10. **Hand off** — offer superpowers:brainstorming for technical design. That is the
+10. **Hand off** — offer soltero-skills:lean-brainstorming for technical design. That is the
     ONLY next step; never jump to implementation.
 
 ## Blocking vs. defaultable — the anti-"flag-and-proceed" rule

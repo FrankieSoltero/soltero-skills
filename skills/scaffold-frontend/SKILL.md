@@ -37,8 +37,12 @@ standards** — ending at a runnable project that matches the author's conventio
    | **Expo / React Native** | Cross-platform mobile (iOS + Android) |
 
 2. **Offer the UI/component layer** for the chosen framework, then let the user choose:
-   - **Web (Next/Vite/Astro):** Tailwind v4 → **shadcn/ui** primitives → optional **ReactBits**
-     for animated components.
+   - **Web (Next/Vite/Astro):** Tailwind v4 → **shadcn/ui** primitives → optional **Magic UI**
+     for animated components (MIT, verified from its LICENSE file — see design-forge's catalog).
+     Anything beyond these comes from `design-forge/references/catalog.md`, which is the
+     license-verified list; a source not in it needs a license verification before it is
+     installed or copied, and "the site says free" is not one. ReactBits in particular is
+     **rejected** there (MIT + Commons Clause, not OSI-approved) — do not offer it.
    - **Mobile (Expo):** **NativeWind** → **react-native-reusables** ("shadcn for RN"). Web
      shadcn/ui is DOM-only — do not use it in Expo.
 
@@ -71,7 +75,8 @@ standards** — ending at a runnable project that matches the author's conventio
   (`@tailwind` directives + `tailwind.config.js`). Never apply Tailwind v4's CSS-first steps to
   an Expo app.
 - **Vite create needs the standalone `--`**: `npm create vite@latest name -- --template react-ts`.
-- **Pin the Expo SDK** during transitions: `--template default@sdk-56` (else you get an older SDK).
+- **Pin the Expo SDK, but look it up first:** `npm view expo version` gives the current major;
+  pass it as `--template default@sdk-<major>`. A number written down here goes stale and pins you *backwards*.
 
 ## Red Flags — STOP
 

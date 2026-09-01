@@ -19,6 +19,11 @@ const round = opts.round || 1
 const priorDimensions = opts.priorDimensions || null
 if (!prdPath || !rubricPath) throw new Error('args.prdPath and args.rubricPath are required')
 
+const MAX_ROUNDS = 3
+if (round > MAX_ROUNDS) {
+  throw new Error(`Round ${round} exceeds the ${MAX_ROUNDS}-round cap. A PRD still BLOCKED after ${MAX_ROUNDS} rounds goes back to soltero-skills:writing-prds; report what blocks and stop. Do not convene another council round.`)
+}
+
 const DIMENSIONS = [
   { key: 'problem-evidence', label: 'D1 Problem & evidence', weight: 15 },
   { key: 'requirements', label: 'D2 Requirements quality', weight: 20 },
@@ -79,20 +84,22 @@ Read these two files:
 1. The rubric: ${rubricPath} — your dimension's checklist and the band anchors. Follow it exactly.
 2. The PRD under review: ${prdPath}
 
-Rules (from the rubric, non-negotiable):
-- Score 0-100 anchored to the bands; when torn between two bands take the LOWER.
-- Every violation must quote the offending PRD line(s) verbatim (or name the absent section) and cite the checklist item.
+Rules (from the rubric):
+- Score 0-100 anchored to the bands. The bands run in both directions: a section that meets a band's description earns that band's score, and when you are genuinely torn between two bands take the lower one. Do not withhold a score the PRD has earned, and do not deduct for anything you cannot quote.
+- Every violation must quote the offending PRD line(s) verbatim — copied from the file you read in this session, not recalled or paraphrased — or name the absent section, and cite the checklist item.
 - A score >= 90 requires affirmative excellenceEvidence quotes; absence of noticed flaws is not evidence.
 - For each violation, propose a concrete fix and classify it: "mechanical" (wording, structure, markers, adding a section — appliable without a product decision) or "owner-decision" (targets, scope calls, personas, retention — needs the PRD owner).
 - Grade ONLY your dimension; ignore flaws that belong to other dimensions.
 
 Return via the structured output schema. This is round ${round} of review.`
 
-const skepticPrompt = (d, g) => `You are an adversarial skeptic on a PRD review council. A grader scored dimension "${d.label}" at ${g.score}/100 — suspiciously high. Your ONLY job is to find checklist violations the grader MISSED.
+const skepticPrompt = (d, g) => `You are the independent verifier on a PRD review council. A grader scored dimension "${d.label}" at ${g.score}/100. Scores in this band get a second pass because a generous grade and a genuinely excellent section read the same way from one pass; your job is to tell those two apart by re-checking the checklist yourself.
 
 Read the rubric (${rubricPath}) — dimension ${d.label}'s checklist — and the PRD (${prdPath}). Check every checklist item explicitly against the PRD. The grader already found these violations (do NOT re-report them): ${JSON.stringify(g.violations.map(v => v.checklistItem + ': ' + v.quote.slice(0, 80)))}
 
-Report only NEW missed violations, each with a verbatim PRD quote and the checklist item it breaks. If after checking every item you genuinely find nothing new, return an empty missedViolations array — but only then.`
+Report a missed violation only when you can name the checklist item it breaks and quote the PRD line that breaks it, copied verbatim from the file you read in this session — not paraphrased, not inferred, and never a stylistic preference. Where a checklist item is satisfied, or the evidence is ambiguous, that item yields nothing.
+
+Both outcomes are correct results. An empty missedViolations array is the right answer when the grade was earned; say so in reasoning, naming the items you checked.`
 
 const regradePrompt = (d, g, s) => `You are a fresh re-grader on a PRD review council for dimension "${d.label}". A prior grader scored it ${g.score}/100, but a skeptic then confirmed these MISSED violations:
 ${JSON.stringify(s.missedViolations, null, 2)}

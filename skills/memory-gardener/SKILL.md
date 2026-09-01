@@ -69,6 +69,20 @@ sections. Formats and conventions: `references/operations.md`.
    (counts, commits, files) must be traceable to it. Git history is the rollback
    mechanism; an uncommitted pass is an unfinished pass.
 
+## Unattended runs (scheduled / cloud routine)
+
+This skill runs on a monthly cloud routine with nobody watching. Don't ask permission for
+steps the pass already covers: dispatch the skeptics, apply what they approve, commit, and
+report. The pass's own stops are completion conditions, not questions for the user — a
+REJECT is final for this pass, and if no independent skeptic can be dispatched the
+destructive edits are deferred and the additive ones still ship (step 4). Neither is ever
+resolved by proceeding without the gate.
+
+Before ending your turn, read your last paragraph — if it is a plan, a question, or a
+promise ("I'll commit this next"), do that work now with tool calls. The pass is complete
+when the commit exists and `git show --stat HEAD` backs every claim in the report; a turn
+that ends before the commit has left the working tree dirty and the pass unfinished.
+
 ## Rationalization Table
 
 | Excuse | Reality |

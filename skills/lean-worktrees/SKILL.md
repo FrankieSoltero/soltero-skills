@@ -1,6 +1,6 @@
 ---
 name: lean-worktrees
-description: Use when starting feature work that needs isolation from the current workspace, or before executing an implementation plan (lean-sdd Setup) — detect existing isolation first, prefer the platform's native worktree tool (e.g. EnterWorktree) over raw git, and only then fall back to a guarded project-local git worktree that is verified gitignored before creation. Lean variant of superpowers:using-git-worktrees.
+description: Use when starting feature work that needs isolation from the current workspace, or before executing an implementation plan (lean-sdd Setup) — detect existing isolation first, prefer the platform's native worktree tool (e.g. EnterWorktree) over raw git, and only then fall back to a guarded project-local git worktree that is verified gitignored before creation. Lean variant of the git-worktree setup step.
 ---
 
 # Lean Worktrees
@@ -37,6 +37,14 @@ branching, and cleanup (paired with `ExitWorktree`). Raw `git worktree add`
 next to a native tool is the #1 mistake: phantom state the harness can't
 manage. The mechanism is your call, not a question for the user — consent to
 "a worktree" was already given.
+
+A native tool may be deferred rather than absent: on Claude Code,
+`EnterWorktree`/`ExitWorktree` are named in a system-reminder but carry no
+schema until `ToolSearch` loads them, so "not in my callable tool list" is not
+evidence there is no native tool — run `ToolSearch` for it before concluding
+the fallback applies. When the isolated work is a dispatched subtask rather
+than this session's own, `Agent(isolation: "worktree")` gives that subagent its
+own worktree and is the native mechanism for that case.
 
 **Git fallback (only when no native tool exists):**
 
