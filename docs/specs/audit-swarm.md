@@ -7,7 +7,9 @@
   full-project risk assessment. Skill invocation is the explicit opt-in required by the
   Workflow tool.
 - **Scope:** Whole-repo audit via a bundled Workflow script (scout → adaptive fan-out →
-  dedup → 3-skeptic verification → synthesized report). Findings only — no code changes.
+  dedup → 3-skeptic verification → synthesized report), gated by a per-run seeded-defect
+  canary so a zero-finding run reports "harness not live" rather than "clean". Findings
+  only — no code changes.
   Non-goals: diff review (built-in covers it), auto-fixing findings, CI integration (later).
 - **Success scenario:** On a seeded-vulnerable fixture repo, the skill produces
   `Docs/audit-YYYY-MM-DD.md` with severity-ranked confirmed findings (file:line, impact,
@@ -19,6 +21,29 @@
 **Orchestration:** `SKILL.md` instructs Claude to call
 `Workflow({scriptPath: "${CLAUDE_SKILL_DIR}/workflows/audit.mjs", args: {root, date, mode}})`.
 `date` is passed via args because workflow scripts cannot call `Date.now()`.
+
+**Phase 0 — Seeded-defect canary (added 2026-09-01).** A finder swarm that silently
+fails — bad path, failed dispatch, a scout that returned nothing usable — produces exactly
+what a clean repo produces: no findings. Nothing in the run distinguishes the two, so
+"0 confirmed findings" was being read as "clean" on no evidence. Every run therefore starts
+by re-finding a defect it already knows about. `SKILL.md` writes a fixture file (the script
+has no filesystem access) in a scratch path **outside** the audited repo — one hard-coded
+fake credential with a distinctive token — and passes `canaryPath`/`canaryToken`/
+`canaryExpect` in `args`; `canaryPath` is required and the script throws without it.
+
+The canary is checked in both directions, through the *same* `judgeFinding` panel path the
+real findings take:
+- **detection** — a `security-auditor` finder pointed at the fixture must independently
+  report the seeded defect (matched on fixture filename + token);
+- **judgement** — the skeptic panel must CONFIRM that true finding, and must REFUTE a
+  deliberately fabricated finding on the same fixture (a panel that rubber-stamps or that
+  kills everything is not verifying).
+
+`canary.live` requires all three. When it is false the run returns
+`verdict: 'harness-not-live'`, `harnessLive: false`, and a summary that leads with the
+failure; the synthesis agent is instructed to open the report with `HARNESS NOT LIVE` and
+never to describe the repository as clean. The word "clean" is reachable only through a
+canary that was planted, found, and judged correctly.
 
 **Phase 1 — Scout (deterministic first).** One scout agent inventories the project with
 real commands, not guesses: stack detection, package manifests + license extraction
@@ -46,8 +71,8 @@ kills the finding; survivors keep consolidated evidence.
 
 **Phase 4 — Synthesis & report.** One synthesis agent writes `Docs/audit-YYYY-MM-DD.md`
 in the audited project: executive summary, severity-ranked confirmed findings with
-file:line and remediation, refuted-findings appendix, scout inventory. Chat gets a short
-top-findings summary.
+file:line and remediation, refuted-findings appendix, scout inventory, and the harness-canary
+section with its verdict. Chat gets a short top-findings summary, canary verdict first.
 
 **Thorough mode (opt-in).** If the user says "thorough"/"exhaustive" (or passes
 `mode: "thorough"`), Phase 2 switches to loop-until-dry: repeated finder rounds, deduping

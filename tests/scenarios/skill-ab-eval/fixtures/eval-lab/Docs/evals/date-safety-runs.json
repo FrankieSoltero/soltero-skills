@@ -1,0 +1,95 @@
+{
+  "skill": "date-safety",
+  "date": "2026-09-01",
+  "judge": "single monolithic rubric agent, one verdict per run, no abstention option",
+  "canary": {
+    "scenario": "canary-tz-shift",
+    "note": "seeded scenario known to fail without date-safety: bare new Date('2026-03-08') across a DST boundary"
+  },
+  "runs": [
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-1",
+      "arm": "without",
+      "verdict": "pass"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-1",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-2",
+      "arm": "without",
+      "verdict": "pass"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-2",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-3",
+      "arm": "without",
+      "verdict": "pass"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-3",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "canary-tz-shift",
+      "arm": "without",
+      "verdict": "pass"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-1",
+      "arm": "without",
+      "verdict": "pass"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-1",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-2",
+      "arm": "without",
+      "verdict": "pass"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-2",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-3",
+      "arm": "without",
+      "verdict": "pass"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-3",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "canary-tz-shift",
+      "arm": "without",
+      "verdict": "pass"
+    }
+  ]
+}

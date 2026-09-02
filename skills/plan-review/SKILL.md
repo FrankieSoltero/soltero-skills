@@ -23,7 +23,8 @@ replaces prose verdicts with a scored council and a gate only the council can op
 
 <HARD-GATE>
 A plan that has not PASSED (overall ≥85 AND every dimension ≥80 AND zero
-blocking-severity violations, from an actual council run) must not be executed — not by
+blocking-severity violations AND zero ungradable `unknown` dimensions, from an actual
+council run) must not be executed — not by
 soltero-skills:lean-sdd, not by any other executor, not by a human "picking up task 1". There is no safe
 subset: severity and task-safety come from the rubric, not from a deadline, a loaded
 sprint board, or who skimmed it. You never green-light on your own read, you never
@@ -79,7 +80,11 @@ adjust or estimate a score, and you never re-review your own fixes.
 3. **Write the report** — `docs/plan-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
    banner (PASS / **BLOCKED — do not execute**), score table (dimension, weight,
    grader score, skeptic misses, final), evidence-quoted violations, then blocking
-   fixes (mechanical), owner questions, recommended fixes.
+   fixes (mechanical), owner questions, recommended fixes. A dimension the council
+   returned as `unknown` is not a score and never becomes one: print it as `unknown` in
+   the table with the reason the grader gave, and carry it into owner questions with
+   what the council would need to grade it. It keeps the gate shut until the owner
+   supplies that basis — you never estimate a number in its place.
 4. **If BLOCKED → fix round:** apply mechanical fixes to the plan (rewording,
    reordering, adding verification/rollback steps, cutting out-of-scope tasks the spec
    already rules out); present owner questions to the user and WAIT — never answer
@@ -92,6 +97,26 @@ adjust or estimate a score, and you never re-review your own fixes.
    the previous findings is NOT a round — new flaws enter through fixes, and the fix
    author cannot be the checker. Maximum 3 rounds; still BLOCKED → report what blocks
    and send the plan back to soltero-skills:lean-plans.
+
+   **Circuit breaker — the loop stops when it stops converging.** The script returns a
+   `nonConvergence` object when a round moves the overall by less than 2 points from the
+   previous round, or when a violation the previous round already reported comes back
+   verbatim in a dimension that was actually re-graded. (Pass the previous round's
+   `overall` as `args.priorOverall` alongside `args.priorDimensions`, or the score half
+   of the check cannot fire.) When it fires, do NOT convene another round — not even
+   "one more, it's close". What is churning is the reviewer prompt or the rubric
+   wording, not the plan, and another round spends 6–18 model calls to reproduce the
+   same disagreement. Instead:
+   1. **Sample the council's own outputs** for the recurring item — both rounds' grader
+      summaries for that dimension, and any skeptic reasoning attached to it.
+   2. **Name the ambiguity**: the exact checklist item or prompt sentence that let two
+      graders read the same line two different ways, quoting what each round said about
+      it.
+   3. **Route it to the owner** as a rubric/prompt fix proposal (a concrete wording
+      change to `references/rubric.md` or the grader prompt in `workflows/review.mjs`),
+      and send the plan itself back to soltero-skills:lean-plans in the same message.
+   You never resolve the ambiguity yourself mid-loop, and you never resolve it by
+   picking whichever round's reading is more convenient.
 6. **On PASS:** record the score and hand off to execution
    (soltero-skills:lean-sdd).
 
@@ -106,6 +131,9 @@ adjust or estimate a score, and you never re-review your own fixes.
 | "Both seniors skimmed it and said it's fine." | Skims miss exactly what councils catch (the fixture's schema bomb read as a one-liner). Note the sign-off in the report; run the council. |
 | "It's an internal tool; auth can fast-follow." | 'Internal-ish' is not a security boundary. D5 grades it; you don't waive it. |
 | "It scored 84.6 — that rounds to 85." | The script's number is the number. 84.6 is BLOCKED. |
+| "Round 2 moved it 0.2 points — one more round should get it over." | Two rounds that don't move the score are a rubric/prompt problem, not a plan problem. Circuit breaker: name the ambiguity, propose the rubric fix to the owner, plan back to lean-plans. |
+| "The same violation came back, so the fix must not have landed — re-run it." | It came back because two graders read the checklist item two ways. Read both rounds' summaries before you re-run anything; if they disagree about what the item means, that's the finding. |
+| "D3 has nothing to grade against; I'll put 70 so the round completes." | You never invent a score. `unknown` is the verdict for absent basis — it routes to the owner and keeps the gate shut. A number there is a guess the weighted total then treats as evidence. |
 | "It's at 88 overall; the one blocking violation is basically mechanical." | Blocking means blocking. Apply the fix, re-convene; the next round passes it in minutes. |
 
 ## Red Flags — STOP
@@ -117,6 +145,10 @@ adjust or estimate a score, and you never re-review your own fixes.
 - Your proposed re-check reviews the diff or the findings list instead of the whole
   plan.
 - You answered an owner question yourself to keep the round moving.
+- The same violation quote is back for a second round and you're queuing a third.
+- Two consecutive rounds landed within 2 points of each other and you're re-convening
+  instead of naming the rubric/prompt ambiguity.
+- You're choosing a number for a dimension the plan gave you no basis to grade.
 - Round 4. (Stop; back to soltero-skills:lean-plans.)
 
 ## Bundled assets

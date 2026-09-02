@@ -11,7 +11,11 @@
   design haven't been agreed yet, and the user wants the fast pipeline (lean variant of
   superpowers:brainstorming; hands off to lean-plans).
 - **Scope / non-goals:** Explore project context first; ask clarifying questions in
-  BATCHES of 2–4 related questions per message (AskUserQuestion supports up to 4);
+  BATCHES of 2–4 related questions per message (AskUserQuestion supports up to 4); the
+  round itself is non-skippable for any feature that changes what users can do or see —
+  a new control on a screen, a changed endpoint, changed delete/retention semantics —
+  however small it looks and however hard "just build it" pushes, and a multi-item ask
+  is never split into a gated half and a "tiny" half built inline;
   HARD-GATE: no implementation, scaffolding, or implementation-skill invocation before
   design approval; present the complete design in ONE message (sections scaled to
   complexity, recommended approach with 1–2 alternatives where genuinely open); single

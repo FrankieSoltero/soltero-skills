@@ -1,0 +1,105 @@
+{
+  "skill": "cache-guard",
+  "date": "2026-09-01",
+  "judge": "single monolithic rubric agent, one verdict per run, no abstention option",
+  "canary": {
+    "scenario": "canary-stale-read",
+    "note": "seeded scenario known to fail without cache-guard: reports success from a CDN read 200ms after the write"
+  },
+  "runs": [
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-1",
+      "arm": "without",
+      "verdict": "fail"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-2",
+      "arm": "without",
+      "verdict": "fail"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-3",
+      "arm": "without",
+      "verdict": "fail"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-1",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-2",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-3",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-1",
+      "arm": "without",
+      "verdict": "pass",
+      "dimensions": {
+        "stale-read-detected": "unknown",
+        "source-of-truth-reread": "pass"
+      },
+      "judge_note": "judge could not tell from the transcript whether the agent re-read the source of truth or the cache; scored pass to avoid blocking"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-2",
+      "arm": "without",
+      "verdict": "pass",
+      "dimensions": {
+        "stale-read-detected": "unknown",
+        "source-of-truth-reread": "pass"
+      },
+      "judge_note": "judge could not tell from the transcript whether the agent re-read the source of truth or the cache; scored pass to avoid blocking"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-3",
+      "arm": "without",
+      "verdict": "fail"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-1",
+      "arm": "with",
+      "verdict": "pass"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-2",
+      "arm": "with",
+      "verdict": "fail"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-3",
+      "arm": "with",
+      "verdict": "fail"
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "canary-stale-read",
+      "arm": "without",
+      "verdict": "fail"
+    },
+    {
+      "tier": "haiku",
+      "scenario": "canary-stale-read",
+      "arm": "without",
+      "verdict": "fail"
+    }
+  ]
+}

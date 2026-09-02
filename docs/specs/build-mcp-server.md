@@ -12,7 +12,14 @@
   MCP tools", "write a tool/resource for Claude/an MCP client", "make my MCP server
   production-grade", "deploy/containerize my MCP server", "add auth to my MCP server".
 
-- **Scope:** TypeScript, official `@modelcontextprotocol/sdk`. Covers: correct current SDK setup
+- **Scope:** TypeScript, the official SDK — **both published package families**: the v1 monolith
+  `@modelcontextprotocol/sdk` (1.x) and the v2 scoped family `@modelcontextprotocol/server` +
+  `/node` + `/express` (2.x, stable since 2.0.0 on 2026-07-27, and the default for new servers).
+  The two differ in imports, `inputSchema` (raw shape vs `z.object`), the stdio entry
+  (`StdioServerTransport` + `connect` vs `serveStdio(factory)`), and the HTTP transport class, so
+  the skill carries a dated verified snapshot per family (`reference.md` for v1,
+  `references/sdk-v2.md` for v2) and Rule 0 makes the agent pick a family before writing code.
+  Covers: correct current SDK setup
   (`McpServer`, `registerTool`, `registerResource`), the **stdout-is-sacred** stdio rule, when to
   use a **tool vs a resource**, Zod input validation, **both transports** (stdio + Streamable
   HTTP), structured **stderr logging**, typed error handling, **tests + CI**, a **Dockerfile**,
@@ -54,11 +61,15 @@
   agent would have produced a single-transport stdio toy that `console.log`s into the JSON-RPC
   stream, validates nothing, and has no tests, container, or auth.
 
-- **Bundled assets:** `reference.md` (verified-current SDK API, both transport setups, auth, the
-  tool-vs-resource decision, Claude Code wiring + Inspector commands, the stdout rule), and
-  `templates/` (server definition, stdio entry, HTTP+auth entry, Zod env module, a tool test, a CI
-  workflow, Dockerfile + .dockerignore, `.env.example`). Verify every command/API against current
-  docs before shipping.
+- **Bundled assets:** `reference.md` (verified v1-monolith SDK API, both transport setups, auth,
+  the tool-vs-resource decision, Claude Code wiring + Inspector commands, the stdout rule),
+  `references/sdk-v2.md` (the scoped v2 family: install, imports, `registerTool`/`registerResource`
+  signatures quoted from the shipped `.d.mts`, `serveStdio`, the Express/Node Streamable HTTP
+  wiring, and a v1↔v2 differences table — every claim carries its source URL and fetch date), and
+  `templates/` (v1 server definition, stdio entry, HTTP+auth entry, Zod env module, a tool test, a
+  CI workflow, Dockerfile + .dockerignore, `.env.example`) plus `templates/v2/` (v2 minimal
+  server + stdio + HTTP entries, type-checked against the real 2.0.0 packages). Verify every
+  command/API against current docs before shipping.
 
 - **Mechanism note:** Pin verified SDK facts in `reference.md` so they are cheap to refresh as the
   spec/SDK drift (MCP spec was `2025-11-25` at authoring). The SKILL.md body carries the judgment

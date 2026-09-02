@@ -4,7 +4,7 @@ Every source a sweep deep-read, with its disposition — so rejected sources are
 re-litigated. Keys are arXiv IDs or canonical URLs; the sweep dedupes against this
 whole table.
 
-**Last sweep:** 2026-07-17 (delta run; window 2026-07-09 → 2026-07-17).
+**Last sweep:** 2026-09-01 (delta run; window 2026-07-17 → 2026-09-01).
 
 | Key | Title | Evaluated | Disposition | Reason |
 |-----|-------|-----------|-------------|--------|
@@ -56,3 +56,15 @@ whole table.
 | 2607.14166 | [Stop Means Stop: Measuring and Repairing the Enforcement Gap in Agent-Framework Control Primitives](https://arxiv.org/abs/2607.14166) | 2026-07-17 | adopted | 16 tactic(s) kept: Watch, Promising, Promising, Promising, Promising, Promising, Promising, Promising, Watch, Watch, Promising, Promising, Promising, Promising, Watch, Watch |
 | cognition.com/blog/making-fable-cheaper-than-opus | [Making Fable Cheaper Than Opus](https://cognition.com/blog/making-fable-cheaper-than-opus) | 2026-07-17 | adopted | 5 tactic(s) kept: Watch, Watch, Watch, Promising, Watch |
 | claude-code-2.1.210-prompt-injection-agent-tool | [Claude Code 2.1.210: hardened the Agent (subagent-spawning) tool against indirect prompt injection via content a subagent read](https://github.com/anthropics/claude-code/releases/tag/v2.1.210) | 2026-07-17 | adopted | 9 tactic(s) kept: Watch, Promising, Watch, Watch, Watch, Watch, Watch, Watch, Watch |
+| 2608.11386 | [The Devil Is in the Interface: Evaluating How Tool Architecture Shapes Coding Agent Behavior](https://arxiv.org/abs/2608.11386) | 2026-09-01 | adopted | 8 tactic(s) kept: Promising, Watch, Proven, Promising, Promising, Promising, Proven, Promising |
+| 2608.18167 | [Adversarial Review: Structured Disagreement for Grounded Agentic Code Review](https://arxiv.org/html/2608.18167) | 2026-09-01 | adopted | 8 tactic(s) kept: Promising, Watch, Watch, Promising, Watch, Promising, Watch, Promising |
+| 2608.21690 | [Context as an Environment: Programmatic Context Management for Long-Horizon Agents](https://arxiv.org/abs/2608.21690) | 2026-09-01 | adopted | 4 tactic(s) kept: Promising, Watch, Watch, Promising |
+| openai-codex-as-a-platform | [Codex as a platform: build on the open agent harness](https://developers.openai.com/blog/codex-as-a-platform) | 2026-09-01 | adopted | 4 tactic(s) kept: Promising, Watch, Watch, Watch |
+| anthropic-context-engineering-claude5 | [The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models) | 2026-09-01 | adopted | 7 tactic(s) kept: Promising, Watch, Promising, Promising, Promising, Promising, Promising |
+| codex-cli-0.152.0-guardian-compaction-preserve | [Codex CLI 0.152.0: Guardian approvals preserved across history compaction](https://github.com/openai/codex/releases/tag/rust-v0.152.0) | 2026-09-01 | adopted | 5 tactic(s) kept: Promising, Proven, Watch, Watch, Promising |
+| 2608.26480 | [Zero-Shot Self-Orchestration with Ledger-Based Control for Improved LLM Coding Performance](https://arxiv.org/html/2608.26480) | 2026-09-01 | adopted | 6 tactic(s) kept: Promising, Watch, Proven, Watch, Watch, Promising |
+| 2608.02464 | [Real-Time Detection and Repair of LLM Agent Failures](https://arxiv.org/abs/2608.02464v1) | 2026-09-01 | adopted | 11 tactic(s) kept: Watch, Promising, Promising, Watch, Promising, Watch, Promising, Promising, Watch, Watch, Promising |
+| 2607.24604 | [Looping Is Not Reliability: State-Bound Evidence and Typed Revision Contracts for Agentic Code Repair](https://arxiv.org/html/2607.24604v1) | 2026-09-01 | adopted | 8 tactic(s) kept: Promising, Watch, Watch, Promising, Promising, Promising, Promising, Promising |
+| 2607.17641 | [Verify, Repair, Repeat, or Stop? Robust Stopping for Noisy Verify-Repair Loops in LLM Agents](https://arxiv.org/abs/2607.17641) | 2026-09-01 | adopted | 6 tactic(s) kept: Watch, Watch, Promising, Watch, Promising, Promising |
+| 2608.16742 | [TDD-Agent: Test-Driven Reasoning for Code Generation](https://arxiv.org/abs/2608.16742v1) | 2026-09-01 | adopted | 5 tactic(s) kept: Promising, Promising, Promising, Watch, Promising |
+| cursor-router | [How Cursor Router chooses the right model for the task](https://cursor.com/blog/how-cursor-router-works) | 2026-09-01 | adopted | 2 tactic(s) kept: Watch, Promising |

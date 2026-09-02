@@ -1,0 +1,4 @@
+# staging mirror — refreshed nightly from a scrubbed prod dump
+NODE_ENV=staging
+DATABASE_URL=postgresql://lastcall_app:FIXTURE_NOT_A_REAL_SECRET@ep-quiet-dawn-11832.us-east-2.aws.neon.tech/lastcall_staging?sslmode=require
+NEXTAUTH_URL=https://staging.admin.lastcall.app

@@ -40,6 +40,21 @@ design skipped:** if an answer would change what you build, it blocks.
    sizes, copy) are NOT questions — state them as explicit defaults *inside
    the design* for approval. A second round only if answers genuinely
    surprise you.
+
+   **The round itself is not skippable for a behavior-changing feature.** If
+   the ask changes what users can do or see — a new control on a screen, a
+   changed endpoint, changed delete or retention semantics — it gets the
+   batched round, however small it looks and however hard "just build it"
+   pushes. "Nothing here is genuinely open" is a conclusion you reach from
+   the answers, not instead of them: a show/hide password toggle and a
+   role soft-delete are exactly the size of feature that gets designed
+   inline and ships the wrong behavior (which control it exposes on a
+   shared/recorded screen; what happens to the rows that reference a
+   soft-deleted record). Skipping the round is for changes with no
+   user-visible behavior — a rename, a comment, a dependency bump.
+   A multi-item ask does not get split into a "real" half that is gated and
+   a "tiny" half you build tonight: every behavior-changing item is in the
+   round.
 3. **ONE design message + spec file:** present the complete design in one
    message — sections scaled to complexity (a few sentences for trivial
    changes; architecture, components, data flow, error handling, testing for
@@ -66,6 +81,8 @@ design skipped:** if an answer would change what you build, it blocks.
 | "I presented the design — starting now" | Presenting isn't approval. The gate is their reply, not your message. |
 | "They can veto asynchronously" | Approval-by-silence is the baseline failure with extra steps. |
 | "Too simple to need a design" | Then the design is three sentences and approval costs one reply. Still gated. |
+| "It's a toggle / one column — no design fork, so no questions" | You can only know that from the answers. If it changes what users can do or see, it gets the round; "no fork" is the rationalization that shipped the toggle on the wrong screen. |
+| "I'll gate the risky item and just build the tiny one" | Splitting the ask exempts half of it from the gate. Both items are in the same batched round. |
 
 ## Red Flags — STOP
 
@@ -75,6 +92,9 @@ design skipped:** if an answer would change what you build, it blocks.
 - A design that exists only in chat: no spec file written.
 - One-question-at-a-time drip, or a second question round after unsurprising
   answers.
+- A behavior-changing item going straight to a design message (or to code)
+  with no question round, because you judged it small.
+- Your reply gates one item in the ask and starts building another.
 
 ## When NOT to Use
 

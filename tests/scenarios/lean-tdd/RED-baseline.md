@@ -1,5 +1,7 @@
 # RED baseline — lean-tdd (no skill present)
 
+_Baseline model: session default (unrecorded) + haiku probe · run date: 2026-07-29_
+
 Fresh general-purpose subagents; docs/, skills/, agents/ out of bounds.
 Two tiers probed: session-default model (the controller tier) and haiku (the
 cheap tier lean-sdd's model table actually dispatches for mechanical work).

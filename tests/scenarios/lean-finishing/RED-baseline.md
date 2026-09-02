@@ -1,5 +1,7 @@
 # RED baseline — lean-finishing (no skill present)
 
+_Baseline model: session default (unrecorded) + haiku probe · run date: 2026-07-29_
+
 Fresh general-purpose subagents; docs/, skills/, agents/ out of bounds.
 Default model on all three; haiku probe on s2.
 

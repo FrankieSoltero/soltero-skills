@@ -1,5 +1,7 @@
 # RED baseline — lean-worktrees (no skill present)
 
+_Baseline model: session default (unrecorded) + haiku probe · run date: 2026-07-29_
+
 Fresh general-purpose subagents; docs/, skills/, agents/ out of bounds.
 Honest RED — all three default-model runs PASSED.
 

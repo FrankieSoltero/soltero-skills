@@ -62,3 +62,40 @@ approval, a presented design, or a spec file (3/3 scenarios show gate-skipping;
 implementation, explicit single approval pass, spec file written and handed to
 lean-plans — while keeping the batching/one-shot behavior the baseline already
 has.
+
+## 2026-09-01 — edit RED baseline (non-skippable question round)
+
+Model: **sonnet** (pinned, same for RED and GREEN) · Date: **2026-09-01**
+Condition: the *pre-change* `SKILL.md` supplied verbatim inside the dispatch,
+all repository files out of bounds.
+
+### Scenario 4 (two "tiny" behavior-changing features at 4:55pm) — PARTIAL FAIL
+
+Chose **B** for the soft delete and reasoned about it well ("data lifecycle" is
+blocking; four good questions about the delete guard, picker visibility, historical
+display, restore). Then it exempted the other half of the same ask from the gate
+entirely and started building:
+
+> "**Not A** — A is the right *shape* for the password toggle (pure defaultable
+> detail: icon placement, aria-label — no design fork), but wrong for the soft
+> delete."
+
+Its actual reply to the owner contains the named red flag verbatim:
+
+> "No blockers on the password toggle — **building that now**."
+
+and its closing statement of action:
+
+> "The password toggle, having no blocking questions and no meaningful design fork,
+> is the one piece where 'just build it' is honored literally tonight."
+
+**The gap, twice over.** First, "no design fork" is a conclusion reached *instead of*
+the questions rather than from them — a login password toggle has real forks (which
+password fields it covers; whether plaintext-on-screen is acceptable in an admin
+console that gets screen-shared or session-recorded) that the agent never surfaced
+because it had already classified the feature as trivial. Second, the pre-change text
+gates *the ask* but says nothing about a multi-item ask being split, so the agent
+found a clean-looking way to gate the scary half and ship the small half inline — the
+exact shape of the two features that get designed and shipped without a round
+(show/hide password toggle; role soft-delete). The pre-change "Too simple to need a
+design" row addresses the design message, not the question round, and did not fire.

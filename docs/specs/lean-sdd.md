@@ -15,9 +15,16 @@
   superpowers:subagent-driven-development; consumes lean-plans' dependency table).
 - **Scope / non-goals:** Controller-side execution process: fresh implementer per task;
   pipelined dispatch — reviewer(N) runs concurrently with implementer(N+1) when the plan's
-  dependency table shows disjoint files; risk-tiered review (mechanical → spec-compliance-
-  only on a cheap model; standard/judgment → full two-verdict review); fix loop capped at
-  3 rounds (round 3 = fresh implementer on a more capable model), then adjudicate;
+  dependency table shows disjoint files — where "disjoint" means the union of declared
+  paths AND the artifacts each brief's install/migrate/generate/snapshot steps write, so
+  shared mutable state (lockfile, migrations directory + lock, generated client, shared
+  dev DB, cache) counts as file overlap even when every declared path differs; risk-tiered
+  review (mechanical → spec-compliance-only on a cheap model; standard/judgment → full
+  two-verdict review); fix loop capped at 3 rounds (round 3 = fresh implementer on a more
+  capable model), where the cap ends the loop but never accepts the work — a still-red
+  signal at exhaustion (failing covering test, BLOCK verdict, live reproduction) reverts
+  the task's commits or returns it to lean-plans for replanning, and adjudication-to-park
+  is reserved for disagreement about a green artifact;
   progress ledger + report/brief/diff handed over as files, never pasted. Keeps SDD's
   load-bearing parts: don't-trust-the-report reviewer stance, breaker adjudication with
   ledger rulings, final whole-branch review on the most capable model with ONE fix wave.
@@ -27,8 +34,10 @@
   dependency table shows task 3 touches disjoint files: the agent dispatches task 2's
   reviewer AND task 3's implementer in the same message, queues task 2's fix dispatch
   behind the review verdict, reviews the mechanical task 4 as spec-only on a cheap model,
-  and at a round-3 non-converging loop stops dispatching and adjudicates with a ledger
-  ruling instead of looping to round 5.
+  and at a round-3 non-converging loop stops dispatching: if the covering tests still
+  fail it reverts the task's commits (or returns the task to lean-plans) with a ledger
+  line, and only if the artifact is green and the dispute is a judgment call does it
+  adjudicate and park — never looping to round 5.
 - **Bundled assets:** `references/implementer-prompt.md`, `references/task-reviewer-prompt.md`
   (with spec-only mode), `references/re-review-prompt.md`; `scripts/sdd-workspace`,
   `scripts/task-brief`, `scripts/review-package`. Derived from

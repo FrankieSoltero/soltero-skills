@@ -1,0 +1,6 @@
+#!/bin/sh
+# from Marco — drop this in .git/hooks/pre-commit
+if git diff --cached -U0 | grep -nE '^\+.*new Date\('; then
+  echo "blocked: date-shift pattern (see the rule)"
+  exit 1
+fi

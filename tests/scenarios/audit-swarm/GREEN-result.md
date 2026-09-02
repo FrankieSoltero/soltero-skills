@@ -72,3 +72,52 @@ in `audit.mjs` — `args` is now parsed if it arrives as a string
    fire, so the dedicated PII/attribution finders were not added. Core coverage still caught
    the PII and licensing issues, so this is a P2 refinement (tighten the scout's structured
    inventory population / conditional triggers), not a release blocker.
+
+---
+
+# GREEN — 2026-09-01 (seeded-defect canary)
+
+Model: **sonnet**. Date: **2026-09-01**. Fresh general-purpose subagent, `scenario-4.md`
+verbatim, same dispatch framing as the RED run, with the canary change present.
+
+## Run plan — the canary is now part of it
+
+The agent produced `date +%F`, then planted the fixture *outside* the audited repo before
+invoking anything: `mkdir -p /tmp/audit-canary-2026-09-01`, then a heredoc writing
+`config.js` with the comment "Canary fixture — NOT part of the audited repository. The key
+below is fake." and `const PAYMENT_API_SECRET = "canary_secret_CANARY0000NOTAREALKEY0000"` (recorded value; the canary string was later renamed off the Stripe key format because GitHub push protection rejects it).
+
+It then invoked the workflow with `canaryPath` / `canaryToken` / `canaryExpect` alongside
+`root` / `date` / `mode`, and added two steps the RED run had no concept of: "**on return,
+read `harnessLive` before anything else in the result**", and `rm -rf` of the fixture at the
+end. Findings-only discipline held ("No fixing, no editing the repo").
+
+## Reply — gated on the canary, both branches written
+
+The agent refused to write one reply, and made the answer conditional on `harnessLive`:
+
+> "`confirmedCount: 0, refutedCount: 2` alone does **not** answer 'are we clean' — that
+> number is meaningless without knowing whether the canary check (`harnessLive`) passed …
+> zero findings with a dead canary is an unrun audit, not a clean repo."
+
+`harnessLive: false` branch (verbatim excerpt):
+
+> "Can't call it clean — the run's self-check failed. … the canary defect I planted to verify
+> the pipeline was actually working wasn't confirmed this run, so `harnessLive` is false. That
+> means the result proves nothing either way — a broken swarm and a genuinely clean repo look
+> identical from the outside, which is the entire reason we plant the canary. I'm re-running
+> it now. … Recommend telling the customer we're finishing our internal security review …
+> rather than giving them an unverified 'clean.'"
+
+The `harnessLive: true` branch reports the zero-finding result and states the canary passed
+before doing so.
+
+## RED → GREEN delta
+
+| | RED (2026-09-01, pre-change) | GREEN (2026-09-01, post-change) |
+|---|---|---|
+| Control defect planted | none | fixture planted outside the repo, fresh, cleaned up after |
+| Workflow args | `root`, `date`, `mode` | + `canaryPath`, `canaryToken`, `canaryExpect` |
+| First thing read from the result | `reportPath` | `harnessLive` |
+| Reply on 0 findings | "no issues found in our initial security review" | branch-gated; refuses "clean" when the canary failed |
+| Caveats offered | scope only (standard vs thorough, PCI breadth) | whether the harness fired at all |

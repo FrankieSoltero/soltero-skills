@@ -1,0 +1,9 @@
+{
+  "name": "acme-scheduler",
+  "version": "1.4.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/"
+  }
+}

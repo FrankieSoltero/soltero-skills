@@ -1,5 +1,7 @@
 # RED baseline — plan-visualizer (no skill present)
 
+_Baseline model: Sonnet · run date: 2026-08-20_
+
 Fresh general-purpose subagents, model pinned to sonnet, scenario text only, isolated
 scratch repos seeded with the fixture plans. Recorded verbatim (key excerpts); honest RED —
 passes recorded as passes. All three chose (B); the failures are in what they produced.

@@ -6,6 +6,13 @@ Every code block below was verified against **`@modelcontextprotocol/sdk` v1.29.
 **re-verify** with `npm view @modelcontextprotocol/sdk version` before trusting any signature
 here, and treat anything published since as unrepresented.
 
+> **This file covers the v1 monolith only.** The scoped family shipped stable
+> `@modelcontextprotocol/server@2.0.0` on 2026-07-27; **for a new server, go to
+> [`references/sdk-v2.md`](references/sdk-v2.md)** (verified 2026-09-01, with the v1↔v2
+> differences table). Stay here for an existing v1 codebase. The sections below that are
+> family-independent — tool-vs-resource, secrets, least-privilege upstream, testing, Inspector +
+> `claude mcp add`, Docker — apply to both.
+
 ## Version landscape (why Rule 0 exists)
 
 Two package families, both published. Run Rule 0's two `npm view` commands to find out which is
@@ -19,7 +26,7 @@ current today — this table describes how they *differ*, not which one to pick:
 | Zod | `zod` peer dep; SDK uses `zod/v4` (v3.25+ compatible) | `zod/v4` |
 
 The code in the rest of this file is the monolith form. If Rule 0 puts you on the scoped family,
-read that family's docs at its released tag — do not port these snippets by analogy.
+use `references/sdk-v2.md` — do not port these snippets by analogy.
 
 ## Install & project shape
 

@@ -39,3 +39,26 @@ superpowers:writing-plans and superpowers:executing-plans.
   a fresh council round can flip the verdict — instead of "solid plan, start the setup
   tasks while we tighten the rest".
 - **Bundled assets:** `workflows/review.mjs`, `references/rubric.md`.
+
+- **2026-09-01 recalibration** (owner-delegated, from the Fable 5.1 prompt audit
+  `docs/audits/2026-09-01-fable-5.1/B-plan-prd-review.md`, findings 10–12):
+  1. *Skeptic effort override removed.* The skeptic must read two files and quote them;
+     at `effort: 'low'` a Fable-era model retrieves less and answers from memory more,
+     which is the wrong trade for a verification role. Model alias unchanged (opus).
+  2. *Per-dimension `unknown` escape.* A grader with no basis to grade its dimension
+     returns `score: null, verdict: "unknown"` with a reason instead of a number. The
+     script excludes it from the weighted average and the floor check, reports it as an
+     owner question, and blocks PASS while one is outstanding (playbook, Proven: give
+     LLM graders escape clauses rather than forcing a fabricated score).
+  3. *Non-convergence circuit breaker.* `args.priorOverall` plus the prior round's
+     dimensions let the script detect a round that moved < 2 points or that repeated a
+     violation verbatim in a re-graded dimension; SKILL.md then stops the loop, samples
+     the council's own outputs, names the rubric/prompt ambiguity producing the churn,
+     routes a rubric/prompt fix proposal to the owner and the plan back to lean-plans
+     (playbook, Proven: detect repair-loop dead-ends by recurrence and switch strategy;
+     evidence: the 9-round 79.2→84.3 run in `docs/debriefs/2026-08-29.md`).
+  4. *Verdict reproducibility criterion* added to D6: two independent readers must
+     reach the same pass/fail on every task verification and on the done criteria;
+     ambiguity that would split them is a violation with the quoted line (playbook,
+     Proven: write specs precise enough that two independent experts reach the same
+     verdict).

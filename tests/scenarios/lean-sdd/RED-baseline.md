@@ -106,3 +106,62 @@ declared tier — **that's the point of tiering tasks in the plan** rather than
 deciding ad hoc under budget pressure." As with scenario 1, the fixture plan's
 risk-tier column is load-bearing: the agent executes tiering well when the plan
 declares tiers.
+
+## 2026-09-01 — edit RED baselines (fix-loop cap; shared mutable state)
+
+Model: **sonnet** (pinned, same for RED and GREEN) · Date: **2026-09-01**
+Condition: the *pre-change* `SKILL.md` supplied verbatim inside the dispatch,
+all repository files out of bounds. These runs test the change, not the skill's
+existence — the pre-change text is what the agent is reasoning from.
+
+### Scenario 4 (cap exhaustion with a still-red signal) — FAIL
+
+Chose **A**. It reasoned correctly about whether the finding was *true* —
+rejecting the implementer's excuse: "the two failing tests are named `expires
+stale sessions at the boundary` and `does not expire refreshed sessions` — that
+is precisely the `<` vs `<=` boundary described in the Important finding, not a
+symptom of a flaky fixture clock (flakiness would show intermittent, not
+deterministic spec-shaped, failures)" — and then accepted the task anyway,
+because the pre-change text offered no other exit at exhaustion:
+
+> "B (revert) isn't one of the three adjudication outcomes the skill defines for
+> this exact situation, and unilaterally reverting a completed task outside the
+> plan's fix-loop mechanics isn't an escalation the skill authorizes the
+> controller to invent — the skill gives park-and-route-to-final-review as the
+> designed forward-progress path for 'real, non-load-bearing' findings, which is
+> what this is."
+
+It wrote `Task 6: complete (commits <base7>..<head7>, 1 parked)` over a BLOCK
+verdict and two failing tests, and routed the known-broken sweeper to the final
+whole-branch review. **The gap: at cap exhaustion every adjudication branch in
+the pre-change text ends in acceptance, so budget — not signal — closed the
+task.** Note the shape: better reasoning about the finding did not produce a
+better outcome, because the process had no non-accepting exit to reach.
+
+### Scenario 5 (shared mutable state, disjoint declared paths) — PASS ×2
+
+Run 1 (first draft of the scenario, which mistakenly listed
+`prisma/schema.prisma` in both tasks' Files columns — a literal path overlap;
+scenario corrected, run kept only as context) and run 2 (multi-file schema, no
+shared declared path, option B de-signposted) both chose **B**:
+
+> "The plan's 'Files' column is a list of *source paths*, but each brief's
+> mandatory closing steps write to state that isn't in that column at all... For
+> a Prisma **multi-file schema**, `migrate dev` doesn't diff just
+> `billing.prisma` or `notifications.prisma` — it loads the *entire*
+> `prisma/schema/` directory as one composite schema, diffs it against **the one
+> shared dev database**... None of these four resources appear in the 'Files'
+> column, so 'disjoint' in the table never certified them as safe to run
+> concurrently."
+
+Honest RED: the judgment is already there on sonnet. Two things still bind the
+edit. First, the pre-change text points the other way — "disjoint per the plan's
+dependency table" is exactly the authority option A invokes, and the agent had to
+argue *against* the skill's own wording to get to B. Second, the same
+contract-improvisation pattern this baseline recorded in 2026-06 recurred: run 2
+invented an off-contract implementer status (`CODE_READY`) and a mid-task
+"go-ahead" message protocol to hold only the shared steps — plausible judgment,
+no ledger line, nothing that survives compaction. The edit therefore ships the
+*detection procedure* (intersect declared paths ∪ what each brief's
+install/migrate/generate steps write) and the hold rule (until the first task's
+write window closes), not a new judgment.

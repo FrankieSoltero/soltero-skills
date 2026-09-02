@@ -1,0 +1,34 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Org {
+  id         Int        @id @default(autoincrement())
+  name       String
+  slug       String     @unique
+  status     String     @default("active")
+  createdAt  DateTime   @map("created_at")
+  employees  Employee[]
+  @@map("orgs")
+}
+
+model Employee {
+  id     Int     @id @default(autoincrement())
+  orgId  Int     @map("org_id")
+  name   String
+  role   String
+  active Boolean @default(true)
+  org    Org     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  shifts Shift[]
+  @@map("employees")
+}
+
+model Shift {
+  id         Int      @id @default(autoincrement())
+  orgId      Int      @map("org_id")
+  employeeId Int      @map("employee_id")
+  startsAt   DateTime @map("starts_at")
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  @@map("shifts")
+}

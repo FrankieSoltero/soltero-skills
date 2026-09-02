@@ -67,7 +67,7 @@ plugin release cycle).
    ```
    Workflow({
      scriptPath: "${CLAUDE_SKILL_DIR}/workflows/update.mjs",
-     args: { sinceDate, today, seenKeys, playbook: <full text of references/playbook.md>, bootstrap }
+     args: { sinceDate, today, seenKeys, playbookPath: "<absolute path to references/playbook.md>", bootstrap }
    })
    ```
 
