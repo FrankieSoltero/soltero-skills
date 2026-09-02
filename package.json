@@ -1,6 +1,6 @@
 {
   "name": "soltero-skills",
-  "version": "0.24.0",
+  "version": "1.0.24",
   "description": "A public Claude Code skills library",
   "type": "module",
   "private": false,
