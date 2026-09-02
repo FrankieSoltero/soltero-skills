@@ -3,7 +3,10 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
-## [0.24.0] - 2026-09-02
+## [1.0.24] - 2026-09-02
+
+Version scheme moved to 1.x with this release (0.24.0 was briefly published under the old
+scheme; the content is identical).
 ### Added
 - **agent-swarm** — the universal swarm spawner. Any "spawn a swarm / fan out agents /
   throw a bunch of agents at this" request for a purpose no existing swarm-shaped skill
