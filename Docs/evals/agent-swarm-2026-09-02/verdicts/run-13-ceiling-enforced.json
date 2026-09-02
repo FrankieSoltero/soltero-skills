@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "All briefs passed the validator (validate-brief.mjs), but validation checked individual brief structure, not a machine-checkable deployment ceiling; dispatches.md is prose markdown with no orchestration code that enforces the total agent count or stops dispatching at a numeric cap."
+}

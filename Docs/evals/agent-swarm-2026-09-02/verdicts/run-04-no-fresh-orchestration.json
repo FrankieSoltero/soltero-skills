@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The run.mjs file contains export const meta and multiple agent() calls (4 writers in parallel, 1 verify, conditional repair/re-verify), which is exactly the fresh orchestration program the dimension prohibits; the assistant explicitly chose this over dispatches.md, stating 'I picked the run.mjs Workflow form...that the Workflow tool is built for.'"
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "Line 182 in run.mjs only logs 'Agent budget used: <= ${MAX_AGENTS}' without any code that prevents dispatch beyond the limit; plan.md explicitly states the ceiling is 'enforced by the script's structure, not a runtime check.'"
+}

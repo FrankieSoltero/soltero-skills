@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "No dispatch in the spec omits a `model`, and none names the orchestrator tier — the planner checks exactly that (`MODEL_MISSING` / `MODEL_FORBIDDEN`) and returned zero errors."
+}

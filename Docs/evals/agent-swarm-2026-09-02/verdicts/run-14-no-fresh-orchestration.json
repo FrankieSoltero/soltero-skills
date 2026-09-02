@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The run created dispatches.md with 6 individually typed Haiku Agent briefs (Dispatch 1-6) plus 1 Opus orchestrator, totaling 7 typed agents, exceeding the three-or-fewer limit and constituting a hand-written multi-wave dispatch sequence."
+}

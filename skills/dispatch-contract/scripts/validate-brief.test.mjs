@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { readFileSync, writeFileSync, mkdtempSync, symlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { validateBrief, TIERS } from './validate-brief.mjs';
@@ -219,4 +220,15 @@ test('CLI exits 2 on usage and IO errors', () => {
       assert.equal(e.status, 2, `args ${JSON.stringify(args)}`);
     }
   }
+});
+
+test('CLI still runs when invoked through a symlinked path (macOS /tmp → /private/tmp)', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'validate-brief-link-'));
+  const link = path.join(dir, 'scripts-link');
+  symlinkSync(here, link);
+  const bad = path.join(dir, 'bad-brief.md');
+  writeFileSync(bad, '# Brief\n\n## Objective\nx\n');
+  const r = spawnSync(process.execPath, [path.join(link, 'validate-brief.mjs'), bad], { encoding: 'utf8' });
+  assert.equal(r.status, 1, 'a failing brief must exit 1 even via a symlinked script path');
+  assert.ok((r.stdout + r.stderr).length > 0, 'the validator must print its verdict, not silently no-op');
 });

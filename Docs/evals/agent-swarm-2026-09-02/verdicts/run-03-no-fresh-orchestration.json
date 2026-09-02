@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "I did not write a new Workflow script. I reused workflows/swarm.mjs (the universal runner) and scripts/swarm-plan.mjs (the gate) unchanged, and wrote exactly one new file: the spec, .soltero/swarm/legacyfetch-migration.json, adapted from the reference example."
+}

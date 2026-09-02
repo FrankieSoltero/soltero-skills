@@ -38,6 +38,8 @@ Standing disciplines and procedures:
 - Any destructive or production write → `soltero-skills:destructive-op-gate`
 - Dispatching a subagent outside lean-sdd, or relaying its report →
   `soltero-skills:dispatch-contract`
+- "Spawn a swarm", "fan out agents", "throw a bunch of agents at this", or any
+  ad-hoc Workflow / 4+ Agent dispatches for one task → `soltero-skills:agent-swarm`
 - Debrief names a missed trigger twice → `soltero-skills:skill-trigger-repair`
 - Before shipping a new/edited skill → `soltero-skills:skill-ab-eval`
 

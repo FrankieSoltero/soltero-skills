@@ -1,0 +1,55 @@
+{
+  "name": "pii-redact-sweep",
+  "shape": "find",
+  "goal": "Find every API response that returns customer PII (email, phone, SSN, date of birth) without going through redact() first, for a compliance report",
+  "ceiling": { "agents": 30, "units": 40 },
+  "scout": null,
+  "lanes": [
+    {
+      "key": "routes-check",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "writes": false,
+      "prompt": "Read {item} in {root}. It is an Express-style route handler that may return customer data (email, phone, SSN, date of birth) in a JSON response. Trace every response call (res.json, res.send) in this file back to where the response body is built. If any field carrying email, phone, ssn/social-security, or dob/date-of-birth data reaches the response WITHOUT first passing through the redact() function exported from src/lib/redact.js, report one finding: ref = this file, severity = 'critical' if ssn or dob are exposed unredacted, else 'high', title = a short, CONSISTENT phrase for the defect pattern so identical defects share the exact same title (e.g. \"raw customer object returned without redact()\"), evidence = the exact quoted line(s) showing the unredacted response. If every PII-bearing object in this file's response already passes through redact() before res.json/res.send, or the file returns no PII, return findings: [].",
+      "items": [
+        "src/routes/route1.js",
+        "src/routes/route2.js",
+        "src/routes/route3.js",
+        "src/routes/route4.js",
+        "src/routes/route5.js",
+        "src/routes/route6.js",
+        "src/routes/route7.js",
+        "src/routes/route8.js",
+        "src/routes/route9.js",
+        "src/routes/route10.js",
+        "src/routes/route11.js",
+        "src/routes/route12.js"
+      ]
+    },
+    {
+      "key": "non-route-sweep",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "writes": false,
+      "prompt": "Sweep {item} under {root}. Confirm whether ANY code path there (an exported function whose return value a route handler sends directly via res.json/res.send, a service or job that builds a response payload, a model helper other than customer()) can put customer PII (email, phone, ssn, dob) into an API response without it passing through redact() from src/lib/redact.js first. List every file you actually opened as part of your evidence, not just the ones with a defect. If you find a leak outside src/routes/, report one finding per distinct leak pattern (ref, severity per the same critical/high rule as the routes lane, title using consistent wording, evidence = quoted lines). If nothing outside src/routes/ can leak PII into a response, return findings: [] and note in the finding-less case which files you inspected by putting that file list as the evidence on a single 'info' severity finding titled \"no additional response-building PII paths found\" with ref = {item}.",
+      "items": [
+        "src/services/**, src/jobs/**, src/models/**, and src/lib/** (every file outside src/routes/)"
+      ]
+    }
+  ],
+  "verify": {
+    "model": "sonnet",
+    "lenses": 1,
+    "escalate": { "severities": ["high", "critical"], "lenses": 3 },
+    "expectedFindings": 9,
+    "expectedPatterns": 1,
+    "panelPerFinding": false
+  },
+  "synth": {
+    "model": "opus",
+    "outputPath": "Docs/swarm-{name}-{date}.md",
+    "prompt": "Write this for a compliance lead, not an engineer. Lead with a one-paragraph plain-language summary: which fields leak, how many endpoints, and that a working fix (redact()) already exists and is used correctly elsewhere in the codebase. Then a table of every confirmed finding: route/file, PII fields exposed, severity, one-line fix (call redact() on the object before res.json). Then briefly list what was checked and cleared (the compliant routes and the non-route sweep) so the lead can see the sweep was thorough, not just the bad news. Then run accounting: agents spent by tier, ceiling, rounds, anything dropped."
+  }
+}

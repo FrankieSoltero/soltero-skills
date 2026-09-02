@@ -25,3 +25,19 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** mkdir -p ~/.claude/logs (2026-07-24); same dir also serves the session-miner cron whose first fire is Aug 1
 - **Lesson:** A cron entry that redirects output depends on the log directory existing — sh kills the whole command on a failed redirect, so the job looks installed but never runs; when a cron job leaves zero traces, check /var/mail/$USER first, and have installers mkdir -p the log dir in the crontab line itself
 - **Regression test:** cron-install docs/snippets should use: mkdir -p ~/.claude/logs && <cmd> >> ~/.claude/logs/x.log 2>&1; verify tonight's 21:40 run writes Docs/debriefs/2026-07-24.md or skip-log
+
+## 2026-09-02 — Re-ran tests/scenarios/agent-swarm/fixtures/setup-workspaces.sh (to add a canary fixture) while three GREEN scenario subagents were still working in /tmp/acme-crm, /tmp/acme-shop, /tmp/acme-billing; the script's rm -rf wiped their workspaces mid-run
+
+- **Symptom:** Re-ran tests/scenarios/agent-swarm/fixtures/setup-workspaces.sh (to add a canary fixture) while three GREEN scenario subagents were still working in /tmp/acme-crm, /tmp/acme-shop, /tmp/acme-billing; the script's rm -rf wiped their workspaces mid-run
+- **Root cause:** Scenario fixture builders are destructive by design (rm -rf + rebuild, so every batch starts clean) and they are shared across the RED, GREEN and A/B phases; nothing stopped a rebuild from being triggered while a batch was live
+- **Fix:** Waited for the runs to finish, inspected the surviving artifacts, re-dispatched any run whose deliverables were lost; the A/B builder (setup-ab-workspaces.sh) now copies per-arm workspaces so each run has its own directory
+- **Lesson:** A fixture builder that rm -rf's a workspace is a destructive op against a possibly-live target: never run it while any subagent batch is in flight, and add new fixtures in a separate script (or behind a flag) rather than appending them to the shared builder and re-running the whole thing
+- **Regression test:** Fixture builders refuse to rebuild a workspace that has a <workspace>/swarm/ or other in-progress marker unless --force is passed
+
+## 2026-09-02 — swarm-plan.mjs and dispatch-contract's validate-brief.mjs exit 0 with no output when invoked through /tmp/... on macOS (found by an A/B baseline run that had to re-invoke via /private/tmp/... to get a verdict)
+
+- **Symptom:** swarm-plan.mjs and dispatch-contract's validate-brief.mjs exit 0 with no output when invoked through /tmp/... on macOS (found by an A/B baseline run that had to re-invoke via /private/tmp/... to get a verdict)
+- **Root cause:** The CLI main-guard compares fileURLToPath(import.meta.url) (already symlink-resolved to /private/tmp/...) with process.argv[1] (the literal /tmp/... the caller typed); they differ, so main() never runs and the process exits 0 — a silent no-op that looks like PASS to anything checking only the exit code
+- **Fix:** Compare realpathSync() of both sides in the main-guard (skills/agent-swarm/scripts/swarm-plan.mjs, skills/dispatch-contract/scripts/validate-brief.mjs) and cover the symlinked-invocation path in each script's test
+- **Lesson:** Never gate a CLI's main() on a string equality between import.meta.url and argv[1]; resolve both with realpathSync (or drop the guard for bin-style scripts). A guard that fails closed to 'do nothing, exit 0' is the worst possible failure for a validator — pair every such script with a test that invokes it through a symlinked path
+- **Regression test:** swarm-plan.test.mjs / validate-brief.test.mjs: spawn the script via a symlinked directory and assert the verdict line appears and the exit code is non-zero on a failing input

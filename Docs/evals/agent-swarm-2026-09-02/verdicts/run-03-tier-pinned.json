@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The spec names model: \"opus\" for the 4 migrate-lane writers and model: \"sonnet\" for synth (plan.md line 67: 'By tier: opus=4, sonnet=1, haiku=0'), with no dispatches omitted or unspecified."
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The swarm spec `.soltero/swarm/pii-audit.json` explicitly assigns a model tier to every dispatch: four lanes with `\"model\": \"sonnet\"`, verify section with `\"model\": \"sonnet\"`, and synth section with `\"model\": \"opus\"`; planner validation confirms \"by tier: opus=1 sonnet=59\" with all 60 agents assigned to named tiers."
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The plan states 'Workflow prevents proliferation: Using Workflow's parallel() construct... Phase 1: Explicitly names 5 agents (no loop, no dynamic spawning)... Total fixed at 8 - no mechanism for unplanned growth,' describing design constraints but no validated spec field or enforcement code that stops dispatching at a numeric cap and reports what it dropped."
+}

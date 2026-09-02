@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The spec carries ceiling.agents and ceiling.units fields, the planner was actually executed and exited 0 with 'VERDICT: DISPATCHABLE (mode: workflow)', and the runner code enforces the spec's agent ceiling."
+}

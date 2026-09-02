@@ -1,0 +1,24 @@
+{
+  "name": "legacyfetch-migration",
+  "shape": "transform",
+  "goal": "Move every legacyFetch caller under src/ to httpClient, preserving behavior, with nothing broken.",
+  "ceiling": { "agents": 8, "units": 30 },
+  "scout": null,
+  "lanes": [
+    {
+      "key": "migrate",
+      "model": "opus",
+      "effort": "low",
+      "schema": "result",
+      "writes": true,
+      "serial": true,
+      "prompt": "In every file under {item} that calls legacyFetch(...), replace the call with the equivalent httpClient.get/post call (rule observed in this codebase: `import { legacyFetch } from '../lib/legacyFetch.js'; ... const r = await legacyFetch(url); return r.json();` becomes `import { httpClient } from '../lib/httpClient.js'; ... return httpClient.get(url);` — httpClient.get already returns the parsed object, no .json() call). Keep behavior identical, remove the now-unused legacyFetch import, then run `node --check` on each touched file and `npm test` from {root}, and return the observed result lines as evidence. Touch nothing outside {item}. Any caller whose call shape does not match this rule (e.g. non-GET usage, extra options): leave it unmodified and return DONE_WITH_CONCERNS naming the file and why.",
+      "items": ["src/account", "src/cart", "src/catalog", "src/checkout"]
+    }
+  ],
+  "synth": {
+    "model": "sonnet",
+    "outputPath": "swarm/legacyfetch-migration-{date}.md",
+    "prompt": "List every item whose status is not DONE first, with the concern; then the DONE scopes with their test evidence line. Note the total count of legacyFetch call sites migrated vs. left untouched."
+  }
+}

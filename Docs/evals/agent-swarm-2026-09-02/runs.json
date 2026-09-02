@@ -1,0 +1,197 @@
+{
+  "skill": "agent-swarm",
+  "date": "2026-09-02",
+  "tiers": {
+    "sonnet": "claude-sonnet-5",
+    "haiku": "claude-haiku-4-5-20251001"
+  },
+  "judge": "isolated single-dimension judges (haiku), Unknown escape, one call per dimension per run",
+  "canary": {
+    "scenario": "canary",
+    "note": "known to fail without agent-swarm: every RED baseline left the agent ceiling in prose and authored a fresh orchestration (ceiling-enforced, no-fresh-orchestration)"
+  },
+  "runs": [
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-1",
+      "arm": "with",
+      "verdict": "pass",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-01.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "pass",
+        "no-fresh-orchestration": "pass",
+        "width-by-work": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-1",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-02.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "pass",
+        "no-fresh-orchestration": "fail",
+        "width-by-work": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-2",
+      "arm": "with",
+      "verdict": "pass",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-03.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "pass",
+        "no-fresh-orchestration": "pass",
+        "width-by-work": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-2",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-04.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "fail",
+        "no-fresh-orchestration": "fail",
+        "width-by-work": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-3",
+      "arm": "with",
+      "verdict": "pass",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-05.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "pass",
+        "no-fresh-orchestration": "pass",
+        "width-by-work": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-3",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-06.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "fail",
+        "no-fresh-orchestration": "fail",
+        "width-by-work": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "canary",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-07.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "fail",
+        "no-fresh-orchestration": "fail",
+        "width-by-work": "fail"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-1",
+      "arm": "with",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-08.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "pass",
+        "no-fresh-orchestration": "pass",
+        "width-by-work": "fail"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-1",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-09.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "fail",
+        "no-fresh-orchestration": "fail",
+        "width-by-work": "fail"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-2",
+      "arm": "with",
+      "verdict": "pass",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-10.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "pass",
+        "no-fresh-orchestration": "pass",
+        "width-by-work": "pass"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-2",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-11.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "fail",
+        "no-fresh-orchestration": "fail",
+        "width-by-work": "pass"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-3",
+      "arm": "with",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-12.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "pass",
+        "no-fresh-orchestration": "pass",
+        "width-by-work": "fail"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-3",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-13.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "fail",
+        "no-fresh-orchestration": "fail",
+        "width-by-work": "pass"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "canary",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "Docs/evals/agent-swarm-2026-09-02/transcripts/run-14.md",
+      "dimensions": {
+        "tier-pinned": "pass",
+        "ceiling-enforced": "fail",
+        "no-fresh-orchestration": "fail",
+        "width-by-work": "fail"
+      }
+    }
+  ]
+}

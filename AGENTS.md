@@ -78,6 +78,12 @@ Standing disciplines and procedures:
   dependency-free Node and runs anywhere; outside Claude Code there is no
   `Agent` tool, so do the dispatched work inline using the brief as your own
   checklist)
+- "Spawn a swarm", "fan out agents", "throw a bunch of agents at this", or
+  about to write an ad-hoc `Workflow` script / four-plus `Agent` dispatches
+  for one task → open `skills/agent-swarm/SKILL.md` (the planner
+  `scripts/swarm-plan.mjs` is dependency-free Node and runs anywhere; the
+  runner `workflows/swarm.mjs` is Claude-Code-only — outside it, execute the
+  spec's lanes yourself, sequentially, holding each to the same return shape)
 - A debrief names a missed trigger twice → open
   `skills/skill-trigger-repair/SKILL.md` (the parser is dependency-free Node
   and runs anywhere; `hooks/session-context.md` has no non-Claude-Code
@@ -110,9 +116,10 @@ under `skills/` with a `SKILL.md` you can open directly.
 - **`Workflow` tool** (bundled multi-agent orchestration: parallel
   subagents, schema-forced structured output, independent-skeptic
   verification passes, concurrency caps, worktree isolation) → **not
-  portable.** Six skills bundle a `Workflow` script: `agent-playbook`
-  (update mode), `audit-swarm`, `design-forge` (update mode), `plan-review`,
-  `prd-review`, and `transcript-reader`. On a non-Claude-Code agent, open
+  portable.** Seven skills bundle a `Workflow` script: `agent-playbook`
+  (update mode), `agent-swarm` (the universal runner), `audit-swarm`,
+  `design-forge` (update mode), `plan-review`, `prd-review`, and
+  `transcript-reader`. On a non-Claude-Code agent, open
   the skill's `SKILL.md`, read what each phase is meant to accomplish, and
   perform those steps yourself, sequentially, as a single agent. You lose
   the parallel fan-out and the independent-skeptic verification pass those

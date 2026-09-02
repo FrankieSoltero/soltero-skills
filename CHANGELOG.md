@@ -3,6 +3,36 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.24.0] - 2026-09-02
+### Added
+- **agent-swarm** — the universal swarm spawner. Any "spawn a swarm / fan out agents /
+  throw a bunch of agents at this" request for a purpose no existing swarm-shaped skill
+  owns becomes a JSON spec (shape, lanes over items, a pinned standard tier at every
+  dispatch site, an agent ceiling, severity-scaled verification, one synthesis agent
+  writing a file, capped loop) instead of a fresh bespoke workflow script or an
+  unbounded inline fan-out. `scripts/swarm-plan.mjs` is the deterministic gate (tier
+  pins, ceiling, loop cap, writer isolation and overlap, findings-need-verify, agent
+  count per tier, Agent-tool mode for ≤3 agents); `workflows/swarm.mjs` is the one
+  parameterized runner (ceiling-enforced dispatch that drops and reports rather than
+  silently exceeding, dedupe, scaled skeptic panel, tier accounting in the return), with
+  a behavioral test that executes it under stubbed Workflow globals. RED on pinned
+  sonnet: a 278-line and a 217-line fresh script per task, at least one dispatch left
+  unpinned (inheriting the orchestrator tier), tiers re-derived per job (code-writing on
+  sonnet, synthesis on haiku), ceilings stated in prose with nothing enforcing them.
+- Routing for agent-swarm in `hooks/session-context.md`, `AGENTS.md`, and the README
+  index; `check:workflows` covers the new runner.
+- Ship gate for agent-swarm via skill-ab-eval: sonnet 0/3 → 3/3, haiku 0/3 → 1/3, canary
+  failed both tiers, no flags — `Docs/skill-eval-agent-swarm-2026-09-02.md`, evidence under
+  `Docs/evals/agent-swarm-2026-09-02/`. Recommendation: ship; haiku's width-by-work
+  dimension regressed (2/3 → 1/3) and is queued as the next planner edit.
+- MCP pinned skill count 48 → 49.
+### Fixed
+- **agent-swarm / dispatch-contract**: the CLI main-guard in `swarm-plan.mjs` and
+  `validate-brief.mjs` compared an unresolved `argv[1]` with the resolved module path, so
+  invoking either through `/tmp/…` on macOS exited 0 with no output (found by an eval
+  baseline run). Both now compare real paths; each test suite invokes the script through a
+  symlink.
+
 ## [0.23.0] - 2026-09-01
 ### Added
 - Six skills, each built through creating-a-skill's RED→GREEN loop on pinned sonnet with

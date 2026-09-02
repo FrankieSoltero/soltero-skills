@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The inspect-math-helpers lane creates 9 separate item entries for money.js and helpers 1-8 with identical prompt templates, producing 9 independent dispatches, when the width-by-work principle requires 'uniform mechanical rewrites are chunked (one writer per scope of several files, not one per file)'."
+}

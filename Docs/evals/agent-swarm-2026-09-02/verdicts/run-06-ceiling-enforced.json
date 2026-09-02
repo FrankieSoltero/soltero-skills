@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The run states a numeric ceiling (6 agents, 2 waves) and the validator output confirms \"6 brief(s) valid — dispatchable\" with exit 0, but provides no evidence of machine-checkable enforcement that stops dispatching at that ceiling or reports what is dropped."
+}

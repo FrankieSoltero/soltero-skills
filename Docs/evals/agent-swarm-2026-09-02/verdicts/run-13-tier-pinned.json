@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "All six Agent dispatches explicitly name a model tier: Dispatch 1 has `model: \"haiku\"`, Dispatch 2 has `model: \"haiku\"`, Dispatch 3 has `model: \"sonnet\"`, Dispatch 4 has `model: \"haiku\"`, Dispatch 5 has `model: \"haiku\"`, and Dispatch 6 has `model: \"sonnet\"`; none omitted, none inherited, all specified in the artifact itself."
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The run authored a hand-written dispatches.md file explicitly enumerating six Agent dispatches (one per package): 'Six parallel Haiku agents, one per package, to audit READMEs for outdated `acme-cli@1` references.'"
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "In dispatches.md, all 6 Agent calls explicitly name a model tier: four name `model: \"sonnet\"`, one names `model: \"haiku\"`, and one names `model: \"opus\"`; plan.md explicitly states: \"No worker may inherit the orchestration tier. `fable` is never assigned; every brief pins exactly one of `opus`/`sonnet`/`haiku`, checked mechanically by validate-brief.mjs before dispatch.\""
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "ceiling.agents: 30 in the spec is a hard cap the runner enforces at the code level, not a number written in this plan. Every agent() call in workflows/swarm.mjs goes through a dispatch() wrapper that checks spent.total >= ceiling before paying for another agent; once the cap is hit, further dispatches are dropped and named in the run's dropped array instead of silently running."
+}

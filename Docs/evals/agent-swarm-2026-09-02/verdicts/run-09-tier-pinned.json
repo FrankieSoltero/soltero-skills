@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "All 8 agent dispatches explicitly name their model tier in run.mjs: 'Discovery Agents (5 × Haiku)' for routes, services, jobs, and utils analysis, and 'Verification Agents (3 × Sonnet)' for redact expert, data flow verifier, and report compiler, with each agent() call containing 'model: \"haiku\"' or 'model: \"sonnet\"'."
+}

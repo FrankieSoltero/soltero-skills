@@ -1,0 +1,92 @@
+{
+  "shape": "transform",
+  "description": "Migrate legacyFetch callers to httpClient across src/ modules",
+  "model": "opus",
+  "ceiling": {
+    "agents": 15
+  },
+  "items": [
+    {
+      "scope": "account_module",
+      "files": [
+        "src/account/account1.js",
+        "src/account/account2.js",
+        "src/account/account3.js",
+        "src/account/account4.js",
+        "src/account/account5.js",
+        "src/account/account6.js",
+        "src/account/account7.js",
+        "src/account/account8.js",
+        "src/account/account9.js",
+        "src/account/account10.js"
+      ]
+    },
+    {
+      "scope": "cart_module",
+      "files": [
+        "src/cart/cart1.js",
+        "src/cart/cart2.js",
+        "src/cart/cart3.js",
+        "src/cart/cart4.js",
+        "src/cart/cart5.js",
+        "src/cart/cart6.js",
+        "src/cart/cart7.js",
+        "src/cart/cart8.js",
+        "src/cart/cart9.js",
+        "src/cart/cart10.js"
+      ]
+    },
+    {
+      "scope": "catalog_module",
+      "files": [
+        "src/catalog/catalog1.js",
+        "src/catalog/catalog2.js",
+        "src/catalog/catalog3.js",
+        "src/catalog/catalog4.js",
+        "src/catalog/catalog5.js",
+        "src/catalog/catalog6.js",
+        "src/catalog/catalog7.js",
+        "src/catalog/catalog8.js",
+        "src/catalog/catalog9.js",
+        "src/catalog/catalog10.js"
+      ]
+    },
+    {
+      "scope": "checkout_module",
+      "files": [
+        "src/checkout/checkout1.js",
+        "src/checkout/checkout2.js",
+        "src/checkout/checkout3.js",
+        "src/checkout/checkout4.js",
+        "src/checkout/checkout5.js",
+        "src/checkout/checkout6.js",
+        "src/checkout/checkout7.js",
+        "src/checkout/checkout8.js",
+        "src/checkout/checkout9.js",
+        "src/checkout/checkout10.js"
+      ]
+    }
+  ],
+  "lanes": [
+    {
+      "name": "migrate_scope",
+      "model": "opus",
+      "writes": true,
+      "isolation": "worktree",
+      "prompt": "Migrate this scope from legacyFetch to httpClient. For each file:\n1. Replace 'import { legacyFetch } from '../lib/legacyFetch.js'' with 'import { httpClient } from '../lib/httpClient.js''\n2. Replace 'legacyFetch(url)' with 'await httpClient.get(url)'\n3. Replace 'legacyFetch(url, {method: \"POST\", ...})' with 'await httpClient.post(url, body)'\n4. Preserve all other code and logic\nThe migration is uniform: legacyFetch(url) always becomes httpClient.get(url) for GET requests. Verify each file parses and the exported functions remain unchanged."
+    }
+  ],
+  "verify": {
+    "model": "sonnet",
+    "lens": "one",
+    "prompt": "Verify the legacyFetch-to-httpClient migration in this scope. Check:\n1. All import statements correctly changed from legacyFetch to httpClient\n2. All legacyFetch() calls replaced with httpClient.get() or httpClient.post()\n3. No syntax errors - all files are valid JavaScript\n4. Exported functions unchanged in signature\nRun: npm test (from project root) to verify smoke tests pass.\nReturn findings keyed by severity."
+  },
+  "synth": {
+    "model": "opus",
+    "outputPath": "MIGRATION_STATUS.md",
+    "prompt": "Compile the legacyFetch-to-httpClient migration status. For each scope (account, cart, catalog, checkout), report:\n- Files migrated (count)\n- Any migration issues or conflicts\n- Verification status (passed/failed)\nInclude:\n- Total files migrated: 40\n- Smoke test status\n- Any files that need manual review\nFormat as markdown with clear sections per scope."
+  },
+  "loop": {
+    "maxRounds": 1
+  }
+}

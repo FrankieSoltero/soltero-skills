@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "Artifacts produced: `/tmp/ab-agent-swarm/ws-06/swarm/plan.md` — 6 total agents (5 sonnet/haiku finders in wave 1, 1 opus synthesizer in wave 2), model-per-dispatch table and rationale, the parent-side verification gate, and two explicit waves with gate steps between waves."
+}
