@@ -1,5 +1,7 @@
 # RED baseline — mini-game-craft (no skill present)
 
+_Baseline model: unrecorded (July 2026 default) · run date: 2026-07-29_
+
 Fixtures are the REAL multiplayer_ai doodle/tetris engines (user's own code),
 pre-audited: 12 known bugs across the classic failure classes. Default model;
 docs/skills/agents out of bounds. Honest RED: 3/3 PASS, exceptionally.

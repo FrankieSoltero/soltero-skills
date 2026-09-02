@@ -14,11 +14,15 @@ export const meta = {
 const opts = typeof args === 'string' ? JSON.parse(args) : (args || {})
 const sinceDate = opts.sinceDate
 const today = opts.today
-const playbook = opts.playbook
+// The playbook is ~250KB; passing it inline as `playbook` is supported but impractical
+// from an orchestrator's tool call. Prefer `playbookPath`: the synthesis agent (which has
+// file tools) reads it itself. Exactly one of the two is required.
+const playbook = typeof opts.playbook === 'string' ? opts.playbook : null
+const playbookPath = typeof opts.playbookPath === 'string' ? opts.playbookPath : null
 const bootstrap = !!opts.bootstrap
 const seen = new Set((opts.seenKeys || []).map(k => String(k).toLowerCase().trim()))
-if (!sinceDate || !today || typeof playbook !== 'string') {
-  throw new Error('args.sinceDate, args.today, and args.playbook (string) are required')
+if (!sinceDate || !today || (!playbook && !playbookPath)) {
+  throw new Error('args.sinceDate, args.today, and one of args.playbook (string) / args.playbookPath (path) are required')
 }
 const CAP = bootstrap ? 24 : 12
 
@@ -270,7 +274,13 @@ if (!survivors.length) {
 phase('Synthesize')
 const synth = await agent(
   `You maintain a tiered coding-agent best-practices playbook. Merge the vetted tactics below ` +
-  `into it as explicit edits.\n\nCURRENT PLAYBOOK:\n${playbook}\n\nVETTED TACTICS (grouped by ` +
+  `into it as explicit edits.\n\n` +
+  (playbook
+    ? `CURRENT PLAYBOOK:\n${playbook}\n\n`
+    : `CURRENT PLAYBOOK: read the full file at ${playbookPath} with the Read tool before ` +
+      `merging (it is long — read it in chunks until the end; every replaceHeading you emit ` +
+      `must be quoted from what you actually read).\n\n`) +
+  `VETTED TACTICS (grouped by ` +
   `source, each with final tier and skeptic reasoning):\n${JSON.stringify(survivors, null, 2)}\n\n` +
   `Rules: (1) Merge duplicates — if two sources support the same tactic, one entry citing both, ` +
   `and multiple independent sources justify Proven. (2) If a tactic updates or contradicts an ` +

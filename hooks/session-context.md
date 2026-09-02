@@ -31,6 +31,15 @@ Standing disciplines and procedures:
 - Starting feature work needing isolation → `soltero-skills:lean-worktrees`
 - Branch complete, needs integrating → `soltero-skills:lean-finishing`
 - Authoring/editing skills in the soltero-skills repo → `soltero-skills:creating-a-skill`
+- Bug fixed / incident resolved / gotcha discovered → `soltero-skills:capture-lesson`
+- Task start in a project with `Docs/mistakes-and-fixes.md`, or "this keeps
+  happening" → `soltero-skills:lesson-recall`
+- Same bug class 3+ times / "universalize it" → `soltero-skills:defect-class-sweep`
+- Any destructive or production write → `soltero-skills:destructive-op-gate`
+- Dispatching a subagent outside lean-sdd, or relaying its report →
+  `soltero-skills:dispatch-contract`
+- Debrief names a missed trigger twice → `soltero-skills:skill-trigger-repair`
+- Before shipping a new/edited skill → `soltero-skills:skill-ab-eval`
 
 ## Red Flags
 

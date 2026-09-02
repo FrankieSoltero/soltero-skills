@@ -1,5 +1,7 @@
 # RED baseline — lean-plans (no skill present)
 
+_Baseline model: unrecorded (July 2026 default) · run date: 2026-07-29_
+
 Fresh general-purpose subagents, session-default model, scenario text only.
 Recorded verbatim (key excerpts); honest RED — passes recorded as passes.
 

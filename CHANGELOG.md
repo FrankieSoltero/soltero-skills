@@ -3,6 +3,67 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [0.23.0] - 2026-09-01
+### Added
+- Six skills, each built through creating-a-skill's RED→GREEN loop on pinned sonnet with
+  a bundled, unit-tested script (`npm test` 27 → 175+ cases):
+  - **destructive-op-gate** — before any irreversible or multi-record write against a
+    possibly-live system: resolve the real target from the actual connection string
+    (`scripts/resolve-target.mjs`), enumerate ids, count-only dry run that must match
+    (`scripts/compare-counts.mjs`), rollback artifact re-read from disk before the write,
+    idempotency key, typed approval at the top tier, record under `Docs/destructive-ops/`.
+    Opt-in `hooks/pretooluse-guard.mjs` flags destructive Bash/SQL shapes. RED: agents
+    judged prod-vs-staging from how rows "looked", reported backups never written, and
+    twice tried to hand-edit the production store.
+  - **dispatch-contract** — typed brief for every subagent dispatch outside lean-sdd
+    (objective, inputs as file refs, tool allowlist, pinned model tier, return schema,
+    autonomy + claim-audit lines), structure-only returns, and the parent-side gate that a
+    relayed claim is verified before it is spoken (`scripts/validate-brief.mjs`).
+  - **skill-trigger-repair** — when a debrief names the same missed skill twice: pull the
+    quoted user phrasing, make it a literal description clause, repair routing surfaces,
+    ledger under `Docs/`, re-check on the next debrief (`scripts/missed-triggers.mjs` parses
+    debriefs and audits routing surfaces).
+  - **lesson-recall** — at task start, match `Docs/mistakes-and-fixes.md` and the memory
+    index against the task, surface fixes before new investigation, count recurrences,
+    hand off to correction-compiler at three (`scripts/recall-lessons.mjs`, read-only).
+  - **defect-class-sweep** — same bug class fixed 3+ times: write the rule and its
+    mechanical detector first, sweep every instance, fix in one reviewed batch, land the
+    rule in `Docs/golden-principles.md` with a check (`scripts/sweep.mjs`).
+  - **skill-ab-eval** — paired with/without runs across ≥2 model tiers, full-transcript
+    reads, single-dimension judges with an `Unknown` escape, seeded canary so an all-clean
+    result is positive evidence (`scripts/paired-table.mjs`).
+- **build-mcp-server** `references/sdk-v2.md` + `templates/v2/` for the scoped
+  `@modelcontextprotocol/server` 2.0.0 family (GA 2026-07-28), every block sourced and
+  dated; templates type-checked and run-verified over a stdio JSON-RPC session.
+- **agent-playbook** sweep 2026-09-01 (window 2026-07-17 → 09-01, all three lanes):
+  60 edits (51 add, 9 replace), 345 → 396 entries, Proven 34 → 39; `update.mjs` now
+  accepts `playbookPath` (the inline `playbook` arg was impractical at 250KB).
+### Changed
+- **plan-review / prd-review**: skeptic effort override removed; prd-review's gate gains
+  the blocking-violation term its selector already used; graders may return
+  `verdict: "unknown"` (owner input, never a floor breach or a pass); non-convergence
+  circuit breaker (<2-point movement or a recurring violation stops the council and routes a
+  rubric/prompt fix to the owner); verdict-reproducibility criterion in D6.
+- **lean-sdd**: the fix-loop cap never accepts work — cap exhaustion with a red signal
+  reverts or replans; shared mutable state counts as file overlap for the one-writer rule.
+- **lean-verification**: UI/API/CLI changes require one live-driven observation plus a
+  final-state check, not a green suite alone.
+- **lean-brainstorming**: the batched question round is non-skippable for features that
+  change what users can do or see.
+- **audit-swarm**: seeded-defect canary per run; a missed canary reports "harness not
+  live", never "clean".
+- **creating-a-skill**: ship gate via skill-ab-eval across ≥2 tiers; deterministic step ⇒
+  bundled script with a test is a Hard Rule; descriptions must carry literal user
+  phrasings and RED includes an unnamed-trigger scenario. CONTRIBUTING updated.
+- Content-marketing family re-baselined on `claude-fable-5-1` (15 scenarios, recorded above
+  the July baselines); only email-marketing's Overview needed amending. The audit's
+  predicted low-effort search regression did not reproduce on trend-research.
+- Routing: capture-lesson (the most-missed skill) and the six new skills added to
+  `hooks/session-context.md`, `AGENTS.md`, `README.md`. MCP pinned skill count 42 → 48.
+- All `tests/scenarios/*/RED-baseline.md` now state their baseline model and run date.
+- Cloud routine prompts for skill-gardener, memory-gardener and skill-patcher carry an
+  unattended-run block (updated 2026-09-01 via the routines API; not in this repo).
+
 ## [0.22.0] - 2026-09-01
 ### Changed
 - **Fable 5.1 prompt audit applied** across the library (report:

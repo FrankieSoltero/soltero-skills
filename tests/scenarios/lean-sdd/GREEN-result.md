@@ -43,3 +43,50 @@ finding routed to the final whole-branch review.
 3/3 PASS; zero REFACTOR rounds. The RED-observed failure — right judgment,
 improvised artifacts — is closed: all runs used the workspace layout, scripts,
 prompt templates, model tiers, and exact ledger line formats.
+
+## 2026-09-01 — scenario 4 (cap exhaustion), sonnet — PASS
+
+Model: **sonnet** · Date: **2026-09-01** · Same dispatch as the RED run with the
+post-change text substituted; repository files out of bounds.
+
+Flipped A → **B**, and split on the signal exactly as the new text specifies:
+"That's exactly this case: verdict is BLOCK, and `npm test -- sweeper` still shows 2
+failing tests. This is not 'Green but disputed' (which requires 'every covering test
+passes and the reproduction is gone') — so adjudication (A) is categorically the
+wrong tool here." It quoted "The cap ends the loop — it never accepts the work.
+Budget exhaustion is not a verdict", used the flakiness clause to reject the
+implementer's excuse ("it holds only if you see the same tests fail at BASE. No BASE
+comparison has been done"), and rejected D with the new rationalization row verbatim.
+
+Executed the contract: `git revert <task6-base7>..<task6-head7>`, a post-revert test
+run to confirm the broken path is actually gone, the exact new ledger line
+(`Task 6: reverted after cap — ...`), Task 7 dispatched onto the clean tree, and the
+replan route flagged for after the demo. It also told the human the sweeper is *not
+in* the branch — "a `complete` line was never earned and silent discards are
+forbidden" — which is the behavior the RED run's `complete (1 parked)` line hid.
+
+No new rationalization surfaced; no REFACTOR round needed.
+
+## 2026-09-01 — scenario 5 (shared mutable state), sonnet — PASS
+
+Model: **sonnet** · Date: **2026-09-01** · Same dispatch as the RED run with the
+post-change text substituted; repository files out of bounds.
+
+Still B — the judgment was already there in RED — but the run now executes the
+skill's detection procedure by name instead of deriving it: it quotes "Derive the
+second set mechanically — read each task's brief and the plan's Global Constraints
+for any step that installs, migrates, seeds, generates, builds, or updates
+snapshots", enumerates the three colliding artifacts against the skill's own
+examples (ordered migrations dir + lock, shared dev DB, generated client, lockfile),
+and rejects C with the new clause verbatim.
+
+The change earns its keep on the contract, not the verdict: the RED run's invented
+off-contract handshake — a `CODE_READY` implementer status and a mid-task "go-ahead"
+message to release only the shared steps — is gone, replaced by the stated rule
+(hold until the write window closes; a fix round reopens it) and a closing line that
+names the difference: "No instruction is added telling any implementer to skip,
+reorder, or self-run the migrate/generate/install steps — those stay in the briefs
+exactly as written; serialization, not step-stripping, is what removes the
+collision."
+
+No new rationalization surfaced; no REFACTOR round needed.

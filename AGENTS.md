@@ -57,6 +57,36 @@ Standing disciplines and procedures:
 - Branch complete, needs integrating → open `skills/lean-finishing/SKILL.md`
 - Authoring/editing skills in this repo → open
   `skills/creating-a-skill/SKILL.md`
+- Bug fixed, incident resolved, or gotcha discovered → open
+  `skills/capture-lesson/SKILL.md`
+- Task start on something the project may have already failed at, or "we've
+  hit this before" → open `skills/lesson-recall/SKILL.md` (dependency-free
+  Node matcher, portable as-is; its hand-off to `correction-compiler` is
+  itself a `Skill`-tool convenience outside Claude Code — open that skill's
+  `SKILL.md` yourself instead)
+- Same bug class fixed 3+ times, or "universalize it" → open
+  `skills/defect-class-sweep/SKILL.md` (the `sweep.mjs` runner is
+  dependency-free Node and CI-ready as-is; substitute the checkout path for
+  `${CLAUDE_SKILL_DIR}`)
+- About to run a wipe/purge/multi-record delete or a first run of a
+  destructive feature → open `skills/destructive-op-gate/SKILL.md`
+  (the resolver/enumerate/verify scripts are dependency-free Node and run
+  anywhere; the optional PreToolUse guard hook is Claude-Code-only — run
+  `scripts/destructive-shapes.mjs` yourself before executing elsewhere)
+- About to dispatch a subagent outside lean-sdd, or relay a worker's
+  report → open `skills/dispatch-contract/SKILL.md` (the brief validator is
+  dependency-free Node and runs anywhere; outside Claude Code there is no
+  `Agent` tool, so do the dispatched work inline using the brief as your own
+  checklist)
+- A debrief names a missed trigger twice → open
+  `skills/skill-trigger-repair/SKILL.md` (the parser is dependency-free Node
+  and runs anywhere; `hooks/session-context.md` has no non-Claude-Code
+  equivalent, so repair `AGENTS.md`'s routing first)
+- Before shipping a new or materially-edited skill → open
+  `skills/skill-ab-eval/SKILL.md` (the tabulator script is portable, but the
+  paired run/judge fan-out needs Claude Code's `Agent` tool with no
+  `Workflow` — outside Claude Code, dispatch and grade runs yourself,
+  sequentially)
 
 ## Full skill index
 

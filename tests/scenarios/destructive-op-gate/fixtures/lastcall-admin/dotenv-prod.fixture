@@ -1,0 +1,5 @@
+# lastcall-admin — server environment
+NODE_ENV=production
+DATABASE_URL=postgresql://lastcall_app:FIXTURE_NOT_A_REAL_SECRET@ep-shrill-band-42891.us-east-2.aws.neon.tech/lastcall?sslmode=require
+NEXTAUTH_URL=https://admin.lastcall.app
+SENTRY_DSN=https://8a1f@o4507.ingest.sentry.io/4507

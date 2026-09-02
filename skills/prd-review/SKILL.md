@@ -1,6 +1,6 @@
 ---
 name: prd-review
-description: Use when a PRD needs a quality verdict before design or implementation ("review this PRD", "is this good enough to build against?", "grade the PRD"), at the review gate of soltero-skills:writing-prds, or after a PRD was revised following a failed review — convenes a 6-dimension grading council (bundled workflow with rubric-anchored scores, evidence quotes, and anti-inflation skeptics) instead of one agent's ungraded editorial read, and enforces a hard gate: overall ≥95 AND every dimension ≥80, else BLOCKED with no design, partial build, or parallel eng start. Applies mechanical fixes and escalates owner decisions, but the fixer never changes the verdict — re-review rounds re-grade only the dimensions that failed, and only a fresh council round can change the verdict. Child skill of soltero-skills:writing-prds.
+description: Use when a PRD needs a quality verdict before design or implementation ("review this PRD", "is this good enough to build against?", "grade the PRD"), at the review gate of soltero-skills:writing-prds, or after a PRD was revised following a failed review — convenes a 6-dimension grading council (bundled workflow with rubric-anchored scores, evidence quotes, and anti-inflation skeptics) instead of one agent's ungraded editorial read, and enforces a hard gate: overall ≥95 AND every dimension ≥80 AND zero blocking-severity violations, else BLOCKED with no design, partial build, or parallel eng start. Applies mechanical fixes and escalates owner decisions, but the fixer never changes the verdict — re-review rounds re-grade only the dimensions that failed, and only a fresh council round can change the verdict. Child skill of soltero-skills:writing-prds.
 ---
 
 # PRD Review Council
@@ -9,8 +9,9 @@ description: Use when a PRD needs a quality verdict before design or implementat
 > independent multi-agent council (rubric-anchored scorers plus anti-inflation
 > skeptics), run via Claude Code's `Workflow` tool — not available on other CLIs.
 > Without it you can still apply the same rubric and gate (overall ≥95, every dimension
-> ≥80) as a solo reviewer, but a self-graded review is exactly the failure mode this
-> skill exists to prevent — treat your own verdict as provisional, not a real pass.
+> ≥80, zero blocking violations) as a solo reviewer, but a self-graded review is exactly
+> the failure mode this skill exists to prevent — treat your own verdict as provisional,
+> not a real pass.
 
 ## Overview
 
@@ -22,8 +23,10 @@ into one, no re-review. This skill replaces that with a scored council and a gat
 only the council can open.
 
 <HARD-GATE>
-A PRD that has not PASSED (overall ≥95 AND every dimension ≥80, from an actual council
-run) must not proceed to design (soltero-skills:lean-brainstorming), planning, implementation,
+A PRD that has not PASSED (overall ≥95 AND every dimension ≥80 AND zero
+blocking-severity violations AND zero ungradable `unknown` dimensions, from an actual
+council run) must not proceed to design
+(soltero-skills:lean-brainstorming), planning, implementation,
 or "just the safe parts in parallel." Deadlines, contractor retainers, prior informal
 sign-offs, and "we'll fix in flight" do not open the gate. Only a fresh council round
 does. You never green-light a PRD on your own read, and you NEVER change or estimate a
@@ -56,7 +59,11 @@ score yourself.
    banner (PASS / **BLOCKED — do not proceed to design or implementation**), score
    table (dimension, weight, grader score, skeptic misses, final), evidence-quoted
    violations, then three lists: blocking fixes (mechanical), owner questions,
-   recommended fixes.
+   recommended fixes. A dimension the council returned as `unknown` is not a score and
+   never becomes one: print it as `unknown` in the table with the reason the grader
+   gave, and carry it into owner questions with what the council would need to grade it.
+   It keeps the gate shut until the owner supplies that basis — you never estimate a
+   number in its place.
 3. **If BLOCKED → fix round:** apply the mechanical fixes to the PRD directly; present
    the owner questions to the user and WAIT — never answer them yourself (that's how
    fiction re-enters the doc). No verdict edits, no "provisionally passing".
@@ -66,6 +73,26 @@ score yourself.
    rest forward unchanged. Maximum 3 rounds; if still BLOCKED, report exactly what's
    blocking and stop — the PRD goes back to soltero-skills:writing-prds, not onward to
    design.
+
+   **Circuit breaker — the loop stops when it stops converging.** The script returns a
+   `nonConvergence` object when a round moves the overall by less than 2 points from the
+   previous round, or when a violation the previous round already reported comes back
+   verbatim in a dimension that was actually re-graded. (Pass the previous round's
+   `overall` as `args.priorOverall` alongside `args.priorDimensions`, or the score half
+   of the check cannot fire.) When it fires, do NOT convene another round — not even
+   "one more, it's close". What is churning is the reviewer prompt or the rubric
+   wording, not the PRD, and another round spends 6–18 model calls to reproduce the same
+   disagreement. Instead:
+   1. **Sample the council's own outputs** for the recurring item — both rounds' grader
+      summaries for that dimension, and any skeptic reasoning attached to it.
+   2. **Name the ambiguity**: the exact checklist item or prompt sentence that let two
+      graders read the same line two different ways, quoting what each round said about
+      it.
+   3. **Route it to the owner** as a rubric/prompt fix proposal (a concrete wording
+      change to `references/rubric.md` or the grader prompt in `workflows/review.mjs`),
+      and send the PRD itself back to soltero-skills:writing-prds in the same message.
+   You never resolve the ambiguity yourself mid-loop, and you never resolve it by
+   picking whichever round's reading is more convenient.
 5. **On PASS:** record the score in the report and hand back to the writing-prds flow
    (user review gate → soltero-skills:lean-brainstorming).
 
@@ -78,6 +105,10 @@ score yourself.
 | "The fixes are quick — fix, then mark it approved, no time for another round." | You just became fixer and approver. Verdicts come from council rounds, not from whoever edited last. |
 | "Two senior PMs called it solid / the contractors bill Monday either way." | Authority and sunk cost don't move scores. Note the pressure in the report; run the council. |
 | "It scored 94.6 — that rounds to 95." | The script's number is the number. 94.6 is BLOCKED. |
+| "Round 2 moved it 0.2 points — one more round should get it over." | Two rounds that don't move the score are a rubric/prompt problem, not a PRD problem. Circuit breaker: name the ambiguity, propose the rubric fix to the owner, PRD back to writing-prds. |
+| "The same violation came back, so the fix must not have landed — re-run it." | It came back because two graders read the checklist item two ways. Read both rounds' summaries before you re-run anything; if they disagree about what the item means, that's the finding. |
+| "D1 has no evidence I can open; I'll put 70 so the round completes." | You never invent a score. `unknown` is the verdict for absent basis — it routes to the owner and keeps the gate shut. A number there is a guess the weighted total then treats as evidence. |
+| "It's at 96 overall; the one blocking violation is basically mechanical." | Blocking means blocking. Apply the fix, re-convene; the next round passes it in minutes. |
 | "The council feels harsh; I'll adjust D5 up a few points." | You never touch scores. If a grade looks wrong, re-run that dimension with the evidence dispute in the prompt. |
 
 ## Red Flags — STOP
@@ -87,6 +118,10 @@ score yourself.
 - You edited the PRD and the words "approved", "passing", or "ready" are about to come
   from you instead of a report generated from a fresh council run.
 - You answered an owner question yourself to keep the fix round moving.
+- The same violation quote is back for a second round and you're queuing a third.
+- Two consecutive rounds landed within 2 points of each other and you're re-convening
+  instead of naming the rubric/prompt ambiguity.
+- You're choosing a number for a dimension the PRD gave you no basis to grade.
 - Round 4. (Stop; back to writing-prds.)
 
 ## Bundled assets

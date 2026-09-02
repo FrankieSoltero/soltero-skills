@@ -1,0 +1,26 @@
+{
+  "name": "<class-slug>",
+  "version": 1,
+  "principle": "GP-NNN",
+  "wrongPattern": "<one line: the wrong pattern, in words, and why it is wrong>",
+  "correctPattern": "<one line: what to write instead>",
+  "detectors": [
+    {
+      "id": "<detector-slug>",
+      "regex": "<JS regex, JSON-escaped, that finds the wrong pattern>",
+      "flags": "",
+      "unless": "<optional JS regex; a line matching it is skipped>"
+    }
+  ],
+  "allowlistMarkers": [
+    "<class-slug>:allow"
+  ],
+  "markerPattern": "TODO\\(<class-slug>\\)",
+  "skipFileWhen": "@generated",
+  "include": [
+    "src/**/*.{js,jsx,ts,tsx,mjs}"
+  ],
+  "exclude": [
+    "**/*.min.js"
+  ]
+}

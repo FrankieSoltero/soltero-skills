@@ -1,6 +1,6 @@
 ---
 name: build-mcp-server
-description: Use when building, hardening, or deploying a Model Context Protocol (MCP) server in TypeScript ("build an MCP server", "expose this API/DB as MCP tools", "make my MCP server production-grade", "add auth or HTTP to my MCP server", "deploy my MCP server so remote clients can reach it") — pins the verified-current @modelcontextprotocol/sdk API instead of authoring from memory or stale tutorials, enforces the stdout-is-the-stdio-channel rule and the tool-vs-resource decision, and makes a production floor the default (Zod validation + stderr logging + typed errors, both transports, bearer auth + env-validated secrets, tests + CI + Dockerfile), then verifies via the MCP Inspector and `claude mcp add`.
+description: Use when building, hardening, or deploying a Model Context Protocol (MCP) server in TypeScript ("build an MCP server", "expose this API/DB as MCP tools", "make my MCP server production-grade", "add auth or HTTP to my MCP server", "deploy my MCP server so remote clients can reach it") — pins the verified-current SDK API for whichever package family you install (@modelcontextprotocol/sdk v1 or the scoped @modelcontextprotocol/server v2) instead of authoring from memory or stale tutorials, enforces the stdout-is-the-stdio-channel rule and the tool-vs-resource decision, and makes a production floor the default (Zod validation + stderr logging + typed errors, both transports, bearer auth + env-validated secrets, tests + CI + Dockerfile), then verifies via the MCP Inspector and `claude mcp add`.
 ---
 
 # Build MCP Server
@@ -24,7 +24,8 @@ Core principle: **verify the API, then build to the floor — every time, regard
 ## When NOT to Use
 
 - Authoring an MCP **client**, or building Claude Code itself.
-- Python/FastMCP servers (this skill is TypeScript + `@modelcontextprotocol/sdk`).
+- Python/FastMCP servers (this skill is TypeScript — `@modelcontextprotocol/sdk` v1 or the scoped
+  `@modelcontextprotocol/server` v2 family).
 - Designing web UI infra (that's `scaffold-frontend`). This is a backend service.
 
 ## Rule 0 — Verify the SDK API; never author it from memory
@@ -39,21 +40,35 @@ not the same as knowing their current state, so check both before writing a line
 So, before writing server code:
 
 1. Run `npm view @modelcontextprotocol/sdk version` **and**
-   `npm view @modelcontextprotocol/server dist-tags` — the second is the one that tells you
-   whether the scoped family has shipped past prerelease. Decide which family you are on, and
-   say which, before installing.
-2. Read the docs for **that exact version**, pinned by git tag (`?ref=v<version>`), never the
-   main branch — main tracks whatever is unreleased at the time you read it.
+   `npm view @modelcontextprotocol/server version dist-tags` — the second tells you where the
+   scoped family stands today (it reached stable `2.0.0` on 2026-07-27). Decide which family you
+   are on, and say which, before installing.
+2. Read the docs for **that exact version**, never the main branch — main tracks whatever is
+   unreleased when you read it. Prefer sources that cannot drift: the `README.md` and `.d.ts`/
+   `.d.mts` inside the **installed** package, then the versioned docs site
+   (`https://ts.sdk.modelcontextprotocol.io/v2/…` for the scoped family). A repo git tag
+   (`?ref=v<version>`) works when one exists — the monorepo had **no `v2.0.0` tag** as of
+   2026-09-01, so don't treat a 404 there as "the docs are gone."
 3. Match imports and the `registerTool`/`registerResource` signatures to that version.
 
-`reference.md` holds a dated, verified snapshot of the monolith API. Check its verification date
-against what step 1 returned: if the installed version has moved past it, or step 1 puts you on
-the scoped family, the snapshot is a starting point to re-verify, not an answer.
+Two dated, verified snapshots ship with this skill — check each one's verification date against
+what step 1 returned, and treat a stale one as a starting point to re-verify, not an answer:
+
+- `references/sdk-v2.md` — the **scoped** family, verified at `@modelcontextprotocol/server@2.0.0`
+  on **2026-09-01** (type-checked and runtime-smoke-tested against the real packages). As of that
+  date the scoped family is out of prerelease and **v2 is the stable line for new servers**;
+  the v1 monolith is still published (1.30.0) and still getting fixes.
+- `reference.md` — the **monolith** family, verified at `@modelcontextprotocol/sdk@1.29.0` on
+  2026-06-14. Use it for an existing v1 codebase you are not migrating yet.
+
+The two families' `inputSchema`, imports, stdio entry, and HTTP transport class all differ —
+`references/sdk-v2.md` has the side-by-side table. Never port a snippet between them by analogy.
 
 ## The Flow
 
-1. **Verify the SDK (Rule 0)**, then scaffold: `npm i @modelcontextprotocol/sdk zod`,
-   `type: module`, strict `tsconfig`, a `bin` entry.
+1. **Verify the SDK (Rule 0)**, then scaffold for the family you landed on — v2:
+   `npm i @modelcontextprotocol/server zod` (+ `/node` `/express` for HTTP); v1:
+   `npm i @modelcontextprotocol/sdk zod`. Then `type: module`, strict `tsconfig`, a `bin` entry.
 
 2. **Define the server once; expose it over both transports from shared code.** One
    `buildServer()` factory (tools + resources). A stdio entry for local clients AND a Streamable
@@ -110,13 +125,15 @@ the scoped family, the snapshot is a starting point to re-verify, not an answer.
 
 | Excuse | Reality |
 |--------|---------|
-| "I know the SDK API." | It's mid-migration (v1 monolith vs v2-alpha scoped). Run `npm view` and match the installed version. |
+| "I know the SDK API." | Two live families (v1 monolith 1.x vs v2 scoped 2.x) with different imports, `inputSchema`, and transports. Run `npm view` and match the installed version. |
 | "It handshakes, so it works." | Handshake ≠ production. No validation/errors/tests/auth = a toy. Apply step 5. |
 | "They only asked for a working server." | The floor is the default. Deliver it (or have them scope it down on purpose), don't silently ship the toy. |
 | "console.log is fine, it's just one log line." | On stdio that one line corrupts the protocol stream. stderr only. |
 | "Everything can be a tool." | Read-only context belongs in resources — cacheable, side-effect-free, auditable separation. |
 | "The README example is current." | The main branch tracks unreleased work and may describe a different package family than the one you installed. Pin the git tag of the version `npm view` reported. |
 
-See `reference.md` for the verified-current API, both transport setups, auth, the Inspector, and
-`claude mcp add`. Bundled `templates/` provide the production floor (server, both entries, env,
-test, CI, Dockerfile).
+See `references/sdk-v2.md` for the **scoped v2** API (verified at 2.0.0, 2026-09-01) and the v1↔v2
+differences table, and `reference.md` for the **v1 monolith** API plus the parts both families
+share: auth, the Inspector, `claude mcp add`, Docker, least-privilege upstream. Bundled
+`templates/` provide the v1 production floor (server, both entries, env, test, CI, Dockerfile);
+`templates/v2/` holds the type-checked v2 minimal server, stdio entry, and HTTP entry.

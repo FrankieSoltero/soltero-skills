@@ -1,13 +1,21 @@
 # PRD Review Rubric — council grading standard
 
 Six dimensions, weights sum to 100. Each grader scores ONE dimension 0–100 against the
-band anchors below. Two evidence rules apply to every grader:
+band anchors below. Three grading rules apply to every grader:
 
 1. **Every deduction cites evidence** — quote the offending PRD line(s) (or name the
    absent section). No unquoted deductions.
 2. **Every score ≥90 cites evidence too** — quote the lines that EARN the excellence.
    "Nothing wrong that I saw" is not evidence; a 90+ without affirmative quotes is
    invalid and must be lowered to 89 or re-examined.
+3. **A dimension with no basis to grade returns `unknown`, not a number** — when the
+   material a checklist tests is neither in the PRD nor readable from it (the PRD defers
+   to a research deck, dashboard, or ticket the grader cannot open), the grader returns
+   `score: null`, `verdict: "unknown"`, and a one-line reason naming what it would need.
+   A number invented over an absent basis moves the weighted total and the floor check as
+   if it were evidence; `unknown` routes to the PRD owner instead. It is neither a floor
+   breach nor a pass — the gate stays closed until the basis exists. Weak-but-checkable
+   is NOT unknown: that gets the low band it earns.
 
 Scores are NOT letter-grade vibes. Anchor to the bands; when torn between two bands,
 take the lower one.
@@ -57,6 +65,11 @@ take the lower one.
 - At least one guardrail metric.
 
 ### D6 — Consistency & ambiguity (weight 20)
+- Two independent readers reach the SAME pass/fail on EVERY acceptance criterion. A
+  Then one reader could call met and another unmet ("promptly", "usable", "nothing
+  important is cut off", "works well") is a violation — quote the line. A criterion two
+  readers can split on is a criterion the council cannot reproduce next round, which is
+  where re-review churn comes from.
 - No cross-section contradictions (goals vs scope vs requirements).
 - No TBD/placeholder in Owner, Open Questions, or any section a builder depends on.
 - No sentence a reasonable reader could take two ways on a decision that matters;
@@ -72,7 +85,27 @@ checklist item explicitly.
 
 ## Gate
 
-- **PASS:** weighted overall ≥95 AND every dimension ≥80.
-- **BLOCKED:** anything else. A BLOCKED PRD must not proceed to design
-  (soltero-skills:lean-brainstorming), planning, or implementation — no exceptions for
-  deadlines, sunk contractor costs, or prior informal sign-offs.
+- **PASS:** weighted overall ≥95 AND every dimension ≥80 AND zero blocking-severity
+  violations outstanding AND zero dimensions returned `unknown`.
+- **BLOCKED:** anything else. A dimension returned `unknown` is excluded from the
+  weighted average and from the floor check (it is not a score) and is reported as an
+  owner question — the gate cannot open while one is outstanding. A BLOCKED PRD must
+  not proceed to design (soltero-skills:lean-brainstorming), planning, or
+  implementation — no exceptions for deadlines, sunk contractor costs, or prior
+  informal sign-offs.
+
+The blocking-violation condition is not decoration: a PRD can average ≥95 while one
+dimension still carries a do-not-build flaw, and the score must not outvote it. The
+re-review selector already treats a dimension carrying a blocking violation as failed,
+so without this condition that dimension would be re-graded every round while the
+verdict ignored it.
+
+## Non-convergence
+
+The council exists to converge. When a round moves the overall by less than 2 points
+from the previous round, or the same violation text comes back in a dimension that was
+actually re-graded, the disagreement is in this rubric's wording or in the reviewer
+prompt — not in the PRD. The script flags it (`nonConvergence`); the loop then stops and
+the ambiguity goes to the owner as a rubric/prompt fix proposal, quoting both rounds'
+wording. Another round against an ambiguous checklist item buys a different number, not
+a better PRD.

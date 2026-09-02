@@ -1,0 +1,24 @@
+sweep: utc-date-shift
+detector: new Date( <single argument that is not a literal and not a Date> )
+scope: src/**/*.js
+run: 2026-09-01 17:42
+
+src/invoices/export.js:3:1  const start = new Date(period.startDate);
+src/invoices/export.js:4:1  const end = new Date(period.endDate);
+src/invoices/render.js:5:1  const issued = new Date(invoice.issuedDate);
+src/invoices/render.js:6:1  const due = new Date(invoice.dueDate);
+src/invoices/render.js:14:1 return new Date(invoice.dueDate) < now;
+src/lib/importer.js:6:1     return new Date(row.effective_date);
+src/lib/importer.js:12:1    return new Date(row.expires);
+src/reports/payroll.js:4:1  end: new Date(payPeriod.endDate),
+src/reports/payroll.js:5:1  ranAt: new Date(payPeriod.runAt),
+src/reports/weekly.js:5:1   return `Week of ${formatShort(new Date(report.weekStartDate))}`;
+src/reports/weekly.js:11:1  const d = new Date(row.bucketDate);
+src/shifts/roster.js:5:1    return new Date(shift.workDate);
+src/shifts/roster.js:9:1    return new Date(shift.clockedInAt);
+src/shifts/roster.js:13:1   const first = new Date(shifts[0].workDate);
+src/shifts/roster.js:14:1   const last = new Date(shifts[shifts.length - 1].workDate);
+src/shifts/swap.js:3:1      const requested = new Date(swap.requestedDate);
+src/shifts/swap.js:8:1      return new Date(swap.submittedAt);
+
+17 hits.

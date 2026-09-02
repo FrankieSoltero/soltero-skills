@@ -1,0 +1,22 @@
+{
+  "name": "utc-date-shift",
+  "version": 1,
+  "principle": "GP-003",
+  "wrongPattern": "new Date(s) / Date.parse(s) on a 'YYYY-MM-DD' calendar-day string — parsed as UTC midnight, renders a day early west of Greenwich",
+  "correctPattern": "split the string on '-' and construct local parts: const [y,m,d] = s.split('-').map(Number); new Date(y, m-1, d)",
+  "detectors": [
+    {
+      "id": "new-date-single-arg",
+      "regex": "new\\s+Date\\s*\\(\\s*(?![)\\s])[^,()]*\\)"
+    },
+    {
+      "id": "date-parse",
+      "regex": "Date\\.parse\\s*\\("
+    }
+  ],
+  "allowlistMarkers": ["date-class:instant"],
+  "markerPattern": "TODO\\(date-class\\)",
+  "skipFileWhen": "@generated",
+  "include": ["src/**/*.{js,jsx,ts,tsx,mjs}"],
+  "exclude": ["**/*.min.js"]
+}

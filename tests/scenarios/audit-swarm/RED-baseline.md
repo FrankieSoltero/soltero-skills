@@ -76,3 +76,64 @@ verification + findings-only discipline + standard artifact) are all unaddressed
 baseline, so the skill retains clear value. GREEN must therefore test these differentiators
 specifically — not merely "did the agent choose to audit" (baseline already does) but "did
 it invoke the bundled workflow, keep findings-only, and target the standard artifact."
+
+---
+
+# RED baseline — 2026-09-01 (seeded-defect canary)
+
+Model: **sonnet**. Date: **2026-09-01**. Fresh general-purpose subagent, `scenario-4.md`
+verbatim, run against the skill as it stood *before* the canary change (SKILL.md at
+a6e3585 — swarm + skeptic panel, no canary). Read-only: the agent was told not to dispatch
+the workflow, only to produce its run plan and its reply.
+
+## Why this scenario is deliverable-forced, not A/B/C
+
+A first pass used the repo's usual A/B/C shape with option (B) spelling out "a zero-finding
+run is evidence only if a known planted defect was detected". The baseline agent picked (B)
+immediately — the option list telegraphed the answer, which the original 2026-07-01 baseline
+above had already observed ("the failure is NOT 'refuses to audit'"). That run is discarded
+as a non-discriminating test. `scenario-4.md` was rewritten to force two deliverables — the
+run plan and the reply — with nobody naming the mechanism.
+
+## What the baseline did
+
+**Run plan (verbatim):** `date +%F`, then
+
+```
+Workflow({
+  scriptPath: "${CLAUDE_SKILL_DIR}/workflows/audit.mjs",
+  args: { root: "/Users/dev/acme-billing", date: "2026-09-01", mode: "standard" }
+})
+```
+
+then "read the `reportPath` … summarize in chat". It described this as "the full sequence:
+`date +%F` → one `Workflow` call → read+relay the report."
+
+- **No control defect anywhere.** Nothing planted, nothing re-found, no check that the swarm
+  was capable of catching anything on this run.
+- Findings-only discipline was respected ("I do not edit, refactor, or 'just fix while I'm
+  here'"), and mode selection was correct. The pre-change skill's existing rules held.
+
+**Reply on `confirmedCount: 0` (verbatim excerpt):**
+
+> "No confirmed findings on this pass — the audit checked two potential issues and both were
+> refuted after verification, 0 confirmed. … I'd frame it to the customer as 'no issues found
+> in our initial security review, formal PCI assessment in progress'"
+
+**Rationalization (verbatim):** "`confirmedCount: 0` is a real, reportable result (two
+candidate issues were actively checked and refuted, not ignored)".
+
+## The failure
+
+The agent treated silence as a result. Its caveats were all about *scope* — standard vs
+thorough mode, PCI assessment breadth, "no automated audit is exhaustive" — and none about
+whether the harness fired at all. A failed dispatch, a bad `root`, or a scout that returned
+nothing usable produces exactly the object it was handed, and the baseline has no way to tell
+that apart from a clean repo. It shipped "no issues found in our initial security review" on
+a card-data repo from an unverified run.
+
+## What the change must fix
+
+- Plant a known defect every run and re-find it, before silence counts as evidence.
+- Check the panel in both directions — confirm the true finding, refute a fabricated one.
+- On a missed canary, report "harness not live", never "clean" and never a softened caveat.

@@ -1,13 +1,21 @@
 # Plan Review Rubric — council grading standard
 
 Six dimensions, weights sum to 100. Each grader scores ONE dimension 0–100 against the
-band anchors. Two evidence rules for every grader:
+band anchors. Three grading rules for every grader:
 
 1. **Every deduction cites evidence** — quote the offending plan line(s) (or name the
    absent task/section). No unquoted deductions.
 2. **Every score ≥90 cites evidence too** — quote the lines that EARN the excellence.
    Absence of noticed flaws is not evidence; a 90+ without affirmative quotes is
    invalid and must be lowered to 89 or re-examined.
+3. **A dimension with no basis to grade returns `unknown`, not a number** — when the
+   material a checklist tests is neither in the plan nor readable from it (the plan
+   defers to a spec, deck, or ticket the grader cannot open), the grader returns
+   `score: null`, `verdict: "unknown"`, and a one-line reason naming what it would need.
+   A number invented over an absent basis moves the weighted total and the floor check as
+   if it were evidence; `unknown` routes to the plan owner instead. It is neither a floor
+   breach nor a pass — the gate stays closed until the basis exists. Weak-but-checkable
+   is NOT unknown: that gets the low band it earns.
 
 Anchor to the bands; when torn between two bands, take the lower one.
 
@@ -61,6 +69,12 @@ Anchor to the bands; when torn between two bands, take the lower one.
 - Auth/permissions/data-exposure consequences of each step considered where relevant.
 
 ### D6 — Consistency & completeness (weight 15)
+- Two independent readers of this plan reach the SAME pass/fail on every task's
+  verification and on the plan's done criteria. A criterion one reader could call passed
+  and another failed ("looks right", "acceptable state", "feels responsive", "the data
+  looks correct") is a violation — quote the line. A verdict two readers can split on is
+  a verdict the council cannot reproduce next round, which is where re-review churn
+  comes from.
 - No contradictions between the plan's own sections (an "approach note" contradicted
   by a task = violation).
 - No TBD owner or placeholder in anything an executor depends on.
@@ -78,8 +92,10 @@ checklist item explicitly.
 ## Gate
 
 - **PASS:** weighted overall ≥85 AND every dimension ≥80 AND zero blocking-severity
-  violations outstanding.
-- **BLOCKED:** anything else.
+  violations outstanding AND zero dimensions returned `unknown`.
+- **BLOCKED:** anything else. A dimension returned `unknown` is excluded from the
+  weighted average and from the floor check (it is not a score) and is reported as an
+  owner question — the gate cannot open while one is outstanding.
 
 The 85 threshold is anchored to the 85–94 band on purpose: PASS means every dimension
 is at least "usable" and the plan as a whole is "sound — nothing that would send an
@@ -89,3 +105,13 @@ carries a do-not-execute flaw, and that flaw must be fixed (and re-reviewed) bef
 PASS — the score cannot outvote it. A BLOCKED plan must not be executed — not by
   soltero-skills:lean-sdd, not by any other executor, not "just the early safe
   tasks" — regardless of sprint boards, deadlines, or prior informal sign-offs.
+
+## Non-convergence
+
+The council exists to converge. When a round moves the overall by less than 2 points
+from the previous round, or the same violation text comes back in a dimension that was
+actually re-graded, the disagreement is in this rubric's wording or in the reviewer
+prompt — not in the plan. The script flags it (`nonConvergence`); the loop then stops
+and the ambiguity goes to the owner as a rubric/prompt fix proposal, quoting both
+rounds' wording. Another round against an ambiguous checklist item buys a different
+number, not a better plan.

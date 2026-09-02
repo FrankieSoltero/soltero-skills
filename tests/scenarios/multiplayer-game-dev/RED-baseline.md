@@ -1,5 +1,7 @@
 # RED baseline — multiplayer-game-dev (no skill present)
 
+_Baseline model: unrecorded (July 2026 default) · run date: 2026-07-29_
+
 Default model; docs/skills/agents out of bounds. Honest RED: 3/3 PASS on the
 planted netcode traps.
 

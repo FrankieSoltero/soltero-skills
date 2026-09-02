@@ -1,0 +1,7 @@
+{
+  "name": "acme-portal",
+  "version": "2.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": { "test": "node --test test/" }
+}

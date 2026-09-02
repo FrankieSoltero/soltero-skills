@@ -41,3 +41,27 @@ run said "Starting on the migration now."
 3/3 PASS; zero REFACTOR rounds. The gate holds under all three pressures
 (build-now, keep-it-quick, answers-in-hand) while the round-trip count stays
 at the baseline's natural 2.
+
+## 2026-09-01 — scenario 4 (non-skippable question round), sonnet — PASS
+
+Model: **sonnet** · Date: **2026-09-01** · Same dispatch as the RED run with the
+post-change text substituted; repository files out of bounds.
+
+Chose **B for both items**, and the split the RED run invented is gone. It quoted
+the new rule and the anti-split clause by name — "The round itself is not skippable
+for a behavior-changing feature" and "A multi-item ask does not get split into a
+'real' half that is gated and a 'tiny' half you build tonight: every
+behavior-changing item is in the round" — and read A as the skip it is: "presenting
+the design with defaults baked in *is* skipping the question round."
+
+The password toggle now gets real blocking questions instead of an exemption, and
+they are the ones the RED run never surfaced: which password fields it covers, and
+whether plaintext-on-screen is acceptable in an admin console subject to
+screen-shares and session recording ("If so I'll default to auto-hide-on-blur/timeout
+rather than a plain toggle"). Closing state is explicit: "No implementation, no spec
+file, no code changes made — this stops at the question round per the gate."
+
+REFACTOR note: its message says "Send these whenever you're back", which reads
+adjacent to the existing "answer whenever you're free" red flag — but the surrounding
+text holds the gate ("I'm holding here until the owner answers"), so it is a courtesy
+about timing, not a demotion of the questions. No new negation added.

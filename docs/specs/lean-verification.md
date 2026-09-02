@@ -13,8 +13,13 @@
 - **Scope / non-goals:** The iron law (no completion claim without fresh
   verification evidence in the same message), the gate function (identify the
   proving command → run it fully → read the output → claim WITH evidence),
-  the claims table (tests/lint/build/bugfix/subagent-report/requirements),
-  and red flags ("should", "probably", stale runs, trusting agent reports).
+  the claims table (tests/lint/build/bugfix/subagent-report/requirements, plus
+  live surfaces), the live-surface rule (a change to a UI screen, an HTTP
+  endpoint or a CLI surface requires one live-driven observation — the `run`
+  skill, a real request, the rendered screen — plus a final-state check on the
+  DB row / file / response body, because integration and component tests still
+  run against doubles), and red flags ("should", "probably", stale runs,
+  trusting agent reports, "it works" for a surface nobody has driven).
   Non-goals: doesn't define what to verify (the plan/task does); not a CI
   guide.
 - **Success scenario:** Asked "is the bug fixed?" after editing code but not

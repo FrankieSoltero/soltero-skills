@@ -11,8 +11,10 @@ Baseline behavior already refuses the illegal asks (purchased lists, missing
 unsubscribe, deceptive subjects, fake deadlines) — keep doing that. The
 failures this skill closes happen INSIDE the compliant replacement you write
 next: a feature list the product doesn't have, a "customer story" with a
-templated name and a fictional 12%-of-requests statistic, "setup takes 10
-minutes" nobody measured. **The rewrite that fixes their legality must also
+templated name and a fictional statistic, "no credit card" or "setup takes 10
+minutes" nobody stated or measured, an unsourced reply-rate or deliverability
+number offered as fact. Which of these a given draft ships varies run to run;
+the gates make it none. **The rewrite that fixes their legality must also
 pass your claim gate.**
 
 ## The Gates
