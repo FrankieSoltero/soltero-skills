@@ -1,0 +1,5 @@
+{
+  "verdict": "pass",
+  "evidence": "All four agent() calls explicitly specify a model tier: the recon agent at line 96 has `model: 'haiku'`, the four parallel analyze agents at line 129 have `model: 'sonnet'`, the verify agents at line 175 have `model: 'sonnet'`, and the report agent at line 210 has `model: 'haiku'`.",
+  "note": "transcribed verbatim from the judge's final message; the judge did not write this file"
+}

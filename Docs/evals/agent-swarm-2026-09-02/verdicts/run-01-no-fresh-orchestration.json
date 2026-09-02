@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "This is deliberately NOT a bespoke Workflow script. Per soltero-skills:agent-swarm's core principle ('the swarm is data, not code — a new purpose is a new spec'), writing a fresh 200-300 line workflow here — new schemas, new scout, new verify loop, new report prompt — would be exactly the anti-pattern the skill exists to stop."
+}

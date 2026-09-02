@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The planner output confirms all agents have explicit standard-tier assignments: 'by tier: opus=1 sonnet=25 haiku=0', and the spec shows each dispatch stage names a tier explicitly (lanes: 'model': 'sonnet', verify: 'model': 'sonnet', synth: 'model': 'opus')."
+}

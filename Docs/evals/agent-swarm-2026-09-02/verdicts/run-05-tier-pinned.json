@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "Every dispatch site in the spec names a standard tier explicitly: lane finders use \"model\": \"sonnet\", verifiers use \"model\": \"sonnet\", and synthesis uses \"model\": \"opus\" — the planner confirms 'no dispatch site is missing a model, and none runs on the orchestrator tier ... per the planner's MODEL_MISSING/MODEL_FORBIDDEN checks, which passed'"
+}

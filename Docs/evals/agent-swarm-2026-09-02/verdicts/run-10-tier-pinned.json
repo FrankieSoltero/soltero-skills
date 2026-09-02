@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The spec file migration-legacyFetch.json explicitly pins all subagent dispatch models: lanes have 'model: opus' for writers (line 73), verify has 'model: sonnet' (line 80), and synth has 'model: opus' (line 85), with none left to inherit from session tier."
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "run.mjs line 160-165 contains code that checks `if (verifyBudgetUsed + lensCount > VERIFY_CAP)` before each verification dispatch, logs what it dropped when the cap is reached, and continues without dispatching: a machine-checkable ceiling enforced during dispatch."
+}

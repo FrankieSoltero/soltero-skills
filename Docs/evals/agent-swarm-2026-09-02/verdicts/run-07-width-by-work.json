@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "So: 6 finder agents (one per package, dispatched in one parallel message), plus 0–6 verifier agents (one only per *positive* finding — a package that's already clean has nothing to refute), plus zero aggregator agents."
+}

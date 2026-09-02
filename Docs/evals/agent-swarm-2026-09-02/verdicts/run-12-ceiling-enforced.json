@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The run produced a validated spec with machine-checkable ceiling field (`\"ceiling\": { \"agents\": 50 }`) that was gated by an actual planner validator which executed and returned DISPATCHABLE with explicit acknowledgment: \"agents: 26 (ceiling 50)\"."
+}

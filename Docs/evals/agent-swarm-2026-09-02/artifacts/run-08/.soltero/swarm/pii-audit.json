@@ -1,0 +1,107 @@
+{
+  "name": "pii-audit",
+  "shape": "find",
+  "goal": "Find every API response that returns customer PII (email, phone, SSN, date of birth) without calling redact()",
+  "ceiling": {
+    "agents": 65,
+    "units": 80
+  },
+  "lanes": [
+    {
+      "key": "routes",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "prompt": "Inspect {item} for response handlers that return customer data without calling redact(). Check: (1) Does res.json() send a customer object directly? (2) Is the customer object nested in a response wrapper? (3) Are all paths through the endpoint covered? Report: file path, line number, what PII fields are exposed (email/phone/ssn/dob), and the exact code that leaks it.",
+      "items": [
+        "src/routes/route1.js",
+        "src/routes/route2.js",
+        "src/routes/route3.js",
+        "src/routes/route4.js",
+        "src/routes/route5.js",
+        "src/routes/route6.js",
+        "src/routes/route7.js",
+        "src/routes/route8.js",
+        "src/routes/route9.js",
+        "src/routes/route10.js",
+        "src/routes/route11.js",
+        "src/routes/route12.js"
+      ]
+    },
+    {
+      "key": "services",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "prompt": "Inspect {item} for functions that return or expose customer data structures without redaction. Check: (1) Does the function return a customer object? (2) Is it called by routes or other services? (3) Could it expose PII indirectly? Report: file path, function name, what it returns, whether it includes PII fields.",
+      "items": [
+        "src/services/service1.js",
+        "src/services/service2.js",
+        "src/services/service3.js",
+        "src/services/service4.js",
+        "src/services/service5.js",
+        "src/services/service6.js",
+        "src/services/service7.js",
+        "src/services/service8.js",
+        "src/services/service9.js",
+        "src/services/service10.js",
+        "src/services/service11.js",
+        "src/services/service12.js",
+        "src/services/service13.js",
+        "src/services/service14.js",
+        "src/services/service15.js",
+        "src/services/service16.js",
+        "src/services/service17.js",
+        "src/services/service18.js",
+        "src/services/service19.js",
+        "src/services/service20.js"
+      ]
+    },
+    {
+      "key": "jobs",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "prompt": "Inspect {item} for background job functions that might log or expose customer PII. Check: (1) What data does it process or output? (2) Does it log customer info? (3) Are logs stored anywhere that might leak PII? Report: file path, function name, any PII that could be exposed.",
+      "items": [
+        "src/jobs/job1.js",
+        "src/jobs/job2.js",
+        "src/jobs/job3.js",
+        "src/jobs/job4.js",
+        "src/jobs/job5.js",
+        "src/jobs/job6.js",
+        "src/jobs/job7.js",
+        "src/jobs/job8.js",
+        "src/jobs/job9.js",
+        "src/jobs/job10.js"
+      ]
+    },
+    {
+      "key": "utils-and-patterns",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "prompt": "Scan the utility and library files for: (1) Data transformation functions that handle customer objects; (2) Error handlers that might log PII; (3) Cross-file patterns where customer() is imported without redact(). Check all src/lib/util*.js files. Report: file path, function/pattern, any PII exposure risk.",
+      "items": ["src/lib/"]
+    }
+  ],
+  "verify": {
+    "model": "sonnet",
+    "lenses": 1,
+    "escalate": {
+      "severities": ["high", "critical"],
+      "lenses": 3
+    },
+    "expectedFindings": 10,
+    "expectedPatterns": 3,
+    "lensInstructions": ["Verify the finding: trace through the code and confirm PII is actually exposed. Check if there's any redaction happening that the finder missed. Could this leak in all code paths or only some? Mark severity: critical if direct unredacted return, high if nested or conditional."]
+  },
+  "synth": {
+    "model": "opus",
+    "outputPath": "swarm/pii-audit-report.md",
+    "prompt": "Create a compliance audit report. Structure: (1) Executive summary - total findings, critical count, completion date; (2) Findings table with: file, line, exposed fields, severity, remediation; (3) Root cause patterns; (4) Remediation roadmap with estimated effort; (5) Verification checklist. Format for a compliance officer/legal team."
+  },
+  "loop": {
+    "maxRounds": 1
+  }
+}

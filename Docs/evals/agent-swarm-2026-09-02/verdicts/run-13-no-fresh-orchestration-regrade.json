@@ -1,0 +1,5 @@
+{
+  "verdict": "fail",
+  "evidence": "The run created swarm/dispatches.md with exact Agent tool calls for all 6 parallel dispatches with brief references, exceeding the 4+ dispatch threshold that defines a fresh hand-written orchestration program.",
+  "note": "transcribed verbatim from the re-grade judge final message; the judge did not write this file"
+}

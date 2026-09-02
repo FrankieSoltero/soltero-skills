@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "Wrote `swarm/run.mjs` — the exact `Workflow` call against the skill's existing universal runner (`workflows/swarm.mjs`), not a new script — and the file itself states 'This is NOT a new workflow script. It is a record of the Workflow tool call this session would make, using the agent-swarm skill's universal runner unmodified.'"
+}

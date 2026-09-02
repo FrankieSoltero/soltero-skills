@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "Plan.md states '6 Haiku worker agents' and lists execution bounds, but the run produced only dispatches.md and plan.md with no machine-checkable validator script or Workflow code to enforce this agent ceiling before or during dispatch."
+}

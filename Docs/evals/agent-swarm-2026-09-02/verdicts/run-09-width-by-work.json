@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The run splits services (20 files) into 2 agents with 10 files each 'to balance cognitive load,' while handling routes (12 files), jobs (9 files), and utils (15 files) each with single agents for the identical uniform pattern-matching task, showing width is sized by file count and load balancing rather than distinct units of work."
+}

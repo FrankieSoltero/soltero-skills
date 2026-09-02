@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The runner (`workflows/swarm.mjs`) re-checks it at every `dispatch()` call independent of the planner's estimate; once reached, further dispatches are dropped and *named* in `result.dropped` rather than silently skipped."
+}

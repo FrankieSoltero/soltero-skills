@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "VERDICT: DISPATCHABLE (mode: workflow) agents: 60 (ceiling 65) by tier: opus=1 sonnet=59 haiku=0 by stage: scout=0 lanes=43 verify=16 synth=1 relative cost units: 64 (ceiling 80) — The planner/validator script executed, checked the spec against machine-checkable ceiling constraints, rejected it initially with ERROR_OVER_CEILING, and approved it only after the ceiling was raised appropriately."
+}

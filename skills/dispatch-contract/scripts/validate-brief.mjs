@@ -13,7 +13,7 @@
 // Exit 0 = every brief passed (warnings may still print). Exit 1 = at least one
 // error. Exit 2 = usage/IO problem.
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 export const TIERS = ['opus', 'sonnet', 'haiku'];
@@ -236,6 +236,12 @@ function main(argv) {
   return results.every((r) => r.ok) ? 0 : 1;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+// Real-path compare: /tmp → /private/tmp on macOS made the plain string compare skip main() and
+// exit 0 with no output (Docs/mistakes-and-fixes.md, 2026-09-02).
+const invokedDirectly = (() => {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); }
+  catch { return false; }
+})();
+if (invokedDirectly) {
   process.exit(main(process.argv.slice(2)));
 }

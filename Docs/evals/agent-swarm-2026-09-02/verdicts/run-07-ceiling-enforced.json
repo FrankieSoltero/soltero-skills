@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "Neither `Agent` nor `Workflow` was invoked at any point in this run."
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "**4 writer agents, not 40** — one per `src/` subdirectory, each owning 10 files. The four sets are disjoint by construction, so there's no collision risk and no need for `isolation: 'worktree'` (which exists specifically for when parallel agents could hit the same file — these provably can't, so paying the setup cost would be waste)."
+}

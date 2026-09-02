@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "so `dispatches.md` was the right choice, not `run.mjs`"
+}

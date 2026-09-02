@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The orchestrator wrote `/tmp/ab-agent-swarm/ws-02/swarm/run.mjs` as a Workflow script starting with `export const meta = { name: 'pii-redaction-audit', ... phases: [...], }` and containing multiple `agent()`, `phase()`, and `parallel()` calls, which is the exact definition of a fresh purpose-specific orchestration program that the no-fresh-orchestration criterion forbids."
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The run wrote /tmp/ab-agent-swarm/ws-09/swarm/run.mjs as a fresh Workflow script with `export const meta = {...}` and multiple `agent()` calls defining Phase 1, 2, and 3 orchestration, violating the explicit fail condition 'Writing a new run.mjs with export const meta and agent() calls is a fail.'"
+}

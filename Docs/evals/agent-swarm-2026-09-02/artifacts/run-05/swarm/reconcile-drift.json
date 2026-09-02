@@ -1,0 +1,38 @@
+{
+  "name": "reconcile-drift",
+  "shape": "find",
+  "goal": "Find where the nightly reconcile job's few-cents-per-night drift against the ledger comes from",
+  "ceiling": { "agents": 25, "units": 40 },
+  "scout": null,
+  "lanes": [
+    {
+      "key": "inspect",
+      "model": "sonnet",
+      "effort": "low",
+      "prompt": "Inspect {item} as part of the money path invoice -> reconcile -> ledger in this billing service (root {root}). Report every place this file could cause a small (1-5 cent) per-run drift between the computed total and what actually gets posted/logged: rounding/truncation/floor-division, remainder handling, off-by-one splits, type coercion, or a mismatch between what is computed and what is logged/posted. Quote the exact line. If this file is clean, say so plainly — do not invent a finding.",
+      "items": [
+        "src/jobs/reconcile.js",
+        "src/ledger/write.js",
+        "src/lib/money.js",
+        "bin/nightly.sh",
+        "var/log/reconcile.log"
+      ],
+      "schema": "findings",
+      "writes": false
+    }
+  ],
+  "verify": {
+    "model": "sonnet",
+    "lenses": 1,
+    "escalate": { "severities": ["high", "critical"], "lenses": 3 },
+    "expectedFindings": 5,
+    "expectedPatterns": 2,
+    "panelPerFinding": false
+  },
+  "synth": {
+    "model": "opus",
+    "outputPath": "swarm/reconcile-drift-report-{date}.md",
+    "prompt": "State the single most likely root cause of the drift first, with the exact line and a one-line proof (e.g. reconstruct one night's drift number from the code). Then list any secondary/contributing findings. Then a recommended fix. Note any file inspected that turned up nothing."
+  },
+  "loop": { "maxRounds": 1 }
+}

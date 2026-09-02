@@ -1,0 +1,128 @@
+[
+  {
+    "run": "run-01",
+    "agentId": "a5d7bff126e63366a",
+    "tier": "sonnet",
+    "scenario": "scenario-1",
+    "arm": "with",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-01.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-02",
+    "agentId": "a095a7435703865c5",
+    "tier": "sonnet",
+    "scenario": "scenario-1",
+    "arm": "without",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-02.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-03",
+    "agentId": "a0b74df13ab2991b1",
+    "tier": "sonnet",
+    "scenario": "scenario-2",
+    "arm": "with",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-03.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-04",
+    "agentId": "ac1d53caf8012d673",
+    "tier": "sonnet",
+    "scenario": "scenario-2",
+    "arm": "without",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-04.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-05",
+    "agentId": "a0852b07e1c7c6fbc",
+    "tier": "sonnet",
+    "scenario": "scenario-3",
+    "arm": "with",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-05.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-06",
+    "agentId": "aa64fa175c737e071",
+    "tier": "sonnet",
+    "scenario": "scenario-3",
+    "arm": "without",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-06.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-07",
+    "agentId": "a2ff53ce35772987a",
+    "tier": "sonnet",
+    "scenario": "canary",
+    "arm": "without",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-07.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-08",
+    "agentId": "ac75a7fddedae49ac",
+    "tier": "haiku",
+    "scenario": "scenario-1",
+    "arm": "with",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-08.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-09",
+    "agentId": "a646f56834b7c6d81",
+    "tier": "haiku",
+    "scenario": "scenario-1",
+    "arm": "without",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-09.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-10",
+    "agentId": "a77a63fbfc200ad21",
+    "tier": "haiku",
+    "scenario": "scenario-2",
+    "arm": "with",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-10.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-11",
+    "agentId": "a50e311a122b1f9a0",
+    "tier": "haiku",
+    "scenario": "scenario-2",
+    "arm": "without",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-11.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-12",
+    "agentId": "a5ed7645298f4d7c3",
+    "tier": "haiku",
+    "scenario": "scenario-3",
+    "arm": "with",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-12.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-13",
+    "agentId": "aac891ff821eeb7b6",
+    "tier": "haiku",
+    "scenario": "scenario-3",
+    "arm": "without",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-13.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-14",
+    "agentId": "a8211fb2218272f6c",
+    "tier": "haiku",
+    "scenario": "canary",
+    "arm": "without",
+    "transcript": "/private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/4fb55dd5-7d91-491e-93bb-8597c5f1254c/scratchpad/ab/transcripts/run-14.md",
+    "crossReads": []
+  }
+]

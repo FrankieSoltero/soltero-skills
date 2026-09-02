@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "mode": "workflow",
+  "counts": {
+    "total": 25,
+    "byTier": {
+      "opus": 1,
+      "sonnet": 24,
+      "haiku": 0
+    },
+    "byStage": {
+      "scout": 0,
+      "lanes": 13,
+      "verify": 11,
+      "synth": 1
+    }
+  },
+  "units": 29,
+  "ceiling": 30,
+  "unitCeiling": 40,
+  "errors": [],
+  "warnings": []
+}

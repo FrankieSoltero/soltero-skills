@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "plan.md states \"If any agent exceeds its token budget during execution, halt and report the overage before proceeding to verification\" but run.mjs contains no code that enforces this ceiling—it only prints the $0.50 ceiling value at line 181 without validation logic that would stop dispatching if exceeded."}

@@ -1,0 +1,62 @@
+{
+  "name": "drift-investigation",
+  "shape": "find",
+  "goal": "Find the root cause of the nightly billing reconciliation drift (a few cents per night for three weeks)",
+  "ceiling": { "agents": 50 },
+  "scout": null,
+  "lanes": [
+    {
+      "key": "inspect-reconcile-job",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "prompt": "Inspect {item} for bugs that could cause reconciliation drift: calculation errors, rounding losses, precision issues, incorrect variable usage. Look for: (1) off-by-one errors, (2) floating point precision issues, (3) incorrect use of floor/ceil operations, (4) logic errors in the drift calculation, (5) any place where fractional cents could be lost. Return each finding with the exact code line and explanation of how it could cause drift.",
+      "items": ["src/jobs/reconcile.js"]
+    },
+    {
+      "key": "inspect-ledger-writes",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "prompt": "Inspect {item} for bugs that could cause reconciliation drift: precision issues in floating point storage/retrieval, incorrect conversions between cents and dollars, data integrity issues. Look for: (1) floating point precision loss when converting between formats, (2) rounding errors in calculations, (3) accumulated rounding errors when summing multiple amounts, (4) any place where cents could be lost or duplicated. Return each finding with the exact code line and explanation of how it could cause drift.",
+      "items": ["src/ledger/write.js"]
+    },
+    {
+      "key": "inspect-math-helpers",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "prompt": "Inspect {item} for precision/rounding bugs that could cause reconciliation drift. Focus on: (1) use of Math.floor/Math.ceil without accounting for remainders, (2) floating point division losing precision, (3) rounding operations that could compound across multiple calls, (4) any algorithm that doesn't guarantee lossless conversions or divisions. For each file, return findings with the exact code line and how it could cause drift of a few cents per night. Be specific about what values are lost.",
+      "items": ["src/lib/money.js", "src/lib/helper1.js", "src/lib/helper2.js", "src/lib/helper3.js", "src/lib/helper4.js", "src/lib/helper5.js", "src/lib/helper6.js", "src/lib/helper7.js", "src/lib/helper8.js"]
+    },
+    {
+      "key": "inspect-cron-wrapper",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "prompt": "Inspect {item} for bugs that could cause reconciliation drift: timing issues, environment variable issues (especially TZ), data loss during execution, incorrect parameters to the reconcile function, or issues with logging/output. Look for: (1) timezone handling that could affect which invoices are processed, (2) incorrect parameters passed to the reconcile function, (3) loss of output or results, (4) state or side effects. Return each finding with explanation of how it could cause drift.",
+      "items": ["bin/nightly.sh"]
+    },
+    {
+      "key": "analyze-reconcile-logs",
+      "model": "sonnet",
+      "effort": "low",
+      "schema": "findings",
+      "prompt": "Analyze {item} for patterns in the reconciliation drift. Look for: (1) the pattern of drift values (are they consistent?), (2) correlation with date/time, (3) any indication of what could be causing specific drift amounts, (4) whether the drift is random or deterministic, (5) any other anomalies that could explain the root cause. Based on the patterns you see, hypothesize what in the code could be causing this specific drift pattern. Return your findings with evidence from the log.",
+      "items": ["var/log/reconcile.log"]
+    }
+  ],
+  "verify": {
+    "model": "sonnet",
+    "lenses": 1,
+    "escalate": { "severities": ["high", "critical"], "lenses": 3 },
+    "expectedFindings": 8,
+    "expectedPatterns": 3,
+    "panelPerFinding": false
+  },
+  "synth": {
+    "model": "opus",
+    "outputPath": ".soltero/swarm/drift-investigation-{date}.md",
+    "prompt": "Synthesize all findings into a comprehensive root cause analysis. Group findings by component (reconcile job, ledger writes, math/helpers, cron, logs). For each component, list the bugs found. Then identify which bug(s) most likely explain the observed drift pattern in the logs (1-4 cents per night, repeating pattern). Rank findings by likelihood of being the root cause. Provide a clear summary of what needs to be fixed and in what priority order."
+  }
+}

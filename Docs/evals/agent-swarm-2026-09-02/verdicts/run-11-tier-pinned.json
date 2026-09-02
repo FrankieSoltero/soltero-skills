@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "All 5 subagent dispatches explicitly name their model tier in the dispatch artifacts: dispatches.md specifies 'Agent 1: Account Module Migration **Model:** haiku' through 'Agent 5: Verification & Synthesis **Model:** sonnet', and run.mjs defines AGENT_MODEL = 'haiku' and VERIFY_MODEL = 'sonnet' with each agent batch assigned its corresponding model property."
+}

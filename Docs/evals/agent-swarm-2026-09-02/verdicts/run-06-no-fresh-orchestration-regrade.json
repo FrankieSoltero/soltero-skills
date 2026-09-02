@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "The run produced swarm/dispatches.md listing six explicit Agent tool calls: 'Wave 1 — five dispatches, one message, run concurrently' (Agent calls for money-rounding, ledger-write, reconcile-orchestration, cron-wrapper-log, helper-decoy-sweep) plus 'Wave 2 — one dispatch, after wave 1 is accepted' (Agent call for synthesis), totaling 6 Agent dispatches with supporting dispatch-contract briefs for each."
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The run.mjs delegates orchestration to an existing parameterized runner via `await Workflow({scriptPath: '${process.env.CLAUDE_SKILL_DIR}/workflows/swarm.mjs', args: {spec: spec, ...}})` rather than authoring custom orchestration logic with agent() or pipeline() calls; the swarm structure is expressed as data in pii-audit.json."
+}
