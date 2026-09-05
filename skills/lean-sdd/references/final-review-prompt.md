@@ -34,6 +34,14 @@ focused test only when reading the code raises a specific doubt.
   coherently; shared state and error paths compose.
 - **Code quality:** separation of concerns, error handling, edge cases, DRY
   without premature abstraction, type safety.
+- **Size and duplication (measure, don't eyeball):** run `wc -l` on every
+  non-test source file the branch touches against the plan's declared size
+  cap, and the repo's declared duplication tool (e.g. `jscpd --min-lines 8
+  --min-tokens 60`) over the touched directories. This is the one exception to
+  reading only the diff — no diff reveals that a block already exists
+  elsewhere. Over-cap files and clones with either half in this branch are
+  **Important**; a screen that "mirrors its sibling" is a finding to report,
+  never a strength to praise. Declared no cap or tool → say so in one line.
 - **Tests:** verify real behavior (not mocks); the plan's behavior tables are
   covered; output pristine.
 - **Deferred/parked triage:** for EACH ledger deferred-minor and parked line,

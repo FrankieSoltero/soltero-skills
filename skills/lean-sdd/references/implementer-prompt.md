@@ -46,9 +46,11 @@ evidence from a run in this session).
    Verify your work however else you like; scratch scripts and quick checks
    live outside the repository (e.g. under /tmp) and are not committed as
    permanent test files.
-2. Follow existing codebase patterns. If a file you're creating grows well
-   beyond the brief's intent, report DONE_WITH_CONCERNS rather than
-   restructuring on your own.
+2. Follow existing codebase patterns — reuse or extract shared code; a copied
+   block ≥ ~8 lines is a defect, not a pattern. If a file you're creating grows
+   well beyond the brief's intent, or past a size cap in the global
+   constraints, report DONE_WITH_CONCERNS rather than restructuring on your
+   own.
    If you find a pre-existing bug, a performance concern, or behavior the
    brief doesn't mention, don't fix, optimize, or extend it here unless the
    brief's behavior cannot work without it — report it as a follow-up in your
