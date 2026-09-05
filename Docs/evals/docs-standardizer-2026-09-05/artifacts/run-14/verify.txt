@@ -1,0 +1,24 @@
+DOCS_ROOT_CLASH . more than one docs root: doc, docs (standard: Docs)
+DOCS_ROOT_CASE docs differs from the standard's docs root "Docs" by case only; rename it or record docsRoot in .docs-standard.json
+REQUIRED_MISSING Docs/architecture.md required by the standard
+REQUIRED_MISSING Docs/conventions.md required by the standard
+REQUIRED_MISSING Docs/decisions.md required by the standard
+REQUIRED_MISSING Docs/mistakes-and-fixes.md required by the standard
+REQUIRED_MISSING Docs/open-questions.md required by the standard
+REQUIRED_MISSING Docs/README.md required by the standard
+ENTRY_OVER_BUDGET CLAUDE.md 253 lines > budget 120
+SECTION_MISSING CLAUDE.md section "Purpose" missing
+SECTION_MISSING CLAUDE.md section "Commands" missing
+SECTION_MISSING CLAUDE.md section "Layout" missing
+SECTION_MISSING CLAUDE.md section "Where to look" missing
+SECTION_MISSING CLAUDE.md section "Conventions" missing
+SECTION_MISSING CLAUDE.md section "Docs" missing
+SECTION_MISSING README.md section "Getting started" missing
+PATH_MISSING CLAUDE.md:104 src/plugins/my-plugin.js
+PATH_MISSING CLAUDE.md:144 migrations/000X_add_column.sql
+PATH_MISSING CONTRIBUTING.md:35 test/reconcile.test.js
+PATH_MISSING CONTRIBUTING.md:44 src/plugins/my-feature.js
+PATH_MISSING docs/ARCHITECTURE.md:131 src/plugins/my-feature.js
+PATH_MISSING docs/ARCHITECTURE.md:235 0002_add_timestamp.sql
+PATH_MISSING docs/SETUP.md:32 ./path/to/ledger.sqlite
+RED docs-verify: 23 findings

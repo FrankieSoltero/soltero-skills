@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "Branch docs/standardize carries four category-scoped commits (reconcile, entry, required, index); before the final commit, docs-verify.mjs reported GREEN with 0 findings (verify.txt)."}

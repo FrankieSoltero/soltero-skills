@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "At line 94 of the transcript, the run invoked docs-standard-init.mjs with --home /tmp/acme-home-ws-10, which returned 'EXISTS /tmp/acme-home-ws-10/.claude/docs-standard.json' at line 100, before any documentation files were created; the home-standard.json artifact confirms the user-scope standard file existed."
+}

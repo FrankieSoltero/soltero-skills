@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The standard was created at line 84 via docs-standard-init.mjs ('CREATED /tmp/acme-home-ws-12/.claude/docs-standard.json'), then read via docs-inventory.mjs and docs-verify.mjs before the first documentation file (CLAUDE.md) was written at line 1147."
+}

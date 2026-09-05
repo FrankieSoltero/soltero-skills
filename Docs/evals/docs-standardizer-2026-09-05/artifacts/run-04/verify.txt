@@ -1,0 +1,12 @@
+DOCS_ROOT_CLASH . more than one docs root: doc, docs (standard: Docs)
+DOCS_ROOT_CASE docs differs from the standard's docs root "Docs" by case only; rename it or record docsRoot in .docs-standard.json
+REQUIRED_MISSING Docs/architecture.md required by the standard
+REQUIRED_MISSING Docs/conventions.md required by the standard
+REQUIRED_MISSING Docs/decisions.md required by the standard
+REQUIRED_MISSING Docs/mistakes-and-fixes.md required by the standard
+REQUIRED_MISSING Docs/open-questions.md required by the standard
+REQUIRED_MISSING Docs/README.md required by the standard
+SECTION_MISSING CLAUDE.md section "Purpose" missing
+PATH_MISSING CLAUDE.md:39 mistakes-and-fixes.md
+PATH_MISSING CLAUDE.md:39 open-questions.md
+RED docs-verify: 11 findings

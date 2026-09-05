@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "Two docs roots remain: the repo contains both doc/ (singular, with notes.md) and docs/ (plural, with SETUP.md, mistakes-and-fixes.md, and adr/), acknowledged in the committed mistakes-and-fixes.md which states 'this repo's filesystem convention already has a lowercase docs/ (this directory) and a separate doc/ (singular)'."}

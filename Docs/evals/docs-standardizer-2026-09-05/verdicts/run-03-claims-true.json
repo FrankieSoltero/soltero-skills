@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "verify.txt shows 'GREEN docs-verify: 0 findings', confirming all commands stated as runnable in the run's documentation exist in package.json/Makefile and all file/directory paths stated as existing are present in the repository.", "recovered_from": "judge final message (file write did not land)"}

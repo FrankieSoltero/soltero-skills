@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "The run executed docs-standard-init.mjs at line 101, which created /tmp/acme-home-ws-08/.claude/docs-standard.json, before any documentation files were written to the repo (first doc file committed at line 692)."
+}

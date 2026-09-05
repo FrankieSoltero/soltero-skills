@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "verify.txt reports 11 findings: two docs roots remain (doc/ and docs/ instead of single Docs/), CLAUDE.md missing required \"Purpose\" heading, and all six required Docs/* files absent (README.md, architecture.md, conventions.md, decisions.md, mistakes-and-fixes.md, open-questions.md)."}

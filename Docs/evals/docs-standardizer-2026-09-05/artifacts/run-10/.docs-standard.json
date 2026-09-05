@@ -1,0 +1,4 @@
+{
+  "docsRoot": "docs",
+  "_comment": "Case-insensitive filesystem; Docs and docs are the same directory. Using lowercase per existing repo structure."
+}

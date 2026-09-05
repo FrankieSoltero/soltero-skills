@@ -1,0 +1,197 @@
+{
+  "skill": "docs-standardizer",
+  "date": "2026-09-05",
+  "tiers": {
+    "sonnet": "claude-sonnet-5",
+    "haiku": "claude-haiku-4-5-20251001"
+  },
+  "judge": "isolated single-dimension judges (haiku), Unknown escape, one call per dimension per run",
+  "canary": {
+    "scenario": "canary",
+    "note": "known to fail without docs-standardizer: every RED baseline committed once on main, recorded no user-scope standard, ran no verifier, and left the required set incomplete (standard-at-user-scope, gated-serial-commits, required-set-complete)"
+  },
+  "runs": [
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-1",
+      "arm": "with",
+      "verdict": "pass",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-01.md",
+      "dimensions": {
+        "standard-at-user-scope": "pass",
+        "gated-serial-commits": "pass",
+        "required-set-complete": "pass",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-1",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-02.md",
+      "dimensions": {
+        "standard-at-user-scope": "fail",
+        "gated-serial-commits": "fail",
+        "required-set-complete": "fail",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-2",
+      "arm": "with",
+      "verdict": "pass",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-03.md",
+      "dimensions": {
+        "standard-at-user-scope": "pass",
+        "gated-serial-commits": "pass",
+        "required-set-complete": "pass",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-2",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-04.md",
+      "dimensions": {
+        "standard-at-user-scope": "pass",
+        "gated-serial-commits": "fail",
+        "required-set-complete": "fail",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-3",
+      "arm": "with",
+      "verdict": "pass",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-05.md",
+      "dimensions": {
+        "standard-at-user-scope": "pass",
+        "gated-serial-commits": "pass",
+        "required-set-complete": "pass",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "scenario-3",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-06.md",
+      "dimensions": {
+        "standard-at-user-scope": "fail",
+        "gated-serial-commits": "fail",
+        "required-set-complete": "fail",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "sonnet",
+      "scenario": "canary",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-07.md",
+      "dimensions": {
+        "standard-at-user-scope": "fail",
+        "gated-serial-commits": "fail",
+        "required-set-complete": "fail",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-1",
+      "arm": "with",
+      "verdict": "pass",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-08.md",
+      "dimensions": {
+        "standard-at-user-scope": "pass",
+        "gated-serial-commits": "pass",
+        "required-set-complete": "pass",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-1",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-09.md",
+      "dimensions": {
+        "standard-at-user-scope": "fail",
+        "gated-serial-commits": "fail",
+        "required-set-complete": "fail",
+        "claims-true": "fail"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-2",
+      "arm": "with",
+      "verdict": "pass",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-10.md",
+      "dimensions": {
+        "standard-at-user-scope": "pass",
+        "gated-serial-commits": "pass",
+        "required-set-complete": "pass",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-2",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-11.md",
+      "dimensions": {
+        "standard-at-user-scope": "pass",
+        "gated-serial-commits": "fail",
+        "required-set-complete": "fail",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-3",
+      "arm": "with",
+      "verdict": "fail",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-12.md",
+      "dimensions": {
+        "standard-at-user-scope": "pass",
+        "gated-serial-commits": "fail",
+        "required-set-complete": "pass",
+        "claims-true": "pass"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "scenario-3",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-13.md",
+      "dimensions": {
+        "standard-at-user-scope": "fail",
+        "gated-serial-commits": "fail",
+        "required-set-complete": "fail",
+        "claims-true": "fail"
+      }
+    },
+    {
+      "tier": "haiku",
+      "scenario": "canary",
+      "arm": "without",
+      "verdict": "fail",
+      "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-14.md",
+      "dimensions": {
+        "standard-at-user-scope": "fail",
+        "gated-serial-commits": "fail",
+        "required-set-complete": "fail",
+        "claims-true": "fail"
+      }
+    }
+  ]
+}

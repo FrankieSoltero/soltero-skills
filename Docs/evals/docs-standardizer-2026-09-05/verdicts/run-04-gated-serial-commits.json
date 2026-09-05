@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The run made a single commit (76c465e) directly on the main branch, not on a separate branch with multiple scoped commits; the transcript states 'Files changed (one commit, `76c465e`, directly on `main`)' and git-log.txt confirms 'branch: main' with only one commit."}

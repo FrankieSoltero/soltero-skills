@@ -1,0 +1,2 @@
+{"verdict": "pass", "evidence": "The verify.txt artifact shows GREEN docs-verify: 0 findings, confirming no CMD_UNKNOWN or PATH_MISSING findings in the documentation created by this run."}
+{"verdict": "pass", "evidence": "The verify.txt artifact shows GREEN docs-verify: 0 findings, confirming no CMD_UNKNOWN or PATH_MISSING findings in the documentation created by this run."}

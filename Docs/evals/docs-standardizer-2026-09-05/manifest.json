@@ -1,0 +1,128 @@
+[
+  {
+    "run": "run-01",
+    "agentId": "a525e9514e44dac6e",
+    "tier": "sonnet",
+    "scenario": "s1",
+    "arm": "with",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-01.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-02",
+    "agentId": "a55afcc36a33ea370",
+    "tier": "sonnet",
+    "scenario": "s1",
+    "arm": "without",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-02.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-03",
+    "agentId": "a85e2f07b2f72fedb",
+    "tier": "sonnet",
+    "scenario": "s2",
+    "arm": "with",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-03.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-04",
+    "agentId": "ac3371efee062c199",
+    "tier": "sonnet",
+    "scenario": "s2",
+    "arm": "without",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-04.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-05",
+    "agentId": "a7c7151e34b9286df",
+    "tier": "sonnet",
+    "scenario": "s3",
+    "arm": "with",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-05.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-06",
+    "agentId": "a06174d019533b4b3",
+    "tier": "sonnet",
+    "scenario": "s3",
+    "arm": "without",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-06.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-07",
+    "agentId": "a31a34f203c4f3fa6",
+    "tier": "sonnet",
+    "scenario": "canary",
+    "arm": "without",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-07.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-08",
+    "agentId": "a884b0082137dce64",
+    "tier": "haiku",
+    "scenario": "s1",
+    "arm": "with",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-08.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-09",
+    "agentId": "ac0fb88a4f80c4259",
+    "tier": "haiku",
+    "scenario": "s1",
+    "arm": "without",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-09.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-10",
+    "agentId": "a23c3cd202853e7fe",
+    "tier": "haiku",
+    "scenario": "s2",
+    "arm": "with",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-10.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-11",
+    "agentId": "a9871c5b5d62ec8a8",
+    "tier": "haiku",
+    "scenario": "s2",
+    "arm": "without",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-11.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-12",
+    "agentId": "a1d0a4a5ce2a9d30d",
+    "tier": "haiku",
+    "scenario": "s3",
+    "arm": "with",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-12.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-13",
+    "agentId": "a48186ee36f345659",
+    "tier": "haiku",
+    "scenario": "s3",
+    "arm": "without",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-13.md",
+    "crossReads": []
+  },
+  {
+    "run": "run-14",
+    "agentId": "af8b945ece5703f1b",
+    "tier": "haiku",
+    "scenario": "canary",
+    "arm": "without",
+    "transcript": "/Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-14.md",
+    "crossReads": []
+  }
+]

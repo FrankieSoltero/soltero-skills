@@ -65,6 +65,7 @@ Set `SOLTERO_SKILLS_DIR` to serve a different skills directory;
 | `audit-swarm` | Whole-repo security + legal audit via an agent swarm: scout → adaptive finders → 3-skeptic verification → severity-ranked report in `Docs/`. |
 | `destructive-op-gate` | Fail-closed gate before any irreversible or multi-record write: resolves the real target from the connection string (not the conversation's description of it), requires a count-only dry run and a verified on-disk rollback artifact, and requires typed human approval only at the top tier. |
 | `code-optimizer` | Whole-repo cleanup behind a test gate: tool-grounded dead-code removal, de-dup/shortening, live-file splitting, and project-guideline enforcement — every change verified and revertible. |
+| `docs-standardizer` | Whole-repo agent-onboarding docs to one user-scope standard (`~/.claude/docs-standard.json`): bundled inventory of every doc surface and its command/path claims, reconcile → entry doc under budget → required set → index, one commit per category behind a bundled claim verifier. |
 | `walkthrough-tutor` | Interactive, level-calibrated walkthrough of a branch/PR's changes — mental model first, then one layer per turn with comprehension checks, teaching the concepts behind the code. |
 | `agent-playbook` | Living, tiered playbook of coding-agent best practices: advisor mode serves source-linked, tier-labeled guidance; update mode runs a research-sweep Workflow (arXiv + lab blogs + OSS → dedupe → deep-read → skeptic tiering). |
 | `memory-gardener` | Periodic skeptic-gated curation of persistent memory surfaces: dedupe/merge/distill/prune as discrete itemized edits, with provenance gating and an independent `memory-skeptic` verifier for every destructive change. |
@@ -105,8 +106,8 @@ Set `SOLTERO_SKILLS_DIR` to serve a different skills directory;
 | `multiplayer-game-dev` | Browser/WebSocket multiplayer netcode: authority-first design, tick/snapshot/interpolation patterns with numbers, and unconditional ship-gates (latency sim, desync harness, cheat probe). |
 | `mini-game-craft` | Browser mini-game mechanics + seeded procedural art: failure-class catalog (timestep, swept collision, rotation, lockout), fixes ship with fail-on-old tests, dt-varying test discipline, art as a pure layer. |
 
-Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`,
-`author-claude-md`.
+Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`
+(`author-claude-md` shipped as `docs-standardizer`).
 
 ## Develop
 

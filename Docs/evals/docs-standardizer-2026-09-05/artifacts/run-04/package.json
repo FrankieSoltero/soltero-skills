@@ -1,0 +1,11 @@
+{
+  "name": "acme-ledger",
+  "version": "2.3.1",
+  "type": "module",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "node --test test/*.test.js",
+    "lint": "eslint .",
+    "migrate": "node scripts/migrate.js"
+  }
+}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "Work was committed directly to main (git-log.txt line 1), with only a single commit creating CLAUDE.md rather than multiple scoped commits, and the verify.txt output shows 21 claim findings rather than zero."}

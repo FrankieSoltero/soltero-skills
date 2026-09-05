@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "docsRoot": "Docs",
+  "entryDoc": {
+    "file": "CLAUDE.md",
+    "mirror": "AGENTS.md",
+    "maxLines": 120,
+    "requiredSections": ["Purpose", "Commands", "Layout", "Where to look", "Conventions", "Docs"]
+  },
+  "required": [
+    { "file": "README.md", "sections": ["Getting started"] },
+    { "file": "Docs/README.md", "purpose": "index: one line per doc under the docs root" },
+    { "file": "Docs/architecture.md", "sections": ["Entry points", "Module map", "Data flow", "Non-obvious mechanisms"] },
+    { "file": "Docs/conventions.md", "sections": ["Declared", "Observed"] },
+    { "file": "Docs/decisions.md", "purpose": "index of decisions/ADRs; never invented" },
+    { "file": "Docs/mistakes-and-fixes.md", "purpose": "lesson log; scaffold only" },
+    { "file": "Docs/open-questions.md", "purpose": "what only a human can answer" }
+  ],
+  "commandSources": ["package.json", "Makefile", "justfile", "pyproject.toml"],
+  "historical": ["CHANGELOG.md", "**/adr/**", "**/decisions/**", "**/mistakes-and-fixes.md", "HANDOFF.md"],
+  "unverifiedMarker": "(unverified)",
+  "absentMarker": "(does not exist)",
+  "exclude": ["node_modules", "dist", "build", "coverage", ".git", "var", "tmp", ".next", "target", "vendor", ".env", ".env.local"]
+}

@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "Work on branch docs/standardize has two scoped commits (60fc120, def78cd), with transcript line 2021 showing 'GREEN docs-verify: 0 findings' before commits were made."}

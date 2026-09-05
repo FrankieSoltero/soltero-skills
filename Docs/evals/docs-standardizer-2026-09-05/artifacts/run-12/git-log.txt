@@ -1,0 +1,52 @@
+branch: docs/standardize
+
+uncommitted:
+
+--- log --all ---
+a9abe6d docs: fix verifier findings
+ CLAUDE.md            | 2 +-
+ Docs/architecture.md | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ec6d74f docs: add required documentation
+ AGENTS.md                  |  1 +
+ Docs/README.md             | 10 ++++++++++
+ Docs/architecture.md       | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ Docs/conventions.md        | 13 +++++++++++++
+ Docs/decisions.md          |  7 +++++++
+ Docs/mistakes-and-fixes.md |  5 +++++
+ Docs/open-questions.md     |  7 +++++++
+ 7 files changed, 87 insertions(+)
+acf8609 docs: add CLAUDE.md entry doc
+ CLAUDE.md | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+75a2b80 docs(reconcile): fix stale README claims and consolidate docs roots
+ {docs => Docs}/SETUP.md               |  0
+ {docs => Docs}/adr/0001-use-sqlite.md |  0
+ {doc => Docs}/notes.md                |  0
+ README.md                             | 10 +++++-----
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+37be94c seed acme-ledger fixture
+ .env.example                |  3 +++
+ .github/workflows/ci.yml    |  9 +++++++++
+ .gitignore                  |  3 +++
+ Makefile                    |  7 +++++++
+ README.md                   | 23 +++++++++++++++++++++++
+ doc/notes.md                |  6 ++++++
+ docs/SETUP.md               |  8 ++++++++
+ docs/adr/0001-use-sqlite.md |  9 +++++++++
+ eslint.config.js            |  1 +
+ migrations/0001_entries.sql |  1 +
+ package.json                | 11 +++++++++++
+ scripts/migrate.js          |  3 +++
+ src/app.js                  | 14 ++++++++++++++
+ src/db.js                   |  5 +++++
+ src/http/router.js          | 18 ++++++++++++++++++
+ src/ledger/post.js          | 10 ++++++++++
+ src/ledger/reconcile.js     |  8 ++++++++
+ src/ledger/rounding.js      |  8 ++++++++
+ src/plugins/audit-log.js    |  6 ++++++
+ src/plugins/fx-normalize.js |  6 ++++++
+ src/plugins/registry.js     | 18 ++++++++++++++++++
+ test/post.test.js           | 12 ++++++++++++
+ test/rounding.test.js       |  9 +++++++++
+ 23 files changed, 198 insertions(+)

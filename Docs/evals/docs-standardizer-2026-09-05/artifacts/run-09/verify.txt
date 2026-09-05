@@ -1,0 +1,18 @@
+DOCS_ROOT_CLASH . more than one docs root: doc, docs (standard: Docs)
+DOCS_ROOT_CASE docs differs from the standard's docs root "Docs" by case only; rename it or record docsRoot in .docs-standard.json
+REQUIRED_MISSING CLAUDE.md entry doc missing
+REQUIRED_MISSING Docs/architecture.md required by the standard
+REQUIRED_MISSING Docs/conventions.md required by the standard
+REQUIRED_MISSING Docs/decisions.md required by the standard
+REQUIRED_MISSING Docs/mistakes-and-fixes.md required by the standard
+REQUIRED_MISSING Docs/open-questions.md required by the standard
+REQUIRED_MISSING Docs/README.md required by the standard
+SECTION_MISSING README.md section "Getting started" missing
+PATH_MISSING doc/notes.md:32 000-b.js
+PATH_MISSING doc/notes.md:32 001-a.js
+PATH_MISSING docs/ARCHITECTURE.md:89 .test.js
+PATH_MISSING docs/ONBOARDING.md:98 migrations/0002_add_description.sql
+PATH_MISSING docs/ONBOARDING.md:121 src/plugins/file-logger.js
+PATH_MISSING docs/ONBOARDING.md:181 /entries
+PATH_MISSING docs/ONBOARDING.md:191 /entries
+RED docs-verify: 17 findings

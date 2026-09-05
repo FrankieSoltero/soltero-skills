@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The run's final verification produced 'GREEN docs-verify: 0 findings' with no CMD_UNKNOWN or PATH_MISSING errors in the created or edited documentation."}

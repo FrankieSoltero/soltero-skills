@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "evidence": "verify.txt shows PATH_MISSING findings in created/edited files: doc/notes.md:32 references 000-b.js and 001-a.js (example filenames without explicit negation markers), docs/ONBOARDING.md:98 references migrations/0002_add_description.sql (hypothetical migration), docs/ONBOARDING.md:121 references src/plugins/file-logger.js (hypothetical plugin), docs/ARCHITECTURE.md:89 references .test.js pattern, and docs/ONBOARDING.md:181, 191 reference /entries API endpoint; these paths do not exist in the repository."
+}

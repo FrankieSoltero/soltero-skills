@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The git log shows only a single commit (b72e6bd) on main branch, but the dimension requires two or more scoped commits on a non-main branch; additionally, verify.txt reports 14 claim findings rather than zero."}

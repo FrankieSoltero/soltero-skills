@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "git-log.txt shows branch: main with a single commit 90d43ab, and verify.txt reports 12 claim findings (DOCS_ROOT_CLASH, DOCS_ROOT_CASE, REQUIRED_MISSING, SECTION_MISSING) rather than none."}

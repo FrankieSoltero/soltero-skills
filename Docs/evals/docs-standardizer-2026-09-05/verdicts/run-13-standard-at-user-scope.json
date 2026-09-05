@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "home-standard.json shows '(no docs-standard.json at user scope)' but the transcript shows the agent created CLAUDE.md and committed it to the repo without reading or creating any documentation standard at the user-scope config directory first."}

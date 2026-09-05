@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "CLAUDE.md lacks explicit headings for 'Layout' and 'Where to look' (has 'What this is', 'Run it', 'Architecture', 'Hard rules', 'Docs map' instead), and the docs root is missing four required files: docs/README.md (docs index), an architecture doc, a conventions doc, and an open-questions doc."}
