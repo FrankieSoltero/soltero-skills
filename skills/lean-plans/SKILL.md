@@ -24,7 +24,11 @@ plan has exactly these parts, in order:
    and how tests are run.
 2. **Global Constraints:** the spec's project-wide exact values, verbatim,
    ONCE. Every task implicitly includes this section — never re-paste it into
-   tasks.
+   tasks. Where the repo declares limits of its own — a max file size (e.g.
+   `.code-optimizer.yml` `max_file_lines`), a duplication tool and threshold
+   (e.g. `jscpd`) — quote them here as constraints, naming the file that
+   declares them; write "none declared" when the repo declares none. A limit
+   the plan never states is a limit nobody downstream applies.
 3. **Task Dependency Table:** one row per task — files touched, depends-on,
    risk tier. This table is the executor's scheduling and review-depth input;
    it must agree with the task blocks' file lists. Risk tiers:
@@ -38,6 +42,12 @@ plan has exactly these parts, in order:
      *produces* (what later tasks rely on — exact names, parameter and return
      types). A task's implementer sees only its own task; this block is how
      they learn what neighbors expect.
+   - **Reuse / extract:** when the task adds a screen, module, or route
+     alongside an existing sibling, name by exact path the shared components,
+     hooks, and styles it reuses — and, where that shared code still sits
+     inline in the sibling, the EXTRACT-first task it depends on. Never
+     "mirror `<sibling>`" or "same structure as `<sibling>`": a fresh-context
+     implementer reads that as "copy it", and a copy is what the plan gets.
    - **Behavior table:** case | input/state | expected. Every spec requirement
      touching this task appears as a row.
    - **Exact values:** magic constants, header/error strings, golden vectors,
@@ -82,6 +92,11 @@ plan duplicates, and then drifts from, the executor's process.
    Task N" — each becomes a behavior row or an exact value.
 5. **Code-rule scan:** any code block that isn't a golden value, an API shape,
    or a ≤15-line tricky core gets converted to contract + behavior rows.
+6. **Existence claims:** every "X does not exist" / "no shared Y available"
+   claim is verified by LISTING the directory it would live in (`ls
+   components/`, `ls hooks/`), never by one grep for one import name. A wrong
+   absence claim makes the plan commission a duplicate of something the repo
+   already ships.
 
 ## Handoff
 
@@ -100,6 +115,9 @@ still executes by hand: work the tasks in dependency order, one at a time.
 | Missing risk tiers | Tiers drive review depth and model cost downstream; omitting them forces the executor to guess. |
 | Review/wave procedure written into the plan | Executor's job. Plans carry facts, not process. |
 | 5-step TDD choreography per task ("write test, run it, implement, run, commit") | One contract block; TDD is the implementer's standing discipline. |
+| "Mirror the sibling screen" as the task's structural instruction | Name the shared modules it reuses by path, plus the extraction task that must precede it. "Mirror" is executed as "copy". |
+| The repo's declared size cap / duplication rule missing from Global Constraints | Quote both with the file that declares them; a limit the plan omits is one no implementer or reviewer applies. |
+| "Component X doesn't exist" concluded from a single grep | List the directory. A wrong absence claim buys a hand-rolled duplicate of shipped code. |
 
 ---
 

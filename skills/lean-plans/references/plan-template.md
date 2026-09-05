@@ -15,6 +15,12 @@ e.g. `npx vitest run <file>`]
 [The spec's project-wide exact values, verbatim, one line each. Every task
 implicitly includes this section — do not re-paste into tasks.]
 
+- **Size cap:** [the repo's declared max file lines and the file declaring it,
+  e.g. `700` per `.code-optimizer.yml`; "none declared" if there is none]
+- **Duplication:** [the repo's declared duplication tool and threshold, e.g.
+  `jscpd --min-lines 8`; a copied block at or above it is a defect, not a
+  pattern. "none declared" if there is none]
+
 ## Task Dependency Table
 
 | Task | Files touched | Depends on | Risk tier |
@@ -40,6 +46,12 @@ and may execute/review concurrently."]
 - Consumes: [exact signatures from earlier tasks this task uses — verbatim]
 - Produces: [exact function/class/type names with parameter and return types
   that later tasks rely on]
+
+**Reuse / extract:** [for a screen/module added alongside an existing sibling:
+the shared components, hooks, and styles it reuses, by exact path — plus the
+extraction task it depends on where that code still sits inline in the sibling.
+Never "mirror `<sibling>`". Omit only when nothing reusable exists, verified by
+listing the directory, not by one grep.]
 
 **Behavior:**
 
