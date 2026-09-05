@@ -59,6 +59,17 @@ Anchor to the bands; when torn between two bands, take the lower one.
   has to guess which files "the relevant files" are.
 - Data shapes, routes, and flags are spelled out or explicitly marked
   `(proposed — confirm)`; no silent placeholders.
+- The plan states the size cap and duplication rule the repo declares (quoting the
+  file that declares them, e.g. `.code-optimizer.yml` `max_file_lines`, `jscpd`), or
+  states that none is declared. A repo limit the plan omits is one no executor
+  applies — a limit that lives only in a config file nobody runs is not a limit.
+- Every task that adds a screen or module alongside an existing sibling names, by
+  path, what it reuses or extracts. "Mirror `<sibling>`" / "same structure as
+  `<sibling>`" with no extraction task is a violation: a fresh-context implementer
+  executes it as "copy it".
+- Any "component/helper X does not exist" claim the plan leans on is grounded in a
+  directory listing, not a single grep. An unverified absence claim is a violation —
+  it commissions a duplicate of code the repo already ships.
 
 ### D5 — Risk & reversibility (weight 15)
 - Destructive or schema-changing steps state their blast radius, backup, and rollback
