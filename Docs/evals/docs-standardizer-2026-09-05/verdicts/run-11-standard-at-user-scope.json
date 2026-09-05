@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The run checked /tmp/acme-home-ws-11/.claude/ at line 211-225, then read docs-standard.json from that user-scope config directory at lines 245-277, before writing documentation files to the repo at lines 283-309."}

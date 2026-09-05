@@ -40,6 +40,8 @@ Standing disciplines and procedures:
   `soltero-skills:dispatch-contract`
 - "Spawn a swarm", "fan out agents", "throw a bunch of agents at this", or any
   ad-hoc Workflow / 4+ Agent dispatches for one task → `soltero-skills:agent-swarm`
+- "Document this repo", "make this easier to onboard to", "write/refresh the
+  CLAUDE.md", "standardize the docs" → `soltero-skills:docs-standardizer`
 - Debrief names a missed trigger twice → `soltero-skills:skill-trigger-repair`
 - Before shipping a new/edited skill → `soltero-skills:skill-ab-eval`
 

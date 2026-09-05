@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The verify.txt artifact shows 'GREEN docs-verify: 0 findings' with no CMD_UNKNOWN or PATH_MISSING entries for any documentation created or edited in the run (README.md, CLAUDE.md, and all docs/ files)."}

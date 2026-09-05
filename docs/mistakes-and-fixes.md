@@ -41,3 +41,11 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** Compare realpathSync() of both sides in the main-guard (skills/agent-swarm/scripts/swarm-plan.mjs, skills/dispatch-contract/scripts/validate-brief.mjs) and cover the symlinked-invocation path in each script's test
 - **Lesson:** Never gate a CLI's main() on a string equality between import.meta.url and argv[1]; resolve both with realpathSync (or drop the guard for bin-style scripts). A guard that fails closed to 'do nothing, exit 0' is the worst possible failure for a validator — pair every such script with a test that invokes it through a symlinked path
 - **Regression test:** swarm-plan.test.mjs / validate-brief.test.mjs: spawn the script via a symlinked directory and assert the verdict line appears and the exit code is non-zero on a failing input
+
+## 2026-09-05 — docs-standardizer RED fixture seeded a docs/ vs Docs/ docs-root clash; on macOS both names resolved to one directory, so two of three baseline agents reported 'identical duplicate content' and the clash under test never existed
+
+- **Symptom:** docs-standardizer RED fixture seeded a docs/ vs Docs/ docs-root clash; on macOS both names resolved to one directory, so two of three baseline agents reported 'identical duplicate content' and the clash under test never existed
+- **Root cause:** APFS is case-insensitive by default: mkdir docs then writing Docs/notes.md lands in docs/. The fixture, the inventory script's existsSync path checks, and the Makefile/makefile manifest lookup all assumed a case-sensitive tree
+- **Fix:** Stray root renamed to doc/ (distinct name); case-only mismatch with the standard's root made its own verifier finding (DOCS_ROOT_CASE, resolved by a recorded project override, not a rename); path claims resolved case-exactly via readdirSync per segment; manifest lookup matches exact names from readdirSync
+- **Lesson:** Any fixture or checker that distinguishes paths by case must resolve each segment against readdirSync, never existsSync — a macOS run must report what a Linux checkout would see, and a case-only clash is not a valid fixture on the author's own machine
+- **Regression test:** docs-verify.test.mjs: a doc citing docs/architecture.md and SRC/app.js against Docs/ and src/ yields 2 PATH_MISSING on any filesystem

@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "verify.txt reports 7 PATH_MISSING findings across CLAUDE.md, CONTRIBUTING.md, docs/ARCHITECTURE.md, and docs/SETUP.md—files the run created or edited (lines 17-23: src/plugins/my-plugin.js, migrations/000X_add_column.sql, test/reconcile.test.js, src/plugins/my-feature.js, 0002_add_timestamp.sql, ./path/to/ledger.sqlite)."}

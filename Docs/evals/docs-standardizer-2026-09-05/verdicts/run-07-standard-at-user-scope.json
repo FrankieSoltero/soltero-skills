@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The run wrote CLAUDE.md to the repo at line 619-629, then wrote repo-documentation-standard.md to the user-scope config directory at lines 651-661, violating the requirement that the standard be read or created before writing any repository documentation; additionally, home-standard.json shows no docs-standard.json exists at user scope."}

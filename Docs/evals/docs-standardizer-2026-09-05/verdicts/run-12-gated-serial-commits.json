@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The verifier check before the final commit (transcript lines 1405-1415) reported 2 findings (PATH_MISSING and UNREACHABLE), not zero; the final commit was created to fix those findings.", "recovered_from": "judge final message (file write did not land)"}

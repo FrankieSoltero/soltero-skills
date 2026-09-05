@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "docs-standard-init.mjs created /tmp/acme-home-ws-01/.claude/docs-standard.json at line 357, before CLAUDE.md (the first new documentation file) was written at line 746."}

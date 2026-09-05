@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The home-standard.json artifact contains \"(no docs-standard.json at user scope)\" and the transcript shows the run created documentation files (CLAUDE.md at line 383) without first reading or creating a user-scope docs-standard.json file."}

@@ -3,6 +3,40 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [1.0.25] - 2026-09-05
+### Added
+- **docs-standardizer** — whole-repo agent-onboarding docs to ONE user-scope standard.
+  "Document this repo", "make this codebase easier to onboard to", "write a CLAUDE.md for
+  this project", "standardize the docs" bring the repo to `~/.claude/docs-standard.json`
+  (bootstrapped from the bundled default on first use, docs-root name read from the global
+  CLAUDE.md; a repo-local `.docs-standard.json` may override only `docsRoot`/`exclude`/
+  `entryDoc.file`/extra `required`). Bundled scripts: `docs-inventory.mjs` (every doc
+  surface, its headings, command and path claims with resolution status, command evidence
+  from package.json/Makefile/justfile, coverage against the standard, markdown outline or
+  JSON), `docs-verify.mjs` (the gate: one docs root named as the standard says, required
+  docs and sections, entry-doc line budget, mirror is a pointer, every command claim a
+  manifest script or make target, every path claim case-exact, every doc reachable within
+  two hops; exit 0/1/2), `docs-standard-init.mjs` (bootstrap or print the effective
+  standard; never overwrites). Apply is serial — reconcile → entry doc → required docs →
+  index — one commit per category on `docs/standardize` behind the verifier; the branch is
+  the deliverable, never self-merged. RED on pinned sonnet: three runs, three shapes,
+  nothing at user scope ("project-specific material belongs in the repo"), one commit on
+  main each, no verification, required set never produced, scope collapsed to a TODO file
+  under "just fix the README". Supersedes the roadmap's `author-claude-md`.
+- Routing for docs-standardizer in `hooks/session-context.md`, `AGENTS.md`, and the README
+  index; MCP pinned skill count 49 → 50.
+- Ship gate via skill-ab-eval: sonnet 0/3 → 3/3, haiku 0/3 → 2/3, canary failed both tiers,
+  no flags — `Docs/skill-eval-docs-standardizer-2026-09-05.md`, evidence under
+  `Docs/evals/docs-standardizer-2026-09-05/`. Recommendation: ship; haiku's per-commit
+  gating (commits while the verifier is RED, then a fix-up commit) is the named follow-up.
+### Fixed
+- **docs-standardizer** claim extraction (post-eval, tests added): URL/absolute/home paths
+  (`/entries`, `~/.claude/...`) and extension chains (`.test.js`) are no longer read as
+  repo-path claims; bold negations (`**no**`) and `@AGENTS.md` import lines are recognized.
+- Fixture lesson (`docs/mistakes-and-fixes.md`, 2026-09-05): a `Docs/` vs `docs/` clash is
+  not a valid fixture on a case-insensitive filesystem; path checks resolve each segment
+  against `readdirSync` so a macOS run reports what a Linux checkout would see.
+
 ## [1.0.24] - 2026-09-02
 
 Version scheme moved to 1.x with this release (0.24.0 was briefly published under the old

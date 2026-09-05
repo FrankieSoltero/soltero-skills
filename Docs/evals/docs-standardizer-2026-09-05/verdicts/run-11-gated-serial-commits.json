@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The run committed a single commit to main (git-log.txt: \"branch: main\"; only commit 6a4f12d shown) rather than multiple scoped commits to a feature branch, and ran no verification check before committing (verify.txt shows 11 findings discovered after the fact)."}

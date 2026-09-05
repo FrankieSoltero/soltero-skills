@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The run worked on branch docs/standardize (not main) with four scoped commits (reconcile, entry, required, index), and before the final commit executed docs-verify.mjs which reported 'GREEN docs-verify: 0 findings' in verify.txt with exit code 0."}

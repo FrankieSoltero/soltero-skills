@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The home-standard.json artifact states '(no docs-standard.json at user scope)' and the transcript shows the run read only the global CLAUDE.md at lines 444-460, then wrote documentation files to the repo starting at line 466 without establishing any user-scope standard first."}

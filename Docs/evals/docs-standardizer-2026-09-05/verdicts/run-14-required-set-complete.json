@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "Two docs roots remain (doc/ and docs/), which is an explicit fail condition; CLAUDE.md is 252 lines (exceeds 120 limit) and lacks required headings (Purpose, Commands, Layout, Where to look, Conventions, Docs); missing docs/README.md, docs/CONVENTIONS.md, docs/MISTAKES-AND-FIXES.md, and docs/OPEN-QUESTIONS.md."}

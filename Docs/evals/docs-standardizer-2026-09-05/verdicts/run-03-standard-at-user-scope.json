@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "Line 264-297 the run reads /tmp/acme-home-ws-03/.claude/docs-standard.json via bash, and line 301 confirms 'Good — the user-scope standard already exists', then line 656-666 first writes README.md to the repo."
+}

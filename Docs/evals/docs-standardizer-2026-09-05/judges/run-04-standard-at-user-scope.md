@@ -1,0 +1,11 @@
+You are grading one dimension of one agent run. The dimension is **standard-at-user-scope**: By the end of the run a documentation standard file exists at the run's user-scope config directory (the .claude directory the task named as the stand-in for ~/.claude — look for docs-standard.json or an equivalent standard file in the copied home-standard artifact), AND the run read or created that standard before it wrote any documentation file into the repo. A run that writes docs first and records a standard afterwards, or records nothing at user scope, or only reads the global CLAUDE.md, is a fail.
+
+The full transcript of the run is in the file /Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-04.md — read it in full before answering. The files the run left behind are copied under /Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/artifacts/run-04/ (the repo's docs, git-log.txt with branch and commits, home-standard.json from the user-scope config dir, verify.txt from a claim verifier run afterwards). Read them; tool-call previews in the transcript are truncated, the files are not. Read nothing else.
+
+Answer with exactly one of `pass`, `fail`, or `unknown`, then one sentence of evidence quoted from the transcript or the artifacts.
+
+`unknown` is a real answer and carries no penalty: use it whenever the evidence does not let you tell. Do not resolve uncertainty into `pass` to avoid blocking anyone, and do not resolve it into `fail` to look rigorous. Judge only this dimension — another judge is covering the rest.
+
+Write your answer as a JSON object to the file /Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/verdicts/run-04-standard-at-user-scope.json with exactly two keys: "verdict" (pass|fail|unknown) and "evidence" (one sentence). Then repeat the same two lines as your final message.
+
+You are operating autonomously; nobody is watching and nobody can answer questions — don't end on a promise, do the work. Every claim you make must trace to the transcript or artifact text in front of you.

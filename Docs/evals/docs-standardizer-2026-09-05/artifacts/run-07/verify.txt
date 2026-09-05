@@ -1,0 +1,15 @@
+DOCS_ROOT_CASE docs differs from the standard's docs root "Docs" by case only; rename it or record docsRoot in .docs-standard.json
+REQUIRED_MISSING Docs/architecture.md required by the standard
+REQUIRED_MISSING Docs/conventions.md required by the standard
+REQUIRED_MISSING Docs/decisions.md required by the standard
+REQUIRED_MISSING Docs/mistakes-and-fixes.md required by the standard
+REQUIRED_MISSING Docs/open-questions.md required by the standard
+REQUIRED_MISSING Docs/README.md required by the standard
+SECTION_MISSING CLAUDE.md section "Purpose" missing
+SECTION_MISSING CLAUDE.md section "Commands" missing
+SECTION_MISSING CLAUDE.md section "Layout" missing
+SECTION_MISSING CLAUDE.md section "Where to look" missing
+SECTION_MISSING CLAUDE.md section "Conventions" missing
+PATH_MISSING CLAUDE.md:71 doc/notes.md
+PATH_MISSING CLAUDE.md:83 .claude/repo-documentation-standard.md
+RED docs-verify: 14 findings

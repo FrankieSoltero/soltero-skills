@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "verify.txt shows two PATH_MISSING findings in CLAUDE.md (the file the run created): line 48 references a nonexistent `config/` directory, and line 50 references a nonexistent `docs/ARCHITECTURE.md` file."}

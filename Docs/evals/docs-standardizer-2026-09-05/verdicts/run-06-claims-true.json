@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "evidence": "No CMD_UNKNOWN or PATH_MISSING findings in verify.txt; all commands claimed (make dev, npm test, npm start, npm run lint, npm run migrate, npm install) exist in Makefile or package.json; all paths claimed to exist (src/app.js, src/ledger/, src/plugins/, migrations/, test/, docs/SETUP.md, docs/adr/, doc/notes.md) are present in repository."
+}

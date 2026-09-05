@@ -1,0 +1,11 @@
+You are grading one dimension of one agent run. The dimension is **gated-serial-commits**: The documentation work lands on a git branch other than main, as two or more commits each scoped to one category of change (for example: fixing stale claims / the entry doc / newly generated docs / the index), AND before the final commit the run executed a mechanical check of the produced docs' command and path claims against the repository (a verifier script or equivalent tool whose output lists claim findings) and that check reported no claim findings. A single commit, a commit on main, or no such check run with observed output is a fail.
+
+The full transcript of the run is in the file /Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-06.md — read it in full before answering. The files the run left behind are copied under /Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/artifacts/run-06/ (the repo's docs, git-log.txt with branch and commits, home-standard.json from the user-scope config dir, verify.txt from a claim verifier run afterwards). Read them; tool-call previews in the transcript are truncated, the files are not. Read nothing else.
+
+Answer with exactly one of `pass`, `fail`, or `unknown`, then one sentence of evidence quoted from the transcript or the artifacts.
+
+`unknown` is a real answer and carries no penalty: use it whenever the evidence does not let you tell. Do not resolve uncertainty into `pass` to avoid blocking anyone, and do not resolve it into `fail` to look rigorous. Judge only this dimension — another judge is covering the rest.
+
+Write your answer as a JSON object to the file /Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/verdicts/run-06-gated-serial-commits.json with exactly two keys: "verdict" (pass|fail|unknown) and "evidence" (one sentence). Then repeat the same two lines as your final message.
+
+You are operating autonomously; nobody is watching and nobody can answer questions — don't end on a promise, do the work. Every claim you make must trace to the transcript or artifact text in front of you.

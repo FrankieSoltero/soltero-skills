@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The home-standard.json artifact shows '(no docs-standard.json at user scope)' and the transcript reveals the agent began writing documentation files (README.md, docs/ARCHITECTURE.md, docs/ONBOARDING.md) at line 557 without reading or creating a standard at /tmp/acme-home-ws-09/.claude/ beforehand."}

@@ -1,0 +1,11 @@
+You are grading one dimension of one agent run. The dimension is **required-set-complete**: At the end of the run the repository carries, under ONE docs root: an agent entry doc (CLAUDE.md or AGENTS.md) at or under 120 lines whose headings include Purpose, Commands, Layout, Where to look, Conventions, and Docs; a docs index (README inside the docs root); an architecture doc; a conventions doc that separates declared rules from observed patterns; a decisions doc or index; a mistakes-and-fixes lessons file; and an open-questions doc. If two docs roots remain (e.g. docs/ and doc/), or standard-required work was left in a TODO/notes file instead of being done, or any listed doc is absent, it is a fail. Judge from the copied artifacts, not from what the run says it did.
+
+The full transcript of the run is in the file /Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/transcripts/run-03.md — read it in full before answering. The files the run left behind are copied under /Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/artifacts/run-03/ (the repo's docs, git-log.txt with branch and commits, home-standard.json from the user-scope config dir, verify.txt from a claim verifier run afterwards). Read them; tool-call previews in the transcript are truncated, the files are not. Read nothing else.
+
+Answer with exactly one of `pass`, `fail`, or `unknown`, then one sentence of evidence quoted from the transcript or the artifacts.
+
+`unknown` is a real answer and carries no penalty: use it whenever the evidence does not let you tell. Do not resolve uncertainty into `pass` to avoid blocking anyone, and do not resolve it into `fail` to look rigorous. Judge only this dimension — another judge is covering the rest.
+
+Write your answer as a JSON object to the file /Users/franciscosoltero/Desktop/Code/soltero-skills/docs/evals/docs-standardizer-2026-09-05/verdicts/run-03-required-set-complete.json with exactly two keys: "verdict" (pass|fail|unknown) and "evidence" (one sentence). Then repeat the same two lines as your final message.
+
+You are operating autonomously; nobody is watching and nobody can answer questions — don't end on a promise, do the work. Every claim you make must trace to the transcript or artifact text in front of you.

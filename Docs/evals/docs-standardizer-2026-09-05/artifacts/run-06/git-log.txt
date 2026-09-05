@@ -1,0 +1,36 @@
+branch: main
+
+uncommitted:
+
+--- log --all ---
+90d43ab docs: add CLAUDE.md from verified commands, fix stale README
+ CLAUDE.md                  | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ README.md                  | 12 +++++++-----
+ docs/mistakes-and-fixes.md | 35 +++++++++++++++++++++++++++++++++++
+ package-lock.json          | 12 ++++++++++++
+ 4 files changed, 100 insertions(+), 5 deletions(-)
+37be94c seed acme-ledger fixture
+ .env.example                |  3 +++
+ .github/workflows/ci.yml    |  9 +++++++++
+ .gitignore                  |  3 +++
+ Makefile                    |  7 +++++++
+ README.md                   | 23 +++++++++++++++++++++++
+ doc/notes.md                |  6 ++++++
+ docs/SETUP.md               |  8 ++++++++
+ docs/adr/0001-use-sqlite.md |  9 +++++++++
+ eslint.config.js            |  1 +
+ migrations/0001_entries.sql |  1 +
+ package.json                | 11 +++++++++++
+ scripts/migrate.js          |  3 +++
+ src/app.js                  | 14 ++++++++++++++
+ src/db.js                   |  5 +++++
+ src/http/router.js          | 18 ++++++++++++++++++
+ src/ledger/post.js          | 10 ++++++++++
+ src/ledger/reconcile.js     |  8 ++++++++
+ src/ledger/rounding.js      |  8 ++++++++
+ src/plugins/audit-log.js    |  6 ++++++
+ src/plugins/fx-normalize.js |  6 ++++++
+ src/plugins/registry.js     | 18 ++++++++++++++++++
+ test/post.test.js           | 12 ++++++++++++
+ test/rounding.test.js       |  9 +++++++++
+ 23 files changed, 198 insertions(+)

@@ -84,6 +84,11 @@ Standing disciplines and procedures:
   `scripts/swarm-plan.mjs` is dependency-free Node and runs anywhere; the
   runner `workflows/swarm.mjs` is Claude-Code-only — outside it, execute the
   spec's lanes yourself, sequentially, holding each to the same return shape)
+- "Document this repo", "make this easier to onboard to", "write/refresh the
+  CLAUDE.md or AGENTS.md", "standardize the docs" → open
+  `skills/docs-standardizer/SKILL.md` (the inventory, verifier, and
+  standard-bootstrap scripts are dependency-free Node and run anywhere; pass
+  `--home` for the user-scope standard)
 - A debrief names a missed trigger twice → open
   `skills/skill-trigger-repair/SKILL.md` (the parser is dependency-free Node
   and runs anywhere; `hooks/session-context.md` has no non-Claude-Code

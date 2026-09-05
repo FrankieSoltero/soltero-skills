@@ -1,0 +1,53 @@
+branch: docs/standardize
+
+uncommitted:
+
+--- log --all ---
+87e55e9 chore: remove doc/ directory (consolidated into docs/)
+ doc/notes.md | 6 ------
+ 1 file changed, 6 deletions(-)
+3f68e66 docs: add AGENTS.md mirror pointing to CLAUDE.md
+ AGENTS.md | 1 +
+ 1 file changed, 1 insertion(+)
+7475565 fix: update CLAUDE.md links and path references
+ CLAUDE.md | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
+ff23aba docs: add entry doc CLAUDE.md and required docs
+ CLAUDE.md                  | 49 ++++++++++++++++++++++++++++++++++++++
+ docs/README.md             | 24 +++++++++++++++++++
+ docs/architecture.md       | 59 ++++++++++++++++++++++++++++++++++++++++++++++
+ docs/conventions.md        | 45 +++++++++++++++++++++++++++++++++++
+ docs/decisions.md          | 10 ++++++++
+ docs/mistakes-and-fixes.md | 15 ++++++++++++
+ docs/open-questions.md     | 17 +++++++++++++
+ 7 files changed, 219 insertions(+)
+c8b4874 chore: reconcile docs — consolidate doc/ into docs/, fix README stale claims
+ .docs-standard.json | 3 +++
+ README.md           | 9 ++++-----
+ docs/notes.md       | 6 ++++++
+ 3 files changed, 13 insertions(+), 5 deletions(-)
+37be94c seed acme-ledger fixture
+ .env.example                |  3 +++
+ .github/workflows/ci.yml    |  9 +++++++++
+ .gitignore                  |  3 +++
+ Makefile                    |  7 +++++++
+ README.md                   | 23 +++++++++++++++++++++++
+ doc/notes.md                |  6 ++++++
+ docs/SETUP.md               |  8 ++++++++
+ docs/adr/0001-use-sqlite.md |  9 +++++++++
+ eslint.config.js            |  1 +
+ migrations/0001_entries.sql |  1 +
+ package.json                | 11 +++++++++++
+ scripts/migrate.js          |  3 +++
+ src/app.js                  | 14 ++++++++++++++
+ src/db.js                   |  5 +++++
+ src/http/router.js          | 18 ++++++++++++++++++
+ src/ledger/post.js          | 10 ++++++++++
+ src/ledger/reconcile.js     |  8 ++++++++
+ src/ledger/rounding.js      |  8 ++++++++
+ src/plugins/audit-log.js    |  6 ++++++
+ src/plugins/fx-normalize.js |  6 ++++++
+ src/plugins/registry.js     | 18 ++++++++++++++++++
+ test/post.test.js           | 12 ++++++++++++
+ test/rounding.test.js       |  9 +++++++++
+ 23 files changed, 198 insertions(+)

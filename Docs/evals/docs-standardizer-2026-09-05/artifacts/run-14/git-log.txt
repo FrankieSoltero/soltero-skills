@@ -1,0 +1,38 @@
+branch: main
+
+uncommitted:
+
+--- log --all ---
+5ce0ea5 docs: comprehensive documentation suite for agent onboarding
+ CLAUDE.md            | 252 ++++++++++++++++++++++++++++++++++
+ CONTRIBUTING.md      | 380 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ README.md            |  79 +++++++++--
+ docs/ARCHITECTURE.md | 340 +++++++++++++++++++++++++++++++++++++++++++++
+ docs/INDEX.md        | 183 +++++++++++++++++++++++++
+ docs/SETUP.md        | 238 +++++++++++++++++++++++++++++++-
+ 6 files changed, 1458 insertions(+), 14 deletions(-)
+7e8821e seed acme-ledger fixture
+ .env.example                |  3 +++
+ .github/workflows/ci.yml    |  9 +++++++++
+ .gitignore                  |  3 +++
+ Makefile                    |  7 +++++++
+ README.md                   | 23 +++++++++++++++++++++++
+ doc/notes.md                |  6 ++++++
+ docs/SETUP.md               |  8 ++++++++
+ docs/adr/0001-use-sqlite.md |  9 +++++++++
+ eslint.config.js            |  1 +
+ migrations/0001_entries.sql |  1 +
+ package.json                | 11 +++++++++++
+ scripts/migrate.js          |  3 +++
+ src/app.js                  | 14 ++++++++++++++
+ src/db.js                   |  5 +++++
+ src/http/router.js          | 18 ++++++++++++++++++
+ src/ledger/post.js          | 10 ++++++++++
+ src/ledger/reconcile.js     |  8 ++++++++
+ src/ledger/rounding.js      |  8 ++++++++
+ src/plugins/audit-log.js    |  6 ++++++
+ src/plugins/fx-normalize.js |  6 ++++++
+ src/plugins/registry.js     | 18 ++++++++++++++++++
+ test/post.test.js           | 12 ++++++++++++
+ test/rounding.test.js       |  9 +++++++++
+ 23 files changed, 198 insertions(+)

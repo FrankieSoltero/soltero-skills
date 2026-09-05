@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The run wrote /tmp/acme-ledger-ws-02/AGENTS.md (line 636 of transcript) as the first documentation file without checking or creating a standard at user scope /tmp/acme-home-ws-02/.claude/ first; home-standard.json confirms '(no docs-standard.json at user scope)'."}

@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The run made a single commit to main branch (git-log.txt line 1: 'branch: main'), failing the requirement for multiple scoped commits to a non-main branch; additionally, the verification check produced 23 claim findings (verify.txt line 24: 'RED docs-verify: 23 findings'), not zero as required."}

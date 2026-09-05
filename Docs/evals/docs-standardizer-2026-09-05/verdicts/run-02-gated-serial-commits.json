@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "Commit `3ab3345 docs: onboarding reference for humans and agents` landed on `main` branch (not a separate branch), and verify.txt reports `RED docs-verify: 18 findings` instead of zero claim findings."}

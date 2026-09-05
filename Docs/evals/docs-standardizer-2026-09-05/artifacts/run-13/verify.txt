@@ -1,0 +1,22 @@
+DOCS_ROOT_CLASH . more than one docs root: doc, docs (standard: Docs)
+DOCS_ROOT_CASE docs differs from the standard's docs root "Docs" by case only; rename it or record docsRoot in .docs-standard.json
+REQUIRED_MISSING Docs/architecture.md required by the standard
+REQUIRED_MISSING Docs/conventions.md required by the standard
+REQUIRED_MISSING Docs/decisions.md required by the standard
+REQUIRED_MISSING Docs/mistakes-and-fixes.md required by the standard
+REQUIRED_MISSING Docs/open-questions.md required by the standard
+REQUIRED_MISSING Docs/README.md required by the standard
+SECTION_MISSING CLAUDE.md section "Purpose" missing
+SECTION_MISSING CLAUDE.md section "Layout" missing
+SECTION_MISSING CLAUDE.md section "Where to look" missing
+SECTION_MISSING CLAUDE.md section "Conventions" missing
+SECTION_MISSING CLAUDE.md section "Docs" missing
+CMD_UNKNOWN README.md:9 npm run dev
+CMD_UNKNOWN README.md:18 npm run test:unit
+PATH_MISSING CLAUDE.md:48 config
+PATH_MISSING CLAUDE.md:50 docs/ARCHITECTURE.md
+PATH_MISSING README.md:12 src/server.js
+PATH_MISSING README.md:12 config
+PATH_MISSING README.md:13 config/default.json
+PATH_MISSING README.md:23 docs/ARCHITECTURE.md
+RED docs-verify: 21 findings
