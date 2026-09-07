@@ -49,3 +49,29 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** Stray root renamed to doc/ (distinct name); case-only mismatch with the standard's root made its own verifier finding (DOCS_ROOT_CASE, resolved by a recorded project override, not a rename); path claims resolved case-exactly via readdirSync per segment; manifest lookup matches exact names from readdirSync
 - **Lesson:** Any fixture or checker that distinguishes paths by case must resolve each segment against readdirSync, never existsSync — a macOS run must report what a Linux checkout would see, and a case-only clash is not a valid fixture on the author's own machine
 - **Regression test:** docs-verify.test.mjs: a doc citing docs/architecture.md and SRC/app.js against Docs/ and src/ yields 2 PATH_MISSING on any filesystem
+
+## 2026-09-07 — token-economy RED baseline "passed" twice because the subagents found the spec, the scenario files (with their evaluator-only pass criteria), and the draft audit script
+
+- **Symptom:** the scenario-2 baseline agent produced a near-perfect setup (marker block, calibrated 1M window, backups, conflict named) with no skill present; the scenario-3 agent ran a `token-audit.mjs` "that appeared in my scratchpad" and reported the exact lever table the skill was meant to teach.
+- **Root cause:** `docs/specs/token-economy.md` and `tests/scenarios/token-economy/scenario-*.md` were committed to the working tree before RED, and the draft scripts sat in the session scratchpad — a path every subagent inherits in its system prompt. A named scenario ("use the token-economy skill") sends the agent hunting for that name across the repo and it finds the evaluator block.
+- **Fix:** moved the spec, scenarios, and drafts to an unadvertised directory (`/tmp/.te-wip-<random>`) for the duration of RED, rebuilt the fixtures, re-dispatched all three clean; recorded the void in `tests/scenarios/token-economy/RED-baseline.md`. One clean agent still located the directory with `find / -iname` but did not open it.
+- **Lesson:** a RED baseline is only as clean as the file system the agent can search. Before dispatching, nothing named after the skill may exist in the repo, the scratchpad, or `/tmp`; keep the spec and scenarios out of the tree until GREEN, and grep each baseline transcript for reads of `scenario-*.md`, `docs/specs/`, and the scratchpad path before accepting it.
+- **Regression test:** `grep -o '"file_path":"[^"]*"' <task>.output` and `grep -o '"command":"[^"]\{0,160\}' <task>.output | grep -i 'spec\|scenario\|scratchpad'` are empty for every accepted RED run.
+
+
+## 2026-09-07 — economy-setup.mjs wrote a one-line garbled "protocol block" into CLAUDE.md and its own check reported OK; the GREEN scenario-2 subagent caught it
+
+- **Symptom:** the first `--apply` on Sam's fixture appended `<!-- token-economy:start -->` and `<!-- token-economy:end -->` (a fragment of prose) instead of the protocol text; `--check` then said `PROTOCOL_BLOCK OK` and all 16 script tests were green.
+- **Root cause:** `protocolBlock()` located the markers in `references/protocol.md` with plain `indexOf`, and that file's own explanatory sentence mentions both markers inline *before* the real block. The tests asserted `md.includes(protocolBlock())` — self-consistent with the wrong extraction — and the author's manual check looked at the top of CLAUDE.md, never at the appended tail.
+- **Fix:** every marker lookup (`protocolBlock`, `upsertBlock`, `conflicts`, the presence count) is line-anchored: a marker counts only when it is the whole trimmed line (`findMarkerLine`, `countMarkerLines`). Regression tests assert the extracted block starts with the heading and carries ≥6 protocol bullets, and that a CLAUDE.md mentioning the markers inline still gets exactly one real block.
+- **Lesson:** a verifier that compares a file to the generator's own output verifies nothing; test the *content* of what was written (heading, bullet count), and when a reference doc talks about its own markers, anchor the parser to whole lines. Reading the tail of the file you just appended to is the two-second check that would have caught it.
+- **Regression test:** `node --test skills/token-economy/scripts/economy-setup.test.mjs` → "protocolBlock extracts the real block…" and "…mentions the markers inline in prose…" pass.
+
+## 2026-09-07 — token-economy's three scripts shipped the same `/tmp` vs `/private/tmp` entry-point guard bug fixed on 2026-09-02; two A/B with-arm runs hit the silent no-op
+
+- **Symptom:** `node /tmp/te-eval-skills-with/token-economy/scripts/economy-setup.mjs --home …` printed nothing and exited 0; the sonnet with-arm agents on scenarios 1 and 2 diagnosed it themselves and re-invoked via `realpath`.
+- **Root cause:** `import.meta.url === \`file://${process.argv[1]}\`` — `argv[1]` was the `/tmp/...` path, `import.meta.url` the resolved `/private/tmp/...` one. The 2026-09-02 entry below this one documents the identical defect in `swarm-plan.mjs` and `validate-brief.mjs`; the author wrote new scripts from memory instead of copying the guard those files already carry.
+- **Fix:** all three scripts use `realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)` inside a try/catch (`isMain()`), verified by running the scripts from a `/tmp` copy. The eval copies under `/tmp/te-eval-skills-with` ran the old guard, so the with arm carried the handicap; recorded in the eval report.
+- **Lesson:** a lesson in this file is only useful if `lesson-recall` runs before new scripts are written; for any new `*.mjs` CLI in `skills/*/scripts/`, copy the `isMain()` guard from `swarm-plan.mjs` and test the script through a `/tmp` path before dispatching anything that runs it.
+- **Regression test:** `mkdir -p /tmp/g && cp -R skills/token-economy /tmp/g/ && cp -R skills/agent-handoff /tmp/g/ && node /tmp/g/token-economy/scripts/economy-setup.mjs --home /tmp/te-home-s2 | tail -1` prints a status line, not nothing.
+

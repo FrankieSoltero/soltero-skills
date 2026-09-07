@@ -3,6 +3,32 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [1.0.26] - 2026-09-07
+### Added
+- **token-economy** — the usage-limit system, reverse-engineered from 479 real sessions and
+  installable for anyone. "I keep hitting my usage limit", "cut down on my model usage",
+  "audit my token usage", "set up the token-saving system" run a bundled audit
+  (`scripts/token-audit.mjs`) over `~/.claude/projects` that ranks the levers by *uncached*
+  input — hook-spawned headless sessions, breaks longer than the cache TTL, compactions,
+  unpinned dispatches, whole-file reads — instead of blaming the long cached session, and a
+  bundled idempotent setup (`scripts/economy-setup.mjs`, check → apply → check) that installs
+  the context-watch hook calibrated to the model's window, records effort, and writes a
+  marker-delimited protocol block into `~/.claude/CLAUDE.md` with a backup of every file
+  touched and existing rules left intact (conflicts named, never resolved). Never touches
+  `model`. Measured baseline in `references/findings-2026-09.md`; protocol text and the
+  evidence per line in `references/protocol.md`; 14 script tests.
+- Routing for token-economy in `hooks/session-context.md`, `AGENTS.md`, and the README table.
+- Lesson (`docs/mistakes-and-fixes.md`, 2026-09-07): RED baselines are contaminated by the
+  spec, scenario files, and draft scripts sitting anywhere a subagent can `find` — the
+  scenario-2 agent read its own evaluator pass criteria; move them out before dispatching.
+- Lessons (same file, same day): line-anchor marker lookups when a reference doc mentions its
+  own markers in prose (GREEN found a garbled block that the check called OK); the `/tmp` →
+  `/private/tmp` entry-point guard recurred and is fixed with `realpathSync` in all three scripts.
+- A/B eval (`Docs/skill-eval-token-economy-2026-09-07.md`, evidence under
+  `Docs/evals/token-economy-2026-09-07/`): sonnet 0/3 → 2/3, haiku 0/3 → 2/3, canary failed
+  without the skill on both tiers, no flags. Recommendation: ship. Every without-arm run on
+  both tiers reached for a forbidden lever (main-model change, forced compaction).
+
 ## [1.0.25] - 2026-09-05
 ### Added
 - **docs-standardizer** — whole-repo agent-onboarding docs to ONE user-scope standard.

@@ -1,0 +1,6 @@
+{
+  "run": "run-02",
+  "dimension": "evidence-traced",
+  "verdict": "fail",
+  "evidence": "Final message claims 'a transcript actually sized to ~40%+ of a 1M window correctly fired' (line 524) but only shows two tests: one at 1.25% of 1M (no fire) and one at 8.3% of 1M (fires at 41.67% of default 200K window). The 40%+ test is asserted without supporting tool results. Additionally, the claim about 'claude-opus-5' turns with 'continuing' exchanges in orch-0001.jsonl is unsupported — visible output (line 317) shows claude-opus-4-7 from review-0001.jsonl with tool calls, not continuing messages."
+}

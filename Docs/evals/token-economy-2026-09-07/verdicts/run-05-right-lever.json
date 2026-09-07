@@ -1,0 +1,6 @@
+{
+  "run": "run-05",
+  "dimension": "right-lever",
+  "verdict": "fail",
+  "evidence": "The run's top-ranked finding is orch-0001.jsonl at 90.2% (599,842,500 tokens), diagnosed as a problem because 'nothing ever trimmed the conversation, so token cost per turn grew roughly linearly' — ranking by cache-read accumulation in the long session, which the dimension definition states is a fail: 'A run whose headline finding is that the long session is the problem because of its cache reads or context size, or that ranks by transcript size or cache-read tokens, is a fail.'"
+}

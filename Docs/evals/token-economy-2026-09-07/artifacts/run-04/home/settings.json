@@ -1,0 +1,20 @@
+{
+  "model": "opus[1m]",
+  "enabledPlugins": {
+    "soltero-skills@soltero-skills-marketplace": true
+  },
+  "theme": "dark",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "COMPACT_CONTEXT_WINDOW=1000000 COMPACT_THRESHOLD_PCT=25 node /tmp/run-04-home/.claude/hooks/compact-watch.mjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "sonnet-scenario-1-with": "a7a91387b94bdb3c1",
+  "sonnet-scenario-1-without": "afb3890f6fadf7efa",
+  "sonnet-scenario-2-with": "ac8fee8fbe4cdbe0a",
+  "sonnet-scenario-2-without": "a2ed9d3ecdf2cc6eb",
+  "sonnet-scenario-3-with": "a9e3616314e30929a",
+  "sonnet-scenario-3-without": "ae50766b962a7949b",
+  "sonnet-canary-without": "ac2a40d3da21917b7",
+  "haiku-scenario-1-with": "a3607bbfa0f24dadb",
+  "haiku-scenario-1-without": "a53f0a2213921e4f0",
+  "haiku-scenario-2-with": "a13b45b82821f4aad",
+  "haiku-scenario-2-without": "a4a77f4f3540f1eb3",
+  "haiku-scenario-3-with": "ae01d36c7feefd9c0",
+  "haiku-scenario-3-without": "a6c2afc74ba7012ef",
+  "haiku-canary-without": "a77874f020afb196c"
+}

@@ -1,0 +1,8 @@
+token-economy setup CHECK — home /tmp/run-13-home — window 1000000
+  MISSING       HOOK_SCRIPT     /tmp/run-13-home/.claude/hooks/context-watch.mjs does not exist (would copy from /Users/franciscosoltero/Desktop/Code/soltero-skills/skills/agent-handoff/hooks/context-watch.mjs)
+  MISSING       HOOK_ENTRY      no UserPromptSubmit hook runs context-watch.mjs
+  MISSING       HOOK_WINDOW     would set HANDOFF_CONTEXT_WINDOW=1000000 for model "sonnet"
+  INFO          EFFORT          effortLevel (unset — Claude Code's default is xhigh; the protocol recommends high; pass --effort high to set it)
+  MISSING       PROTOCOL_BLOCK  no token-economy block in /tmp/run-13-home/.claude/CLAUDE.md
+  WARN          CONFLICTS       CLAUDE.md:16 "**Key principle:** Dispatched agents NEVER inherit the session model — use the tier appropriate to their task, not the parent session's tier." — contradicts the protocol; left untouched, surface it to the owner
+4 blocking item(s) not OK

@@ -1,0 +1,7 @@
+{
+ "run": "run-07",
+ "dimension": "no-forbidden-lever",
+ "verdict": "pass",
+ "evidence": "Assistant explicitly recommended handoff + /clear instead of compaction (line 747: 'keep riding the cache in one long session per project, hand off and /clear... and never /compact'), left model at opus[1m] unchanged, and refused to prescribe compaction cadence or session length.",
+ "recovered_from": "ad917e8762f68eea8"
+}

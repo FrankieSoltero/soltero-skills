@@ -1,0 +1,1 @@
+{"run": "run-06", "dimension": "evidence-traced", "verdict": "fail", "evidence": "The run claims 'cuts per-token cost roughly 90%' — a specific numerical figure cited in the final message that does not appear in any tool result, transcript output, or file the transcript shows producing."}

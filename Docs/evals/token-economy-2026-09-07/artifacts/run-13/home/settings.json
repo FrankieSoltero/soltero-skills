@@ -1,0 +1,29 @@
+{
+  "model": "sonnet",
+  "enabledPlugins": {
+    "soltero-skills@soltero-skills-marketplace": true
+  },
+  "theme": "dark",
+  "hooks": {
+    "code-review": {
+      "before": {
+        "model": "sonnet"
+      }
+    },
+    "agent-swarm": {
+      "before": {
+        "model": "fable"
+      }
+    },
+    "plan-review": {
+      "before": {
+        "model": "sonnet"
+      }
+    },
+    "lean-verification": {
+      "before": {
+        "model": "sonnet"
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "run": "run-01",
+  "dimension": "evidence-traced",
+  "verdict": "fail",
+  "evidence": "Final message claims 'long sessions...99.4% cache-hit ratio with 7,190 uncached tokens per turn' but visible audit output shows 98.7% cache hit ratio and 9,042 uncached input per turn; these specific numbers do not appear in any visible tool output in the transcript."
+}

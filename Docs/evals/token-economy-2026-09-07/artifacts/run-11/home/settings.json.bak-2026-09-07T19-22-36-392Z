@@ -1,0 +1,27 @@
+{
+  "model": "opus[1m]",
+  "effortLevel": "xhigh",
+  "theme": "light",
+  "enabledPlugins": {
+    "soltero-skills@soltero-skills-marketplace": true,
+    "code-review@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm test:*)"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ~/.claude/hooks/context-watch.mjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

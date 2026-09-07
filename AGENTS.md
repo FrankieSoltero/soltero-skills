@@ -89,6 +89,11 @@ Standing disciplines and procedures:
   `skills/docs-standardizer/SKILL.md` (the inventory, verifier, and
   standard-bootstrap scripts are dependency-free Node and run anywhere; pass
   `--home` for the user-scope standard)
+- "I keep hitting my usage limit", "cut down on my model usage", "audit my
+  token usage", "set up the token-saving system on this machine" → open
+  `skills/token-economy/SKILL.md` (the audit and setup scripts are
+  dependency-free Node and run anywhere; pass `--home` to point them at a
+  different user-scope directory)
 - A debrief names a missed trigger twice → open
   `skills/skill-trigger-repair/SKILL.md` (the parser is dependency-free Node
   and runs anywhere; `hooks/session-context.md` has no non-Claude-Code

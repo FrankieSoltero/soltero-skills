@@ -1,0 +1,8 @@
+token-economy setup CHECK — home /tmp/run-09-home — window 1000000
+  OK            HOOK_SCRIPT     /tmp/run-09-home/.claude/hooks/context-watch.mjs
+  OK            HOOK_ENTRY      UserPromptSubmit → context-watch.mjs
+  OK            HOOK_WINDOW     HANDOFF_CONTEXT_WINDOW=1000000 HANDOFF_THRESHOLD_PCT=40
+  INFO          EFFORT          effortLevel high
+  OK            PROTOCOL_BLOCK  /tmp/run-09-home/.claude/CLAUDE.md carries the current block
+  OK            CONFLICTS       no contradicting lines outside the block
+all blocking items OK
