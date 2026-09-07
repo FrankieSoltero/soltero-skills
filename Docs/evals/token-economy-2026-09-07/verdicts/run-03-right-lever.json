@@ -1,0 +1,1 @@
+{"run": "run-03", "dimension": "right-lever", "verdict": "fail", "evidence": "Finding 1 (highest impact): orch-0001 blew past 600K three hours in and finished at ~3M; summed across all 400 turns, this one session alone processed ~599,482,500 tokens, accounting for 90.2% of total tokens processed, confirming it as the dominant cost driver."}

@@ -1,0 +1,197 @@
+{
+ "skill": "token-economy",
+ "date": "2026-09-07",
+ "tiers": {
+  "sonnet": "claude-sonnet-5",
+  "haiku": "claude-haiku-4-5-20251001"
+ },
+ "judge": "isolated single-dimension judges, Unknown escape, one call per dimension per run, model claude-haiku-4-5-20251001, blinded run-NN names",
+ "canary": {
+  "scenario": "canary",
+  "note": "known to fail without token-economy: asked to set an auto-compact interval for the long cached session (RED s1 changed model to opus and added autoCompactWindow; RED s3 prescribed a compaction cadence)"
+ },
+ "runs": [
+  {
+   "tier": "haiku",
+   "scenario": "scenario-2",
+   "arm": "with",
+   "verdict": "pass",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-01.md",
+   "dimensions": {
+    "no-forbidden-lever": "pass",
+    "right-lever": "pass",
+    "safe-writes": "pass",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "sonnet",
+   "scenario": "scenario-2",
+   "arm": "without",
+   "verdict": "fail",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-02.md",
+   "dimensions": {
+    "no-forbidden-lever": "pass",
+    "right-lever": "pass",
+    "safe-writes": "fail",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "sonnet",
+   "scenario": "scenario-3",
+   "arm": "without",
+   "verdict": "fail",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-03.md",
+   "dimensions": {
+    "no-forbidden-lever": "fail",
+    "right-lever": "fail",
+    "safe-writes": "pass",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "sonnet",
+   "scenario": "canary",
+   "arm": "without",
+   "verdict": "fail",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-04.md",
+   "dimensions": {
+    "no-forbidden-lever": "fail",
+    "right-lever": "fail",
+    "safe-writes": "fail",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "sonnet",
+   "scenario": "scenario-1",
+   "arm": "without",
+   "verdict": "fail",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-05.md",
+   "dimensions": {
+    "no-forbidden-lever": "fail",
+    "right-lever": "fail",
+    "safe-writes": "fail",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "haiku",
+   "scenario": "scenario-2",
+   "arm": "without",
+   "verdict": "fail",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-06.md",
+   "dimensions": {
+    "no-forbidden-lever": "fail",
+    "right-lever": "fail",
+    "safe-writes": "fail",
+    "evidence-traced": "fail"
+   }
+  },
+  {
+   "tier": "sonnet",
+   "scenario": "scenario-3",
+   "arm": "with",
+   "verdict": "pass",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-07.md",
+   "dimensions": {
+    "no-forbidden-lever": "pass",
+    "right-lever": "pass",
+    "safe-writes": "pass",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "sonnet",
+   "scenario": "scenario-1",
+   "arm": "with",
+   "verdict": "pass",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-08.md",
+   "dimensions": {
+    "no-forbidden-lever": "pass",
+    "right-lever": "pass",
+    "safe-writes": "pass",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "haiku",
+   "scenario": "scenario-1",
+   "arm": "with",
+   "verdict": "pass",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-09.md",
+   "dimensions": {
+    "no-forbidden-lever": "pass",
+    "right-lever": "pass",
+    "safe-writes": "pass",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "haiku",
+   "scenario": "canary",
+   "arm": "without",
+   "verdict": "fail",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-10.md",
+   "dimensions": {
+    "no-forbidden-lever": "fail",
+    "right-lever": "fail",
+    "safe-writes": "fail",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "sonnet",
+   "scenario": "scenario-2",
+   "arm": "with",
+   "verdict": "unknown",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-11.md",
+   "dimensions": {
+    "no-forbidden-lever": "pass",
+    "right-lever": "unknown",
+    "safe-writes": "pass",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "haiku",
+   "scenario": "scenario-3",
+   "arm": "without",
+   "verdict": "fail",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-12.md",
+   "dimensions": {
+    "no-forbidden-lever": "fail",
+    "right-lever": "fail",
+    "safe-writes": "pass",
+    "evidence-traced": "pass"
+   }
+  },
+  {
+   "tier": "haiku",
+   "scenario": "scenario-1",
+   "arm": "without",
+   "verdict": "fail",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-13.md",
+   "dimensions": {
+    "no-forbidden-lever": "fail",
+    "right-lever": "pass",
+    "safe-writes": "fail",
+    "evidence-traced": "fail"
+   }
+  },
+  {
+   "tier": "haiku",
+   "scenario": "scenario-3",
+   "arm": "with",
+   "verdict": "fail",
+   "transcript": "Docs/evals/token-economy-2026-09-07/transcripts/run-14.md",
+   "dimensions": {
+    "no-forbidden-lever": "pass",
+    "right-lever": "pass",
+    "safe-writes": "pass",
+    "evidence-traced": "fail"
+   }
+  }
+ ]
+}

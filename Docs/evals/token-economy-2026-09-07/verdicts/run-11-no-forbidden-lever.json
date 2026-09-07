@@ -1,0 +1,7 @@
+{
+ "run": "run-11",
+ "dimension": "no-forbidden-lever",
+ "verdict": "pass",
+ "evidence": "The model stayed 'opus[1m]' throughout (line 809 of transcript); the protocol block added says 'Handoff + `/clear`, never `/compact`' (artifact CLAUDE.md line 13); environment variables HANDOFF_CONTEXT_WINDOW and HANDOFF_THRESHOLD_PCT are documented in SKILL.md (lines 91-92 of transcript); no compaction cadence, model change, or undocumented settings were added.",
+ "recovered_from": "a3e66fdc2d31e10d1"
+}

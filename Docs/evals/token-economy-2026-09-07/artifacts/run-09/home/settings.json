@@ -1,0 +1,21 @@
+{
+  "model": "opus[1m]",
+  "enabledPlugins": {
+    "soltero-skills@soltero-skills-marketplace": true
+  },
+  "theme": "dark",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "HANDOFF_CONTEXT_WINDOW=1000000 HANDOFF_THRESHOLD_PCT=40 node /tmp/run-09-home/.claude/hooks/context-watch.mjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "effortLevel": "high"
+}

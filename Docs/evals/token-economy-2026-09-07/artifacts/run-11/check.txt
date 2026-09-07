@@ -1,0 +1,8 @@
+token-economy setup CHECK — home /tmp/run-11-home — window 1000000
+  OK            HOOK_SCRIPT     /tmp/run-11-home/.claude/hooks/context-watch.mjs
+  OK            HOOK_ENTRY      UserPromptSubmit → context-watch.mjs
+  OK            HOOK_WINDOW     HANDOFF_CONTEXT_WINDOW=1000000 HANDOFF_THRESHOLD_PCT=40
+  INFO          EFFORT          effortLevel xhigh
+  OK            PROTOCOL_BLOCK  /tmp/run-11-home/.claude/CLAUDE.md carries the current block
+  WARN          CONFLICTS       CLAUDE.md:4 "- Subagents should inherit the session model so quality stays consistent across the team." — contradicts the protocol; left untouched, surface it to the owner
+all blocking items OK

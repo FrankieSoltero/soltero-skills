@@ -1,0 +1,8 @@
+token-economy setup CHECK — home /tmp/run-05-home — window 1000000
+  MISSING       HOOK_SCRIPT     /tmp/run-05-home/.claude/hooks/context-watch.mjs does not exist (would copy from /Users/franciscosoltero/Desktop/Code/soltero-skills/skills/agent-handoff/hooks/context-watch.mjs)
+  MISSING       HOOK_ENTRY      no UserPromptSubmit hook runs context-watch.mjs
+  MISSING       HOOK_WINDOW     would set HANDOFF_CONTEXT_WINDOW=1000000 for model "opus"
+  INFO          EFFORT          effortLevel (unset — Claude Code's default is xhigh; the protocol recommends high; pass --effort high to set it)
+  MISSING       PROTOCOL_BLOCK  no token-economy block in /tmp/run-05-home/.claude/CLAUDE.md
+  WARN          CONFLICTS       CLAUDE.md:13 "`/compact` (or start a fresh session) rather than letting it keep growing." — contradicts the protocol; left untouched, surface it to the owner
+4 blocking item(s) not OK

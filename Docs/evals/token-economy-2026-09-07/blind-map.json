@@ -1,0 +1,16 @@
+{
+ "haiku-scenario-2-with": "run-01",
+ "sonnet-scenario-2-without": "run-02",
+ "sonnet-scenario-3-without": "run-03",
+ "sonnet-canary-without": "run-04",
+ "sonnet-scenario-1-without": "run-05",
+ "haiku-scenario-2-without": "run-06",
+ "sonnet-scenario-3-with": "run-07",
+ "sonnet-scenario-1-with": "run-08",
+ "haiku-scenario-1-with": "run-09",
+ "haiku-canary-without": "run-10",
+ "sonnet-scenario-2-with": "run-11",
+ "haiku-scenario-3-without": "run-12",
+ "haiku-scenario-1-without": "run-13",
+ "haiku-scenario-3-with": "run-14"
+}

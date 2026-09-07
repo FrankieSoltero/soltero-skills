@@ -1,0 +1,128 @@
+[
+ {
+  "id": "sonnet-scenario-1-with",
+  "tier": "sonnet",
+  "scenario": "scenario-1",
+  "arm": "with",
+  "home": "/tmp/te-sonnet-scenario-1-with",
+  "prompt": "prompts/sonnet-scenario-1-with.md",
+  "variant": "s1"
+ },
+ {
+  "id": "sonnet-scenario-1-without",
+  "tier": "sonnet",
+  "scenario": "scenario-1",
+  "arm": "without",
+  "home": "/tmp/te-sonnet-scenario-1-without",
+  "prompt": "prompts/sonnet-scenario-1-without.md",
+  "variant": "s1"
+ },
+ {
+  "id": "sonnet-scenario-2-with",
+  "tier": "sonnet",
+  "scenario": "scenario-2",
+  "arm": "with",
+  "home": "/tmp/te-sonnet-scenario-2-with",
+  "prompt": "prompts/sonnet-scenario-2-with.md",
+  "variant": "s2"
+ },
+ {
+  "id": "sonnet-scenario-2-without",
+  "tier": "sonnet",
+  "scenario": "scenario-2",
+  "arm": "without",
+  "home": "/tmp/te-sonnet-scenario-2-without",
+  "prompt": "prompts/sonnet-scenario-2-without.md",
+  "variant": "s2"
+ },
+ {
+  "id": "sonnet-scenario-3-with",
+  "tier": "sonnet",
+  "scenario": "scenario-3",
+  "arm": "with",
+  "home": "/tmp/te-sonnet-scenario-3-with",
+  "prompt": "prompts/sonnet-scenario-3-with.md",
+  "variant": "s3"
+ },
+ {
+  "id": "sonnet-scenario-3-without",
+  "tier": "sonnet",
+  "scenario": "scenario-3",
+  "arm": "without",
+  "home": "/tmp/te-sonnet-scenario-3-without",
+  "prompt": "prompts/sonnet-scenario-3-without.md",
+  "variant": "s3"
+ },
+ {
+  "id": "sonnet-canary-without",
+  "tier": "sonnet",
+  "scenario": "canary",
+  "arm": "without",
+  "home": "/tmp/te-sonnet-canary-without",
+  "prompt": "prompts/sonnet-canary-without.md",
+  "variant": "s3"
+ },
+ {
+  "id": "haiku-scenario-1-with",
+  "tier": "haiku",
+  "scenario": "scenario-1",
+  "arm": "with",
+  "home": "/tmp/te-haiku-scenario-1-with",
+  "prompt": "prompts/haiku-scenario-1-with.md",
+  "variant": "s1"
+ },
+ {
+  "id": "haiku-scenario-1-without",
+  "tier": "haiku",
+  "scenario": "scenario-1",
+  "arm": "without",
+  "home": "/tmp/te-haiku-scenario-1-without",
+  "prompt": "prompts/haiku-scenario-1-without.md",
+  "variant": "s1"
+ },
+ {
+  "id": "haiku-scenario-2-with",
+  "tier": "haiku",
+  "scenario": "scenario-2",
+  "arm": "with",
+  "home": "/tmp/te-haiku-scenario-2-with",
+  "prompt": "prompts/haiku-scenario-2-with.md",
+  "variant": "s2"
+ },
+ {
+  "id": "haiku-scenario-2-without",
+  "tier": "haiku",
+  "scenario": "scenario-2",
+  "arm": "without",
+  "home": "/tmp/te-haiku-scenario-2-without",
+  "prompt": "prompts/haiku-scenario-2-without.md",
+  "variant": "s2"
+ },
+ {
+  "id": "haiku-scenario-3-with",
+  "tier": "haiku",
+  "scenario": "scenario-3",
+  "arm": "with",
+  "home": "/tmp/te-haiku-scenario-3-with",
+  "prompt": "prompts/haiku-scenario-3-with.md",
+  "variant": "s3"
+ },
+ {
+  "id": "haiku-scenario-3-without",
+  "tier": "haiku",
+  "scenario": "scenario-3",
+  "arm": "without",
+  "home": "/tmp/te-haiku-scenario-3-without",
+  "prompt": "prompts/haiku-scenario-3-without.md",
+  "variant": "s3"
+ },
+ {
+  "id": "haiku-canary-without",
+  "tier": "haiku",
+  "scenario": "canary",
+  "arm": "without",
+  "home": "/tmp/te-haiku-canary-without",
+  "prompt": "prompts/haiku-canary-without.md",
+  "variant": "s3"
+ }
+]

@@ -1,0 +1,9 @@
+{
+  "model": "opus[1m]",
+  "enabledPlugins": {
+    "soltero-skills@soltero-skills-marketplace": true
+  },
+  "theme": "dark",
+  "autoCompactEnabled": true,
+  "autoCompactWindow": 350000
+}

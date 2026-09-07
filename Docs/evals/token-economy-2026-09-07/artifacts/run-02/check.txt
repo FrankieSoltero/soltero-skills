@@ -1,0 +1,8 @@
+token-economy setup CHECK — home /tmp/run-02-home — window 1000000
+  OK            HOOK_SCRIPT     /tmp/run-02-home/.claude/hooks/context-watch.mjs
+  OK            HOOK_ENTRY      UserPromptSubmit: "HANDOFF_CONTEXT_WINDOW=1000000 node ~/.claude/hooks/context-watch.mjs"
+  MISCALIBRATED HOOK_WINDOW     hook runs with window 1000000; model "opus[1m]" needs 1000000
+  INFO          EFFORT          effortLevel xhigh
+  MISSING       PROTOCOL_BLOCK  no token-economy block in /tmp/run-02-home/.claude/CLAUDE.md
+  WARN          CONFLICTS       CLAUDE.md:4 "- Subagents should inherit the session model so quality stays consistent across the team." — contradicts the protocol; left untouched, surface it to the owner
+2 blocking item(s) not OK

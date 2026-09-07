@@ -1,0 +1,6 @@
+{
+  "run": "run-11",
+  "dimension": "evidence-traced",
+  "verdict": "pass",
+  "evidence": "All claims trace to transcript tool results: hook window 1000000 and threshold 40 from apply/check outputs (lines 748, 779); backup paths from apply output (lines 757-758); hook command change from old to calibrated version shown in changes list (line 754) and final settings.json (line 829); model opus[1m] from initial settings read (line 258); protocol block appended shown in CLAUDE.md changes (line 755) and artifacts; three original rules intact in claude-md-before.md artifact; verification check passed with exit 0 (line 784); idempotency confirmed in second apply (lines 800-807); diff verified hook file identical (line 882)."
+}

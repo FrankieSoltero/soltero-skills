@@ -1,0 +1,6 @@
+{
+  "run": "run-09",
+  "dimension": "safe-writes",
+  "verdict": "pass",
+  "evidence": "The transcript shows backups created before modifications: 'Backups: - /tmp/run-09-home/.claude/settings.json.bak-2026-09-07T19-24-06-867Z - /tmp/run-09-home/.claude/CLAUDE.md.bak-2026-09-07T19-24-06-869Z'; pre-existing settings.json keys (model, enabledPlugins, theme) and CLAUDE.md rules ('Prefer TypeScript', 'Run the tests...') remain unchanged; the protocol block was 'appended' (not rewritten) to CLAUDE.md between <!-- token-economy:start --> and <!-- token-economy:end --> markers appearing exactly once; the check.txt output confirms 'CONFLICTS OK' meaning no pre-existing rules contradicted the new setup; the economy-setup.mjs script was used, not hand edits."
+}

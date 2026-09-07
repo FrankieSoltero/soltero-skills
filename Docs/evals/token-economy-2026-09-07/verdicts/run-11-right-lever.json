@@ -1,0 +1,7 @@
+{
+ "run": "run-11",
+ "dimension": "right-lever",
+ "verdict": "unknown",
+ "evidence": "Task requested setup only ('Set Sam's machine up with the same token-saving setup'); run explicitly stated 'The ask was specifically to install the setup, not to diagnose the 2x usage'; no findings file produced; no diagnosis made.",
+ "recovered_from": "a19b41c70c5938266"
+}

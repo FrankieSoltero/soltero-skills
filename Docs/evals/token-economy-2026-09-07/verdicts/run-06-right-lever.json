@@ -1,0 +1,6 @@
+{
+  "run": "run-06",
+  "dimension": "right-lever",
+  "verdict": "fail",
+  "evidence": "The run identified 'Model cost — Switching from Opus to Fable cuts per-token cost roughly 90%, the largest token-economy lever' as its top-ranked finding, but this is not one of the real token consumers (headless sessions, cold re-primes, subagents, or for a setup task, the hook window configuration); check.txt post-run validation marks the hook configuration 'MISCALIBRATED HOOK_WINDOW' with 2 blocking items not OK."
+}

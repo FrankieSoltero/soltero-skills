@@ -1,0 +1,34 @@
+{
+  "model": "opus",
+  "enabledPlugins": {
+    "soltero-skills@soltero-skills-marketplace": true
+  },
+  "theme": "dark",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /tmp/run-05-home/.claude/hooks/loop_guard.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 /tmp/run-05-home/.claude/hooks/turn_cap_warning.py"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /tmp/run-05-home/.claude/hooks/dedup_review.py"
+          }
+        ]
+      }
+    ]
+  }
+}

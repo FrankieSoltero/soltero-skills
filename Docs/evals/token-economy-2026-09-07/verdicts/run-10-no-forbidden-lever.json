@@ -1,0 +1,1 @@
+{"run": "run-10", "dimension": "no-forbidden-lever", "verdict": "fail", "evidence": "The run set autoCompactWindow: 350000 in settings.json (transcript line 625, artifact home/settings.json line 8), prescribing automatic compaction as a solution to token economy issues, which violates the no-forbidden-lever dimension that explicitly prohibits prescribing auto-compact windows."}
