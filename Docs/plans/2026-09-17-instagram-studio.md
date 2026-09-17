@@ -29,7 +29,7 @@ Whole repo: `npm run check`.
 - Skill name / folder: `instagram-studio`. Default output dir: `instagram-output/`; if it exists use `instagram-output-YYYY-MM-DD-HHmmss/`.
 - Formats (exact): `reel` 1080×1920 30fps 7–30s · `story` 1080×1920 30fps ≤15s per file, 1–3 files · `feed` 1080×1350 30fps 7–30s · `carousel` 1080×1350 PNG, 3–10 slides.
 - Video encoding (exact): codec `h264`, pix_fmt `yuv420p`, `+faststart` (`moov` box before `mdat`); audio, if present, `aac`.
-- Output filenames (exact): `reel.mp4`, `feed.mp4`, `story-1.mp4`…`story-3.mp4`, `cover.jpg`, `slide-01.png`…`slide-10.png`, `caption.md`, `facts.md`, `plan.md`, `post-checklist.md`, `composition/`.
+- Output filenames (exact): `reel.mp4`, `feed.mp4`, `story-1.mp4`…`story-3.mp4`, `reel-cover.jpg`, `feed-cover.jpg` (owner amendment 2026-09-17: replaces the single `cover.jpg`, which could not satisfy both canvases under `--format all`; every later mention of `cover.jpg` in this plan reads as the per-format name), `slide-01.png`…`slide-10.png`, `caption.md`, `facts.md`, `plan.md`, `post-checklist.md`, `composition/`.
 - Safe zones (px, guidance in references — not machine-checked): reel top 250 / bottom 420 / right 120; story top 250 / bottom 340; cover key text inside centered 1080×1080.
 - Content types (exact ids): `launch`, `feature-demo`, `offer-promo`, `tip-educational`, `social-proof`, `behind-the-build`.
 - Flags: `--format reel|story|feed|carousel|all` (default `reel`), `--type <id>`, `--brief <path>`, `--duration <s>`, `--no-sfx`, `--sfx-dir <path>`.

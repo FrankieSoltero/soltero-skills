@@ -72,3 +72,7 @@ are passed verbatim into the relevant task briefs instead:
 - Task 8 verify: report has a tier × with/without pass-rate table (≥2 tier rows) and a `## Canary` section stating PASS/FAIL.
 - Task 10: the scenario to re-run is whichever of `tests/scenarios/content-marketing/scenario-{1,2,3}.md` never names the skill — the implementer states which file and why in `parent-link-check.md`.
 - Plan header says the spec is approved; the spec's Status line flips in Task 1 (user approved in-session 2026-09-17).
+
+## Owner amendment after PASS — 2026-09-17
+
+Task 5 review found a plan defect: one `cover.jpg` cannot match both the reel (1080×1920) and feed (1080×1350) canvases, so `--format all` could never pass `check-output.mjs`. Owner ruling: covers are ALWAYS per-format — `reel-cover.jpg`, `feed-cover.jpg`. Global Constraints filename line amended accordingly; Task 4 (validator) and Task 5 (skill text) reopened for a scoped fix round each. No other plan text changed.
