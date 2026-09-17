@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The agent stopped before producing a plan or caption because \"neither resolves to a usable image: `photos/patio.jpg` does not exist anywhere in the folder... `photos/bar-interior.jpg.txt` exists exactly as named, but it is not a photo,\" plainly stating the missing-asset reason for stopping instead of producing format-contract material."}

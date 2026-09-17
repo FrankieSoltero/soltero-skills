@@ -1,0 +1,20 @@
+{
+  "sonnet-scenario-1-with": "R11",
+  "sonnet-scenario-1-without": "R04",
+  "sonnet-scenario-2-with": "R16",
+  "sonnet-scenario-2-without": "R01",
+  "sonnet-scenario-3-with": "R08",
+  "sonnet-scenario-3-without": "R13",
+  "sonnet-scenario-4-with": "R06",
+  "sonnet-scenario-4-without": "R18",
+  "sonnet-canary-carousel-without": "R02",
+  "haiku-scenario-1-with": "R10",
+  "haiku-scenario-1-without": "R15",
+  "haiku-scenario-2-with": "R05",
+  "haiku-scenario-2-without": "R12",
+  "haiku-scenario-3-with": "R17",
+  "haiku-scenario-3-without": "R03",
+  "haiku-scenario-4-with": "R09",
+  "haiku-scenario-4-without": "R14",
+  "haiku-canary-carousel-without": "R07"
+}

@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The named fixture existed and was read successfully (no missing-input case), no video tooling was required, and the agent respected the no-render gate explicitly: \"No export command of any kind was executed in this session\" while only writing out the verbatim command as instructed."}

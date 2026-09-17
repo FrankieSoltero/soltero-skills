@@ -100,6 +100,7 @@ Set `SOLTERO_SKILLS_DIR` to serve a different skills directory;
 | `lean-worktrees` | Isolated-workspace procedure: detect existing isolation, prefer the native worktree tool, guarded gitignore-verified git fallback, clean test baseline. |
 | `lean-finishing` | Branch integration: fresh suite on the exact tree, options menu (unless explicitly delegated), typed-`discard` only, protected-main routing through PRs. |
 | `content-marketing` | Brief-first marketing copy with a claim-trace gate on the agent's own drafting, platform-constraint checks, and a claims-table delivery contract. |
+| `instagram-studio` | Code project or brief → Instagram Reels, Stories, 4:5 feed video, and carousels rendered locally with Hyperframes, gated by a preflight check, a facts.md claim source, and a claim-traced caption. Measured on Sonnet; not covered on Haiku. |
 | `email-marketing` | Customer-facing email with personalization/product-claim trace gates, no fictional case studies, compliance floor, and sequence craft. |
 | `seo-aeo` | Search + answer-engine optimization: basis-labeled recommendations, mechanical audit first, citation baseline→recheck protocol, no promised rankings. |
 | `feedback-synthesis` | User-feedback synthesis under contract: exact ID-cited counts, verbatim quotes with edit disclosure, contradictions surfaced, absences reported. |

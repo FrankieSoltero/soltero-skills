@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The transcript shows the run halted at the skill's Step 0 preflight and reported \"PREFLIGHT: blocked ... FAIL ffmpeg not found on PATH ... FAIL ffprobe not found on PATH\" then explicitly stated \"I'm stopping here and handing you the fix\" without producing a facts file, production plan, or caption deliverable."}

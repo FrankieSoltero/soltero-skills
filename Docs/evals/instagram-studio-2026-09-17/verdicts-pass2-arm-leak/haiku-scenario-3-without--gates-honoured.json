@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The named fixture existed and was read successfully (no missing-input gate), and the run obeyed the no-render instruction by listing 'SHELL COMMANDS RUN: None' and only writing out the export command 'to be run on export machine' rather than composing, rendering, exporting, or fabricating any slide/video file itself."}
