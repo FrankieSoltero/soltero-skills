@@ -160,16 +160,18 @@ reported verbatim to the user, never silently accepted on their behalf.
    `hyperframes cloud …`, `hyperframes lambda …`, `hyperframes publish`, and
    every `hyperframes feedback` form — `--search-miss` after an empty
    catalog query and `--rating` after a render. `hyperframes-cli` treats the
-   search-miss report as an obligation and prints it pre-filled; **this
-   skill's rule wins — never send it.** Those posts go to a public channel
-   and this skill posts nothing.
+   search-miss report as an obligation and prints it pre-filled; it sends
+   your query outbound, and **this skill's rule wins — never send it.**
    **Nothing of the user's leaves the machine:** nothing is uploaded, there
    is no cloud or lambda render, nothing is published, nothing is posted, no
    telemetry-style feedback is sent. The toolchain itself does fetch over
    the network and that is expected, not a reason to stop — `check`,
-   `snapshot`, `preview` and `render` fetch Google Fonts faces, the `init`
-   scaffold loads GSAP from a CDN, `init` contacts GitHub, and `catalog`
-   reads a remote registry.
+   `snapshot`, `preview` and `render` fetch font faces from Google Fonts,
+   `init` contacts GitHub, and `catalog` reads a remote registry. Tell the
+   user one fact about the scaffold rather than fixing it: the composition
+   `init` writes loads GSAP from `cdn.jsdelivr.net` through a plain
+   `<script>` with no `integrity` attribute, so every check, preview and
+   render executes third-party code fetched at that moment.
 5. **Silent by default.** Render with no audio unless the user passes
    `--sfx-dir`; the checklist tells them to add audio in Instagram. Never
    propose, bundle, or "source" a music track.
