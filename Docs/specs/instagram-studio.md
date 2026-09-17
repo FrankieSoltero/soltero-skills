@@ -1,6 +1,28 @@
 # instagram-studio — design spec
 
-Date: 2026-09-17 · Status: AWAITING APPROVAL · Author: Claude (lean-brainstorming)
+Date: 2026-09-17 · Status: APPROVED 2026-09-17 · Author: Claude (lean-brainstorming)
+
+- **Problem:** Turning a code project or a written brief into ready-to-post
+  Instagram marketing content (Reels, Stories, feed video, carousels)
+  currently means manual editing, captioning, and format/safe-zone
+  guesswork, with no repeatable, clean-room workflow for it.
+- **Trigger:** A user wants short-form marketing content generated for
+  Instagram from a project or brief — Reels, Stories, feed video, or
+  carousels — complete with caption, hashtags, cover image, and a posting
+  checklist.
+- **Trigger phrasings:** "make an Instagram reel for this", "make a reel",
+  "create short-form content for Instagram", "make a carousel post", "make
+  an Instagram story", "turn this into Instagram content", "marketing video
+  for Instagram", "promote this on Instagram".
+- **Success scenario:** Given a code project (or brief), the skill
+  preflights dependencies, extracts `facts.md`, plans a beat-by-beat
+  storyboard, composes via Hyperframes, renders format-correct
+  MP4s/PNGs (safe zones, exact durations, h264/yuv420p/+faststart), and
+  delivers `caption.md`, `cover.jpg`, and `post-checklist.md` with every
+  on-screen claim traced to `facts.md`.
+- **Bundled assets:** `references/` (formats.md, step-1-source.md through
+  step-4-deliver.md, content-types.md), `scripts/` (preflight.mjs,
+  check-output.mjs), `assets/brief-template.md`.
 
 ## Goal
 
@@ -12,24 +34,29 @@ Instagram; no brag text, music, or SFX files are copied.
 
 ## Decisions taken in the question round
 
+<!-- markdownlint-disable MD013 -->
 | Decision | Choice |
 |---|---|
 | Input | Code project when present, otherwise brief + supplied assets |
 | Renderer | Hyperframes CLI (`npx hyperframes`, Apache-2.0, local render, no account) |
 | Formats | Reel 9:16, Story 9:16, Feed video 4:5, Carousel 4:5 stills |
 | Music | None bundled. Render silent (optional SFX); user adds audio in Instagram |
+<!-- markdownlint-enable MD013 -->
 
 ## Verified facts about the dependency
 
-- `hyperframes` npm 0.8.46, Apache-2.0, github.com/heygen-com/hyperframes, renders locally to MP4.
-- Domain skills install non-interactively with `npx hyperframes skills update` (core set).
+- `hyperframes` npm 0.8.46, Apache-2.0, github.com/heygen-com/hyperframes,
+  renders locally to MP4.
+- Domain skills install non-interactively with `npx hyperframes skills
+  update` (core set).
 - `npx hyperframes snapshot` exports PNG frames — this is the carousel export path.
 - Requires Node 22+ (have v26) and ffmpeg on PATH (**not installed on this machine**).
 - Cloud/Lambda rendering exists but is never used by this skill.
 
 ## Shape
 
-```
+<!-- markdownlint-disable MD013 -->
+```text
 skills/instagram-studio/
   SKILL.md                      # dispatch, 5 steps with gates, creative laws
   references/
@@ -45,6 +72,7 @@ skills/instagram-studio/
   assets/brief-template.md
 tests/scenarios/instagram-studio/   # per creating-a-skill
 ```
+<!-- markdownlint-enable MD013 -->
 
 ## Flow (each step has a gate)
 
@@ -74,12 +102,14 @@ tests/scenarios/instagram-studio/   # per creating-a-skill
 
 ## Format table (exact values the validator enforces)
 
+<!-- markdownlint-disable MD013 -->
 | Format | Canvas | Duration | Output | Notes |
 |---|---|---|---|---|
 | reel | 1080×1920, 30fps | 7–30s (default 12–20s) | reel.mp4 + cover.jpg | key text inside safe zone: top 250px / bottom 420px / right 120px clear |
 | story | 1080×1920, 30fps | ≤15s per frame, 1–3 frames | story-N.mp4 | top 250px / bottom 340px clear; leave sticker/link space |
 | feed | 1080×1350, 30fps | 7–30s | feed.mp4 + cover.jpg | re-layout of the reel, not a crop |
 | carousel | 1080×1350 PNG | 3–10 slides | slide-NN.png | slide 1 = hook, last = CTA; ≤ ~25 words/slide |
+<!-- markdownlint-enable MD013 -->
 
 All video: H.264, yuv420p, +faststart, AAC if audio present. Cover also
 checked against the 1:1 center crop of the profile grid (key text inside the
@@ -102,11 +132,18 @@ caption.md (caption + hashtags + alt text + claims table), post-checklist.md`.
 
 ## Defaults I chose (flagging as decisions)
 
-- Name `instagram-studio`; child of `content-marketing` (listed in its "Parent of" line).
-- SFX: none bundled in v1 (keeps repo light, zero license surface); `--sfx-dir` accepts user-supplied files. brag's Kenney pack is CC0 and could be added later.
-- No voiceover in v1. No burned-in auto-captions of speech (there is no speech); on-screen text is the caption.
-- Hashtags: 3–5 specific tags, no banned/generic mega-tags list lookup (no network). Optional hand-off to `trend-research` for angle/hook ideas is mentioned, not required.
-- Never posts to Instagram, never touches an account or API. Deliverable is files + checklist ("add audio in-app, upload cover, paste caption").
+- Name `instagram-studio`; child of `content-marketing` (listed in its
+  "Parent of" line).
+- SFX: none bundled in v1 (keeps repo light, zero license surface);
+  `--sfx-dir` accepts user-supplied files. brag's Kenney pack is CC0 and
+  could be added later.
+- No voiceover in v1. No burned-in auto-captions of speech (there is no
+  speech); on-screen text is the caption.
+- Hashtags: 3–5 specific tags, no banned/generic mega-tags list lookup (no
+  network). Optional hand-off to `trend-research` for angle/hook ideas is
+  mentioned, not required.
+- Never posts to Instagram, never touches an account or API. Deliverable
+  is files + checklist ("add audio in-app, upload cover, paste caption").
 - `--format all` plans once, then composes each format as its own layout.
 
 ## Error handling
