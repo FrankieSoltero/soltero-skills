@@ -3,6 +3,27 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [1.0.28] - 2026-09-17
+### Fixed
+- **ESM entry-point guard (GP-001)** — five scripts decided "am I the entry point?" by
+  comparing `import.meta.url` with a `file://` URL built from the raw `process.argv[1]`.
+  Node resolves symlinks for one and not the other, so through a symlinked path (macOS
+  `/tmp` → `/private/tmp`) the guard was false, `main()` never ran, and the process printed
+  nothing and exited 0 — a silent pass. Fixed in `destructive-op-gate`'s
+  `compare-counts.mjs`, `resolve-target.mjs` and `destructive-shapes.mjs`,
+  `defect-class-sweep`'s `sweep.mjs`, and `tools/check-workflow-syntax.mjs` with the
+  `isMain()` realpath guard, each with a regression test that spawns the script through a
+  real symlink (written first, watched failing). Fourth occurrence of this class; the two
+  `instagram-studio` scripts were fixed in 1.0.27.
+
+### Added
+- **Defect-class rule + CI hard gate** — `Docs/defect-classes/esm-entry-guard.rule.json`,
+  a new `Docs/golden-principles.md` with entry GP-001 (wrong / correct / not covered /
+  check / origin), `npm run check:entry-guard`, and a step in
+  `.github/workflows/validate.yml` that fails any PR reintroducing the guard. Swept with
+  the bundled runner: 5 matches → 0; one test comment that quotes the pattern on purpose
+  carries `esm-entry-guard:allow`.
+
 ## [1.0.27] - 2026-09-17
 ### Added
 - **instagram-studio** — turns a code project *or* a written brief into post-ready

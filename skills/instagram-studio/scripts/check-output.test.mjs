@@ -407,6 +407,7 @@ test('the CLI exits 2 on usage errors and on a missing out-dir', () => {
 });
 
 test('the CLI runs when reached through a symlinked path', () => {
+  // esm-entry-guard:allow — this comment quotes the wrong pattern on purpose (GP-001).
   // Regression: the entry-point guard compared import.meta.url to `file://${process.argv[1]}`.
   // Node resolves the main entry's symlinks but argv[1] keeps the symlinked spelling, so on
   // macOS (/tmp -> /private/tmp) the guard was false, main() never ran, and the validator

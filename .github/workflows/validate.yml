@@ -16,6 +16,8 @@ jobs:
         run: node tools/lint-frontmatter.mjs
       - name: Unit tests (hard gate, no deps)
         run: npm test
+      - name: Defect classes (hard gate, no deps) — GP-001 esm-entry-guard
+        run: node skills/defect-class-sweep/scripts/sweep.mjs --rule Docs/defect-classes/esm-entry-guard.rule.json --root .
       - name: MCP server typecheck + build + tests (hard gate)
         run: |
           npm ci
