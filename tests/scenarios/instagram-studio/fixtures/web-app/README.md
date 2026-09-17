@@ -11,5 +11,4 @@ Static landing page for Streakly, a habit tracker.
 
 ## Status
 
-Beta. The page is the only public surface; there is no app store listing,
-press kit, or press coverage yet.
+Beta — the page is the only thing that is live.
