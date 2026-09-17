@@ -50,5 +50,8 @@ Rule files live in `Docs/defect-classes/`; the runner is
   caught only when the lessons file was re-read) — each recorded in
   `docs/mistakes-and-fixes.md` and each fixed by hand. Swept 2026-09-17: 117 files scanned, 5 instances
   (`destructive-op-gate` ×3, `defect-class-sweep/scripts/sweep.mjs`,
-  `tools/check-workflow-syntax.mjs`), 5 fixed, 0 allowlisted, 0 deferred.
+  `tools/check-workflow-syntax.mjs`), 5 fixed, 0 deferred. After `instagram-studio` (1.0.27)
+  merged: 121 files, 1 allowlisted — a test comment in
+  `skills/instagram-studio/scripts/check-output.test.mjs` that quotes the wrong pattern on
+  purpose.
 - **Known undecidable instances:** none.
