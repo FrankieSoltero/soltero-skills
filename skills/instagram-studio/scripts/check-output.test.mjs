@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -384,6 +384,32 @@ test('the CLI exits 2 on usage errors and on a missing out-dir', () => {
   const gone = run([join(tmpdir(), 'ig-studio-does-not-exist-12345'), '--format', 'all']);
   assert.equal(gone.code, 2);
   assert.match(gone.stderr, /out-dir/);
+});
+
+test('the CLI runs when reached through a symlinked path', () => {
+  // Regression: the entry-point guard compared import.meta.url to `file://${process.argv[1]}`.
+  // Node resolves the main entry's symlinks but argv[1] keeps the symlinked spelling, so on
+  // macOS (/tmp -> /private/tmp) the guard was false, main() never ran, and the validator
+  // printed nothing and exited 0 — a silent pass from a tool whose whole job is to fail loudly.
+  const link = join(mkdtempSync(join(tmpdir(), 'ig-studio-link-')), 'scripts');
+  symlinkSync(here, link);
+
+  let stdout = '';
+  let code = 0;
+  try {
+    stdout = execFileSync(
+      process.execPath,
+      [join(link, 'check-output.mjs'), outDir(), '--format', 'all', '--json'],
+      { encoding: 'utf8' },
+    );
+  } catch (e) {
+    stdout = e.stdout ?? '';
+    code = e.status;
+  }
+
+  assert.notEqual(stdout.trim(), '', 'the CLI printed nothing — main() never ran through the symlink');
+  assert.match(stdout, /output\.empty/);
+  assert.equal(code, 1);
 });
 
 test('the CLI exits 2 when ffprobe is not on PATH', () => {

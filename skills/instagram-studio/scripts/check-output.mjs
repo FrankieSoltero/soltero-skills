@@ -10,8 +10,9 @@
 // Exit codes: 0 no errors (warnings allowed), 1 any error, 2 usage error,
 // out-dir missing, or ffprobe not installed.
 import { execFileSync } from 'node:child_process';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, realpathSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /** The canvas/encoding contract, per format. Carousel slides are stills, so no fps/duration. */
 export const FORMATS = Object.freeze({
@@ -353,4 +354,9 @@ export function main(argv) {
   return result.errors.length ? 1 : 0;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) process.exit(main(process.argv.slice(2)));
+// Entry-point guard that survives /tmp → /private/tmp symlinks on macOS (lesson 2026-09-02).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+
+if (isMain()) process.exit(main(process.argv.slice(2)));
