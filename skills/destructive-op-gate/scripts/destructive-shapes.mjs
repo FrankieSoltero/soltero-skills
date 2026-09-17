@@ -10,7 +10,8 @@
 // This is a coarse net over shell text. It sees neither the resolved connection string nor
 // the row count, so it cannot decide whether an operation is safe — it only says "this one
 // needs the gate". False positives are expected and are cheaper than the alternative.
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 /** Remove quoted-string bodies so an `echo "DROP TABLE ..."` does not read as a DROP. */
 function stripQuoted(cmd) {
@@ -118,7 +119,12 @@ export function matchDestructiveShapes(command) {
   return out;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Entry-point guard that survives /tmp → /private/tmp symlinks on macOS (lesson 2026-09-02).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+
+if (isMain()) {
   const arg = process.argv[2];
   if (!arg) {
     process.stderr.write('usage: destructive-shapes.mjs "<command>" | destructive-shapes.mjs -\n');

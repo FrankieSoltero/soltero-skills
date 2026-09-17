@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, symlinkSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -154,4 +155,13 @@ test('--json emits the verdict, the sets and the key for a wrapper to consume', 
   assert.equal(parsed.verdict, 'MISMATCH');
   assert.deepEqual(parsed.missing, ['3']);
   assert.match(parsed.key, /^op:[0-9a-f]{16}$/);
+});
+
+test('CLI still runs when invoked through a symlinked path (macOS /tmp → /private/tmp)', () => {
+  const linkDir = mkdtempSync(join(tmpdir(), 'dog-counts-link-'));
+  const link = join(linkDir, 'scripts-link');
+  symlinkSync(here, link);
+  const r = spawnSync(process.execPath, [join(link, 'compare-counts.mjs')], { encoding: 'utf8' });
+  assert.match(r.stdout, /COMPARE: INDETERMINATE/, 'main() must run when the script is reached through a symlink');
+  assert.equal(r.status, 1, 'a gate must never exit 0 silently through a symlinked script path');
 });

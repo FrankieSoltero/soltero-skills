@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -233,4 +233,14 @@ test('CLI --format json emits the machine-readable inventory', () => {
   assert.equal(parsed.principle, 'GP-003');
   assert.ok(parsed.matches.every((m) => m.file && m.line > 0 && m.column > 0 && m.detector));
   assert.equal(parsed.markers.length, 2);
+});
+
+test('CLI still runs when invoked through a symlinked path (macOS /tmp → /private/tmp)', () => {
+  const linkDir = mkdtempSync(path.join(tmpdir(), 'sweep-link-'));
+  const link = path.join(linkDir, 'scripts-link');
+  symlinkSync(here, link);
+  const r = spawnSync(process.execPath, [path.join(link, 'sweep.mjs'), '--rule', rulePath, '--root', scheduler],
+    { encoding: 'utf8' });
+  assert.match(r.stdout, /matches \(17\)/, 'main() must run when the sweep runner is reached through a symlink');
+  assert.equal(r.status, 1, 'a dirty tree must exit 1, never a silent 0, through a symlinked script path');
 });

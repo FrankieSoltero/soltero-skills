@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -136,4 +137,19 @@ test('missing input and unreadable files are usage errors (exit 2), not classifi
   assert.equal(run([]).code, 2);
   assert.equal(run(['--dotenv', '/nonexistent/.env']).code, 2);
   assert.equal(run(['--assert', 'nonsense', '--url', 'postgres://x@localhost/d']).code, 2);
+});
+
+test('CLI still runs when invoked through a symlinked path (macOS /tmp → /private/tmp)', () => {
+  const linkDir = mkdtempSync(join(tmpdir(), 'dog-target-link-'));
+  const link = join(linkDir, 'scripts-link');
+  symlinkSync(here, link);
+  const script = join(link, 'resolve-target.mjs');
+  const prod = spawnSync(process.execPath,
+    [script, '--url', 'postgresql://app:pw@ep-x.us-east-2.aws.neon.tech/lastcall', '--assert', 'local'],
+    { encoding: 'utf8' });
+  assert.match(prod.stdout, /ASSERT local: FAILED/, 'main() must run when the script is reached through a symlink');
+  assert.equal(prod.status, 1, 'a failed assertion must exit 1, never a silent 0, through a symlinked script path');
+  const noArgs = spawnSync(process.execPath, [script], { encoding: 'utf8' });
+  assert.equal(noArgs.status, 2, 'missing input must still be a usage error through a symlinked script path');
+  assert.match(noArgs.stderr, /usage: resolve-target\.mjs/);
 });
