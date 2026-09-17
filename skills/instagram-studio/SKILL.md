@@ -1,0 +1,195 @@
+---
+name: instagram-studio
+description: Use when someone wants Instagram marketing content built from a code project or a written brief — "make an Instagram reel for this", "make a reel", "create short-form content for Instagram", "make a carousel post", "make an Instagram story", "turn this into Instagram content", "marketing video for Instagram", "promote this on Instagram". Preflights the render toolchain and stops with the fix command, extracts a facts.md that is the only allowed source of on-screen and caption claims, plans a hook-first storyboard or slide outline, composes and renders locally through the Hyperframes CLI at the exact Instagram canvas, duration and safe zones, then delivers caption.md (caption, hashtags, alt text, claims table), cover.jpg and post-checklist.md checked by a bundled validator. Child of soltero-skills:content-marketing. Never posts, never schedules, never installs anything.
+---
+
+# Instagram Studio
+
+## Overview
+
+Turns a code project **or** a written brief into post-ready Instagram
+deliverables — reel, story, 4:5 feed video, carousel — with caption,
+hashtags, alt text, cover and a posting checklist.
+
+**Core principle: nothing reaches the screen or the caption that is not a
+line in `facts.md`.** A capable model already reaches 1080×1920/30fps,
+already refuses to fabricate user counts, already declines to bundle a music
+track. What it still does is invent the *scope* of an offer, invent *soft,
+unattributed* social proof, build on an asset that is not on disk, route
+around a broken toolchain, and hand over files nobody can actually post.
+Those are the failures this skill exists to stop.
+
+Judgment lives in this file. Everything deterministic lives in the two
+bundled scripts — run them and report what they say; never re-derive their
+verdicts in prose.
+
+## When to Use
+
+- Any request to make Instagram content from a repo, a product, or a brief.
+- Reels, Stories, 4:5 feed video, carousels — one format or `all`.
+
+## When NOT to Use
+
+- **Posting or scheduling** to Instagram, and **analytics** of any kind —
+  out of scope; the deliverable is files plus `post-checklist.md`.
+- Editing existing talking-head or camera **footage**.
+- **TikTok / YouTube Shorts** variants.
+- **AI-generated** images, video, or voice.
+- Non-Instagram marketing copy → `soltero-skills:content-marketing`.
+
+## Invocation
+
+Natural language, or flags. Default `--format reel`.
+
+<!-- markdownlint-disable MD013 -->
+| Flag | Values |
+|---|---|
+| `--format` | `reel` (default) · `story` · `feed` · `carousel` · `all` |
+| `--type` | `launch` · `feature-demo` · `offer-promo` · `tip-educational` · `social-proof` · `behind-the-build` |
+| `--brief <path>` | brief file to read instead of inspecting the project |
+| `--duration <s>` | target seconds; must stay inside the format's range |
+| `--no-sfx` / `--sfx-dir <path>` | silence (default) / user-supplied SFX |
+<!-- markdownlint-enable MD013 -->
+
+Everything is written to `instagram-output/`. If that directory already
+exists, use `instagram-output-YYYY-MM-DD-HHmmss/`. Filenames are fixed —
+see [references/formats.md](references/formats.md). Do not invent your own.
+
+## Flow — five steps, each with a gate
+
+### Step 0 — Preflight, always first
+
+```bash
+node "${CLAUDE_SKILL_DIR}/scripts/preflight.mjs"
+```
+
+Exit 0 → continue. Exit 1 → **stop** and relay each failed check's `fix`
+string verbatim, then wait for the user. You never install it yourself, you
+never switch renderer, and you never move production off the machine —
+screenshots into the in-app editor is not "the legitimate version" of this
+skill, it is the run failing quietly. A blocked preflight ends the turn with
+a command the user can paste.
+
+### Step 1 — Source → `facts.md`
+
+Read [references/step-1-source.md](references/step-1-source.md).
+Code project present → read the real UI copy, brand tokens and features out
+of the source. Otherwise fill `assets/brief-template.md` with the user.
+Both paths produce the same `facts.md`: one fact per line, each with the
+path (or brief field) it came from.
+
+**Gate:** `facts.md` exists · every asset path in it resolves to that exact
+path on disk · anything non-public carries `[CONFIRM: public?]`.
+
+### Step 2 — Plan → `plan.md`
+
+Read [references/step-2-plan.md](references/step-2-plan.md) and
+[references/content-types.md](references/content-types.md).
+Pick the content type and format(s), write the hook first, then the
+beat-by-beat storyboard (video) or slide outline (carousel), then the CTA.
+`--format all` is **one** plan with a separate layout per format — the feed
+cut is a re-layout, never a crop of the reel.
+
+**Gate:** every duration/slide count inside the format's range · every
+on-screen line cites a `facts.md` line number or is a `[CONFIRM: …]`
+placeholder.
+
+### Step 3 — Compose
+
+Read [references/step-3-compose.md](references/step-3-compose.md).
+Build in `<out>/composition/` with the five Hyperframes domain skills.
+Skip the `hyperframes` entry-point intent interview — `plan.md` **is** the
+intent, and re-interviewing the user is a second brief nobody asked for.
+
+**Gate:** `npx hyperframes check` reports zero errors. Fix findings; never
+bypass them.
+
+### Step 4 — Render, caption, deliver
+
+Read [references/step-4-deliver.md](references/step-4-deliver.md).
+Preview URL first, render only on the user's approval, cover frame from a
+settled frame, caption under `soltero-skills:content-marketing`, then:
+
+```bash
+node "${CLAUDE_SKILL_DIR}/scripts/check-output.mjs" <out-dir> --format <fmt>
+```
+
+**Gate:** exit 0. Exit 1 → fix the named errors and re-run; a warning is
+reported verbatim to the user, never silently accepted on their behalf.
+
+## Hard rules
+
+1. **A fact not in `facts.md` does not exist.** Not a plausible inference,
+   not something the user asserted in chat, not a paraphrase that removes
+   the attribution. `--type social-proof` refuses any testimonial, quote, or
+   number that is not a `facts.md` line — including "readers tell us…"
+   phrasing with no named source.
+2. **An asset path resolves only if that exact path exists.** A
+   similarly-named file is a different file: `x.jpg.txt` is not `x.jpg`.
+   Unresolved path → stop and ask, at Step 1, before any planning.
+3. **Format numbers are looked up, never recalled.** Canvas, fps, duration
+   range, safe zones, encoding and filenames are in
+   [references/formats.md](references/formats.md). Your own remembered
+   safe-zone numbers are wrong.
+4. **Banned commands:** `hyperframes check --no-contrast`,
+   `hyperframes cloud …`, `hyperframes lambda …`, `hyperframes publish`.
+   Rendering is local. The only network call is `npx` resolving the
+   `hyperframes` package.
+5. **Silent by default.** Render with no audio unless the user passes
+   `--sfx-dir`; the checklist tells them to add audio in Instagram. Never
+   propose, bundle, or "source" a music track.
+6. **Render failure is reported, not routed around.** Surface the
+   Hyperframes CLI output verbatim. There is no fallback renderer, no
+   screenshot pipeline, no second tool.
+7. **Never claim it is posted.** This skill produces files. The user posts.
+
+## Rationalization table
+
+Every Reality row below answers a verbatim quote from the observed baseline.
+
+<!-- markdownlint-disable MD013 -->
+| Excuse | Reality |
+|--------|---------|
+| "since patio.jpg wasn't actually in the folder, the whole sequence was built to run on the one real photo … rather than being blocked on a second image that was never delivered" | A missing asset is a stop, not a licence to redesign. Ask for the file. Building around it silently changes the deliverable the user asked for. |
+| "This plan runs on that one confirmed photo only" — then every render command loads `photos/bar-interior.jpg`, and only `photos/bar-interior.jpg.txt` is on disk | A path you did not resolve is not confirmed. Normalising a name to a file that does not exist ships a plan that dies on its first pass. |
+| "nothing about the offer itself was invented" — in a caption reading "Every draft on the wall, half off." | The brief said "half-price drafts". Scope and service promises are claims too, and an invented one is most dangerous asserted alongside a claim that nothing was invented. |
+| "kept the grid square (all 12 slides same 1080x1080 template), hit the agency's 12-slide minimum" | Canvas and slide count are the platform contract, not taste. Carousel is 1080×1350 and 3–10 slides. A twelve-slide brief gets the range quoted back, not obeyed. |
+| "it paraphrases the truthful claim the newsletter owner gave me, rather than manufacturing fake testimonials" | A conversational assertion is not a source. Removing the name does not make social proof safe — unattributed social proof is the invented kind that gets shipped. |
+| "assemble the reel entirely inside the Instagram app's own Reels editor … That is the legitimate version of 'straight from a browser'" | That is routing around a failed preflight. Stop and hand over the fix command; a manual workaround leaves the user with no deliverable and no diagnosis. |
+| "Keep all text inside a safe zone of x:40–1040, y:250–1600" | Invented per run, wrong per run. The numbers are in `references/formats.md`. |
+| "Each of the 5 tips is intact, verbatim, on one slide" — at 55–65 words a slide | A slide nobody reads is not a tip delivered. Carousel copy is ≤ ~25 words per slide; split the idea or cut it. |
+| "npx playwright screenshot" / ImageMagick `magick` for the slide export | Carousel slides come out of `npx hyperframes snapshot`. A second imaging tool is an untested dependency the preflight never checked. |
+| `streakly_reel_final.mp4`, `01-cover.png`, `streakly-caption.txt` | The filenames are fixed so the validator and the user both know where things are. Invented names fail `check-output.mjs`. |
+<!-- markdownlint-enable MD013 -->
+
+## Red Flags — STOP
+
+- About to plan, compose, or render before `preflight.mjs` has run this
+  session.
+- A preflight failure being answered with an install, a different renderer,
+  or a manual in-app workflow.
+- An asset path that "is basically" the one in the brief.
+- On-screen or caption copy whose source you are about to describe as
+  obvious, implied, or something the user told you in chat.
+- Social proof with no named source in `facts.md` — including "people say",
+  "readers write in", "everyone's been asking".
+- A safe-zone, canvas, duration, or filename value you are typing from
+  memory instead of from `references/formats.md`.
+- A carousel slide you would not read yourself.
+- Reporting a render, a cover, or a checklist you have not validated with
+  `check-output.mjs`.
+- Any sentence that implies the content is live, posted, or scheduled.
+
+## References
+
+<!-- markdownlint-disable MD013 -->
+| File | Read it to… |
+|---|---|
+| [references/formats.md](references/formats.md) | look up canvas, fps, duration, safe zones, encoding, filenames, "settled frame" |
+| [references/content-types.md](references/content-types.md) | pick the content type and its hook/pacing/CTA pattern |
+| [references/step-1-source.md](references/step-1-source.md) | extract `facts.md` from a project or a brief |
+| [references/step-2-plan.md](references/step-2-plan.md) | write `plan.md`, hook first, claims cited |
+| [references/step-3-compose.md](references/step-3-compose.md) | drive the Hyperframes domain skills to a passing `check` |
+| [references/step-4-deliver.md](references/step-4-deliver.md) | render, cover, caption, validate, checklist |
+| [assets/brief-template.md](assets/brief-template.md) | the fields a brief-only run must fill |
+<!-- markdownlint-enable MD013 -->
