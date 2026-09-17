@@ -75,10 +75,19 @@ guard line `window.__timelines = window.__timelines || {};` into the
 composition: without it `index.html` throws on load and cannot be measured,
 and with it `check`, `preview` and `render` behave exactly as before.
 
-Optional cross-check: `npx hyperframes snapshot --at <t>` and compute the
+Ink bounds — `npx hyperframes snapshot --at <t> --no-end` and compute the
 ink bounding box of that PNG (a `node:zlib` decode does it with no
-dependency). The ink box sits inside the CSS box — the two agree, they are
-not the same number.
+dependency). `--no-end` is load-bearing here too: without it `--end`
+defaults on and you also get an end-of-timeline frame you did not ask for.
+The ink box sits inside the CSS box — the two agree, they are not the same
+number.
+
+This is a **cross-check** when a browser can be driven, and **the**
+measurement method when one cannot. What it is never is optional in the
+sense of skippable: if steps 1–4 above are not available to you, the ink
+bounds are how the safe zones get measured. Reporting a block as inside the
+bounds without either measurement is an unmeasured assertion — the thing
+this section exists to stop.
 
 Do not reach for `npx hyperframes keyframes` (a static source parser — it
 reports no boxes at all) or `hyperframes-animation`'s `animation-map.mjs`

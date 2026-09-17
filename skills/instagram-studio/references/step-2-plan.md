@@ -49,9 +49,11 @@ Step 3 then measures the rendered frame. Carousel slides have no platform
 UI over them and therefore no safe-zone bands — place their text by
 composition alone and do not invent bands for them.
 
-Every on-screen line carries either a `facts.md:<line>` citation or a
-`[CONFIRM: …]` placeholder that survives into the render as a visible
-bracket. There is no third category. In particular:
+Every on-screen line carries either a `facts.md:<n>` citation — **`<n>` is
+the numbered item in `facts.md`, not the file's line number** (see
+[step-1-source.md](step-1-source.md)) — or a `[CONFIRM: …]` placeholder that
+survives into the render as a visible bracket. There is no third category.
+In particular:
 
 - **Scope is a claim.** "half-price drafts" in the brief does not license
   "every draft on the wall". If the brief did not say how wide the offer
@@ -104,7 +106,8 @@ section per format:
 ## Gate
 
 Every duration and count inside its format's range · every on-screen line
-cites a `facts.md` line or is a visible `[CONFIRM: …]` · no cited line is
+cites a `facts.md` numbered item or is a visible `[CONFIRM: …]` · no cited
+item is
 itself marked `[CONFIRM: public?]` unless the user has resolved it · every
 `Shows:` line depicts only what `facts.md` establishes exists · every
 video-format text block has a `Place:` x/y range and it sits inside that

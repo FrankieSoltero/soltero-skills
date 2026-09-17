@@ -34,7 +34,7 @@ Whole repo: `npm run check`.
 - Content types (exact ids): `launch`, `feature-demo`, `offer-promo`, `tip-educational`, `social-proof`, `behind-the-build`.
 - Flags: `--format reel|story|feed|carousel|all` (default `reel`), `--type <id>`, `--brief <path>`, `--duration <s>`, `--no-sfx`, `--sfx-dir <path>`.
 - Hyperframes skills required (exact names): `hyperframes-core`, `hyperframes-animation`, `hyperframes-creative`, `hyperframes-keyframes`, `hyperframes-cli`. Install command: `npx hyperframes skills update`. Banned: `hyperframes check --no-contrast`, `hyperframes cloud …`, `hyperframes lambda …`, `hyperframes publish`.
-- The skill never installs software, never posts, never calls a network API other than `npx hyperframes` package resolution.
+- The skill never installs software, never posts, never calls a network API other than `npx hyperframes` package resolution. (correction 2026-09-17, evidence-backed, reported to the owner: the Hyperframes toolchain itself fetches Google Fonts faces, a jsdelivr GSAP script with no `integrity`, GitHub on `init` and a remote registry on `catalog` — see Docs/evals/instagram-studio-2026-09-17/live-render.md finding 1; this constraint reads as: the skill uploads, publishes, posts and sends nothing of the user's.)
 - Scripts are invoked from the skill body as `node "${CLAUDE_SKILL_DIR}/scripts/<name>.mjs"`.
 - SKILL.md body ≤ ~300 lines; description ≤1024 chars, leads with "Use when", quotes the trigger phrasings from Task 1.
 - Markdown must pass `npm run lint:md`; frontmatter must pass `npm run lint:fm`.

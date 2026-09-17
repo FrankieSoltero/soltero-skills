@@ -65,16 +65,21 @@ text sits inside the centered 1080×1080 crop.
 `snapshot` writes PNG only and nothing in the Hyperframes CLI bakes a still
 into an MP4, so both halves are ffmpeg — the one preflight already checked,
 with nothing new installed. Select by frame **index**, not `-ss <seconds>`,
-so you get the settled frame itself and not the nearest keyframe:
+so you get the settled frame itself and not the nearest keyframe. The index
+is `ceil(t * 30)`, not `round`: the settled frame is the **first** frame at
+least 0.5s after the keyframe, so rounding down would pick a frame that is
+still animating:
 
 ```bash
-# cover — frame index = round(t * 30) at 30fps; 42 is t = 1.40s
+# cover — frame index = ceil(t * 30) at 30fps; 42 is t = 1.40s
 ffmpeg -y -v error -i <out-dir>/reel.mp4 \
   -vf "select='eq(n\,42)'" -fps_mode passthrough -frames:v 1 -q:v 2 \
   <out-dir>/reel-cover.jpg
 ```
 
-ffmpeg 9 removed `-vsync`; `-fps_mode` is the spelling that works. Then bake
+ffmpeg 9 removed `-vsync`; `-fps_mode` is the spelling that works. An ffmpeg
+that rejects `-fps_mode` is older than 5 and wants `-vsync 0` instead — read
+the version, do not guess which spelling this machine takes. Then bake
 the same image over frame 0 only, re-encoding with the contract's flags —
 h264, yuv420p, 30fps, `+faststart`, no audio:
 

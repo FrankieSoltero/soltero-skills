@@ -109,6 +109,13 @@ test('a landscape canvas on a reel is video.dimensions', () => {
   assert.deepEqual(codes(validateVideo('feed', probe({ width: 1080, height: 1350 }))), []);
 });
 
+test('a probed file with no video stream is video.missing', () => {
+  const audioOnly = { streams: [{ codec_type: 'audio', codec_name: 'aac' }], format: { duration: '15.0' } };
+  const r = validateVideo('reel', audioOnly);
+  assert.deepEqual(codes(r), ['video.missing']);
+  assert.match(r.errors[0].message, /no video stream/);
+});
+
 test('any frame rate other than exactly 30 is video.fps', () => {
   assert.deepEqual(codes(validateVideo('reel', probe({ fps: '25/1' }))), ['video.fps']);
   assert.deepEqual(codes(validateVideo('reel', probe({ fps: '30000/1001' }))), ['video.fps']);
@@ -290,6 +297,19 @@ test('a reel with only the feed cover present is cover.missing, named per format
   const r = checkOutput(dir, { format: 'reel', probe: fakeProbe({ 'reel.mp4': probe() }) });
   assert.deepEqual(codes(r), ['cover.missing']);
   assert.match(r.errors[0].message, /reel-cover\.jpg/);
+});
+
+test('the expected video file absent from the out-dir is video.absent, not video.missing', () => {
+  // Slides keep the out-dir non-empty so this is the absent-file branch, not output.empty.
+  const dir = outDir({
+    'slide-01.png': png(1080, 1350),
+    'slide-02.png': png(1080, 1350),
+    'slide-03.png': png(1080, 1350),
+    'caption.md': caption(),
+  });
+  const r = checkOutput(dir, { format: 'reel' });
+  assert.deepEqual(codes(r), ['video.absent']);
+  assert.match(r.errors[0].message, /reel\.mp4/);
 });
 
 test('a reel cover on the wrong canvas is cover.dimensions', () => {

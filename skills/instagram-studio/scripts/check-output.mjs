@@ -264,7 +264,7 @@ export function checkOutput(dir, { format = 'reel', probe = ffprobe } = {}) {
     if (f === 'reel' || f === 'feed') {
       const file = `${f}.mp4`;
       if (!files.includes(file)) {
-        fail(r, 'video.missing', `${file} is missing from the out-dir`);
+        fail(r, 'video.absent', `${file} is missing from the out-dir`);
         continue;
       }
       checkVideoFile(r, dir, f, file, probe);

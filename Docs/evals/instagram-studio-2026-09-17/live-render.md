@@ -157,7 +157,7 @@ cleared it. The five warnings were fixed anyway by giving each clip a stable id
 $ npx --yes hyperframes check
 EXIT=0
 ◆  Checking composition
-[INFO] [Compiler] Fetched 11 font face(s) for "Inter" from Google Fonts (cached to /Users/franciscosoltero/.cache/hyperframes/fonts/inter)
+[INFO] [Compiler] Fetched 11 font face(s) for "Inter" from Google Fonts (cached to /Users/…/.cache/hyperframes/fonts/inter)
 [INFO] [Compiler] Injected deterministic @font-face rules for 1 requested font families
 [hyperframes] browserGpuMode probe → hardware (WebGL renderer vendor="Google Inc. (Apple)" renderer="ANGLE (Apple, ANGLE Metal Renderer: Apple M5, Unspecified Version)")
 
@@ -309,7 +309,12 @@ $ ffmpeg -y -v error -i reel.mp4 -i reel-cover.jpg \
     -filter_complex "[0:v][1:v]overlay=0:0:enable='eq(n\,0)':eof_action=repeat,format=yuv420p" \
     -c:v libx264 -preset medium -crf 18 -r 30 -an -movflags +faststart reel-baked.mp4
 BAKE EXIT=0
+$ mv reel-baked.mp4 reel.mp4
 ```
+
+The `mv` is part of the step, not an afterthought: the baked file has to take
+the contract filename back, or the out-dir ships the un-baked `reel.mp4` and a
+stray `reel-baked.mp4` the validator does not know about.
 
 Proof the bake landed, by PSNR of frame 0 against the cover:
 
@@ -371,7 +376,7 @@ in from the start, having learned that from run 1):
 $ npx --yes hyperframes check
 EXIT=0
 ◆  Checking composition
-[INFO] [Compiler] Fetched 11 font face(s) for "Inter" from Google Fonts (cached to /Users/franciscosoltero/.cache/hyperframes/fonts/inter)
+[INFO] [Compiler] Fetched 11 font face(s) for "Inter" from Google Fonts (cached to /Users/…/.cache/hyperframes/fonts/inter)
 [INFO] [Compiler] Injected deterministic @font-face rules for 1 requested font families
 [hyperframes] browserGpuMode probe → hardware (WebGL renderer vendor="Google Inc. (Apple)" renderer="ANGLE (Apple, ANGLE Metal Renderer: Apple M5, Unspecified Version)")
 
@@ -513,7 +518,7 @@ All under `<scratch>` =
 | `reel-cover.jpg` | 57,231 |
 | `caption.md` | 3,597 |
 | `facts.md` | 2,718 |
-| `plan.md` | 3,853 |
+| `plan.md` | 4,306 |
 | `post-checklist.md` | 2,012 |
 | `composition/index.html` | 7,856 |
 | `composition/hyperframes.json` | 318 |

@@ -2,6 +2,13 @@
 
 ## Run — model alias `sonnet` — 2026-09-17
 
+> **Provenance (added 2026-09-17).** This run measured the tree at the
+> **parent of commit `87f86cb`** — the commit that recorded this file.
+> `skills/instagram-studio/SKILL.md` and its references changed afterwards
+> in `144287c`, `fada6c9` and `e8c001e`. The "4/4" below is therefore a
+> measurement of that earlier skill text, **not of the shipped text**.
+> Nothing recorded below has been re-measured or re-graded.
+
 Four fresh `general-purpose` subagents, one per scenario, dispatched
 concurrently in a single message with the model pinned explicitly to the
 `sonnet` alias on every call — the same alias RED pinned, never inherited
@@ -407,6 +414,12 @@ observed failures, never speculatively — nothing was added.
    2026-09-17.
 8. **`hyperframes-skills` passed preflight in this environment**, so the
    "one of the five is missing" branch at Step 3 is untested.
+9. **Scenario 1's per-block x/y placement was volunteered, not required.**
+   At the base this run measured, nothing in the skill asked for a `Place:`
+   line — the run produced per-block coordinates on its own. The Plan-gate
+   requirement that every video-format text block carry an x/y placement was
+   added later, by `144287c`. So that result is evidence the model will do
+   it unprompted at that text, not evidence the gate was exercised.
 
 ---
 

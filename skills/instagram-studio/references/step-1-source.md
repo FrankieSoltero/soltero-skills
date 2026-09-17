@@ -43,8 +43,13 @@ this file is evidence, not copy.
    source in the project
 ```
 
-Line numbers matter: Step 2 cites them, and the claims table in
-`caption.md` points back at them.
+**Citation convention — `facts.md:<n>` means numbered item `n` of this
+list, never the file's line `n`.** The items are numbered, so the citation
+survives a heading, a blank line, or a fact that wraps onto two lines; a raw
+line offset does not. `facts.md:5` above is the team-plan fact whatever line
+it sits on. Number the items contiguously from 1 and never renumber them
+once Step 2 has cited them. Step 2 cites these numbers, and the claims table
+in `caption.md` points back at them.
 
 ## Non-public facts
 

@@ -2,6 +2,11 @@
 
 Date: 2026-09-17 · Status: APPROVED 2026-09-17 · Author: Claude (lean-brainstorming)
 
+> **Amendment 2026-09-17 (owner ruling).** Covers are **per format**:
+> `reel-cover.jpg` (1080×1920) and `feed-cover.jpg` (1080×1350). One
+> `cover.jpg` could not satisfy both canvases under `--format all`. Every
+> later mention of `cover.jpg` in this spec reads as the per-format name.
+
 - **Problem:** Turning a code project or a written brief into ready-to-post
   Instagram marketing content (Reels, Stories, feed video, carousels)
   currently means manual editing, captioning, and format/safe-zone

@@ -36,6 +36,10 @@ verdicts in prose.
 - **TikTok / YouTube Shorts** variants.
 - **AI-generated** images, video, or voice.
 - Non-Instagram marketing copy → `soltero-skills:content-marketing`.
+- **On `haiku`** — measured tier scope: `sonnet` 0/4 without → 4/4 with;
+  `haiku` 2/4 with, so it is **not covered** and this skill's work is not
+  routed there; `opus`/`fable` unmeasured
+  ([Docs/skill-eval-instagram-studio-2026-09-17.md](../../Docs/skill-eval-instagram-studio-2026-09-17.md)).
 
 ## Invocation
 
@@ -57,7 +61,7 @@ see [references/formats.md](references/formats.md). Do not invent your own.
 
 Two invocations therefore produce two unrelated out-dirs. A second format
 for the same piece **reuses the first run's `facts.md`** — copy that file
-across, never re-derive it, or the two runs cite different line numbers for
+across, never re-derive it, or the two runs cite different item numbers for
 the same fact. `check-output.mjs` validates ONE directory, so run it once
 per out-dir; `--format all` in a single invocation is how you get every
 format in one directory and one validator run.
@@ -68,16 +72,20 @@ format in one directory and one validator run.
 
 ```bash
 node "${CLAUDE_SKILL_DIR}/scripts/preflight.mjs"
-npx hyperframes --version   # only after preflight exits 0
 ```
 
 Exit 1 → **stop** and relay each failed check's `fix` string verbatim, then
 wait for the user. Exit 2 → a usage error; fix the invocation and re-run.
-Exit 0 → run `npx hyperframes --version` once. Preflight proves node,
-ffmpeg, ffprobe and the five skill directories; it never proves the CLI
-itself runs, and a broken toolchain found at Step 3 has already cost you
-`facts.md` and `plan.md`. If that command fails, stop and relay its error —
-the same stop rule as a failed preflight.
+Exit 0 → and only then, run this once:
+
+```bash
+npx hyperframes --version
+```
+
+Preflight proves node, ffmpeg, ffprobe and the five skill directories; it
+never proves the CLI itself runs, and a broken toolchain found at Step 3 has
+already cost you `facts.md` and `plan.md`. If that command fails, stop and
+relay its error — the same stop rule as a failed preflight.
 
 You never install the fix yourself, you never switch renderer, and you never
 move production off the machine — screenshots into the in-app editor is not
@@ -111,7 +119,8 @@ beat-by-beat storyboard (video) or slide outline (carousel), then the CTA.
 cut is a re-layout, never a crop of the reel.
 
 **Gate:** every duration/slide count inside the format's range · every
-on-screen line cites a `facts.md` line number or is a `[CONFIRM: …]`
+on-screen line cites a `facts.md` numbered item (`facts.md:<n>` = item n,
+never the file's line n) or is a `[CONFIRM: …]`
 placeholder · a `facts.md` line that is itself marked `[CONFIRM: public?]`
 is not a usable citation until the user resolves it · every `Shows:` line
 depicts only something `facts.md` establishes exists · every text block in a
