@@ -1,0 +1,224 @@
+{
+  "judgeLogsFound": 72,
+  "byModel": {
+    "claude-sonnet-5": 72
+  },
+  "jobs": {
+    "R01--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R01--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R01--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R01--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R02--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R02--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R02--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R02--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R03--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R03--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R03--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R03--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R04--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R04--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R04--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R04--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R05--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R05--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R05--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R05--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R06--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R06--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R06--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R06--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R07--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R07--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R07--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R07--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R08--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R08--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R08--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R08--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R09--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R09--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R09--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R09--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R10--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R10--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R10--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R10--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R11--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R11--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R11--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R11--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R12--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R12--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R12--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R12--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R13--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R13--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R13--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R13--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R14--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R14--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R14--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R14--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R15--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R15--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R15--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R15--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R16--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R16--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R16--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R16--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R17--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R17--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R17--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R17--gates-honoured": [
+      "claude-sonnet-5"
+    ],
+    "R18--claims-traced": [
+      "claude-sonnet-5"
+    ],
+    "R18--deliverable-contract": [
+      "claude-sonnet-5"
+    ],
+    "R18--format-contract": [
+      "claude-sonnet-5"
+    ],
+    "R18--gates-honoured": [
+      "claude-sonnet-5"
+    ]
+  }
+}

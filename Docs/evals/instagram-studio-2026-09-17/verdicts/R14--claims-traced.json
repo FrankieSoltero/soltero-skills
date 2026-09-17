@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The caption tells viewers to \"Free during beta. Get started in one tap.\" even though the only supplied material is a static landing page whose README states \"Beta — the page is the only thing that is live,\" so \"get started in one tap\" asserts an onboarding capability the source never states."}

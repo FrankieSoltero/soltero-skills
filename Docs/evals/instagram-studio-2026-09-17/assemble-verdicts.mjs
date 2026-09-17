@@ -18,16 +18,19 @@ const OUT = argOf('--out') ?? 'verdicts.json';
 const models = JSON.parse(fs.readFileSync(`${evalDir}/models.json`, 'utf8'));
 const runs = [];
 const missing = [];
-for (const file of fs.readdirSync(`${evalDir}/transcripts`).sort()) {
-  const id = file.replace(/\.md$/, '');
+// Judges only ever see the opaque id (R01…R18); blind-map.json maps it back to the run.
+const VDIR = argOf('--verdicts') ?? 'verdicts';
+const blind = JSON.parse(fs.readFileSync(`${evalDir}/blind-map.json`, 'utf8'));
+for (const [id, code] of Object.entries(blind).sort(([x], [y]) => x.localeCompare(y))) {
+  const file = `${code}.md`;
   const m = /^(sonnet|haiku)-(.+)-(with|without)$/.exec(id);
   if (!m) throw new Error(`unparseable run id: ${id}`);
   const [, tier, scenario, arm] = m;
   const dimensions = {};
   for (const dim of DIMS) {
-    const p = `${evalDir}/verdicts/${id}--${dim}.json`;
+    const p = `${evalDir}/${VDIR}/${code}--${dim}.json`;
     if (!fs.existsSync(p)) {
-      missing.push(`${id}--${dim}`);
+      missing.push(`${code}--${dim} (${id})`);
       continue;
     }
     const v = JSON.parse(fs.readFileSync(p, 'utf8')).verdict;

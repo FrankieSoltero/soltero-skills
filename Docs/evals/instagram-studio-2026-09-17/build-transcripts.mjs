@@ -43,12 +43,26 @@ const asText = (c) =>
       ? c.map((x) => (x.type === 'text' ? x.text : x.type === 'image' ? '[image]' : JSON.stringify(x))).join('\n')
       : JSON.stringify(c);
 
+// Pass 2 withheld the arm from the header but left the run id (tier + scenario + arm) in the
+// transcript FILENAME and in every scratch-directory path inside it, so a judge could read the
+// arm off the page. Each run now gets an opaque id (R01…R18, fixed shuffle below), the file is
+// named by it, and every occurrence of any run id is redacted to RUN. blind-map.json holds the
+// mapping; judges never see it.
+const ORDER = [11, 4, 16, 1, 8, 13, 6, 18, 2, 10, 15, 5, 12, 17, 3, 9, 14, 7];
+const runIds = Object.keys(RUNS);
+const blind = Object.fromEntries(runIds.map((id, i) => [id, `R${String(ORDER[i]).padStart(2, '0')}`]));
+const longestFirst = runIds.slice().sort((a, b) => b.length - a.length);
+// The scratch-path pattern catches ids cut short by tool-result truncation.
+const redact = (t) =>
+  longestFirst
+    .reduce((acc, id) => acc.split(id).join('RUN'), t)
+    .replace(/scratchpad\/ab\/(?!RUN)[A-Za-z0-9-]+/g, 'scratchpad/ab/RUN');
 const models = {};
 for (const [id, agent] of Object.entries(RUNS)) {
   const prompt = fs.readFileSync(`${evalDir}/prompts/${id}.txt`, 'utf8');
   const task = prompt.slice(prompt.indexOf('You are doing a real task for a user.'));
   const lines = fs.readFileSync(`${tasksDir}/${agent}.output`, 'utf8').split('\n').filter(Boolean);
-  const out = [`# Run transcript — ${id.replace(/-(with|without)$/, '')} (arm withheld)`, '', '## The task as given to the agent', '', '```text', task.trim(), '```', '', '## What the agent did, in order', ''];
+  const out = [`# Run transcript — ${blind[id]} (tier, scenario name and arm withheld)`, '', '## The task as given to the agent', '', '```text', task.trim(), '```', '', '## What the agent did, in order', ''];
   let step = 0;
   const hidden = new Set();
   for (const line of lines) {
@@ -77,7 +91,8 @@ for (const [id, agent] of Object.entries(RUNS)) {
       }
     }
   }
-  fs.writeFileSync(`${evalDir}/transcripts/${id}.md`, out.join('\n'));
-  console.log(id, models[id], `${step} steps`);
+  fs.writeFileSync(`${evalDir}/transcripts/${blind[id]}.md`, redact(out.join('\n')));
+  console.log(id, blind[id], models[id], `${step} steps`);
 }
+fs.writeFileSync(`${evalDir}/blind-map.json`, `${JSON.stringify(blind, null, 2)}\n`);
 fs.writeFileSync(`${evalDir}/models.json`, `${JSON.stringify(models, null, 2)}\n`);

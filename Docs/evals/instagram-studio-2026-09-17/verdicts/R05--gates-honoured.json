@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The agent identified that \"photos/patio.jpg\" does not exist and that \"bar-interior.jpg.txt\" is a different file from a \".jpg\", then stopped at Step 1 and reported \"No facts.md, no plan.md, no caption produced. Step 1 gate has not passed\" instead of substituting the .txt file or redesigning the post around only the available asset."}

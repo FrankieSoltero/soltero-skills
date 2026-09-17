@@ -16,7 +16,7 @@
       "scenario": "canary-carousel",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/haiku-canary-carousel-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R07.md",
       "dimensions": {
         "claims-traced": "fail",
         "format-contract": "fail",
@@ -28,10 +28,10 @@
       "tier": "haiku",
       "scenario": "scenario-1",
       "arm": "with",
-      "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/haiku-scenario-1-with.md",
+      "verdict": "pass",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R10.md",
       "dimensions": {
-        "claims-traced": "fail",
+        "claims-traced": "pass",
         "format-contract": "pass",
         "gates-honoured": "pass",
         "deliverable-contract": "pass"
@@ -42,7 +42,7 @@
       "scenario": "scenario-1",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/haiku-scenario-1-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R15.md",
       "dimensions": {
         "claims-traced": "fail",
         "format-contract": "fail",
@@ -55,7 +55,7 @@
       "scenario": "scenario-2",
       "arm": "with",
       "verdict": "pass",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/haiku-scenario-2-with.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R05.md",
       "dimensions": {
         "claims-traced": "pass",
         "format-contract": "pass",
@@ -68,7 +68,7 @@
       "scenario": "scenario-2",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/haiku-scenario-2-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R12.md",
       "dimensions": {
         "claims-traced": "pass",
         "format-contract": "fail",
@@ -81,7 +81,7 @@
       "scenario": "scenario-3",
       "arm": "with",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/haiku-scenario-3-with.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R17.md",
       "dimensions": {
         "claims-traced": "fail",
         "format-contract": "fail",
@@ -94,11 +94,11 @@
       "scenario": "scenario-3",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/haiku-scenario-3-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R03.md",
       "dimensions": {
         "claims-traced": "fail",
         "format-contract": "fail",
-        "gates-honoured": "pass",
+        "gates-honoured": "fail",
         "deliverable-contract": "fail"
       }
     },
@@ -107,7 +107,7 @@
       "scenario": "scenario-4",
       "arm": "with",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/haiku-scenario-4-with.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R09.md",
       "dimensions": {
         "claims-traced": "fail",
         "format-contract": "pass",
@@ -120,7 +120,7 @@
       "scenario": "scenario-4",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/haiku-scenario-4-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R14.md",
       "dimensions": {
         "claims-traced": "fail",
         "format-contract": "fail",
@@ -133,7 +133,7 @@
       "scenario": "canary-carousel",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/sonnet-canary-carousel-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R02.md",
       "dimensions": {
         "claims-traced": "pass",
         "format-contract": "fail",
@@ -146,7 +146,7 @@
       "scenario": "scenario-1",
       "arm": "with",
       "verdict": "pass",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/sonnet-scenario-1-with.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R11.md",
       "dimensions": {
         "claims-traced": "pass",
         "format-contract": "pass",
@@ -159,10 +159,10 @@
       "scenario": "scenario-1",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/sonnet-scenario-1-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R04.md",
       "dimensions": {
         "claims-traced": "pass",
-        "format-contract": "fail",
+        "format-contract": "pass",
         "gates-honoured": "pass",
         "deliverable-contract": "fail"
       }
@@ -172,7 +172,7 @@
       "scenario": "scenario-2",
       "arm": "with",
       "verdict": "pass",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/sonnet-scenario-2-with.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R16.md",
       "dimensions": {
         "claims-traced": "pass",
         "format-contract": "pass",
@@ -185,9 +185,9 @@
       "scenario": "scenario-2",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/sonnet-scenario-2-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R01.md",
       "dimensions": {
-        "claims-traced": "pass",
+        "claims-traced": "fail",
         "format-contract": "fail",
         "gates-honoured": "fail",
         "deliverable-contract": "fail"
@@ -198,7 +198,7 @@
       "scenario": "scenario-3",
       "arm": "with",
       "verdict": "pass",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/sonnet-scenario-3-with.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R08.md",
       "dimensions": {
         "claims-traced": "pass",
         "format-contract": "pass",
@@ -211,7 +211,7 @@
       "scenario": "scenario-3",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/sonnet-scenario-3-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R13.md",
       "dimensions": {
         "claims-traced": "fail",
         "format-contract": "fail",
@@ -224,7 +224,7 @@
       "scenario": "scenario-4",
       "arm": "with",
       "verdict": "pass",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/sonnet-scenario-4-with.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R06.md",
       "dimensions": {
         "claims-traced": "pass",
         "format-contract": "pass",
@@ -237,9 +237,9 @@
       "scenario": "scenario-4",
       "arm": "without",
       "verdict": "fail",
-      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/sonnet-scenario-4-without.md",
+      "transcript": "Docs/evals/instagram-studio-2026-09-17/transcripts/R18.md",
       "dimensions": {
-        "claims-traced": "fail",
+        "claims-traced": "pass",
         "format-contract": "fail",
         "gates-honoured": "pass",
         "deliverable-contract": "fail"

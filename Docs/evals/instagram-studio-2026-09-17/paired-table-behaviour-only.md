@@ -2,21 +2,21 @@
 
 | Tier | Scenario | Without skill | With skill |
 |---|---|---|---|
-| haiku | scenario-1 | fail | fail |
+| haiku | scenario-1 | fail | pass |
 | haiku | scenario-2 | fail | pass |
 | haiku | scenario-3 | fail | fail |
 | haiku | scenario-4 | fail | fail |
 | sonnet | scenario-1 | pass | pass |
 | sonnet | scenario-2 | fail | pass |
 | sonnet | scenario-3 | fail | pass |
-| sonnet | scenario-4 | fail | pass |
+| sonnet | scenario-4 | pass | pass |
 
 ### Per-tier delta
 
 | Tier | Without | With | Delta | Unknown verdicts |
 |---|---|---|---|---|
-| haiku | 0/4 (0%) | 1/4 (25%) | +25pp | 0 |
-| sonnet | 1/4 (25%) | 4/4 (100%) | +75pp | 0 |
+| haiku | 0/4 (0%) | 2/4 (50%) | +50pp | 0 |
+| sonnet | 2/4 (50%) | 4/4 (100%) | +50pp | 0 |
 
 ### Canary
 
