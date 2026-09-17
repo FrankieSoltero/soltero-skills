@@ -234,3 +234,39 @@ changes behaviour (stops on the missing asset; refuses invented or inflated clai
 What would change the answer: a second run per cell that breaks the sonnet 4/4; or the
 three gaps above being repaired through `creating-a-skill` and a re-run lifting haiku —
 at which point haiku can be added to the covered tiers.
+
+## Addendum — after the gaps were repaired (2026-09-17, tree `e8c001e`)
+
+Everything above measures the tree named at the top. The three gaps were afterwards repaired
+through the normal authoring loop (fix round on the skill text, commits `fada6c9` and
+`e8c001e`, independently re-reviewed) together with twelve instruction defects found by
+the live render (`Docs/evals/instagram-studio-2026-09-17/live-render.md`). The "reported,
+not patched" heading above describes this eval's own conduct — it patched nothing — and
+is left as written.
+
+**Targeted re-check, not a re-run of the eval.** Only the two haiku with-arm cells that
+failed were run again, with the repaired `SKILL.md` swapped into the otherwise
+byte-identical original prompt (`recheck/`: `gen-recheck-prompts.mjs`, `build-recheck.mjs`,
+blinded transcripts `X1`/`X2`, the final-pass judge prompts with only the two paths
+substituted, 8 sonnet judges). One run per cell, no paired without-arm, no canary of its
+own — so it **supports no ship decision and changes no number in the tables above**.
+
+| Cell | Main eval (final pass) | Re-check on `e8c001e` |
+|---|---|---|
+| haiku scenario-4 with | fail (`claims-traced`, `gates-honoured`) | 4/4 dimensions pass — ran preflight under the job PATH, stopped at the failed check, relayed `brew install ffmpeg`, reached no tool by absolute path |
+| haiku scenario-3 with | fail (`claims-traced`, `format-contract`) | 4/4 dimensions pass — but see below |
+
+**The scenario-3 pass is one I do not fully accept.** The run held the contract (1080×1350,
+3–10 slides, no unsourced reader praise) but then **stopped and asked the user to choose**,
+producing no facts file, plan or caption — in a scenario whose user says nobody can be
+asked, and against a skill that says to quote the range and *plan inside it* (the sonnet
+with-arm run did exactly that and delivered a 7-slide plan). Three judges scored the stop
+as legitimate; the rubric's stop clause is meant for a missing input or a failed tool
+check, and neither occurred. The rubric has no "did the job" dimension, so an over-stop
+passes it. Recorded as a rubric gap and a possible new haiku failure shape (over-stopping),
+not as a recovered cell.
+
+**Recommendation unchanged: ship-for-sonnet only.** The re-check is encouraging evidence
+that gap 1 (environment consistency) is closed on haiku; it is not a measurement. Adding
+haiku to the covered tiers needs the full paired eval re-run on the repaired tree, with a
+rubric dimension for delivering the work.
