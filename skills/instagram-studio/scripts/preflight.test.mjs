@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, symlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { runPreflight } from './preflight.mjs';
@@ -9,9 +10,9 @@ import { runPreflight } from './preflight.mjs';
 const here = dirname(fileURLToPath(import.meta.url));
 const cli = join(here, 'preflight.mjs');
 
-const run = (args) => {
+const run = (args, script = cli) => {
   try {
-    return { code: 0, stdout: execFileSync('node', [cli, ...args], { encoding: 'utf8' }), stderr: '' };
+    return { code: 0, stdout: execFileSync(process.execPath, [script, ...args], { encoding: 'utf8' }), stderr: '' };
   } catch (e) {
     return { code: e.status, stdout: e.stdout ?? '', stderr: e.stderr ?? '' };
   }
@@ -137,6 +138,23 @@ test('--json prints the result object and the exit code tracks ok', () => {
   assert.equal(typeof parsed.ok, 'boolean');
   assert.deepEqual(parsed.checks.map((c) => c.name), ['node', 'ffmpeg', 'ffprobe', 'hyperframes-skills']);
   assert.equal(r.code, parsed.ok ? 0 : 1);
+});
+
+test('run through a symlinked path, main() still runs — a silent exit 0 would read as PASS', () => {
+  // macOS /tmp → /private/tmp: import.meta.url is the resolved path, argv[1] is not.
+  const dir = mkdtempSync(join(tmpdir(), 'ig-preflight-'));
+  const link = join(dir, 'scripts-link');
+  symlinkSync(here, link, 'dir');
+  const r = run(['--json'], join(link, 'preflight.mjs'));
+  assert.notEqual(r.stdout.trim(), '', 'the script produced no output through a symlinked path');
+  const parsed = JSON.parse(r.stdout);
+  assert.equal(parsed.checks.length, 4);
+  assert.equal(r.code, parsed.ok ? 0 : 1);
+});
+
+test('node versions compare numerically, not as strings: v9.11.0 fails, v22.0.0 passes', () => {
+  assert.equal(byName(runPreflight(healthy({ nodeVersion: 'v9.11.0' })), 'node').ok, false);
+  assert.equal(byName(runPreflight(healthy({ nodeVersion: 'v22.0.0' })), 'node').ok, true);
 });
 
 test('the default output is a human-readable table naming every check', () => {

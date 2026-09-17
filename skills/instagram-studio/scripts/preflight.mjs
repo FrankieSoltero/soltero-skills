@@ -7,9 +7,10 @@
 //   node preflight.mjs [--json]
 //
 // Exit codes: 0 every check passed, 1 at least one check failed, 2 usage error.
-import { existsSync } from 'node:fs';
+import { existsSync, realpathSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { delimiter, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const MIN_NODE_MAJOR = 22;
 
@@ -115,4 +116,15 @@ export function main(argv) {
   return result.ok ? 0 : 1;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) process.exit(main(process.argv.slice(2)));
+// Entry-point guard that survives /tmp → /private/tmp symlinks on macOS (lesson 2026-09-02):
+// a raw `import.meta.url === file://${argv[1]}` compare is false through a symlinked path,
+// so main() never runs and a preflight gate exits 0 in silence — which reads as PASS.
+function isMain() {
+  try {
+    return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isMain()) process.exit(main(process.argv.slice(2)));
