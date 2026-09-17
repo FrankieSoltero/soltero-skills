@@ -33,6 +33,9 @@ const PLACEHOLDERS = ['[CONFIRM:', '[NEED:'];
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 const STORY_RE = /^story-(\d+)\.mp4$/;
 const SLIDE_RE = /^slide-(\d+)\.png$/;
+// Covers are per format, always: one file could not satisfy both canvases under
+// `--format all`. A legacy `cover.jpg` is not an expected filename anywhere.
+const COVERS = Object.freeze({ reel: 'reel-cover.jpg', feed: 'feed-cover.jpg' });
 
 const report = () => ({ errors: [], warnings: [] });
 const fail = (r, code, message) => r.errors.push({ code, message });
@@ -122,7 +125,12 @@ export function readPngSize(buffer) {
   return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
 }
 
-/** Validate the carousel as a set: how many slides, how they are numbered, how big they are. */
+/**
+ * Validate the carousel as a set: how many slides, how they are numbered, how big they
+ * are. A slide whose size could not be read is reported once as `carousel.unreadable`
+ * and still counts toward the set, so one corrupt file cannot cascade into spurious
+ * count/sequence errors.
+ */
 export function validateCarousel(slides) {
   const { width, height, minSlides, maxSlides } = FORMATS.carousel;
   const r = report();
@@ -138,7 +146,9 @@ export function validateCarousel(slides) {
   }
 
   for (const s of slides) {
-    if (s.width !== width || s.height !== height) {
+    if (!Number.isInteger(s.width) || !Number.isInteger(s.height)) {
+      fail(r, 'carousel.unreadable', `${s.file} is not a readable PNG`);
+    } else if (s.width !== width || s.height !== height) {
       fail(r, 'carousel.dimensions', `${s.file} is ${s.width}x${s.height}, expected ${width}x${height}`);
     }
   }
@@ -257,13 +267,14 @@ export function checkOutput(dir, { format = 'reel', probe = ffprobe } = {}) {
         continue;
       }
       checkVideoFile(r, dir, f, file, probe);
-      if (!files.includes('cover.jpg')) {
-        fail(r, 'cover.missing', `cover.jpg is missing — ${f} deliverables need a cover`);
+      const coverFile = COVERS[f];
+      if (!files.includes(coverFile)) {
+        fail(r, 'cover.missing', `${coverFile} is missing — every ${f} needs its own cover`);
       } else {
-        const cover = probe(join(dir, 'cover.jpg')).streams?.find((s) => s.codec_type === 'video');
+        const cover = probe(join(dir, coverFile)).streams?.find((s) => s.codec_type === 'video');
         const want = FORMATS[f];
         if (!cover || cover.width !== want.width || cover.height !== want.height) {
-          fail(r, 'cover.dimensions', `cover.jpg is ${cover ? `${cover.width}x${cover.height}` : 'unreadable'}, expected ${want.width}x${want.height}`);
+          fail(r, 'cover.dimensions', `${coverFile} is ${cover ? `${cover.width}x${cover.height}` : 'unreadable'}, expected ${want.width}x${want.height}`);
         }
       }
     } else if (f === 'story') {
@@ -275,14 +286,15 @@ export function checkOutput(dir, { format = 'reel', probe = ffprobe } = {}) {
       }
       for (const s of stories) checkVideoFile(r, dir, 'story', s.file, probe);
     } else if (f === 'carousel') {
-      const measured = [];
-      for (const s of slides) {
+      // Every slide file stays in the list even when its header is unreadable: count and
+      // sequence describe the set on disk, not the subset that happened to parse.
+      const measured = slides.map((s) => {
         try {
-          measured.push({ file: s.file, ...readPngSize(readFileSync(join(dir, s.file))) });
+          return { file: s.file, ...readPngSize(readFileSync(join(dir, s.file))) };
         } catch {
-          fail(r, 'carousel.dimensions', `${s.file} is not a readable PNG`);
+          return { file: s.file };
         }
-      }
+      });
       merge(r, validateCarousel(measured));
     }
   }

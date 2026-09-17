@@ -201,6 +201,12 @@ test('a slide that is not 1080x1350 is carousel.dimensions', () => {
   assert.match(validateCarousel(bad).errors[0].message, /slide-02\.png/);
 });
 
+test('a slide with no readable size is carousel.unreadable and still counts toward the set', () => {
+  const r = validateCarousel([slide(1), { file: 'slide-02.png' }, slide(3)]);
+  assert.deepEqual(codes(r), ['carousel.unreadable']);
+  assert.match(r.errors[0].message, /slide-02\.png/);
+});
+
 // ---------------------------------------------------------------- caption
 
 test('a well-formed caption produces no errors and no warnings', () => {
@@ -251,32 +257,79 @@ const fakeProbe = (byFile) => (path) => {
   return byFile[name];
 };
 
-test('a reel without cover.jpg is cover.missing; a mismatched cover is cover.dimensions', () => {
-  const dir = outDir({ 'reel.mp4': mp4('ftyp', 'moov', 'mdat'), 'caption.md': caption() });
-  const missing = checkOutput(dir, { format: 'reel', probe: fakeProbe({ 'reel.mp4': probe() }) });
-  assert.deepEqual(codes(missing), ['cover.missing']);
+const ok = () => mp4('ftyp', 'moov', 'mdat');
+const reelProbes = { 'reel.mp4': probe(), 'reel-cover.jpg': probe({ width: 1080, height: 1920 }) };
+const feedProbes = {
+  'feed.mp4': probe({ width: 1080, height: 1350 }),
+  'feed-cover.jpg': probe({ width: 1080, height: 1350 }),
+};
 
-  const dir2 = outDir({
-    'reel.mp4': mp4('ftyp', 'moov', 'mdat'),
-    'cover.jpg': Buffer.alloc(4),
+test('reel and feed each carry their own cover and pass on their own', () => {
+  const reelDir = outDir({ 'reel.mp4': ok(), 'reel-cover.jpg': Buffer.alloc(4), 'caption.md': caption() });
+  assert.deepEqual(codes(checkOutput(reelDir, { format: 'reel', probe: fakeProbe(reelProbes) })), []);
+
+  const feedDir = outDir({ 'feed.mp4': ok(), 'feed-cover.jpg': Buffer.alloc(4), 'caption.md': caption() });
+  assert.deepEqual(codes(checkOutput(feedDir, { format: 'feed', probe: fakeProbe(feedProbes) })), []);
+});
+
+test('under --format all, reel and feed covers are checked against their own canvases', () => {
+  const dir = outDir({
+    'reel.mp4': ok(),
+    'reel-cover.jpg': Buffer.alloc(4),
+    'feed.mp4': ok(),
+    'feed-cover.jpg': Buffer.alloc(4),
     'caption.md': caption(),
   });
-  const probes = { 'reel.mp4': probe(), 'cover.jpg': probe({ width: 1080, height: 1350 }) };
-  assert.deepEqual(codes(checkOutput(dir2, { format: 'reel', probe: fakeProbe(probes) })), [
-    'cover.dimensions',
+  const r = checkOutput(dir, { format: 'all', probe: fakeProbe({ ...reelProbes, ...feedProbes }) });
+  assert.deepEqual(r.formats, ['reel', 'feed']);
+  assert.deepEqual(codes(r), []);
+});
+
+test('a reel with only the feed cover present is cover.missing, named per format', () => {
+  const dir = outDir({ 'reel.mp4': ok(), 'feed-cover.jpg': Buffer.alloc(4), 'caption.md': caption() });
+  const r = checkOutput(dir, { format: 'reel', probe: fakeProbe({ 'reel.mp4': probe() }) });
+  assert.deepEqual(codes(r), ['cover.missing']);
+  assert.match(r.errors[0].message, /reel-cover\.jpg/);
+});
+
+test('a reel cover on the wrong canvas is cover.dimensions', () => {
+  const dir = outDir({ 'reel.mp4': ok(), 'reel-cover.jpg': Buffer.alloc(4), 'caption.md': caption() });
+  const probes = { 'reel.mp4': probe(), 'reel-cover.jpg': probe({ width: 1080, height: 1350 }) };
+  const r = checkOutput(dir, { format: 'reel', probe: fakeProbe(probes) });
+  assert.deepEqual(codes(r), ['cover.dimensions']);
+  assert.match(r.errors[0].message, /reel-cover\.jpg/);
+});
+
+test('a legacy cover.jpg is ignored: not an error, not a deliverable', () => {
+  const dir = outDir({ 'reel.mp4': ok(), 'reel-cover.jpg': Buffer.alloc(4), 'cover.jpg': Buffer.alloc(4), 'caption.md': caption() });
+  assert.deepEqual(codes(checkOutput(dir, { format: 'reel', probe: fakeProbe(reelProbes) })), []);
+  // on its own it is not a deliverable at all
+  assert.deepEqual(codes(checkOutput(outDir({ 'cover.jpg': Buffer.alloc(4) }), { format: 'all' })), [
+    'output.empty',
   ]);
-  probes['cover.jpg'] = probe({ width: 1080, height: 1920 });
-  assert.deepEqual(codes(checkOutput(dir2, { format: 'reel', probe: fakeProbe(probes) })), []);
 });
 
 test('a reel whose mdat precedes moov is video.faststart', () => {
   const dir = outDir({
     'reel.mp4': mp4('ftyp', 'mdat', 'moov'),
-    'cover.jpg': Buffer.alloc(4),
+    'reel-cover.jpg': Buffer.alloc(4),
     'caption.md': caption(),
   });
-  const p = fakeProbe({ 'reel.mp4': probe(), 'cover.jpg': probe() });
-  assert.deepEqual(codes(checkOutput(dir, { format: 'reel', probe: p })), ['video.faststart']);
+  assert.deepEqual(codes(checkOutput(dir, { format: 'reel', probe: fakeProbe(reelProbes) })), [
+    'video.faststart',
+  ]);
+});
+
+test('one corrupt slide is reported once and does not cascade into count or sequence', () => {
+  const dir = outDir({
+    'slide-01.png': png(1080, 1350),
+    'slide-02.png': Buffer.from('this is not a png'),
+    'slide-03.png': png(1080, 1350),
+    'caption.md': caption(),
+  });
+  const r = checkOutput(dir, { format: 'carousel' });
+  assert.deepEqual(codes(r), ['carousel.unreadable']);
+  assert.match(r.errors[0].message, /slide-02\.png/);
 });
 
 test('story files outside 1-3 are story.count and a gap is story.sequence', () => {
@@ -306,13 +359,13 @@ test('an out-dir with deliverables but no caption.md is caption.missing', () => 
 test('--format all checks every format that has at least one file present', () => {
   const dir = outDir({
     'reel.mp4': mp4('ftyp', 'moov', 'mdat'),
-    'cover.jpg': Buffer.alloc(4),
+    'reel-cover.jpg': Buffer.alloc(4),
     'slide-01.png': png(1080, 1350),
     'slide-02.png': png(1080, 1350),
     'slide-03.png': png(1080, 1350),
     'caption.md': caption(),
   });
-  const p = fakeProbe({ 'reel.mp4': probe(), 'cover.jpg': probe() });
+  const p = fakeProbe({ 'reel.mp4': probe(), 'reel-cover.jpg': probe() });
   const r = checkOutput(dir, { format: 'all', probe: p });
   assert.deepEqual(r.formats, ['reel', 'carousel']);
   assert.deepEqual(codes(r), []);
