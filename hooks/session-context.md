@@ -44,7 +44,7 @@ Standing disciplines and procedures:
   CLAUDE.md", "standardize the docs" → `soltero-skills:docs-standardizer`
 - "I keep hitting my usage limit", "cut down on my model usage", "audit my token
   usage", "set up the token-saving system" → `soltero-skills:token-economy`
-- "Make an Instagram reel for this", "make a carousel post", "make an
+- "make an Instagram reel for this", "make a carousel post", "make an
   Instagram story", "turn this into Instagram content" →
   `soltero-skills:instagram-studio`
 - Debrief names a missed trigger twice → `soltero-skills:skill-trigger-repair`
