@@ -36,16 +36,15 @@ Not preferences. A skill that breaks one does not ship, whatever the deadline.
    re-derived by an LLM every run, with a fresh chance to slip. Judgment in the skill,
    determinism in a script. This binds hardest where the step is small and incidental inside an
    otherwise judgment-heavy skill — that is where it gets skipped.
-   The test earns that trust only two ways. **Spawn the script the way the body does** — as a CLI
-   through a path that is not this checkout (a `/tmp` copy or a symlinked directory, which is how
-   an installed skill is actually reached) — and assert its real output, not just its exit code:
-   a main-guard that compares an unresolved `process.argv[1]` to a resolved `import.meta.url`
-   skips `main()` and exits 0, and "did nothing, successfully" reads as PASS to everything that
-   checks only the status. Resolve both sides with `realpathSync` (copy the guard from
-   `skills/agent-swarm/scripts/swarm-plan.mjs`). **Assert the content the script produced** — the
-   heading, the bullet count, the parsed value — never that the artifact equals the generator's
-   own output: a test built from the code under test is self-consistent with that code's bugs and
-   stays green while the script writes garbage.
+   The test earns that trust only two ways. **Spawn the script as a CLI, through a symlinked
+   path, and assert its real output** — not just its exit code. A script that silently does
+   nothing and exits 0 reads as PASS to everything that checks only the status; the entry-point
+   guard that causes it, and the symlink regression test that catches it, are `GP-001` in
+   `Docs/golden-principles.md`, gated in CI by `npm run check:entry-guard`. Follow it there
+   rather than re-deriving it here. **Assert the content the script produced** — the heading,
+   the bullet count, the parsed value — never that the artifact equals the generator's own
+   output: a test built from the code under test is self-consistent with that code's bugs and
+   stays green while the script writes garbage. Nothing mechanical catches that second one.
 3. **No ship without with/without pass rates on ≥2 model tiers.** GREEN on one tier shows the
    skill did not hurt, once, on one model; it does not show it helps. Run the paired comparison
    — same tasks, with the skill vs without — on at least two tiers with
@@ -91,7 +90,7 @@ Not preferences. A skill that breaks one does not ship, whatever the deadline.
 | `name` | lowercase letters/numbers/hyphens, ≤64 chars, not `anthropic`/`claude`; always set it |
 | `description` | third person, leads with the trigger ("Use when …") AND says what it does, quotes the literal phrasings a user would type, ≤1024 chars |
 | body | ≤~500 lines; inline short content; split heavy reference (100+ lines) one level deep |
-| deterministic step | bundled script under `scripts/` + a `*.test.mjs` beside it, invoked from the body — never prose; the test spawns it through a non-checkout path and asserts produced content, not the generator's own output |
+| deterministic step | bundled script under `scripts/` + a `*.test.mjs` beside it, invoked from the body — never prose; the test spawns it through a symlink (`GP-001`) and asserts produced content, not the generator's own output |
 | ship evidence | with/without pass rates on ≥2 model tiers (`soltero-skills:skill-ab-eval`), not one tier's GREEN |
 
 ## Rationalization Table
@@ -106,7 +105,7 @@ Not preferences. A skill that breaks one does not ship, whatever the deadline.
 | "Everything the documented loop asks for is green, so it ships." | The loop asks for the A/B eval too. A checklist that measures process and never measures effect goes fully green on a skill that changes nothing. |
 | "We'll measure with/without next week — teammates are blocked today." | Then it sits in the plugin unmeasured all week, and a "measure it later" item blocks nothing by design. Either the numbers exist or it does not ship. |
 | "It's one small deterministic step inside a big judgment skill — prose is clearer." | Small and incidental is exactly where this gets skipped. Prose re-derives the logic every run; a script cannot be talked out of running correctly. Script + test. |
-| "`npm test` is green and the script exits 0 — the deterministic step is covered." | Both were true while `swarm-plan.mjs` silently skipped `main()`, and while `economy-setup.mjs` wrote a garbled block its own `--check` called OK across 16 green tests. A script that fails closed to "do nothing, exit 0" passes anything reading the exit code; a test built from the generator's output passes anything the generator gets wrong. Spawn it through a non-checkout path, assert the content. |
+| "`npm test` is green and the script exits 0 — the deterministic step is covered." | Both were true while `swarm-plan.mjs` silently skipped `main()`, and while `economy-setup.mjs` wrote a garbled block its own `--check` called OK across 16 green tests. A script that fails closed to "do nothing, exit 0" passes anything reading the exit code; a test built from the generator's output passes anything the generator gets wrong. Spawn it through a symlink, assert the content. |
 | "The description is accurate — it describes what the skill does." | Accurate and findable are different properties. If its words are not the words a user types, the skill never loads and its accuracy is never exercised. |
 | "All 3 scenarios pass, so the skill is validated." | If all 3 name the skill, you validated the body and never tested the trigger. Write the negative one. |
 
@@ -117,9 +116,8 @@ Not preferences. A skill that breaks one does not ship, whatever the deadline.
 - Committing a skill that hasn't passed `lint-frontmatter` + `claude plugin validate` → STOP.
 - About to ship on pass-rate evidence from a single model tier → STOP, run the A/B eval.
 - Writing prose for a step that has exactly one right answer → STOP, write the script + test.
-- A bundled script's main-guard compares `process.argv[1]` to `import.meta.url` without
-  resolving both through `realpathSync` → STOP, it exits 0 doing nothing when invoked through a
-  symlinked or `/tmp` path.
+- A bundled script's entry-point guard does not resolve `process.argv[1]` → STOP, see `GP-001`;
+  run `npm run check:entry-guard`.
 - A script's test never spawns it as a CLI, or asserts the artifact matches the generator's own
   output → STOP, that test is green against its own bugs.
 - Every scenario names the skill → STOP, the description is untested; write the negative one.
