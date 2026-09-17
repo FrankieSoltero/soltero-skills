@@ -67,6 +67,17 @@ bracket. There is no third category. In particular:
 - A `[CONFIRM: …]` in the plan is fine. Quietly resolving it in your own
   favour while writing the composition is not.
 
+**A claim is not only text.** What a beat *shows* is a claim too: a depicted
+product UI, an app screen, a push notification, a device frame all assert
+that the thing exists and looks like that. A `Shows:` line may depict only
+what `facts.md` establishes exists — a screenshot at a resolved path, a
+screen described in the source. Scripting an app screen for a product that
+ships as a web page is an invented product claim even when every word on it
+is cited. The same rule reaches the hashtags and the alt text written at
+Step 4: `#appdemo` or an alt text saying "download the app" asserts a
+product form and an availability, and needs a `facts.md` line like any
+sentence does.
+
 ## Durations and counts
 
 Check them against [formats.md](formats.md) as you write, not after
@@ -95,6 +106,7 @@ section per format:
 Every duration and count inside its format's range · every on-screen line
 cites a `facts.md` line or is a visible `[CONFIRM: …]` · no cited line is
 itself marked `[CONFIRM: public?]` unless the user has resolved it · every
+`Shows:` line depicts only what `facts.md` establishes exists · every
 video-format text block has a `Place:` x/y range and it sits inside that
 format's safe-zone bounds in [formats.md](formats.md) (carousel exempt) ·
 hook written first · one CTA.

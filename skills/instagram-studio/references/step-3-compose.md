@@ -54,6 +54,32 @@ and none of them produce the contract's files.
 `check` does not know about Instagram's chrome. Measure each text block on
 its beat's **settled frame** — the first frame at least 0.5s after that
 beat's last text-position keyframe — against the bounds in
-[formats.md](formats.md). `npx hyperframes snapshot --at <t>` gives you the
-frame to look at. A block that clears the band only while it is still
-animating in has not cleared it.
+[formats.md](formats.md). A block that clears the band only while it is
+still animating in has not cleared it.
+
+Looking at a snapshot is not measuring: it returns no numbers, so nothing is
+actually checked. Read the boxes:
+
+1. Serve `<out>/composition/` over a local static file server — a few lines
+   of `node:http` is enough. **Install nothing.**
+2. Open it in a browser at the format's exact canvas as the viewport
+   (1080×1920 or 1080×1350), `devicePixelRatio` 1, scrolled to 0,0.
+3. Seek the timeline to the settled frame:
+   `window.__timelines['<timeline-id>'].time(<t>)`.
+4. Read `getBoundingClientRect()` on each text block and compare its top,
+   bottom and right against that format's bounds.
+
+For step 1 to work the composition has to survive being opened outside the
+Hyperframes runtime, which creates `window.__timelines` itself. Write the
+guard line `window.__timelines = window.__timelines || {};` into the
+composition: without it `index.html` throws on load and cannot be measured,
+and with it `check`, `preview` and `render` behave exactly as before.
+
+Optional cross-check: `npx hyperframes snapshot --at <t>` and compute the
+ink bounding box of that PNG (a `node:zlib` decode does it with no
+dependency). The ink box sits inside the CSS box — the two agree, they are
+not the same number.
+
+Do not reach for `npx hyperframes keyframes` (a static source parser — it
+reports no boxes at all) or `hyperframes-animation`'s `animation-map.mjs`
+(it bootstraps npm packages, which this skill never does).

@@ -74,3 +74,10 @@ line that is still flying in clears every band and tells you nothing.
 All of it in `instagram-output/`, or `instagram-output-YYYY-MM-DD-HHmmss/`
 when that directory already exists. Slides and story files are numbered
 contiguously from 1.
+
+That list is the **deliverables**. `composition/` additionally holds the
+toolchain's own by-products — `AGENTS.md`, `CLAUDE.md`, `hyperframes.json`,
+`meta.json`, `package.json`, a `.thumbnails/` preview cache, and the raw
+snapshot captures with their `contact-sheet.jpg`. The validator ignores
+them, they are not deliverables, and they stay where they are: deleting
+them breaks re-rendering.

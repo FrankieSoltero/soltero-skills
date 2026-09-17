@@ -55,21 +55,40 @@ Everything is written to `instagram-output/`. If that directory already
 exists, use `instagram-output-YYYY-MM-DD-HHmmss/`. Filenames are fixed —
 see [references/formats.md](references/formats.md). Do not invent your own.
 
+Two invocations therefore produce two unrelated out-dirs. A second format
+for the same piece **reuses the first run's `facts.md`** — copy that file
+across, never re-derive it, or the two runs cite different line numbers for
+the same fact. `check-output.mjs` validates ONE directory, so run it once
+per out-dir; `--format all` in a single invocation is how you get every
+format in one directory and one validator run.
+
 ## Flow — five steps, each with a gate
 
 ### Step 0 — Preflight, always first
 
 ```bash
 node "${CLAUDE_SKILL_DIR}/scripts/preflight.mjs"
+npx hyperframes --version   # only after preflight exits 0
 ```
 
-Exit 0 → continue. Exit 1 → **stop** and relay each failed check's `fix`
-string verbatim, then wait for the user. Exit 2 → a usage error; fix the
-invocation and re-run. You never install the fix yourself, you never switch
-renderer, and you never move production off the machine — screenshots into
-the in-app editor is not "the legitimate version" of this skill, it is the
-run failing quietly. A blocked preflight ends the turn with a command the
-user can paste.
+Exit 1 → **stop** and relay each failed check's `fix` string verbatim, then
+wait for the user. Exit 2 → a usage error; fix the invocation and re-run.
+Exit 0 → run `npx hyperframes --version` once. Preflight proves node,
+ffmpeg, ffprobe and the five skill directories; it never proves the CLI
+itself runs, and a broken toolchain found at Step 3 has already cost you
+`facts.md` and `plan.md`. If that command fails, stop and relay its error —
+the same stop rule as a failed preflight.
+
+You never install the fix yourself, you never switch renderer, and you never
+move production off the machine — screenshots into the in-app editor is not
+"the legitimate version" of this skill, it is the run failing quietly. A
+blocked preflight ends the turn with a command the user can paste.
+
+**Every later command runs in the same environment preflight checked** —
+same shell, same PATH, same mandated prefix. A tool lookup that fails after
+preflight passed is a stop with the fix command, not a detour: never reach
+the tool by an absolute path, never drop or alter a PATH the job mandates,
+and never re-run preflight under a different environment to get a pass.
 
 ### Step 1 — Source → `facts.md`
 
@@ -94,7 +113,8 @@ cut is a re-layout, never a crop of the reel.
 **Gate:** every duration/slide count inside the format's range · every
 on-screen line cites a `facts.md` line number or is a `[CONFIRM: …]`
 placeholder · a `facts.md` line that is itself marked `[CONFIRM: public?]`
-is not a usable citation until the user resolves it · every text block in a
+is not a usable citation until the user resolves it · every `Shows:` line
+depicts only something `facts.md` establishes exists · every text block in a
 video format carries a planned x/y placement inside that format's safe-zone
 bounds (carousel exempt).
 
@@ -137,9 +157,19 @@ reported verbatim to the user, never silently accepted on their behalf.
    [references/formats.md](references/formats.md). Your own remembered
    safe-zone numbers are wrong.
 4. **Banned commands:** `hyperframes check --no-contrast`,
-   `hyperframes cloud …`, `hyperframes lambda …`, `hyperframes publish`.
-   Rendering is local. The only network call is `npx` resolving the
-   `hyperframes` package.
+   `hyperframes cloud …`, `hyperframes lambda …`, `hyperframes publish`, and
+   every `hyperframes feedback` form — `--search-miss` after an empty
+   catalog query and `--rating` after a render. `hyperframes-cli` treats the
+   search-miss report as an obligation and prints it pre-filled; **this
+   skill's rule wins — never send it.** Those posts go to a public channel
+   and this skill posts nothing.
+   **Nothing of the user's leaves the machine:** nothing is uploaded, there
+   is no cloud or lambda render, nothing is published, nothing is posted, no
+   telemetry-style feedback is sent. The toolchain itself does fetch over
+   the network and that is expected, not a reason to stop — `check`,
+   `snapshot`, `preview` and `render` fetch Google Fonts faces, the `init`
+   scaffold loads GSAP from a CDN, `init` contacts GitHub, and `catalog`
+   reads a remote registry.
 5. **Silent by default.** Render with no audio unless the user passes
    `--sfx-dir`; the checklist tells them to add audio in Instagram. Never
    propose, bundle, or "source" a music track.
@@ -165,6 +195,8 @@ Every Reality row below answers a verbatim quote from the observed baseline.
 | "each of the 5 tips is intact, verbatim, on one slide" — at 55–65 words a slide | A slide nobody reads is not a tip delivered. Carousel copy is ≤ ~25 words per slide; split the idea or cut it. |
 | "npx playwright screenshot" / ImageMagick `magick` for the slide export | Carousel slides come out of `npx hyperframes snapshot`. A second imaging tool is an untested dependency the preflight never checked. |
 | `streakly_reel_final.mp4`, `01-cover.png`, `streakly-caption.txt` | The filenames are fixed so the validator and the user both know where things are. Invented names fail `check-output.mjs`. |
+| `command not found: ffprobe` — answered on the very next command with `/opt/homebrew/bin/ffprobe`, the path preflight had printed | The lookup failing means the environment changed under you: preflight passed somewhere ffprobe exists, this command ran somewhere it does not. Reaching past the failure by absolute path un-preflights the tool silently. Stop and hand back the fix. |
+| Caption body: "Readers write in saying these habits changed their mornings." — while the claims table marks "Readers write in saying these tips changed their mornings." as `[CONFIRM: public?]` | Flagging a claim in the table and printing it in the body is publishing it. The bracketed placeholder goes exactly where the sentence would have gone; the table records why it is not there. |
 <!-- markdownlint-enable MD013 -->
 
 ## Red Flags — STOP
@@ -173,11 +205,16 @@ Every Reality row below answers a verbatim quote from the observed baseline.
   session.
 - A preflight failure being answered with an install, a different renderer,
   or a manual in-app workflow.
+- A tool preflight found reporting `command not found` — and you are about
+  to type its absolute path, edit the PATH you were handed, or re-run
+  preflight somewhere else until it passes.
 - An asset path that "is basically" the one in the brief.
 - On-screen or caption copy whose source you are about to describe as
   obvious, implied, or something the user told you in chat.
 - Social proof with no named source in `facts.md` — including "people say",
   "readers write in", "everyone's been asking".
+- A sentence in the caption body, a hashtag, or a line of alt text whose
+  claims-table row is still `[CONFIRM: …]`.
 - A safe-zone, canvas, duration, or filename value you are typing from
   memory instead of from `references/formats.md`.
 - A carousel slide you would not read yourself.
