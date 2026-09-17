@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The caption text says 'Streakly is live in beta' with feature copy phrased as present-tense product capabilities, while the fixture's README.md states 'Beta — the page is the only thing that is live,' so the caption asserts the app itself is live/available when the supplied material says only the marketing landing page is live."}

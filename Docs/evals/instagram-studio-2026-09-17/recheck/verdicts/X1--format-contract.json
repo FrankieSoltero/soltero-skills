@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The agent stopped after preflight failed and said so plainly: \"FAIL  ffmpeg             not found on PATH\" / \"FAIL  ffprobe            not found on PATH\" and \"Why I stopped: The instagram-studio skill requires ffmpeg and ffprobe to render video. These tools are not available on your PATH,\" never producing a plan or format contract at all."}

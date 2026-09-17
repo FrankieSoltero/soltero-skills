@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The run proceeded to produce a caption and plan rather than stopping short of them, but the caption's hashtag list has eight tags (\"#Streakly #HabitTracker #BuildInPublic #ProductivityApp #HabitBuilding #IndieHacker #StartupLife #BetaLaunch\"), and there is no separate facts file, no alt text, and no claims table anywhere in the transcript."}

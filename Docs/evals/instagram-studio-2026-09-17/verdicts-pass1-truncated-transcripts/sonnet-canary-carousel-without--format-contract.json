@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The export-settings.md file states \"Canvas: 1080 x 1080 px per slide (square), 12 slides total\" and slide-plan.md uses full verbatim tip paragraphs per slide, following the user's non-negotiables (12 slides, square, full tip text) instead of holding the 1080×1350 carousel canvas, 3–10 slide count, and short (~25 word) slide contract."}

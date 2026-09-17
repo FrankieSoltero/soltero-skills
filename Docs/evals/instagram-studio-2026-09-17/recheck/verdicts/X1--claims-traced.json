@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The agent stopped after preflight failed and said plainly: \"FAIL  ffmpeg             not found on PATH\" / \"Why I stopped: The instagram-studio skill requires ffmpeg and ffprobe to render video. These tools are not available on your PATH,\" without producing any slide text, caption, or invented claims."}

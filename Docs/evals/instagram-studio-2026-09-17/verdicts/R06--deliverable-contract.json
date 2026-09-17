@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The run stopped at the required preflight check and said so plainly: \"PREFLIGHT: blocked ... FAIL ffmpeg not found on PATH ... FAIL ffprobe not found on PATH\" and the agent stated \"No video file was produced, because preflight blocked before Step 1 (facts.md), Step 2 (plan.md), Step 3 (compose), or Step 4 (render).\""}
