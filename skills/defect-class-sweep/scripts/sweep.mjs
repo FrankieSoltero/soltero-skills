@@ -12,8 +12,9 @@
 // The rule file is the reviewable artifact: name, the human-readable correct/wrong
 // pattern, the detector regexes, the allowlist markers that suppress a known-good hit,
 // and the triage-marker pattern. Contract: ../references/rule-file.md
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, realpathSync, statSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const DEFAULT_EXCLUDES = [
   '**/node_modules/**', '**/.git/**', '**/dist/**', '**/build/**',
@@ -253,4 +254,9 @@ function main(argv) {
   return result.matches.length ? 1 : 0;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) process.exit(main(process.argv.slice(2)));
+// Entry-point guard that survives /tmp → /private/tmp symlinks on macOS (lesson 2026-09-02).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+
+if (isMain()) process.exit(main(process.argv.slice(2)));

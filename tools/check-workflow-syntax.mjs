@@ -9,7 +9,8 @@
 // gate: strip the leading `export ` keyword(s), wrap the body in an async IIFE, and compile
 // (never run) it with vm.
 import vm from 'node:vm'
-import { readFileSync } from 'node:fs'
+import { readFileSync, realpathSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
 export function checkWorkflowSyntax(source) {
   const wrapped = '(async () => {\n' + source.replace(/^export /gm, '') + '\n})()'
@@ -21,7 +22,12 @@ export function checkWorkflowSyntax(source) {
   }
 }
 
-const invokedDirectly = import.meta.url === `file://${process.argv[1]}`
+// Entry-point guard that survives /tmp → /private/tmp symlinks on macOS (lesson 2026-09-02).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url) } catch { return false }
+}
+
+const invokedDirectly = isMain()
 if (invokedDirectly) {
   const path = process.argv[2]
   if (!path) {

@@ -14,7 +14,8 @@
 //             2 usage error / no input
 //
 // Credentials are never printed: every URL is emitted with the password replaced by ***.
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 export const PROD_MARKER = /(?<![a-z])(prod|production|prd|live)(?![a-z])/;
 export const NONPROD_MARKER =
@@ -190,4 +191,9 @@ export function main(argv, env = process.env) {
   return payload.classification === 'unknown' ? 1 : 0;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) process.exit(main(process.argv.slice(2)));
+// Entry-point guard that survives /tmp → /private/tmp symlinks on macOS (lesson 2026-09-02).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+
+if (isMain()) process.exit(main(process.argv.slice(2)));

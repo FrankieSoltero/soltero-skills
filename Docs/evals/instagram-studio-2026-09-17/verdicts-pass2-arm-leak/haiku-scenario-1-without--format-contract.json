@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The plan specifies \"**Frame Rate:** 60 fps\" instead of the required 30fps, and text overlays like \"'Your habits get a home' appears bottom-left at 1.3s\" and \"'Don't break the streak' appears center at 5.3s\" give only qualitative positions (bottom-left, bottom-right, center) with no x/y coordinates or pixel bounds inside the safe zone."}

@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "Every on-screen line and caption claim in the run traces to facts.md, which itself cites only the public landing page (e.g. \"9. Pricing status \\\"Free during beta.\\\" — index.html:45\"), and the caption's claims table maps each claim back to a facts.md line with no invented stats, counts, ratings, or testimonials."}

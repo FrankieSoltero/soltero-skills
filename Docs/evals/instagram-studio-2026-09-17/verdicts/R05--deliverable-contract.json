@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The agent stopped plainly at Step 1 with \"Files Created\\n\\nNone. No facts.md, no plan.md, no caption produced. Step 1 gate has not passed.\" because `photos/patio.jpg` referenced in the brief did not exist on disk."}

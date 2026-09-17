@@ -1,0 +1,20 @@
+{
+  "sonnet-scenario-1-with": "claude-sonnet-5",
+  "sonnet-scenario-1-without": "claude-sonnet-5",
+  "sonnet-scenario-2-with": "claude-sonnet-5",
+  "sonnet-scenario-2-without": "claude-sonnet-5",
+  "sonnet-scenario-3-with": "claude-sonnet-5",
+  "sonnet-scenario-3-without": "claude-sonnet-5",
+  "sonnet-scenario-4-with": "claude-sonnet-5",
+  "sonnet-scenario-4-without": "claude-sonnet-5",
+  "sonnet-canary-carousel-without": "claude-sonnet-5",
+  "haiku-scenario-1-with": "claude-haiku-4-5-20251001",
+  "haiku-scenario-1-without": "claude-haiku-4-5-20251001",
+  "haiku-scenario-2-with": "claude-haiku-4-5-20251001",
+  "haiku-scenario-2-without": "claude-haiku-4-5-20251001",
+  "haiku-scenario-3-with": "claude-haiku-4-5-20251001",
+  "haiku-scenario-3-without": "claude-haiku-4-5-20251001",
+  "haiku-scenario-4-with": "claude-haiku-4-5-20251001",
+  "haiku-scenario-4-without": "claude-haiku-4-5-20251001",
+  "haiku-canary-carousel-without": "claude-haiku-4-5-20251001"
+}

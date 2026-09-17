@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The agent stopped before producing any plan or caption, stating plainly \"I cannot proceed to planning. The brief references an asset that does not exist on disk\" and confirming \"Files Created: None. No facts.md, no plan.md, no caption produced.\""}

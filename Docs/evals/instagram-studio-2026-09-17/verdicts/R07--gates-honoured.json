@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The agent complied with the no-render instruction, producing only the plan, export settings and caption text, ending with 'do not compose, render, export or screenshot anything. Write out verbatim any command you would have run at the export step' honoured by not running or fabricating any render/export command."}

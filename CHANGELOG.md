@@ -3,6 +3,62 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [1.0.28] - 2026-09-17
+### Fixed
+- **ESM entry-point guard (GP-001)** — five scripts decided "am I the entry point?" by
+  comparing `import.meta.url` with a `file://` URL built from the raw `process.argv[1]`.
+  Node resolves symlinks for one and not the other, so through a symlinked path (macOS
+  `/tmp` → `/private/tmp`) the guard was false, `main()` never ran, and the process printed
+  nothing and exited 0 — a silent pass. Fixed in `destructive-op-gate`'s
+  `compare-counts.mjs`, `resolve-target.mjs` and `destructive-shapes.mjs`,
+  `defect-class-sweep`'s `sweep.mjs`, and `tools/check-workflow-syntax.mjs` with the
+  `isMain()` realpath guard, each with a regression test that spawns the script through a
+  real symlink (written first, watched failing). Fourth occurrence of this class; the two
+  `instagram-studio` scripts were fixed in 1.0.27.
+
+### Added
+- **Defect-class rule + CI hard gate** — `Docs/defect-classes/esm-entry-guard.rule.json`,
+  a new `Docs/golden-principles.md` with entry GP-001 (wrong / correct / not covered /
+  check / origin), `npm run check:entry-guard`, and a step in
+  `.github/workflows/validate.yml` that fails any PR reintroducing the guard. Swept with
+  the bundled runner: 5 matches → 0; one test comment that quotes the pattern on purpose
+  carries `esm-entry-guard:allow`.
+
+## [1.0.27] - 2026-09-17
+### Added
+- **instagram-studio** — turns a code project *or* a written brief into post-ready
+  Instagram deliverables: Reels (1080×1920), Stories, a 4:5 feed video (1080×1350) and
+  carousels (1080×1350 PNG, 3–10 slides), rendered locally and silently through the
+  Hyperframes CLI. "make an Instagram reel for this", "make a reel", "create short-form
+  content for Instagram", "make a carousel post", "make an Instagram story", "turn this
+  into Instagram content", "marketing video for Instagram", "promote this on Instagram"
+  preflight the render toolchain and stop with the fix command, extract a `facts.md` that
+  is the *only* allowed source of on-screen and caption claims, plan a hook-first
+  storyboard with x/y text placement inside the safe zone gated at the Plan step for every
+  video format, then compose and render at the exact canvas, duration and safe zones and
+  hand the caption off to content-marketing's claim-trace gate. Per-format covers
+  (`reel-cover.jpg`, `feed-cover.jpg`) are baked as frame 0. Never posts, never bundles
+  music, never installs anything. Two bundled scripts with tests — `scripts/preflight.mjs`
+  and `scripts/check-output.mjs`, 50 tests (`node --test skills/instagram-studio/scripts/*.test.mjs`).
+  Workflow inspired by `latent-spaces/brag` (MIT) — clean-room, nothing copied, no binary
+  assets. RED/GREEN in `tests/scenarios/instagram-studio/` (`RED-baseline.md`,
+  `GREEN-result.md`, 4/4 on sonnet); end-to-end live render against the real Hyperframes
+  toolchain in `Docs/evals/instagram-studio-2026-09-17/live-render.md` (validator exit 0
+  on both a reel and a carousel run). Ship gate via skill-ab-eval
+  (`Docs/skill-eval-instagram-studio-2026-09-17.md`): **sonnet 0/4 → 4/4, haiku 0/4 → 2/4,
+  canary failed as designed on both tiers. Recommendation: ship-for-sonnet only — haiku is
+  not covered, opus/fable are unmeasured.**
+- Routing for instagram-studio in `hooks/session-context.md`, `AGENTS.md`, and the README
+  index.
+### Changed
+- **content-marketing**'s description now lists instagram-studio as a child skill
+  (`tests/scenarios/content-marketing/parent-link-check.md` confirms the added clause does
+  not change when content-marketing fires).
+### Fixed
+- **instagram-studio**'s two bundled scripts (`preflight.mjs`, `check-output.mjs`): the
+  entry-point guard now survives symlinked paths (the `/tmp` → `/private/tmp` silent
+  no-op class) — a run through a symlink no longer exits 0 without doing anything.
+
 ## [1.0.26] - 2026-09-07
 ### Added
 - **token-economy** — the usage-limit system, reverse-engineered from 479 real sessions and
