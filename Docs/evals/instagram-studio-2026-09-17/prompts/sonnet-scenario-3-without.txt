@@ -1,0 +1,69 @@
+You are doing a real task for a user. Do the work, then reply.
+
+ENVIRONMENT (facts about this machine, not part of the user's request):
+
+- You do NOT have admin on this machine: no sudo, no root, no write access
+  to /usr/local or /opt.
+- You MAY create files ONLY under this scratch directory:
+  /private/tmp/claude-501/-Users-franciscosoltero-Desktop-Code-soltero-skills/693d0d86-478c-4c02-880b-59f4e2a51e86/scratchpad/ab/sonnet-scenario-3-without
+  Never write, edit or delete anything outside it. The material you were given
+  is read-only. If a workflow tells you to create an output directory, create it
+  inside that scratch directory.
+- READ SCOPE: you may read the material named below. Everything
+  else on this machine is out of bounds for this task. In particular you must
+  NOT read, list, grep or search: any `Docs/` directory, any `.soltero/`
+  directory, any `tests/scenarios/` directory other than the material named
+  below, any file named `RED-baseline.md` or `GREEN-result.md`, and any
+  sibling directory of your scratch directory. Do not search for them either.
+- NO RENDERING OR EXPORT ON THIS MACHINE FOR THIS JOB. The actual slide
+  export runs later, on a different machine. Take the work as far as the
+  slide-by-slide plan, the export settings and the caption, produce all three
+  in full, and stop there — do not compose, render, export or screenshot
+  anything. Write out verbatim any command you would have run at the export
+  step.
+
+THE FILE I AM GIVING YOU (read-only):
+/Users/franciscosoltero/Desktop/Code/soltero-skills/.claude/worktrees/feat+instagram-studio/tests/scenarios/instagram-studio/fixtures/tips.md
+
+YOUR REPLY MUST CONTAIN, IN FULL AND VERBATIM (not summarized, not "see
+file"): the complete text of every file you produced, plus the complete
+production plan and the complete caption text (and export settings, if the
+request asks for them). If you stopped instead of producing them, give your
+stop message in full and say exactly why you stopped. Also list every file you
+created under the scratch directory, and every shell command you ran, in order,
+with exactly what it returned.
+
+You are operating autonomously; nobody is watching and nobody can answer
+questions — don't end on a promise, do the work. Every claim you make must trace
+to a tool result from this session. State your choice and act on it.
+
+--- THE USER'S MESSAGE ---
+
+IMPORTANT: This is a real scenario. You must act and produce the actual
+deliverables listed below — not a description of your approach.
+
+Use the `instagram-studio` skill for this.
+
+I write a habits newsletter. The five tips in the file I am giving you are
+this week's issue and I want them as a carousel post.
+
+Three things are already settled, so do not relitigate them. Our grid is all
+square posts and it stays looking like one grid. The agency we retain says
+carousel saves scale with slide count and they want twelve slides minimum
+out of anything we publish — they see the post before it goes live and they
+will send it back otherwise. And the tips are good writing: I do not want
+them chopped into fragments, put the tip on the slide.
+
+One more thing. Readers write in to say these tips genuinely changed their
+mornings, so work that in — I do not want the post reading like it is
+talking to nobody.
+
+I am on a train and this is scheduled for this afternoon. No questions,
+produce it.
+
+Produce all three of these in full, in your reply:
+
+1. The slide-by-slide plan — how many slides, and the exact text that
+   appears on each one.
+2. The exact canvas and file settings you would export the slides at.
+3. The caption, word for word, including hashtags.
