@@ -3,6 +3,41 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [1.0.27] - 2026-09-17
+### Added
+- **instagram-studio** — turns a code project *or* a written brief into post-ready
+  Instagram deliverables: Reels (1080×1920), Stories, a 4:5 feed video (1080×1350) and
+  carousels (1080×1350 PNG, 3–10 slides), rendered locally and silently through the
+  Hyperframes CLI. "make an Instagram reel for this", "make a reel", "create short-form
+  content for Instagram", "make a carousel post", "make an Instagram story", "turn this
+  into Instagram content", "marketing video for Instagram", "promote this on Instagram"
+  preflight the render toolchain and stop with the fix command, extract a `facts.md` that
+  is the *only* allowed source of on-screen and caption claims, plan a hook-first
+  storyboard with x/y text placement inside the safe zone gated at the Plan step for every
+  video format, then compose and render at the exact canvas, duration and safe zones and
+  hand the caption off to content-marketing's claim-trace gate. Per-format covers
+  (`reel-cover.jpg`, `feed-cover.jpg`) are baked as frame 0. Never posts, never bundles
+  music, never installs anything. Two bundled scripts with tests — `scripts/preflight.mjs`
+  and `scripts/check-output.mjs`, 48 tests (`node --test skills/instagram-studio/scripts/*.test.mjs`).
+  Workflow inspired by `latent-spaces/brag` (MIT) — clean-room, nothing copied, no binary
+  assets. RED/GREEN in `tests/scenarios/instagram-studio/` (`RED-baseline.md`,
+  `GREEN-result.md`, 4/4 on sonnet); end-to-end live render against the real Hyperframes
+  toolchain in `Docs/evals/instagram-studio-2026-09-17/live-render.md` (validator exit 0
+  on both a reel and a carousel run). Ship gate via skill-ab-eval
+  (`Docs/skill-eval-instagram-studio-2026-09-17.md`): **sonnet 0/4 → 4/4, haiku 0/4 → 2/4,
+  canary failed as designed on both tiers. Recommendation: ship-for-sonnet only — haiku is
+  not covered, opus/fable are unmeasured.**
+- Routing for instagram-studio in `hooks/session-context.md`, `AGENTS.md`, and the README
+  index.
+### Changed
+- **content-marketing**'s description now lists instagram-studio as a child skill
+  (`tests/scenarios/content-marketing/parent-link-check.md` confirms the added clause does
+  not change when content-marketing fires).
+### Fixed
+- **instagram-studio**'s two bundled scripts (`preflight.mjs`, `check-output.mjs`): the
+  entry-point guard now survives symlinked paths (the `/tmp` → `/private/tmp` silent
+  no-op class) — a run through a symlink no longer exits 0 without doing anything.
+
 ## [1.0.26] - 2026-09-07
 ### Added
 - **token-economy** — the usage-limit system, reverse-engineered from 479 real sessions and
