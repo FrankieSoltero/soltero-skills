@@ -56,7 +56,11 @@ the same conditions:
    telegraph *which* settings are right — but it does guarantee the question
    gets answered. Recorded as a standing condition of the scenario, not
    changed, so RED and GREEN are measured under the same prompt.
-3. **Model pinning.** Every dispatch passed the alias `sonnet` explicitly;
+3. **Do not reproduce scenario 4 from the shim recipe in the appendix.** It
+   is recorded there as what RED actually did, and it does *not* make the
+   dependency missing — see "Correction for later runs (2026-09-17)" at the
+   top of the appendix for the PATH-removal recipe that does.
+4. **Model pinning.** Every dispatch passed the alias `sonnet` explicitly;
    no run inherited a session model. The alias, not a fully-qualified model
    id, is what was pinned — so a later run must pin the same alias, and a
    change in what that alias resolves to is a confound to note rather than
@@ -514,8 +518,58 @@ table, no cover frame, no checklist, and named the output
 
 ## Appendix — the RED dispatch wrappers, verbatim
 
-Committed so Tasks 6 and 8 can reproduce RED conditions from the repo. Each
-baseline prompt was the wrapper below, followed by a
+### Correction for later runs (2026-09-17)
+
+**The scenario-4 shim recipe below is a record of what RED did, not a
+recipe to copy.** It does not make the dependency missing, for two
+independent reasons:
+
+1. **It cannot fail the skill's preflight.** `scripts/preflight.mjs`
+   resolves a binary by testing file existence against each `PATH` entry
+   (`existsSync`, no subprocess), so a *file* named `ffmpeg` satisfies the
+   check whatever it does when executed. Measured against the shim
+   directory used in the re-run:
+
+   ```text
+   $ PATH="<scratch>/shim-bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
+       node skills/instagram-studio/scripts/preflight.mjs --json
+   {"ok": true, … "ffmpeg" ok:true detail:"<scratch>/shim-bin/ffmpeg" …}
+   exit=0
+   ```
+
+   Anyone reproducing scenario 4 from the shim recipe therefore gets a
+   *passing* preflight and a meaningless run.
+2. **It was walked around at runtime anyway.** The re-run agent confirmed
+   the shim, then called `/opt/homebrew/bin/ffmpeg` by absolute path. See
+   "Scenario 4 re-run — the shim is honoured, then walked around".
+
+**Use PATH removal instead.** Run the job with a `PATH` that does not
+contain the directory holding the real binaries (on this machine,
+`/opt/homebrew/bin`). Verified to fail preflight:
+
+```text
+$ PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" \
+    node skills/instagram-studio/scripts/preflight.mjs --json
+{"ok": false, …
+  {"name":"ffmpeg","ok":false,"detail":"not found on PATH",
+   "fix":"brew install ffmpeg"},
+  {"name":"ffprobe","ok":false,"detail":"not found on PATH",
+   "fix":"brew install ffmpeg"} …}
+exit=1
+```
+
+This is the approach the with-skill run of scenario 4 used; the details of
+that run are recorded in `GREEN-result.md`. The RED history below and the
+wrappers it quotes are left exactly as they were run — this note corrects
+what to do next, not what happened.
+
+---
+
+### What follows is the record, exactly as run
+
+Committed so Tasks 6 and 8 can see RED's conditions from the repo — read
+with the correction above, which supersedes the scenario-4 shim for any
+later run. Each baseline prompt was the wrapper below, followed by a
 `--- THE USER'S MESSAGE ---` separator and the scenario file's text
 verbatim. Dispatch was the `Agent` tool, `subagent_type:
 "general-purpose"`, `model: "sonnet"` passed explicitly on every call.
