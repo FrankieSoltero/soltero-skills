@@ -18,7 +18,7 @@ project adheres to Semantic Versioning.
   hand the caption off to content-marketing's claim-trace gate. Per-format covers
   (`reel-cover.jpg`, `feed-cover.jpg`) are baked as frame 0. Never posts, never bundles
   music, never installs anything. Two bundled scripts with tests — `scripts/preflight.mjs`
-  and `scripts/check-output.mjs`, 48 tests (`node --test skills/instagram-studio/scripts/*.test.mjs`).
+  and `scripts/check-output.mjs`, 50 tests (`node --test skills/instagram-studio/scripts/*.test.mjs`).
   Workflow inspired by `latent-spaces/brag` (MIT) — clean-room, nothing copied, no binary
   assets. RED/GREEN in `tests/scenarios/instagram-studio/` (`RED-baseline.md`,
   `GREEN-result.md`, 4/4 on sonnet); end-to-end live render against the real Hyperframes
