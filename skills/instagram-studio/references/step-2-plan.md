@@ -50,6 +50,10 @@ bracket. There is no third category. In particular:
   door opens" needs a source like any number does.
 - **Comparative claims are claims.** "Most habit apps guilt you" needs a
   source or it is a `[CONFIRM: …]`.
+- **A `[CONFIRM: public?]`-marked `facts.md` line is not a usable
+  citation.** It is sourced but not cleared for publication, so on-screen
+  copy citing it stays a visible `[CONFIRM: …]` until the user resolves the
+  mark.
 - A `[CONFIRM: …]` in the plan is fine. Quietly resolving it in your own
   favour while writing the composition is not.
 
@@ -79,5 +83,6 @@ section per format:
 ## Gate
 
 Every duration and count inside its format's range · every on-screen line
-cites a `facts.md` line or is a visible `[CONFIRM: …]` · hook written first
-· one CTA.
+cites a `facts.md` line or is a visible `[CONFIRM: …]` · no cited line is
+itself marked `[CONFIRM: public?]` unless the user has resolved it · hook
+written first · one CTA.

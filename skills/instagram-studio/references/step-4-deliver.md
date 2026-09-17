@@ -16,23 +16,31 @@ carousel slides are exported as stills:
 
 ```bash
 npx hyperframes render --output <out-dir>/reel.mp4
+npx hyperframes render --output <out-dir>/feed.mp4
+npx hyperframes render --output <out-dir>/story-1.mp4   # …-2, …-3
 npx hyperframes snapshot --at <t1>,<t2>,<t3>   # one per carousel slide
 ```
 
-Rename snapshot output to `slide-01.png` … contiguously from 1.
+One render per format, each from that format's own composition. Rename
+snapshot output to `slide-01.png` … contiguously from 1.
 
 **If the render fails, surface the Hyperframes CLI output verbatim** and
 stop. Diagnose and re-render, or hand the error back. There is no fallback
 renderer, no alternative encoder, and no manual assembly path.
 
-## Cover
+## Covers — one per video format
 
-Pick the cover from a **settled frame** — the first frame at least 0.5s
-after that beat's last text-position keyframe — of a beat that reads on its
-own, usually the hook's resolved state. Export it as `cover.jpg` at the
-format's full canvas, and bake that same image as frame 0 of the video so
-the in-feed first frame and the uploaded cover match. Key cover text sits
-inside the centered 1080×1080 crop.
+`reel.mp4` gets `reel-cover.jpg` (1080×1920); `feed.mp4` gets
+`feed-cover.jpg` (1080×1350). There is no single shared cover file. Under
+`--format all` you produce both, each from **its own** composition — a reel
+cover rescaled to 4:5 is a crop, and the validator measures the canvas.
+
+For each one, pick the frame from a **settled frame** — the first frame at
+least 0.5s after that beat's last text-position keyframe — of a beat that
+reads on its own, usually the hook's resolved state. Export it at that
+format's full canvas, and bake that same image as frame 0 of **that**
+video, so the in-feed first frame and the uploaded cover match. Key cover
+text sits inside the centered 1080×1080 crop.
 
 ## Audio
 
@@ -89,7 +97,8 @@ The handover. It says, for this run:
 
 1. what to upload, in order, and which file is which;
 2. add audio in the Instagram composer (the render is silent);
-3. upload `cover.jpg` as the cover;
+3. upload that format's cover — `reel-cover.jpg` for the reel,
+   `feed-cover.jpg` for the feed post;
 4. paste `## Caption` and `## Hashtags`; paste `## Alt text` into
    Instagram's alt-text field;
 5. every `[CONFIRM: …]` still open — these block posting;

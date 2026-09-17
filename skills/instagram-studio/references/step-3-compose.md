@@ -9,8 +9,9 @@ motion.
 `hyperframes-core` · `hyperframes-animation` · `hyperframes-creative` ·
 `hyperframes-keyframes` · `hyperframes-cli`
 
-Preflight already confirmed all five are installed; if one is missing you
-are back at Step 0 with `npx hyperframes skills update`.
+Preflight already confirmed all five are installed. If one turns out to be
+missing, stop and relay `npx hyperframes skills update` to the user as the
+fix, exactly as at Step 0 — you never run the install yourself.
 
 **Skip the `hyperframes` entry-point intent interview.** `plan.md` is the
 brief — the subject, the beats, the on-screen copy, the duration and the

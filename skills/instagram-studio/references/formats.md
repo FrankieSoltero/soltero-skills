@@ -10,9 +10,9 @@ guidance for you, so they are the ones you have to hold yourself.
 <!-- markdownlint-disable MD013 -->
 | Format | Canvas | Duration | Output |
 |---|---|---|---|
-| `reel` | 1080×1920, 30fps | 7–30s (target 12–20s) | `reel.mp4` + `cover.jpg` |
+| `reel` | 1080×1920, 30fps | 7–30s (target 12–20s) | `reel.mp4` + `reel-cover.jpg` |
 | `story` | 1080×1920, 30fps | ≤15s per file, 1–3 files | `story-1.mp4` … `story-3.mp4` |
-| `feed` | 1080×1350, 30fps | 7–30s | `feed.mp4` + `cover.jpg` |
+| `feed` | 1080×1350, 30fps | 7–30s | `feed.mp4` + `feed-cover.jpg` |
 | `carousel` | 1080×1350 PNG | 3–10 slides | `slide-01.png` … `slide-10.png` |
 <!-- markdownlint-enable MD013 -->
 
@@ -45,14 +45,19 @@ any logo** inside these bounds; background motion may run full-bleed.
 Story also needs room left for stickers and the link — do not fill the
 bottom band with copy and plan to "move the sticker".
 
-`cover.jpg` is a full-canvas frame (1080×1920 for `reel`, 1080×1350 for
-`feed`), but the profile grid crops it to 1:1: **key cover text must sit
-inside the centered 1080×1080 region** — y 420–1500 on a reel, y 135–1215
-on a feed cover.
+**Covers are per format.** `reel-cover.jpg` is 1080×1920 and
+`feed-cover.jpg` is 1080×1350 — each a full-canvas frame of its own video.
+There is no single shared cover file: one image cannot be both canvases,
+and under
+`--format all` both covers exist side by side.
+
+The profile grid crops a cover to 1:1, so **key cover text must sit inside
+the centered 1080×1080 region** — y 420–1500 on `reel-cover.jpg`, y 135–1215
+on `feed-cover.jpg`.
 
 ## Settled frame
 
-Used for the cover pick and for any safe-zone measurement:
+Used for each format's cover pick and for any safe-zone measurement:
 
 > The **settled frame** of a beat is the first frame at least 0.5s after
 > that beat's last text-position keyframe.
@@ -62,9 +67,9 @@ line that is still flying in clears every band and tells you nothing.
 
 ## Output filenames — fixed
 
-`reel.mp4` · `feed.mp4` · `story-1.mp4` … `story-3.mp4` · `cover.jpg` ·
-`slide-01.png` … `slide-10.png` · `caption.md` · `facts.md` · `plan.md` ·
-`post-checklist.md` · `composition/`
+`reel.mp4` · `feed.mp4` · `story-1.mp4` … `story-3.mp4` · `reel-cover.jpg` ·
+`feed-cover.jpg` · `slide-01.png` … `slide-10.png` · `caption.md` ·
+`facts.md` · `plan.md` · `post-checklist.md` · `composition/`
 
 All of it in `instagram-output/`, or `instagram-output-YYYY-MM-DD-HHmmss/`
 when that directory already exists. Slides and story files are numbered

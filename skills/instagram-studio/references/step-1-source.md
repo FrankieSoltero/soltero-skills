@@ -63,9 +63,11 @@ planning starts.
   not satisfied by `photos/patio.jpeg`, by `photos/patio.jpg.txt`, or by a
   file with a similar name in the same folder.
 - An unresolved path is a **stop**: name the missing file, say what it was
-  for, and ask the user for it or for permission to plan without it. It is
-  not permission to redesign the piece around the assets that happen to
-  exist, and it is never something to discover halfway through a render.
+  for, and ask the user. Planning resumes only after they supply the asset
+  or explicitly approve proceeding without it — never on your own
+  assessment that the piece works fine without it. It is not permission to
+  redesign around the assets that happen to exist, and it is never
+  something to discover halfway through a render.
 - Record the resolved path in `facts.md` so Step 3 composes against the file
   you actually checked.
 

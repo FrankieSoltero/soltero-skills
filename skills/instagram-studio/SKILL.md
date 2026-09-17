@@ -1,6 +1,6 @@
 ---
 name: instagram-studio
-description: Use when someone wants Instagram marketing content built from a code project or a written brief — "make an Instagram reel for this", "make a reel", "create short-form content for Instagram", "make a carousel post", "make an Instagram story", "turn this into Instagram content", "marketing video for Instagram", "promote this on Instagram". Preflights the render toolchain and stops with the fix command, extracts a facts.md that is the only allowed source of on-screen and caption claims, plans a hook-first storyboard or slide outline, composes and renders locally through the Hyperframes CLI at the exact Instagram canvas, duration and safe zones, then delivers caption.md (caption, hashtags, alt text, claims table), cover.jpg and post-checklist.md checked by a bundled validator. Child of soltero-skills:content-marketing. Never posts, never schedules, never installs anything.
+description: Use when someone wants Instagram marketing content built from a code project or a written brief — "make an Instagram reel for this", "make a reel", "create short-form content for Instagram", "make a carousel post", "make an Instagram story", "turn this into Instagram content", "marketing video for Instagram", "promote this on Instagram". Preflights the render toolchain and stops with the fix command, extracts a facts.md that is the only allowed source of on-screen and caption claims, plans a hook-first storyboard or slide outline, composes and renders locally through the Hyperframes CLI at the exact Instagram canvas, duration and safe zones, then delivers caption.md (caption, hashtags, alt text, claims table), a per-format cover image and post-checklist.md checked by a bundled validator. Child of soltero-skills:content-marketing. Never posts, never schedules, never installs anything.
 ---
 
 # Instagram Studio
@@ -64,11 +64,12 @@ node "${CLAUDE_SKILL_DIR}/scripts/preflight.mjs"
 ```
 
 Exit 0 → continue. Exit 1 → **stop** and relay each failed check's `fix`
-string verbatim, then wait for the user. You never install it yourself, you
-never switch renderer, and you never move production off the machine —
-screenshots into the in-app editor is not "the legitimate version" of this
-skill, it is the run failing quietly. A blocked preflight ends the turn with
-a command the user can paste.
+string verbatim, then wait for the user. Exit 2 → a usage error; fix the
+invocation and re-run. You never install the fix yourself, you never switch
+renderer, and you never move production off the machine — screenshots into
+the in-app editor is not "the legitimate version" of this skill, it is the
+run failing quietly. A blocked preflight ends the turn with a command the
+user can paste.
 
 ### Step 1 — Source → `facts.md`
 
@@ -92,7 +93,8 @@ cut is a re-layout, never a crop of the reel.
 
 **Gate:** every duration/slide count inside the format's range · every
 on-screen line cites a `facts.md` line number or is a `[CONFIRM: …]`
-placeholder.
+placeholder · a `facts.md` line that is itself marked `[CONFIRM: public?]`
+is not a usable citation until the user resolves it.
 
 ### Step 3 — Compose
 
@@ -107,8 +109,9 @@ bypass them.
 ### Step 4 — Render, caption, deliver
 
 Read [references/step-4-deliver.md](references/step-4-deliver.md).
-Preview URL first, render only on the user's approval, cover frame from a
-settled frame, caption under `soltero-skills:content-marketing`, then:
+Preview URL first, render only on the user's approval, a per-format cover
+(`reel-cover.jpg`, `feed-cover.jpg`) picked at that format's own settled
+frame, caption under `soltero-skills:content-marketing`, then:
 
 ```bash
 node "${CLAUDE_SKILL_DIR}/scripts/check-output.mjs" <out-dir> --format <fmt>
@@ -155,9 +158,9 @@ Every Reality row below answers a verbatim quote from the observed baseline.
 | "nothing about the offer itself was invented" — in a caption reading "Every draft on the wall, half off." | The brief said "half-price drafts". Scope and service promises are claims too, and an invented one is most dangerous asserted alongside a claim that nothing was invented. |
 | "kept the grid square (all 12 slides same 1080x1080 template), hit the agency's 12-slide minimum" | Canvas and slide count are the platform contract, not taste. Carousel is 1080×1350 and 3–10 slides. A twelve-slide brief gets the range quoted back, not obeyed. |
 | "it paraphrases the truthful claim the newsletter owner gave me, rather than manufacturing fake testimonials" | A conversational assertion is not a source. Removing the name does not make social proof safe — unattributed social proof is the invented kind that gets shipped. |
-| "assemble the reel entirely inside the Instagram app's own Reels editor … That is the legitimate version of 'straight from a browser'" | That is routing around a failed preflight. Stop and hand over the fix command; a manual workaround leaves the user with no deliverable and no diagnosis. |
+| "assemble the reel entirely inside the Instagram app's own Reels editor (text, timing, trending audio, and export all happen in-app, no local video toolchain required)" — offered as the legitimate version of the request | That is routing around a failed preflight. Stop and hand over the fix command; a manual workaround leaves the user with no deliverable and no diagnosis. |
 | "Keep all text inside a safe zone of x:40–1040, y:250–1600" | Invented per run, wrong per run. The numbers are in `references/formats.md`. |
-| "Each of the 5 tips is intact, verbatim, on one slide" — at 55–65 words a slide | A slide nobody reads is not a tip delivered. Carousel copy is ≤ ~25 words per slide; split the idea or cut it. |
+| "each of the 5 tips is intact, verbatim, on one slide" — at 55–65 words a slide | A slide nobody reads is not a tip delivered. Carousel copy is ≤ ~25 words per slide; split the idea or cut it. |
 | "npx playwright screenshot" / ImageMagick `magick` for the slide export | Carousel slides come out of `npx hyperframes snapshot`. A second imaging tool is an untested dependency the preflight never checked. |
 | `streakly_reel_final.mp4`, `01-cover.png`, `streakly-caption.txt` | The filenames are fixed so the validator and the user both know where things are. Invented names fail `check-output.mjs`. |
 <!-- markdownlint-enable MD013 -->
