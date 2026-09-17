@@ -84,6 +84,10 @@ Final pass: none — 72/72 verdicts are pass or fail and the script raised no
 **This is the third judging pass. Two earlier passes were discarded for defects in this
 eval's own harness, not in the skill, and both are archived untouched.** The 18 runs were
 executed once and never re-run; only the transcript rendering and the judges changed.
+Said plainly, because this eval was run by the skill's own builder: across the two
+re-grades the reported haiku figure dipped to 1/4 and came back to pass 1's 2/4, so the
+number reported is also the best of the three. Run prompts, rubric definitions and
+`models.json` are byte-unchanged across all three passes.
 
 | Pass | Defect | haiku with | sonnet with | Archived as |
 |---|---|---|---|---|
@@ -180,7 +184,15 @@ changes behaviour (stops on the missing asset; refuses invented or inflated clai
   graded on conventions it was never told. The sensitivity cut bounds that.
 - Blinding is imperfect even now: a with-arm run reads the skill's reference files and
   writes `facts.md`/`plan.md` in the skill's shape, and a judge can infer the arm from
-  that. What is removed is every label — filename, header, paths.
+  that. What is removed is every label — filename, header, paths. Three without-arm runs
+  also remark, in their own words, that the `instagram-studio` skill is unavailable (R03,
+  R14, R18 — R18 even says "without"): the fixture path names the skill in both arms, so
+  an unaided run can notice its absence. Those are the transcripts' own prose and cannot
+  be redacted; all three runs fail on several dimensions and none is a marginal call.
+- The haiku canary run breached its read scope: it ran `ls` on this eval's own directory
+  (`transcripts/R14.md`), seeing file and directory names only — nothing was opened, so
+  its prompt was not compromised — but it is the one transcript that shows a judge the
+  eval's scaffolding, and it is the liveness proof that wandered.
 - opus and fable were not measured. Nothing in this report covers them.
 - The scenario-4 PATH rule is an instruction, not an enforcement; haiku's with-arm run
   shows it can be broken by accident. That is a property of the harness and also a real
