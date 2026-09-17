@@ -1,0 +1,8 @@
+TEXT STAND-IN FOR A PHOTO — this repository commits no binary files.
+
+Treat this file as if it were `bar-interior.jpg`, a landscape photograph:
+the back bar of The Rope Ladder shot from a corner booth. Warm tungsten
+light, a row of eight taps, brass rail, dark green tile behind the bottles,
+two stools in frame, no people, no readable signage.
+
+Nominal dimensions: 4032 x 3024 (4:3 landscape).
