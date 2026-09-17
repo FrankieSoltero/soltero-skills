@@ -30,6 +30,7 @@ a claim about the product.
 
 ## Hook (0.0–2.0s)
 On screen: "Your streak survived the flu."   ← facts.md:2
+Place: x 80–960 · y 980–1320
 Shows: app home, streak card                  ← assets/home.png
 
 ## Beat 2 (2.0–6.5s)
@@ -37,7 +38,16 @@ Shows: app home, streak card                  ← assets/home.png
 
 ## CTA (13.0–16.0s)
 On screen: "streakly.app"                     ← facts.md:1
+Place: x 80–960 · y 1180–1420
 ```
+
+**Every on-screen text block in a `reel`, `story` or `feed` plan carries a
+`Place:` line — an x-range and a y-range in canvas pixels, inside that
+format's safe-zone bounds in [formats.md](formats.md).** Planning the
+placement is what makes the bounds checkable before anything is composed;
+Step 3 then measures the rendered frame. Carousel slides have no platform
+UI over them and therefore no safe-zone bands — place their text by
+composition alone and do not invent bands for them.
 
 Every on-screen line carries either a `facts.md:<line>` citation or a
 `[CONFIRM: …]` placeholder that survives into the render as a visible
@@ -84,5 +94,7 @@ section per format:
 
 Every duration and count inside its format's range · every on-screen line
 cites a `facts.md` line or is a visible `[CONFIRM: …]` · no cited line is
-itself marked `[CONFIRM: public?]` unless the user has resolved it · hook
-written first · one CTA.
+itself marked `[CONFIRM: public?]` unless the user has resolved it · every
+video-format text block has a `Place:` x/y range and it sits inside that
+format's safe-zone bounds in [formats.md](formats.md) (carousel exempt) ·
+hook written first · one CTA.

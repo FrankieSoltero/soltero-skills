@@ -94,7 +94,9 @@ cut is a re-layout, never a crop of the reel.
 **Gate:** every duration/slide count inside the format's range · every
 on-screen line cites a `facts.md` line number or is a `[CONFIRM: …]`
 placeholder · a `facts.md` line that is itself marked `[CONFIRM: public?]`
-is not a usable citation until the user resolves it.
+is not a usable citation until the user resolves it · every text block in a
+video format carries a planned x/y placement inside that format's safe-zone
+bounds (carousel exempt).
 
 ### Step 3 — Compose
 
