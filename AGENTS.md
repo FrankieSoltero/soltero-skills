@@ -98,6 +98,11 @@ Standing disciplines and procedures:
   `skills/skill-trigger-repair/SKILL.md` (the parser is dependency-free Node
   and runs anywhere; `hooks/session-context.md` has no non-Claude-Code
   equivalent, so repair `AGENTS.md`'s routing first)
+- "Make an Instagram reel for this", "make a carousel post", "make an
+  Instagram story", "turn this into Instagram content" → open
+  `skills/instagram-studio/SKILL.md` (the bundled `scripts/preflight.mjs` and
+  `scripts/check-output.mjs` are dependency-free Node and run anywhere;
+  rendering itself still needs the Hyperframes CLI and its skills installed)
 - Before shipping a new or materially-edited skill → open
   `skills/skill-ab-eval/SKILL.md` (the tabulator script is portable, but the
   paired run/judge fan-out needs Claude Code's `Agent` tool with no
