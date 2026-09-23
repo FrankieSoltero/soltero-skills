@@ -3,7 +3,7 @@
 All skills are authored with the `creating-a-skill` skill — test-driven documentation.
 
 ## The loop
-1. Spec → `docs/specs/<skill>.md`.
+1. Spec → `Docs/specs/<skill>.md`.
 2. RED → 3 pressure scenarios in `tests/scenarios/<skill>/` — one of which never names the
    skill, so the description itself is tested and not just the body; run a fresh subagent
    without the skill and record the baseline failure. Record the model identifier and the date at the top of
