@@ -46,3 +46,8 @@ test('parseFrontmatter extracts quoted and unquoted fields', () => {
 test('parseFrontmatter returns null when no frontmatter', () => {
   assert.equal(parseFrontmatter('# Title only'), null);
 });
+
+test('parseFrontmatter reads a SKILL.md saved with CRLF line endings', () => {
+  const fm = parseFrontmatter('---\r\nname: my-skill\r\ndescription: "Use when X"\r\n---\r\n\r\n# Body\r\n');
+  assert.deepEqual(fm, { name: 'my-skill', description: 'Use when X' });
+});
