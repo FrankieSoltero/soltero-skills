@@ -10,3 +10,9 @@ private-notes/
 
 # MCP server build output (built by `npm run build`, shipped via `prepack`)
 mcp/dist/
+
+# Skill working artifacts (lean-sdd ledgers, dispatch briefs, swarm specs) — session-local
+.soltero/
+
+# Per-machine agent configs (contain absolute local paths)
+.kimi-code/
