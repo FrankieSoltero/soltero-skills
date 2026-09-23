@@ -5,7 +5,7 @@ mechanical tier → sonnet, standard/judgment tiers → opus. An omitted model
 silently inherits the session's orchestrator model (fable), which is reserved
 for orchestration — never for dispatched work.
 
-```
+```text
 You are implementing Task [N]: [task name].
 
 ## Requirements

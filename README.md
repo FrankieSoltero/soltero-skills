@@ -10,7 +10,7 @@ session hook.
 
 ## Install
 
-```
+```text
 /plugin marketplace add FrankieSoltero/soltero-skills
 /plugin install soltero-skills@soltero-skills-marketplace
 ```
@@ -115,7 +115,7 @@ Roadmap (see `Docs/specs/`): `claude-integration-patterns`, `financial-correctne
 
 Every skill is built with `creating-a-skill`. See `CONTRIBUTING.md`.
 
-```
+```text
 npm test            # tooling unit tests
 npm run lint:fm     # SKILL.md frontmatter lint
 npm run validate:plugin

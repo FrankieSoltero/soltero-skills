@@ -40,7 +40,7 @@ measurement is a protocol, not a vibe.
 
 ## Output contract (audits/optimizations)
 
-```
+```text
 Mechanical: <check>: ✓|✗ <detail>          (full checklist, first)
 Recommendations: <what> — <why> [basis label] — <fix>
 Measurement: baseline prompt set + recheck date

@@ -176,7 +176,7 @@ loop.
 
 ## Ledger Line Formats (exact)
 
-```
+```text
 Task <N>: complete (commits <base7>..<head7>, review clean)
 Task <N>: complete (commits <base7>..<head7>, <K> parked)
 Task <N>: fix round <R>/3 (<X> addressed, <Y> open — <finding one-liners>; commits <a7>..<b7>)

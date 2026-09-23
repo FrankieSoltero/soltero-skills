@@ -42,7 +42,7 @@ optionally with a suggested verification step, and produce no proposed artifact.
 
 ## Proposal directory layout
 
-```
+```text
 Docs/mining/proposals/<YYYY-MM-DD>/
   PROPOSALS.md                  # the human's summary — one section per candidate
   claude-md-additions.md        # proposed one-liners, quoted, with target file noted
@@ -94,7 +94,7 @@ proposals never do):
 - Internal hostnames/IPs not already public → `<INTERNAL_HOST>`
 - Customer/account identifiers → `<ACCOUNT_ID>`
 
-Sweep with a grep pass for common shapes (`Bearer `, `sk_`, `ghp_`, `AKIA`, `-----BEGIN`,
+Sweep with a grep pass for common shapes (`Bearer`, `sk_`, `ghp_`, `AKIA`, `-----BEGIN`,
 `@` in command arguments) before finalizing; then re-read each proposal once, because
 regexes miss prose-embedded PII.
 

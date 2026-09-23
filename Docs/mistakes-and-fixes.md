@@ -58,7 +58,6 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Lesson:** a RED baseline is only as clean as the file system the agent can search. Before dispatching, nothing named after the skill may exist in the repo, the scratchpad, or `/tmp`; keep the spec and scenarios out of the tree until GREEN, and grep each baseline transcript for reads of `scenario-*.md`, `docs/specs/`, and the scratchpad path before accepting it.
 - **Regression test:** `grep -o '"file_path":"[^"]*"' <task>.output` and `grep -o '"command":"[^"]\{0,160\}' <task>.output | grep -i 'spec\|scenario\|scratchpad'` are empty for every accepted RED run.
 
-
 ## 2026-09-07 — economy-setup.mjs wrote a one-line garbled "protocol block" into CLAUDE.md and its own check reported OK; the GREEN scenario-2 subagent caught it
 
 - **Symptom:** the first `--apply` on Sam's fixture appended `<!-- token-economy:start -->` and `<!-- token-economy:end -->` (a fragment of prose) instead of the protocol text; `--check` then said `PROTOCOL_BLOCK OK` and all 16 script tests were green.

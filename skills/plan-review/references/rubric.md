@@ -34,12 +34,14 @@ Anchor to the bands; when torn between two bands, take the lower one.
 ## Dimensions & checklists
 
 ### D1 — Task decomposition & ordering (weight 15)
+
 - Tasks are small, single-purpose, and sequenced; dependencies explicit.
 - Nothing security- or data-critical is ordered after the step that exposes it
   (deploy before auth = violation).
 - No task bundles multiple unrelated changes ("build the widget" = violation).
 
 ### D2 — Verifiability (weight 20)
+
 - EVERY task carries a concrete verification: the exact command/check to run and the
   expected observable result — not "test at the end", not "works".
 - Test-writing is interleaved (test-first where the repo practices TDD), never a
@@ -48,6 +50,7 @@ Anchor to the bands; when torn between two bands, take the lower one.
   felt ("feels solid", "team says it works").
 
 ### D3 — Spec fidelity & traceability (weight 20)
+
 - Every task traces to a spec/PRD requirement (cite it); every spec requirement and
   action is covered by some task (a dropped action = violation).
 - Nothing in the plan implements what the spec marks out of scope; no invented
@@ -55,12 +58,14 @@ Anchor to the bands; when torn between two bands, take the lower one.
 - The plan's claims about the spec are accurate (misquoting scope = violation).
 
 ### D4 — Concreteness (weight 15)
+
 - Tasks name exact files/paths, functions, endpoints, commands — an executor never
   has to guess which files "the relevant files" are.
 - Data shapes, routes, and flags are spelled out or explicitly marked
   `(proposed — confirm)`; no silent placeholders.
 
 ### D5 — Risk & reversibility (weight 15)
+
 - Destructive or schema-changing steps state their blast radius, backup, and rollback
   path BEFORE the step runs; no untested direct-to-production mutations
   (`db push` to prod = violation).
@@ -69,6 +74,7 @@ Anchor to the bands; when torn between two bands, take the lower one.
 - Auth/permissions/data-exposure consequences of each step considered where relevant.
 
 ### D6 — Consistency & completeness (weight 15)
+
 - Two independent readers of this plan reach the SAME pass/fail on every task's
   verification and on the plan's done criteria. A criterion one reader could call passed
   and another failed ("looks right", "acceptable state", "feels responsive", "the data

@@ -54,7 +54,7 @@ real urgency (dated founding-customer window) instead of faking it.
 
 ## Delivery contract (required, per email/sequence)
 
-```
+```text
 Claims: <claim> ← <source|PLACEHOLDER>        (features, numbers, policies)
 Personalization: <touch> ← <real source|SLOT>
 Compliance: unsub ✓ · address ✓ · consent: <basis> · exits: <list>

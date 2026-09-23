@@ -4,7 +4,7 @@ Dispatch once, after all tasks are complete, on opus — named explicitly, never
 inherited. This is the merge-gate review: it sees the whole branch in context
 and triages everything the task loop deferred.
 
-```
+```text
 You are the final whole-branch reviewer for completed work. Review the entire
 branch against its plan before it integrates.
 

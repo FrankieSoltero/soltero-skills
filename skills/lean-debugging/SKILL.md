@@ -13,7 +13,7 @@ every downstream consumer.
 
 ## The Iron Law
 
-```
+```text
 NO FIX WITHOUT ROOT CAUSE — AND NO SYMPTOM PATCH AS A "FALLBACK"
 ```
 

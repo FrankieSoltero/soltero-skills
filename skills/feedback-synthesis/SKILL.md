@@ -14,7 +14,7 @@ downstream PRD work can consume the output.
 
 ## The Contract (every synthesis delivers this)
 
-```
+```text
 Themes (one row per theme, largest first):
   <theme> | n=<items>/<unique users> | IDs: <list> | verbatim: "<exact quote>" (<ID>) | severity note
 Contradictions: <A> (IDs) vs <B> (IDs) — presented as tension, never averaged

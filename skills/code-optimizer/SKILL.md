@@ -70,6 +70,7 @@ counts you never ran a command to obtain. Run it every pass, declared or not.
 ## Phase 2 — Apply (serial, one commit per category, gate after each)
 
 In this order, each its own commit:
+
 1. **Dead/unused removal** — only tool-flagged AND not allowlisted; confirm reachable-nowhere.
 2. **Redundancy & shortening** — dedupe copy-paste, simplify verbose constructs; behavior-preserving.
 3. **File splitting** — files over threshold split along export/responsibility seams; rewire

@@ -12,7 +12,7 @@ didn't watch the test fail, you don't know it tests the right thing.
 
 ## The Iron Law
 
-```
+```text
 NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
 ```
 

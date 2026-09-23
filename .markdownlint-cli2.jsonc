@@ -1,0 +1,42 @@
+// markdownlint-cli2 config — scope and rules for `npm run lint:md` (a CI hard gate).
+//
+// Scope: authored, living markdown (skills, agents, root docs, living Docs/ files).
+// Ignored: gitignored/local trees, and generated or archival artifacts whose text
+// is a record (eval transcripts, debriefs, audits, dated plans/specs/reports) or a
+// deliberately raw fixture (tests/scenarios prompts are pasted verbatim to agents).
+{
+  "config": {
+    "default": true,
+    // Prose is wrapped at ~100 cols and tables/URLs run long; 80 was never the convention.
+    "MD013": false,
+    // Keep-a-Changelog repeats "Added"/"Fixed" under each release heading.
+    "MD024": { "siblings_only": true },
+    // Back-to-back quotes of different sources are deliberately separate blockquotes.
+    "MD028": false,
+    // agent-playbook entries are one-sentence claims used as headings.
+    "MD026": false,
+    // Inline HTML (<details>, <br>, <kbd>) is intentional in skills and README.
+    "MD033": false,
+    // Bold "Priority: N" / "Step N" lead-ins are labels, not headings.
+    "MD036": false,
+    // Reference files and agent prompts do not start with an H1.
+    "MD041": false
+  },
+  "ignores": [
+    "**/node_modules/**",
+    ".claude/worktrees/**",
+    "mcp/dist/**",
+    "HANDOFF.md",
+    "tests/scenarios/**",
+    "Docs/evals/**",
+    "Docs/debriefs/**",
+    "Docs/audits/**",
+    "Docs/mining/**",
+    "Docs/superpowers/**",
+    "Docs/plans/**",
+    "Docs/specs/**",
+    "Docs/plan-reviews/**",
+    "Docs/skill-eval-*.md",
+    "Docs/skill-garden-report-*.md"
+  ]
+}

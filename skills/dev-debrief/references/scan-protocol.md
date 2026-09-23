@@ -91,7 +91,7 @@ Apply session-miner's checklist **verbatim** —
 local part), `<NAME>`, `<INTERNAL_HOST>`, `<ACCOUNT_ID>`. Then the debrief-specific
 rule: **no maps to secrets** — the report never names the file, env var, or location
 holding a live credential, and never says "see X for the real value". Sweep the
-finished report with the checklist's grep pass (`Bearer `, `sk_`, `ghp_`, `AKIA`,
+finished report with the checklist's grep pass (`Bearer`, `sk_`, `ghp_`, `AKIA`,
 `-----BEGIN`, `@` in arguments), then re-read once for prose-embedded PII.
 
 ## Push notification

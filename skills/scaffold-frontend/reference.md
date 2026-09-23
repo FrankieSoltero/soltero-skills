@@ -4,6 +4,7 @@ Verified current commands (checked against official docs). CLIs drift — re-ver
 version-sensitive lines against the linked docs before a release.
 
 ## Table of contents
+
 1. Framework tradeoffs
 2. Scaffold commands (per framework)
 3. UI layer — web (Tailwind v4 + shadcn/ui + Magic UI)
@@ -44,11 +45,13 @@ cd my-app && npx astro add react tailwind     # @tailwindcss/vite (v4); deprecat
 npm view expo version                  # e.g. 57.x -> use sdk-57
 npx create-expo-app@latest my-app --template default@sdk-<major>
 ```
+
 Docs: nextjs.org/docs/app/api-reference/cli/create-next-app · vite.dev/guide · docs.astro.build/en/install-and-setup · docs.expo.dev/get-started/create-a-project
 
 ## 3. UI layer — web (Tailwind v4 + shadcn/ui + Magic UI)
 
 **Tailwind v4 — different package per build tool:**
+
 ```bash
 # Vite / Astro — the Vite plugin:
 npm install tailwindcss @tailwindcss/vite
@@ -57,6 +60,7 @@ npm install tailwindcss @tailwindcss/vite
 npm install tailwindcss @tailwindcss/postcss postcss
 #   postcss.config.mjs: { plugins: { "@tailwindcss/postcss": {} } }
 ```
+
 ```css
 /* Your main CSS — v4 is CSS-first; this single line replaces @tailwind base/components/utilities */
 @import "tailwindcss";
@@ -68,18 +72,22 @@ npm install tailwindcss @tailwindcss/postcss postcss
 ```
 
 **shadcn/ui** (package is `shadcn`, not `shadcn-ui`):
+
 ```bash
 npx shadcn@latest init        # -t next|vite|start|react-router|astro ; -b radix|base ; -d ; -y
 npx shadcn@latest add button  # or: add (interactive) / add -a (all) / --overwrite / --dry-run
 ```
+
 Prereq for **Vite/Astro**: the `@/*` → `./src` alias must exist in BOTH the bundler config and
 `tsconfig(.app).json` *before* `init`, or alias resolution fails. (Next sets this up already.)
 
 **Magic UI** (animated components — NOT an npm dependency; add per component). MIT, verified
 2026-07-21 from the project's LICENSE file; see `design-forge/references/catalog.md`:
+
 ```bash
 npx shadcn@latest add "https://magicui.design/r/<component>.json"
 ```
+
 > **Not ReactBits.** design-forge's license verifier fetched its LICENSE.md on 2026-07-21 and
 > rejected it: "MIT + Commons Clause License Condition v1.0", GitHub SPDX `NOASSERTION`, not
 > OSI-approved. Copying its component source counts as an install of that source. Any other
@@ -105,6 +113,7 @@ npx @react-native-reusables/cli@latest init          # -t minimal | minimal-uniw
 npx @react-native-reusables/cli@latest add button    # add (interactive) / add -a / --overwrite
 npx @react-native-reusables/cli@latest doctor        # diagnose an existing setup
 ```
+
 Docs: tailwindcss.com · ui.shadcn.com · magicui.design · nativewind.dev · reactnativereusables.com
 
 ## 5. Standards layer notes
@@ -120,7 +129,8 @@ Docs: tailwindcss.com · ui.shadcn.com · magicui.design · nativewind.dev · re
   X-Content-Type-Options nosniff, Referrer-Policy, HSTS, Permissions-Policy, `poweredByHeader:false`).
   Vite/Astro → headers belong on the **host/CDN**, not the dev server. For static hosts
   (Netlify/Cloudflare Pages) add `public/_headers`:
-  ```
+
+  ```text
   /*
     Content-Security-Policy: default-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
     X-Frame-Options: DENY
@@ -128,6 +138,7 @@ Docs: tailwindcss.com · ui.shadcn.com · magicui.design · nativewind.dev · re
     Referrer-Policy: no-referrer
     Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   ```
+
 - **Env:** `templates/env.ts` (Zod, fail-fast). Client-exposed vars need the framework prefix:
   Next `NEXT_PUBLIC_`, Vite `VITE_`, Astro `PUBLIC_`, Expo `EXPO_PUBLIC_`. Everything else is server-only.
 - **Tests:** `templates/vitest.config.ts` + `vitest.setup.ts`. Install:
