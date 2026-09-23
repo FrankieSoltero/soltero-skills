@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.2",
-    "markdownlint-cli2": "^0.14.0",
+    "markdownlint-cli2": "^0.23.3",
     "typescript": "^7.0.2"
   }
 }

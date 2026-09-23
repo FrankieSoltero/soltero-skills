@@ -20,7 +20,9 @@
     // Bold "Priority: N" / "Step N" lead-ins are labels, not headings.
     "MD036": false,
     // Reference files and agent prompts do not start with an H1.
-    "MD041": false
+    "MD041": false,
+    // Tables use bare `|---|` delimiter rows; MD060 (new since the 0.23 upgrade) flags style only.
+    "MD060": false
   },
   "ignores": [
     "**/node_modules/**",
