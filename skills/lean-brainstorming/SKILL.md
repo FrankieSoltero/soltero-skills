@@ -62,7 +62,7 @@ design skipped:** if an answer would change what you build, it blocks.
    choice is genuinely open, and every default you chose flagged as a
    decision. Before presenting, self-review: placeholders, contradictions,
    requirements interpretable two ways, scope creep. Write the design to
-   `docs/specs/YYYY-MM-DD-<topic>-design.md` (user preferences for location
+   `Docs/specs/YYYY-MM-DD-<topic>-design.md` (user preferences for location
    override).
 4. **Single combined approval gate:** end the design message with the spec
    path and ONE ask — "Approve, or tell me what to change." Design approval

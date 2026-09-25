@@ -77,7 +77,7 @@ adjust or estimate a score, and you never re-review your own fixes.
    reserved for plans that need the extra scrutiny); never let a dispatch inherit the
    session model. If you also cannot dispatch subagents, run the six rubric passes
    separately yourself and DISCLOSE that it's a stand-in, not the council.
-3. **Write the report** — `docs/plan-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
+3. **Write the report** — `Docs/plan-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
    banner (PASS / **BLOCKED — do not execute**), score table (dimension, weight,
    grader score, skeptic misses, final), evidence-quoted violations, then blocking
    fixes (mechanical), owner questions, recommended fixes. A dimension the council
