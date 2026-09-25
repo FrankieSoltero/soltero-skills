@@ -181,9 +181,7 @@ test('usage errors exit 2 and write nothing', () => {
   assert.ok(!existsSync(receiptsDir(repo)), 'no receipt dir created by a usage error');
 });
 
-test('a claim with no alphanumerics is a usage error (exit 2) caught before the command runs', {
-  todo: 'BUG: slugify() runs after spawnSync (create-receipt.mjs:67 vs :54), so the command executes and the script then crashes with an uncaught throw, exit 1',
-}, () => {
+test('a claim with no alphanumerics is a usage error (exit 2) caught before the command runs', {}, () => {
   const repo = makeRepo();
   const marker = join(repo, 'ran.marker');
   const r = run(['--claim', '!!!', '--produced-by', 'a', '--repo', repo,

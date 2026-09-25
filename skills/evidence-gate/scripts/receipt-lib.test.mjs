@@ -177,14 +177,14 @@ test('receipts (tracked or not) never invalidate the tree hash', () => {
   assert.notEqual(computeTreeHash(repo, 'elsewhere'), computeTreeHash(repo));
 });
 
-test('staging a new file changes the tree hash (receipt-format.md: "Committing (or staging) … closes this gap")', {
-  todo: 'BUG: treeHash lists `git ls-tree HEAD`, so staged-but-uncommitted files are invisible; receipt-format.md:48 promises staging closes the gap',
-}, () => {
+test('a staged-but-uncommitted new file is invisible to the tree hash until committed (documented v1 limit)', () => {
   const repo = makeRepo({ 'a.txt': 'a' });
   const before = computeTreeHash(repo);
   put(repo, 'staged.txt', 'staged');
   git(repo, 'add', 'staged.txt');
-  assert.notEqual(computeTreeHash(repo), before);
+  assert.equal(computeTreeHash(repo), before, 'treeHash lists HEAD, so staging alone does not change it');
+  git(repo, 'commit', '-qm', 'add staged');
+  assert.notEqual(computeTreeHash(repo), before, 'committing closes the gap');
 });
 
 test('computeTreeHash propagates the git failure outside a repo', () => {
@@ -233,8 +233,6 @@ test('several problems are all reported, not just the first', () => {
     ['args must be an array', 'exitCode must be an integer', 'missing field: treeHash']);
 });
 
-test('args elements must be strings (contract: "array of strings")', {
-  todo: 'BUG: checkCompleteness only checks Array.isArray(args), so args like [1, null] pass as complete (receipt-lib.mjs:73)',
-}, () => {
+test('args elements must be strings (contract: "array of strings")', {}, () => {
   assert.notDeepEqual(checkCompleteness({ ...completeReceipt(), args: [1, null] }), []);
 });

@@ -47,6 +47,11 @@ function main() {
     process.exit(2);
   }
 
+  // Validate everything that can fail BEFORE the verification command runs.
+  let slug;
+  try { slug = slugify(opts.claim); }
+  catch (e) { console.error(`error: --claim ${e.message}`); process.exit(2); }
+
   const repo = resolve(opts.repo);
   const receiptsAbs = join(repo, opts.receiptsDir);
   mkdirSync(receiptsAbs, { recursive: true });
@@ -64,7 +69,6 @@ function main() {
     output = Buffer.concat([run.stdout ?? Buffer.alloc(0), run.stderr ?? Buffer.alloc(0)]);
   }
 
-  const slug = slugify(opts.claim);
   const outputName = `${slug}.output.txt`;
   writeFileSync(join(receiptsAbs, outputName), output);
 
