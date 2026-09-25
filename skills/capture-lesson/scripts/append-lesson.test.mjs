@@ -121,7 +121,7 @@ test('an empty-string required value counts as missing', () => {
   assert.equal(existsSync(file), false);
 });
 
-test('a required flag given with no value is a usage error, not a swallowed neighbour', { todo: 'BUG: arg() takes the next argv token even when it is another flag, so `--symptom --cause C` records symptom "--cause"' }, () => {
+test('a required flag given with no value is a usage error, not a swallowed neighbour', () => {
   const dir = mkdtempSync(join(tmpdir(), 'append-lesson-'));
   const file = join(dir, 'log.md');
   const r = run(['--symptom', '--cause', 'C', '--fix', 'F', '--lesson', 'L', '--file', file]);
@@ -129,7 +129,7 @@ test('a required flag given with no value is a usage error, not a swallowed neig
   assert.equal(existsSync(file), false);
 });
 
-test('a multi-line value cannot break the one-line heading of the enforced entry format', { todo: 'BUG: values are interpolated raw, so a newline in --symptom splits the "## YYYY-MM-DD — <symptom>" heading across lines' }, () => {
+test('a multi-line value cannot break the one-line heading of the enforced entry format', () => {
   const dir = mkdtempSync(join(tmpdir(), 'append-lesson-'));
   const file = join(dir, 'log.md');
   const r = run([...flags({ ...REQUIRED, '--symptom': 'first line\nsecond line' }), '--file', file]);
