@@ -7,6 +7,7 @@ export interface Frontmatter {
 }
 
 export declare function parseFrontmatter(content: string): Frontmatter | null;
+export declare function checkYamlSafety(content: string): string[];
 export declare function validateFrontmatter(
   fm: Frontmatter,
   folderName?: string,
