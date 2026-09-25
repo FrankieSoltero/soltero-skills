@@ -130,3 +130,11 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** the live render (Docs/evals/instagram-studio-2026-09-17/live-render.md) found all 12 defects; fixed in fada6c9 and e8c001e
 - **Lesson:** a skill that drives an external CLI is not verified until one run goes end to end with the real tool; schedule the live run BEFORE the efficacy eval, not after, so eval judges are grading a skill that can actually be executed
 - **Regression test:** `node skills/instagram-studio/scripts/check-output.mjs <out-dir> --format all` exits 0 on a real render
+
+## 2026-09-25 — PR #31 went green on CI but sat BLOCKED: adding a Node matrix renamed the 'validate' job's check to 'validate (22)'/'validate (24)', and main's ruleset requires a check named exactly 'validate'
+
+- **Symptom:** PR #31 went green on CI but sat BLOCKED: adding a Node matrix renamed the 'validate' job's check to 'validate (22)'/'validate (24)', and main's ruleset requires a check named exactly 'validate'
+- **Root cause:** Required status checks match the check-run name; a matrix appends '(<value>)' to it. The ruleset was never read before the job was restructured
+- **Fix:** Matrix job renamed 'test'; a 'validate' job with needs: test, if: always(), and an explicit needs.test.result == success step (a skipped required job reports as passing)
+- **Lesson:** Before renaming, matrixing, or splitting a CI job, read the required checks (gh api repos/<o>/<r>/rules/branches/main) and keep every required context reporting — a green run that never posts the required name blocks merges forever
+- **Regression test:** (none yet)
