@@ -3,6 +3,28 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
+## [Unreleased]
+
+### Fixed
+
+- **CRLF frontmatter** — `tools/frontmatter.mjs` matched only `\n`, so a `SKILL.md` saved
+  with Windows line endings failed `lint-frontmatter` and was omitted from the MCP server's
+  skill listings. Regression test added.
+- **`Docs/` vs `docs/` case split** — git tracked 1,250 files under `Docs/` and 67 under
+  `docs/`; macOS merged them, Linux did not (e.g. `Docs/mistakes-and-fixes.md` was missing
+  on Linux, and `skill-trigger-repair` read `docs/debriefs` while `dev-debrief` writes
+  `Docs/debriefs`). Everything is now under `Docs/`.
+- **Dependencies** — `npm audit` 7 → 0 (runtime: `fast-uri`, `hono`, `qs`; dev:
+  `markdownlint-cli2` 0.14 → 0.23).
+
+### Changed
+
+- **Node ≥ 22 required** (`engines`); Node 20 reached end-of-life 2026-04-30. CI runs 22
+  and 24 with SHA-pinned actions and a read-only token.
+- **`npm run check` passes** — markdownlint is scoped by `.markdownlint-cli2.jsonc` to
+  authored docs (was 175,175 errors across worktrees and eval transcripts) and is a CI
+  hard gate, as is `check:workflows`, which now covers all 7 bundled workflows (was 3).
+
 ## [1.0.28] - 2026-09-17
 
 ### Fixed
