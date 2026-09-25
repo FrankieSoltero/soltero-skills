@@ -7,6 +7,19 @@ project adheres to Semantic Versioning.
 
 ### Fixed
 
+- **Skill descriptions fit the listing budget** — Claude Code drops the descriptions of
+  the least-used skills when the listing overflows (about 1% of context); 26 of 52 were
+  listed name-only in one session. Descriptions trimmed 34.4k → 18.8k chars, keeping the
+  trigger phrasings; 16 that were invalid strict YAML now parse. The README documents the
+  `skillListingBudgetFraction` and `skillOverrides` levers.
+- **Bugs found by the new test suites** — `evidence-gate`: an all-punctuation claim ran
+  the command before failing, a non-string `outputPath` crashed `verify-receipt`, `args`
+  were not checked to be strings, and `receipt-format.md` wrongly said staging makes a new
+  file count. `capture-lesson`: a valueless flag swallowed its neighbour and a newline
+  broke the entry heading. `transcript-reader` ingest: non-ASCII names, "Speaker 1"
+  labels and multi-voice VTT cues were misattributed.
+- **One docs root** — `lean-plans`, `lean-brainstorming`, `writing-prds`, `plan-review`,
+  `prd-review` and `content-marketing` now write under `Docs/` like every other skill.
 - **CRLF frontmatter** — `tools/frontmatter.mjs` matched only `\n`, so a `SKILL.md` saved
   with Windows line endings failed `lint-frontmatter` and was omitted from the MCP server's
   skill listings. Regression test added.
@@ -16,6 +29,13 @@ project adheres to Semantic Versioning.
   `Docs/debriefs`). Everything is now under `Docs/`.
 - **Dependencies** — `npm audit` 7 → 0 (runtime: `fast-uri`, `hono`, `qs`; dev:
   `markdownlint-cli2` 0.14 → 0.23).
+
+### Added
+
+- **Tests for the 7 previously untested scripts** (122 tests): `evidence-gate` ×3,
+  `prisma-safety-review` ×2, `capture-lesson`'s `append-lesson`, `transcript-reader`'s
+  `ingest`; each file mutation-checked, since it was written after the code.
+- **Frontmatter lint rejects values strict YAML cannot parse** (an unquoted colon-space or space-hash in a value).
 
 ### Changed
 

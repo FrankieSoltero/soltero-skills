@@ -17,6 +17,13 @@ session hook.
 
 Then invoke skills as `soltero-skills:<skill-name>`.
 
+**Many plugins installed?** Claude Code gives the whole skill listing about 1% of the
+context window and, when it overflows, keeps every name but drops the descriptions of your
+least-used skills — which then rarely trigger on their own. Run `/doctor` to see the
+listing's cost; to make room, raise `skillListingBudgetFraction` in `settings.json` (e.g.
+`0.02`) or set noisy skills to `"name-only"` in `skillOverrides`. See
+[skill descriptions are cut short](https://code.claude.com/docs/en/skills#skill-descriptions-are-cut-short).
+
 ## Use from any agent (MCP)
 
 The library also ships as an MCP (Model Context Protocol) server over stdio,
