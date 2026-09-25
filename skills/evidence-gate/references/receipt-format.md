@@ -44,9 +44,10 @@ Implemented once in `scripts/receipt-lib.mjs` — never re-derive it by hand.
 
 ## Known v1 limits (stated, not hidden)
 
-- **Untracked files are invisible** to `treeHash`: a brand-new file not yet `git add`ed
-  does not change the hash. Committing (or staging) work before certifying it closes
-  this gap; gates on commit-shaped transitions (merge-ready) inherit git's tracking.
+- **Uncommitted new files are invisible** to `treeHash`: it lists `HEAD`'s tree (step 1), so
+  a brand-new file does not change the hash until it is committed — staging alone is not
+  enough. Committing work before certifying it closes this gap; gates on commit-shaped
+  transitions (merge-ready) inherit git's tracking.
 - **No cryptographic signing in v1.** Hash-binding + digests defeat staleness and
   accidental drift, not a deliberate forger with write access to the receipts dir.
   HMAC signing (receipt-body HMAC, key from the environment, additive `signature` +

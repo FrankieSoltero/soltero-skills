@@ -71,11 +71,16 @@ export function checkCompleteness(receipt) {
     const v = receipt[f];
     if (f === 'args') {
       if (!Array.isArray(v)) problems.push('args must be an array');
+      else if (!v.every((x) => typeof x === 'string')) problems.push('args must be an array of strings');
     } else if (f === 'exitCode') {
       if (!Number.isInteger(v)) problems.push('exitCode must be an integer');
     } else if (typeof v !== 'string' || v.length === 0) {
       problems.push(`${f} must be a non-empty string`);
     }
+  }
+  // outputPath is optional, but when present it must be usable as a path.
+  if ('outputPath' in receipt && (typeof receipt.outputPath !== 'string' || receipt.outputPath.length === 0)) {
+    problems.push('outputPath must be a non-empty string when present');
   }
   return problems;
 }

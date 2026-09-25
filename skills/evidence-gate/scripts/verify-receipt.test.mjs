@@ -191,9 +191,7 @@ test('INCOMPLETE: unparseable JSON, a non-object, or a nonexistent receipt file 
   assert.match(none.stdout, /INCOMPLETE: unreadable/);
 });
 
-test('INCOMPLETE: a mistyped optional outputPath is reported as a verdict, not a crash', {
-  todo: 'BUG: a non-string outputPath throws an uncaught TypeError from path.join (verify-receipt.mjs:50-51), aborting the whole run with no GATE line',
-}, () => {
+test('INCOMPLETE: a mistyped optional outputPath is reported as a verdict, not a crash', {}, () => {
   const repo = makeRepo();
   const p = writeReceipt(repo, 'badpath', { overrides: { outputPath: 123 } });
   const r = verify(['--repo', repo, p]);
