@@ -12,7 +12,7 @@
 // Exit 0 = no blocking flag. Exit 1 = at least one blocking flag (the eval does
 // not support a ship decision as it stands). Exit 2 = malformed input.
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const ARMS = new Set(['with', 'without']);
@@ -277,6 +277,10 @@ function main(argv) {
   return result.flags.length === 0 ? 0 : 1;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+// Entry-point guard that survives symlinked paths (GP-001, Docs/golden-principles.md).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+if (isMain()) {
   process.exit(main(process.argv.slice(2)));
 }

@@ -22,7 +22,7 @@
 // the description at itself: rewriting from it is circular, so the phrasing has to be
 // recovered from the cited session or recorded as unrecovered.
 
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -267,4 +267,8 @@ function main(argv) {
   console.log(argv.includes('--markdown') ? toMarkdown(summary) : JSON.stringify(summary, null, 2));
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) main(process.argv.slice(2));
+// Entry-point guard that survives symlinked paths (GP-001, Docs/golden-principles.md).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+if (isMain()) main(process.argv.slice(2));
