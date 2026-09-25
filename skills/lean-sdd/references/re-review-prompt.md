@@ -4,7 +4,7 @@ Dispatch after each fix round. Haiku for small fix diffs; sonnet when the fix
 touched standard/judgment-tier code. This is
 not a fresh review — the full review already happened.
 
-```
+```text
 You are re-reviewing Task [N]'s fix round. Verdict each finding and inspect
 the fix diff — nothing else.
 

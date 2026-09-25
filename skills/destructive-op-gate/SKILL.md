@@ -47,10 +47,12 @@ condition under which the expensive mistakes happen, so it gets the expensive tr
 ## The Gate
 
 1. **Resolve the target from the config, not the conversation.**
+
    ```bash
    node ${CLAUDE_SKILL_DIR}/scripts/resolve-target.mjs --dotenv .env
    node ${CLAUDE_SKILL_DIR}/scripts/resolve-target.mjs --env-var DATABASE_URL
    ```
+
    Read the printed reason and quote it. Exit 1 means `unknown` — stop there; do not
    substitute your own judgment about whether the host "looks like" a dev box. When the
    config and a human's description disagree, the config wins and you say so out loud.
@@ -61,10 +63,12 @@ condition under which the expensive mistakes happen, so it gets the expensive tr
    that it looks correct and selects the wrong rows.
 4. **Count-only dry run, compared mechanically** against that enumeration — the ids you
    listed are the expected side, the dry run's number is the actual side:
+
    ```bash
    node ${CLAUDE_SKILL_DIR}/scripts/compare-counts.mjs \
      --expected-ids ids.txt --actual-file dryrun.txt --op purge_shifts --target <host/db>
    ```
+
    MATCH or stop. MISMATCH and INDETERMINATE both exit 1, and INDETERMINATE — "I could
    not extract a number" — is a block, not a shrug.
 5. **Produce the rollback artifact, then confirm it exists.** Export the exact rows to

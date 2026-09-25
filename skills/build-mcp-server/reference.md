@@ -38,7 +38,7 @@ npm i -D typescript @types/node tsx vitest
 `package.json`: `"type": "module"`, `"bin": { "<name>": "./dist/stdio.js" }`,
 scripts `build` (`tsc`), `dev` (`tsx watch`), `test` (`vitest run`), `typecheck` (`tsc --noEmit`).
 `tsconfig.json`: `"module": "NodeNext"`, `"target": "ES2022"`, `"strict": true`,
-`"noUncheckedIndexedAccess": true`, `outDir `dist`. Add `#!/usr/bin/env node` to the stdio entry.
+`"noUncheckedIndexedAccess": true`, `outDir`dist`. Add`#!/usr/bin/env node` to the stdio entry.
 
 ## The server, defined once (v1.29.x)
 

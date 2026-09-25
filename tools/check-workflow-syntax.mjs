@@ -29,16 +29,21 @@ function isMain() {
 
 const invokedDirectly = isMain()
 if (invokedDirectly) {
-  const path = process.argv[2]
-  if (!path) {
-    console.error('usage: check-workflow-syntax.mjs <workflow.mjs>')
+  const paths = process.argv.slice(2)
+  if (paths.length === 0) {
+    console.error('usage: check-workflow-syntax.mjs <workflow.mjs> [more.mjs ...]')
     process.exit(2)
   }
-  const result = checkWorkflowSyntax(readFileSync(path, 'utf8'))
-  if (result.ok) {
-    console.log(`ok: ${path} parses under the Workflow runtime dialect`)
-  } else {
-    console.error(`SYNTAX ERROR in ${path}: ${result.error}`)
-    process.exit(1)
+  // Check every path before exiting so one run reports all broken scripts.
+  let failed = false
+  for (const path of paths) {
+    const result = checkWorkflowSyntax(readFileSync(path, 'utf8'))
+    if (result.ok) {
+      console.log(`ok: ${path} parses under the Workflow runtime dialect`)
+    } else {
+      console.error(`SYNTAX ERROR in ${path}: ${result.error}`)
+      failed = true
+    }
   }
+  if (failed) process.exit(1)
 }

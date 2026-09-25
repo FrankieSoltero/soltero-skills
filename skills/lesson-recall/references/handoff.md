@@ -35,7 +35,7 @@ the script's output, so it does not have to re-derive them:
 
 Worked handoff, from the scenario-2 fixture:
 
-```
+```text
 Recall: this is the 5th recorded occurrence of the calendar-day-shift class
 (2026-05-02, 2026-06-02, 2026-06-25, 2026-07-08, 2026-08-21), and the owner puts it at ~15.
 Handing off to soltero-skills:correction-compiler before fixing the queue.

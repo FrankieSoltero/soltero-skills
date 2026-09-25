@@ -7,10 +7,10 @@
 //
 // It reports. It never edits a debrief, a skill, or a routing file.
 //
-//   node missed-triggers.mjs docs/debriefs                 # JSON summary
-//   node missed-triggers.mjs docs/debriefs --markdown      # ledger-ready tables
-//   node missed-triggers.mjs docs/debriefs/2026-08-19.md   # one report
-//   node missed-triggers.mjs docs/debriefs --routing .     # + which routing surfaces
+//   node missed-triggers.mjs Docs/debriefs                 # JSON summary
+//   node missed-triggers.mjs Docs/debriefs --markdown      # ledger-ready tables
+//   node missed-triggers.mjs Docs/debriefs/2026-08-19.md   # one report
+//   node missed-triggers.mjs Docs/debriefs --routing .     # + which routing surfaces
 //                                                          #   name each skill
 //
 // Quote kinds:

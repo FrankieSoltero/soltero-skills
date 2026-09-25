@@ -92,6 +92,7 @@ comparison and the key in one call.
 ## Script options
 
 `scripts/resolve-target.mjs`
+
 - `--help` prints the usage line and exits 0 (both scripts).
 - `--url <conn>` | `--dotenv <path>` `[--var NAME]` | `--env-var NAME` — pick the source.
   (The flag is `--dotenv`, not `--env-file`: Node consumes `--env-file` itself.)
@@ -101,6 +102,7 @@ comparison and the key in one call.
 - Never prints the password, in either output mode.
 
 `scripts/compare-counts.mjs`
+
 - `--expected N --actual N`, or `--expected-file/--actual-file` (extracts a count from
   dry-run output, psql command tags, `count(*)` results, or a `(N rows)` footer), or
   `--expected-ids` paired with `--actual-ids` (set comparison naming the extra and missing
@@ -116,7 +118,8 @@ comparison and the key in one call.
   not pick one.
 
 `scripts/destructive-shapes.mjs`
-- `destructive-shapes.mjs "<command>"` or `- ` to read stdin. Exit 1 if any shape matched.
+
+- `destructive-shapes.mjs "<command>"` or `-` to read stdin. Exit 1 if any shape matched.
 - Shapes: `DROP`, `TRUNCATE`, `DELETE`/`UPDATE` with no `WHERE`, schema-resetting
   migration commands (`prisma migrate reset`, `prisma db push --accept-data-loss`,
   `dropdb`, …), and `rm -rf` outside `/tmp` or with an unresolvable target.

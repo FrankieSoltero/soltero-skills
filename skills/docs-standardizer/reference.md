@@ -74,7 +74,7 @@ Exit 0 GREEN, 1 RED, 2 malformed standard or usage. Findings print as
 
 ## Commit messages, one per category
 
-```
+```text
 docs(reconcile): fix stale claims, merge doc/ into docs/, record docsRoot
 docs(entry): CLAUDE.md to standard (N lines / budget M), AGENTS.md pointer
 docs(required): architecture, conventions, decisions, lessons scaffold, open questions

@@ -7,6 +7,7 @@ sample (step 4). All commands are read-only; run them from the audited library r
 
 Any statement whose truth lives outside the repo and can rot without a diff:
 
+<!-- markdownlint-disable MD056 -- the Extraction cells are copy-paste grep -E patterns; escaping their | alternations as \| would break them -->
 | Class | Examples | Extraction (grep -rInE over skill docs) |
 |-------|----------|------------------------------------------|
 | Model names | `claude-3-opus-20240229`, `gpt-4o`, "the strongest available model" | `claude-[a-z0-9.-]+|gpt-[a-z0-9.-]+|gemini-[a-z0-9.-]+` |
@@ -15,6 +16,7 @@ Any statement whose truth lives outside the repo and can rot without a diff:
 | Currency adjectives | "current LTS", "latest", "recommended", "only version supported" | `current|latest|deprecated|LTS|recommended` |
 | External IDs | arXiv IDs, CVE IDs, RFC numbers | `arXiv:[0-9.]+|CVE-[0-9-]+|RFC ?[0-9]+` |
 | Dated statements | "as of March 2025", changelog-style dates | `20[0-9]{2}-[0-9]{2}-[0-9]{2}|as of` |
+<!-- markdownlint-enable MD056 -->
 
 Grep output is a candidate list, not the inventory — read each hit in context and drop
 false positives (code identifiers, the skill's own examples). Also record per doc:

@@ -108,7 +108,7 @@ tool requires; invoke it from the main session (subagents cannot call `Workflow`
    rewrite by file count — re-chunk before dispatching.
 5. **Run it** through the universal runner — not a script you wrote for this purpose:
 
-   ```
+   ```text
    Workflow({
      scriptPath: "${CLAUDE_SKILL_DIR}/workflows/swarm.mjs",
      args: { spec: <the validated spec object, items as arrays>, root: "<absolute path>", date: "<date +%F>" }

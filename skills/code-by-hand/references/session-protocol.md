@@ -6,7 +6,7 @@ One logical block per turn, 5-15 lines (a signature + body, a loop, an error han
 Judgment within the range is yours; going line-by-line briefly for a dense section is
 fine, but it is a narrowing of the same loop, not a different mode. Structure:
 
-```
+```text
 ### Block N — <label>  (file, where it goes)
 
 Why this block, why here: 1-3 sentences — what it does for the feature and why it

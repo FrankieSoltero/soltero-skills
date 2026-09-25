@@ -54,14 +54,14 @@ own worktree and is the native mechanism for that case.
    untracked files to the parent checkout, and a broad `git add` commits the
    whole nested tree:
 
-```bash
-git check-ignore -q .worktrees || {
-  echo '.worktrees/' >> .gitignore
-  git add .gitignore && git commit -m "chore: ignore .worktrees/"
-  git check-ignore -q .worktrees   # hard stop if still non-zero
-}
-git worktree add .worktrees/<branch> -b <branch>
-```
+   ```bash
+   git check-ignore -q .worktrees || {
+     echo '.worktrees/' >> .gitignore
+     git add .gitignore && git commit -m "chore: ignore .worktrees/"
+     git check-ignore -q .worktrees   # hard stop if still non-zero
+   }
+   git worktree add .worktrees/<branch> -b <branch>
+   ```
 
 3. Sandbox denial on `git worktree add` → say so and work in place.
 

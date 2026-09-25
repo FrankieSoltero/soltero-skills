@@ -12,7 +12,7 @@ message is a guess wearing a status report's clothes.
 
 ## The Iron Law
 
-```
+```text
 NO COMPLETION CLAIM WITHOUT FRESH VERIFICATION EVIDENCE
 ```
 

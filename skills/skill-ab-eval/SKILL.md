@@ -35,7 +35,7 @@ off one tier is the unattributed claim that rule already refuses.
 
 ## The Iron Law
 
-```
+```text
 AN EFFICACY CLAIM COMES FROM RUNS THIS EVAL PRODUCED AND TRANSCRIPTS IT READ
 ```
 

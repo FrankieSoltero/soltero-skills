@@ -10,7 +10,7 @@ session hook.
 
 ## Install
 
-```
+```text
 /plugin marketplace add FrankieSoltero/soltero-skills
 /plugin install soltero-skills@soltero-skills-marketplace
 ```
@@ -108,14 +108,14 @@ Set `SOLTERO_SKILLS_DIR` to serve a different skills directory;
 | `multiplayer-game-dev` | Browser/WebSocket multiplayer netcode: authority-first design, tick/snapshot/interpolation patterns with numbers, and unconditional ship-gates (latency sim, desync harness, cheat probe). |
 | `mini-game-craft` | Browser mini-game mechanics + seeded procedural art: failure-class catalog (timestep, swept collision, rotation, lockout), fixes ship with fail-on-old tests, dt-varying test discipline, art as a pure layer. |
 
-Roadmap (see `docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`
+Roadmap (see `Docs/specs/`): `claude-integration-patterns`, `financial-correctness-review`
 (`author-claude-md` shipped as `docs-standardizer`).
 
 ## Develop
 
 Every skill is built with `creating-a-skill`. See `CONTRIBUTING.md`.
 
-```
+```text
 npm test            # tooling unit tests
 npm run lint:fm     # SKILL.md frontmatter lint
 npm run validate:plugin

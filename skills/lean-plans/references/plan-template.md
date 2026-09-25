@@ -32,11 +32,13 @@ and may execute/review concurrently."]
 ## Task N: [Component Name]
 
 **Files:**
+
 - Create: `exact/path/file.ts`
 - Modify: `exact/path/existing.ts`
 - Test: `tests/exact/path/file.test.ts`
 
 **Interfaces:**
+
 - Consumes: [exact signatures from earlier tasks this task uses — verbatim]
 - Produces: [exact function/class/type names with parameter and return types
   that later tasks rely on]

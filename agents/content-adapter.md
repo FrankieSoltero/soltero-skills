@@ -29,7 +29,7 @@ Rules — non-negotiable:
 
 Return (your final message is raw data for the controller):
 
-```
+```text
 ADAPTATION (<platform>):
 <the artifact>
 

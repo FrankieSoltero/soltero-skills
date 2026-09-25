@@ -27,6 +27,7 @@
 
 If an agent reads the skill and still chooses wrong, ask: "You read the skill and chose X —
 how should the skill have been written so the correct choice was the only acceptable one?"
+
 - Clarity gap → add their suggestion verbatim.
 - Organization gap → move the key point earlier/more prominent.
 - Willpower gap → strengthen the foundational principle.
