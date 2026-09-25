@@ -1,6 +1,6 @@
 ---
 name: lean-verification
-description: Use before claiming anything is complete, fixed, or passing — before committing, creating a PR, marking a task done, or answering "is it done/fixed?". No completion claim without fresh verification evidence in the same message; never draft the success message (or its numbers) before the command has run; a subagent's success report is a claim to verify against the diff, not a fact to relay; a changed UI screen, HTTP endpoint or CLI surface needs one live-driven observation plus a final-state check, not just a green suite. Lean variant of the verification-before-completion discipline.
+description: Use before claiming anything is complete, fixed or passing — before committing, opening a PR, marking a task done, or answering "is it done/fixed?". No completion claim without fresh evidence in the same message; a subagent's success report is a claim to verify, not a fact; a changed UI, endpoint or CLI needs one live-driven observation.
 ---
 
 # Lean Verification

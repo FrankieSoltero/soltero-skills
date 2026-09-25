@@ -1,6 +1,6 @@
 ---
 name: prd-user-stories
-description: Use when writing or reviewing the user-stories / acceptance-criteria section of a PRD, or on standalone asks like "write user stories for X" or "add acceptance criteria to these stories" — produces stories that trace to stated requirements with Given/When/Then criteria a tester could execute verbatim, instead of inventing personas, thresholds, and features the PRD never stated or dropping testability because someone asked to "keep it light". Child skill of soltero-skills:writing-prds (which invokes it for section 4).
+description: Use when writing or reviewing a PRD's user stories or acceptance criteria, or on asks like "write user stories for X" or "add acceptance criteria to these stories" — stories trace to stated requirements, with Given/When/Then criteria a tester could run verbatim; no invented personas, thresholds or features. Child of writing-prds.
 ---
 
 # PRD User Stories & Acceptance Criteria

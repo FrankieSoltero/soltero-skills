@@ -1,6 +1,6 @@
 ---
 name: token-economy
-description: Use when usage limits or token spend are the problem — "I keep hitting / blowing through my usage limit", "what's eating my usage", "I have 20 percent left for the week", "cut down on my model usage", "subagents are killing my usage", "why am I burning through usage so fast", "audit my token usage", "use tokens more efficiently", "set up the token-saving system", "set this up on my teammate's machine". Audit mode runs a bundled script over ~/.claude/projects transcripts and ranks the levers by uncached input tokens (hook-spawned headless sessions, breaks longer than the cache TTL, compactions, unpinned dispatches, whole-file reads). Setup mode installs the measured system at user scope with a bundled idempotent script — calibrated context-watch hook, effort, marker-delimited protocol block in ~/.claude/CLAUDE.md (handoff + /clear never /compact, pin every dispatch, workers read) — with a backup of every file touched. Never touches the main model.
+description: Use when usage limits or token spend are the problem — "I keep hitting / blowing through my usage limit", "I have 20 percent left for the week", "why am I burning through usage so fast", "what's eating my usage", "cut down on my model usage", "subagents are killing my usage", "audit my token usage", "set up the token-saving system". Audits transcripts to rank levers, or installs the measured system at user scope with backups. Never touches the main model.
 ---
 
 # Token Economy

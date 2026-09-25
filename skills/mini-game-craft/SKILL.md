@@ -1,6 +1,6 @@
 ---
 name: mini-game-craft
-description: Use when building, fixing, or polishing browser mini-games — platformers, falling-block puzzles, arcade games — especially the multiplayer_ai project's embedded games: "the game feels random/buggy", jump/collision/rotation complaints, frame-rate-dependent behavior, blocks vanishing, pieces jumping, flaky game tests, or adding art/themes/renderers ("make it look good", "art generator"). Carries the failure-class catalog with fix patterns and the seeded-art-layer rules; enforces: name the failure class before patching, every fix ships with a test that fails on the old code, game tests vary dt, and all visual randomness derives from the session seed with engines kept pure. Sibling of multiplayer-game-dev (netcode).
+description: Use when building, fixing or polishing browser mini-games (platformers, falling-block puzzles, arcade) — "the game feels random/buggy", jump/collision/rotation bugs, frame-rate-dependent behavior, blocks vanishing, flaky game tests, or art and themes ("make it look good"). Name the failure class before patching; every fix ships with a test that fails on the old code. Sibling of multiplayer-game-dev.
 ---
 
 # Mini-Game Craft

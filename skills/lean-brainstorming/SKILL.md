@@ -1,6 +1,6 @@
 ---
 name: lean-brainstorming
-description: Use when someone asks to build/add/change functionality and the requirements or design haven't been agreed yet — especially under "just build it" / "keep it quick" / "I've got 15 minutes" pressure — and the fast pipeline is wanted. Batches 2–4 blocking questions in ONE round, presents the complete design in ONE message, and enforces a hard no-implementation-before-approval gate with a single combined design+spec approval pass (2 round trips instead of 8+). Lean, batched-question variant of the brainstorming step; writes the spec file and hands off to soltero-skills:lean-plans. Not for bug fixes, pure questions, or already-approved designs.
+description: Use when someone asks to build/add/change functionality and the design isn't agreed yet — especially under "just build it", "keep it quick" or "I've got 15 minutes" pressure. Batches 2-4 blocking questions in one round, presents the whole design in one message, and holds a hard no-implementation-before-approval gate. Writes the spec and hands off to lean-plans. Not for bug fixes.
 ---
 
 # Lean Brainstorming

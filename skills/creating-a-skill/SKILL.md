@@ -1,6 +1,6 @@
 ---
 name: creating-a-skill
-description: Use when creating a new skill or editing an existing one in this repo, before writing any SKILL.md content ("write a skill for…", "add a skill", "update the X skill", "make this a skill", "turn this into a skill", "the X skill should also…") — enforces test-first, subagent-validated authoring and the plugin's four hard gates: an observed failing baseline, deterministic steps as tested scripts, a description a user's own words actually trigger, and with/without pass rates on two model tiers before anything ships.
+description: Use when creating or editing a skill in this repo, before writing any SKILL.md content ("write a skill for…", "add a skill", "update the X skill", "make this a skill", "turn this into a skill", "the X skill should also…"). Enforces test-first authoring and four hard gates — a failing baseline, tested scripts, a description users' words trigger, with/without pass rates on two tiers.
 ---
 
 # Creating a Skill

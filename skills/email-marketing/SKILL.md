@@ -1,6 +1,6 @@
 ---
 name: email-marketing
-description: Use when writing or planning any email that reaches customers or prospects — cold/outbound outreach, onboarding/drip sequences, newsletters, announcements — or when asked about subject lines, deliverability, or cadence. Inherits content-marketing's claim-trace gate and adds the email-specific ones — personalization traces to a real named fact or is cut; product claims trace even inside compliant rewrites (the observed failure: refusing an illegal list while hallucinating the feature list); no fictional case studies, even templated — plus compliance floor and sequence craft. Child of soltero-skills:content-marketing.
+description: Use when writing or planning email to customers or prospects — cold outreach, onboarding/drip sequences, newsletters, announcements — or asked about subject lines, deliverability or cadence. Inherits content-marketing's claim-trace gate; personalization and product claims must trace to real facts, no fictional case studies, plus a compliance floor. Child of content-marketing.
 ---
 
 # Email Marketing

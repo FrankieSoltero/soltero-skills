@@ -1,6 +1,6 @@
 ---
 name: lean-worktrees
-description: Use when starting feature work that needs isolation from the current workspace, or before executing an implementation plan (lean-sdd Setup) — detect existing isolation first, prefer the platform's native worktree tool (e.g. EnterWorktree) over raw git, and only then fall back to a guarded project-local git worktree that is verified gitignored before creation. Lean variant of the git-worktree setup step.
+description: Use when starting feature work that needs isolation from the current workspace, or before executing a plan (lean-sdd setup). Detects existing isolation first, prefers the platform's native worktree tool (e.g. EnterWorktree), and only then falls back to a project-local git worktree verified gitignored before creation.
 ---
 
 # Lean Worktrees

@@ -1,6 +1,6 @@
 ---
 name: skill-patcher
-description: Use when running the recurring meta-pass ("run skill-patcher", "patch the skills from the corrections ledger", a scheduled maintenance pass) that synthesizes accumulated correction evidence — Docs/corrections-ledger.md, Docs/mistakes-and-fixes.md, review artifacts — back into the skill/ruleset files whose guidance caused repeated mistakes. Clusters the evidence, drafts discrete refine-in-place edits to the implicated rules, and opens a branch + PR with every change traced to its corrections. Never edits installed skills directly, never merges its own PRs, and never patches from a single un-clustered correction (that routes to correction-compiler).
+description: Use when running the recurring meta-pass ("run skill-patcher", "patch the skills from the corrections ledger", scheduled maintenance) that turns clustered correction evidence (Docs/corrections-ledger.md, Docs/mistakes-and-fixes.md) into refine-in-place edits to the skills that caused them, via a branch + PR. Never merges its own PRs; a single correction goes to correction-compiler.
 ---
 
 # Skill Patcher

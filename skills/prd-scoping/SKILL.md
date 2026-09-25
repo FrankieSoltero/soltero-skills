@@ -1,6 +1,6 @@
 ---
 name: prd-scoping
-description: Use when writing or reviewing a PRD's scope/prioritization section, or on standalone asks like "prioritize this feature list", "what should be v1?", "is this in scope?" — enforces a MoSCoW budget (if everything is Must, nothing is prioritized), an explicit Out-of-scope list that survives pressure to delete it, and decomposition when one PRD bundles independent subsystems. Child skill of soltero-skills:writing-prds (which invokes it for section 5).
+description: Use when writing or reviewing a PRD's scope/prioritization section, or on asks like "prioritize this feature list", "what should be v1?", "is this in scope?" — enforces a MoSCoW budget, an explicit Out-of-scope list that survives pressure, and decomposition of bundled subsystems. Child of writing-prds.
 ---
 
 # PRD Scoping & Prioritization

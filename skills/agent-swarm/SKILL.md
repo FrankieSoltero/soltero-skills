@@ -1,6 +1,6 @@
 ---
 name: agent-swarm
-description: Use when asked to "spawn a swarm", "spin up a sub agent swarm", "spawn sub agents for this", "fan out agents", "throw a bunch of agents at this", "parallelize this across agents", "run a workflow on this", or "swarm it" for a purpose no purpose-specific swarm skill already owns (audit-swarm, plan-review, prd-review, lean-sdd, skill-ab-eval, transcript-reader) — and before writing any ad-hoc Workflow script or dispatching four or more Agent calls for one task. Turns the request into a JSON swarm spec (shape, lanes over an inline-scouted work-list, a standard tier pinned at every dispatch site, an agent ceiling, severity-scaled verification, one synthesis agent writing a file, a capped loop), gates it with a bundled planner that prints the agent count per tier and refuses unpinned or orchestrator-tier dispatches, and runs it through one parameterized universal workflow. A new purpose is a new spec file, never a new skill or a fresh 300-line script.
+description: Use when asked to "spawn a swarm", "spin up a sub agent swarm", "fan out agents", "throw a bunch of agents at this", "parallelize this across agents" "run a workflow on this" or "swarm it" and no purpose-built swarm skill owns the job — and before any ad-hoc Workflow script or 4+ Agent dispatches. Turns the request into a JSON swarm spec, gated by a planner, run by one universal workflow.
 ---
 
 # Agent Swarm
