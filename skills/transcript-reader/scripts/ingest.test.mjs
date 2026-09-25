@@ -397,21 +397,21 @@ test('CLI still runs when invoked through a symlinked path (macOS /tmp → /priv
   assert.equal(noArgs.status, 2, 'a usage error must never exit 0 silently through a symlinked path');
 });
 
-// ---------- known bugs (kept red-able, marked todo so the suite stays green) ----------
+// ---------- regressions for bugs found when this suite was written ----------
 
-test('a speaker with a non-ASCII name gets their own utterance', { todo: 'BUG: SPEAKER regex uses ASCII-only [A-Z]/\\w, so "José: ..." is merged into the previous speaker\'s line' }, () => {
+test('a speaker with a non-ASCII name gets their own utterance', () => {
   const res = ingest('u8.txt', 'Derek: hello\nJosé: hola a todos\nÉlodie: bonjour\n');
   assert.equal(res.code, 0, res.stderr);
   assert.deepEqual(res.lines, ['Derek: hello', 'José: hola a todos', 'Élodie: bonjour']);
 });
 
-test('a numbered generic label ("Speaker 1: ...") is its own utterance', { todo: 'BUG: SPEAKER regex requires every word capitalized, so "Speaker 1:" labels are never recognized (whole file rejected as header, exit 1)' }, () => {
+test('a numbered generic label ("Speaker 1: ...") is its own utterance', () => {
   const res = ingest('sp.txt', 'Speaker 1: first\nSpeaker 2: second\n');
   assert.equal(res.code, 0, res.stderr);
   assert.deepEqual(res.lines, ['Speaker 1: first', 'Speaker 2: second']);
 });
 
-test('a VTT cue with two voice tags does not attribute the second voice\'s words to the first', { todo: 'BUG: parseCuePayload keeps only the first <v> speaker and strips later <v> tags into its text' }, () => {
+test('a VTT cue with two voice tags does not attribute the second voice\'s words to the first', () => {
   const res = ingest('mv.vtt', 'WEBVTT\n\n00:00:01.000 --> 00:00:02.000\n<v Ana>hi</v> <v Ben>yo</v>\n');
   assert.equal(res.code, 0, res.stderr);
   assert.ok(!res.lines.includes('[00:00:01] Ana: hi yo'), 'Ben\'s "yo" must not be attributed to Ana');

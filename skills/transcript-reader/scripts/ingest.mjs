@@ -71,17 +71,28 @@ function detectFormat(content, file) {
 
 // ---------- parsers -> [{ timestamp, speaker, text }] ----------
 
+// A speaker label: 1-4 words, the first capitalized in any script (José, Élodie), later
+// words capitalized or a plain number ("Speaker 1"). Every regex using it needs the u flag.
+const SPEAKER = "\\p{Lu}[\\p{L}\\p{N}_.'-]*(?:\\s+(?:\\p{Lu}[\\p{L}\\p{N}_.'-]*|\\d+)){0,3}";
+const LABELED = new RegExp(`^(${SPEAKER}):\\s+(.*)$`, 'u');
+const VOICE_TAG = /<v(?:\.[^ >]*)?\s+([^>]+)>/g;
+
 function parseCuePayload(payloadLines, warnings) {
-  // Voice tag (<v Speaker>text</v>) or "Speaker: text" in the first payload line.
+  // Voice tags (<v Speaker>text</v>, one or more per cue) or "Speaker: text".
+  // Returns one { speaker, text } per voice so a second voice is never credited to the first.
   const joined = payloadLines.join(' ').replace(/\s+/g, ' ').trim();
-  const voice = joined.match(/^<v(?:\.[^ >]*)?\s+([^>]+)>\s*(.*)$/);
-  if (voice) {
-    return { speaker: voice[1].trim(), text: voice[2].replace(/<\/v>\s*$/, '').replace(/<[^>]+>/g, '').trim() };
+  const tags = [...joined.matchAll(VOICE_TAG)];
+  if (tags.length && tags[0].index === 0) {
+    return tags.map((t, i) => {
+      const end = i + 1 < tags.length ? tags[i + 1].index : joined.length;
+      const text = joined.slice(t.index + t[0].length, end).replace(/<[^>]+>/g, '').trim();
+      return { speaker: t[1].trim(), text };
+    });
   }
-  const labeled = joined.match(/^([A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*){0,3}):\s+(.*)$/);
-  if (labeled) return { speaker: labeled[1].trim(), text: labeled[2].replace(/<[^>]+>/g, '').trim() };
+  const labeled = joined.match(LABELED);
+  if (labeled) return [{ speaker: labeled[1].trim(), text: labeled[2].replace(/<[^>]+>/g, '').trim() }];
   if (/<[^>]+>/.test(joined)) warnings.push('cue contained markup with no recognizable voice tag; tags stripped');
-  return { speaker: null, text: joined.replace(/<[^>]+>/g, '').trim() };
+  return [{ speaker: null, text: joined.replace(/<[^>]+>/g, '').trim() }];
 }
 
 function parseVtt(content, warnings) {
@@ -98,8 +109,9 @@ function parseVtt(content, warnings) {
     const start = normalizeTimestamp(timing.split('-->')[0]);
     const payload = lines.slice(idx + 1);
     if (!payload.length) continue;
-    const { speaker, text } = parseCuePayload(payload, warnings);
-    if (text) utterances.push({ timestamp: start, speaker, text });
+    for (const { speaker, text } of parseCuePayload(payload, warnings)) {
+      if (text) utterances.push({ timestamp: start, speaker, text });
+    }
   }
   return utterances;
 }
@@ -110,16 +122,15 @@ function parseSrt(content, warnings) {
 }
 
 // Line-based parser: Zoom txt, Google Meet exports, plain labeled text.
-const SPEAKER = "[A-Z][\\w.'-]*(?:\\s+[A-Z][\\w.'-]*){0,3}";
 const LINE_PATTERNS = [
   // [00:12:42] Derek: text   |   [00:12:42] text
-  { re: new RegExp(`^\\[(\\d{1,2}:\\d{2}(?::\\d{2})?(?:[.,]\\d{1,3})?)\\]\\s+(?:(${SPEAKER}):\\s+)?(.*)$`), map: (m) => ({ timestamp: m[1], speaker: m[2] ?? null, text: m[3] }) },
+  { re: new RegExp(`^\\[(\\d{1,2}:\\d{2}(?::\\d{2})?(?:[.,]\\d{1,3})?)\\]\\s+(?:(${SPEAKER}):\\s+)?(.*)$`, 'u'), map: (m) => ({ timestamp: m[1], speaker: m[2] ?? null, text: m[3] }) },
   // 00:12:42 Derek: text  (Zoom-style)
-  { re: new RegExp(`^(\\d{1,2}:\\d{2}:\\d{2}(?:[.,]\\d{1,3})?)\\s+(${SPEAKER}):\\s+(.*)$`), map: (m) => ({ timestamp: m[1], speaker: m[2], text: m[3] }) },
+  { re: new RegExp(`^(\\d{1,2}:\\d{2}:\\d{2}(?:[.,]\\d{1,3})?)\\s+(${SPEAKER}):\\s+(.*)$`, 'u'), map: (m) => ({ timestamp: m[1], speaker: m[2], text: m[3] }) },
   // Derek (00:12:42): text
-  { re: new RegExp(`^(${SPEAKER})\\s+\\((\\d{1,2}:\\d{2}(?::\\d{2})?)\\):\\s+(.*)$`), map: (m) => ({ timestamp: m[2], speaker: m[1], text: m[3] }) },
+  { re: new RegExp(`^(${SPEAKER})\\s+\\((\\d{1,2}:\\d{2}(?::\\d{2})?)\\):\\s+(.*)$`, 'u'), map: (m) => ({ timestamp: m[2], speaker: m[1], text: m[3] }) },
   // Derek: text
-  { re: new RegExp(`^(${SPEAKER}):\\s+(.*)$`), map: (m) => ({ timestamp: null, speaker: m[1], text: m[2] }) },
+  { re: new RegExp(`^(${SPEAKER}):\\s+(.*)$`, 'u'), map: (m) => ({ timestamp: null, speaker: m[1], text: m[2] }) },
 ];
 
 function parseLines(content, warnings) {
