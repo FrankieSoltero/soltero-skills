@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  validate:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -43,3 +43,14 @@ jobs:
           else
             echo "claude CLI unavailable in CI — frontmatter lint is the gate"
           fi
+
+  # The main-branch ruleset requires a status check named "validate"; matrix legs report as
+  # "test (22)" / "test (24)". always() + an explicit result check, because a skipped
+  # required job would otherwise count as passing.
+  validate:
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: All Node versions passed
+        run: test "${{ needs.test.result }}" = "success"
