@@ -85,7 +85,7 @@ plan duplicates, and then drifts from, the executor's process.
 
 ## Handoff
 
-Save to `docs/plans/YYYY-MM-DD-<feature>.md` (user preferences override).
+Save to `Docs/plans/YYYY-MM-DD-<feature>.md` (user preferences override).
 Then offer, in order: gate the plan with soltero-skills:plan-review; execute
 with soltero-skills:lean-sdd. Where no skill dispatch is available, the plan
 still executes by hand: work the tasks in dependency order, one at a time.

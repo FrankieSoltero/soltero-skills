@@ -7,9 +7,9 @@
 // overlaps, dangling deps, cycles, missing tiers, missing table). Never edits
 // the plan. Output: JSON (default), --mermaid, or --md <planPath>.
 //
-//   node plan-graph.mjs docs/plans/x.md            # JSON analysis
-//   node plan-graph.mjs docs/plans/x.md --mermaid  # mermaid flowchart only
-//   node plan-graph.mjs docs/plans/x.md --md       # full visualization markdown
+//   node plan-graph.mjs Docs/plans/x.md            # JSON analysis
+//   node plan-graph.mjs Docs/plans/x.md --mermaid  # mermaid flowchart only
+//   node plan-graph.mjs Docs/plans/x.md --md       # full visualization markdown
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

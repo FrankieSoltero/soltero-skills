@@ -1,4 +1,4 @@
-# PRD Template — `docs/prds/YYYY-MM-DD-<topic>-prd.md`
+# PRD Template — `Docs/prds/YYYY-MM-DD-<topic>-prd.md`
 
 Draft sections IN ORDER, one at a time, getting a "looks right?" after each. Scale each
 section to its real complexity — a few sentences is fine; padding is not. Every specific

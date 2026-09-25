@@ -55,7 +55,7 @@ score yourself.
    Models as in the script — graders on sonnet, skeptics and re-graders on opus (the
    skeptic only fires on a score ≥90, so the expensive tier is reserved for PRDs that
    need the extra scrutiny); never let a dispatch inherit the session model.
-2. **Write the report** — `docs/prd-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
+2. **Write the report** — `Docs/prd-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
    banner (PASS / **BLOCKED — do not proceed to design or implementation**), score
    table (dimension, weight, grader score, skeptic misses, final), evidence-quoted
    violations, then three lists: blocking fixes (mechanical), owner questions,
