@@ -56,7 +56,7 @@ The dispatch prompt must contain, verbatim:
    justification relies on).
 3. The return contract:
 
-```
+```text
 Return exactly:
 VERDICT: APPROVE | REJECT
 REASON: <one paragraph>

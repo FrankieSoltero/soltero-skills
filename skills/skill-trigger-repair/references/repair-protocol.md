@@ -3,9 +3,9 @@
 ## 1. What the parser gives you
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/scripts/missed-triggers.mjs docs/debriefs            # JSON
-node ${CLAUDE_SKILL_DIR}/scripts/missed-triggers.mjs docs/debriefs --markdown # tables
-node ${CLAUDE_SKILL_DIR}/scripts/missed-triggers.mjs docs/debriefs --routing . --markdown
+node ${CLAUDE_SKILL_DIR}/scripts/missed-triggers.mjs Docs/debriefs            # JSON
+node ${CLAUDE_SKILL_DIR}/scripts/missed-triggers.mjs Docs/debriefs --markdown # tables
+node ${CLAUDE_SKILL_DIR}/scripts/missed-triggers.mjs Docs/debriefs --routing . --markdown
 ```
 
 It reads only the `## Missed triggers` section of each report, in the format
@@ -100,7 +100,7 @@ a line should also ask whether an obsolete one can go.
 
 ## 5. Ledger format — `Docs/trigger-repair-YYYY-MM-DD.md`
 
-One file per repair pass. Not in `docs/debriefs/`, not in `Docs/corrections-ledger.md`.
+One file per repair pass. Not in `Docs/debriefs/`, not in `Docs/corrections-ledger.md`.
 
 ```markdown
 # Trigger Repair — YYYY-MM-DD

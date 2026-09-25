@@ -62,7 +62,7 @@ Not preferences. A skill that breaks one does not ship, whatever the deadline.
 
 ## The Loop
 
-1. **Spec** — write `docs/specs/<skill>.md` from `templates/spec.md`: problem, trigger,
+1. **Spec** — write `Docs/specs/<skill>.md` from `templates/spec.md`: problem, trigger,
    scope, one concrete success scenario, and the literal phrasings a user would type.
 2. **RED** — write 3 pressure scenarios in `tests/scenarios/<skill>/` from
    `templates/scenario.md`; **one of them never names the skill** (Hard Rule 4). Dispatch a

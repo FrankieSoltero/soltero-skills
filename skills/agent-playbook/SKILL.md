@@ -64,7 +64,7 @@ plugin release cycle).
 3. **Invoke the Workflow — do not improvise your own sweep, and do not self-vet
    claims by spot-checking your own research:**
 
-   ```
+   ```text
    Workflow({
      scriptPath: "${CLAUDE_SKILL_DIR}/workflows/update.mjs",
      args: { sinceDate, today, seenKeys, playbookPath: "<absolute path to references/playbook.md>", bootstrap }
@@ -78,7 +78,7 @@ plugin release cycle).
    confident the reasoning sounds.
 4. **Apply the result mechanically:**
    - each `edits[]` item: `add` → append `entryMarkdown` under its `## <topic>`
-     heading (remove the "_No entries yet_" placeholder); `replace` → replace the
+     heading (remove the "*No entries yet*" placeholder); `replace` → replace the
      entry whose `###` heading equals `replacesHeading`.
    - prepend `digest` below the changelog's description line (i.e., after the file's
      intro text, before any previous digests — newest first); update "Last sweep:" to

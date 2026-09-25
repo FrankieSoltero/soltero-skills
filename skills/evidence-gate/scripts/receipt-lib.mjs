@@ -1,5 +1,5 @@
 // Shared deterministic logic for evidence-gate receipts.
-// Contract: docs/specs/evidence-gate.md + references/receipt-format.md. Do not drift.
+// Contract: Docs/specs/evidence-gate.md + references/receipt-format.md. Do not drift.
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';

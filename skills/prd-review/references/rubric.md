@@ -35,6 +35,7 @@ take the lower one.
 ## Dimensions & checklists
 
 ### D1 — Problem & evidence (weight 15)
+
 - Problem states who hurts, how, with evidence (tickets, interviews, data) — not
   "customers have been asking".
 - No solution language in the problem section (naming the tech stack = violation).
@@ -42,29 +43,34 @@ take the lower one.
   that are unvalidated.
 
 ### D2 — Requirements quality (weight 20)
+
 - Numbered, gap-free IDs; each requirement testable (observable bound or behavior —
   "fast", "intuitive", "secure", "scales" are violations).
 - Each traces to a goal; non-functional requirements state their bound.
 - No requirement contradicts another section.
 
 ### D3 — Stories & acceptance criteria (weight 15)
+
 - Every story: validated persona, traces to a requirement.
 - Every story has Given/When/Then criteria with observable Thens.
 - No invented thresholds presented as settled (unsourced numbers need
   `(proposed — confirm)`).
 
 ### D4 — Scope discipline (weight 15)
+
 - MoSCoW (or equivalent) with Must ≤ ~half; Must means "does not ship without".
 - Explicit Out-of-scope list exists.
 - No multi-subsystem bundle absorbed silently; undefined-shape items flagged as
   needing their own spec, not tiered.
 
 ### D5 — Success metrics (weight 15)
+
 - 3–5 primary metrics, each with baseline + target + timeframe + measurement source.
 - Unsourced targets carry `(proposed — confirm)`; no invented instrumentation.
 - At least one guardrail metric.
 
 ### D6 — Consistency & ambiguity (weight 20)
+
 - Two independent readers reach the SAME pass/fail on EVERY acceptance criterion. A
   Then one reader could call met and another unmet ("promptly", "usable", "nothing
   important is cut off", "works well") is a violation — quote the line. A criterion two

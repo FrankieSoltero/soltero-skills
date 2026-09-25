@@ -32,7 +32,7 @@ Status per the SDK's own text:
 
 > "v2 is the stable release line, released alongside the 2026-07-28 spec. v1.x continues to
 > receive bug fixes and security updates"
-> — https://github.com/modelcontextprotocol/typescript-sdk (fetched 2026-09-01)
+> — <https://github.com/modelcontextprotocol/typescript-sdk> (fetched 2026-09-01)
 
 **So: new servers go on v2.** Stay on v1 only for an existing v1 codebase you are not migrating
 yet — and then use `reference.md`, not this file.
@@ -168,7 +168,7 @@ resource *decision* (read-only context → resource; action with cost/risk → t
 v1; see `SKILL.md` step 3.
 
 The docs use `import * as z from 'zod/v4'`
-(https://ts.sdk.modelcontextprotocol.io/v2/servers/tools, fetched 2026-09-01). With the installed
+(<https://ts.sdk.modelcontextprotocol.io/v2/servers/tools>, fetched 2026-09-01). With the installed
 `zod@4.5.4` the `zod/v4` subpath resolves and type-checks.
 
 `outputSchema` + `structuredContent`, verbatim from that docs page:
@@ -200,7 +200,7 @@ declare function serveStdio(factory: McpServerFactory, options?: ServeStdioOptio
 // StdioServerHandle: { close(): Promise<void> }
 ```
 
-Docs example (https://ts.sdk.modelcontextprotocol.io/v2/serving/stdio, fetched 2026-09-01):
+Docs example (<https://ts.sdk.modelcontextprotocol.io/v2/serving/stdio>, fetched 2026-09-01):
 
 ```ts
 import { McpServer } from '@modelcontextprotocol/server';
@@ -274,7 +274,7 @@ the smaller first step.
 
 ### B. `createMcpHandler` + `toNodeHandler` (no framework)
 
-From https://ts.sdk.modelcontextprotocol.io/v2/serving/http (fetched 2026-09-01):
+From <https://ts.sdk.modelcontextprotocol.io/v2/serving/http> (fetched 2026-09-01):
 
 ```ts
 import { createMcpHandler, McpServer } from '@modelcontextprotocol/server';
@@ -320,7 +320,7 @@ request further" (`@modelcontextprotocol/node` README).
 - The 2026-07-28 revision is a distinct "modern era" in v2 (the SDK's types talk about eras,
   `DiscoverRequest`/`DiscoverResult`, `resultType` wire discrimination, tasks). **I did not
   exercise the modern-era opening, so this file does not describe it.** If you need 2026-07-28
-  semantics, read https://ts.sdk.modelcontextprotocol.io/v2/ and the repo's
+  semantics, read <https://ts.sdk.modelcontextprotocol.io/v2/> and the repo's
   `docs/migration/support-2026-07-28.md` rather than inferring from here.
 
 ## Differences vs v1 — at a glance
@@ -343,7 +343,7 @@ v1 column = `reference.md`'s verified v1.29.0 snapshot; v2 column = verified her
 | TS setup | `@types/node` picked up automatically | TS ≥6.0: add `"types": ["node"]` or the `.d.mts`'s `Buffer` refs fail |
 | Migration | — | `npx @modelcontextprotocol/codemod@latest v1-to-v2 .` (mechanical renames only) |
 
-Migration guide: https://ts.sdk.modelcontextprotocol.io/v2/migration/ — it states the codemod
+Migration guide: <https://ts.sdk.modelcontextprotocol.io/v2/migration/> — it states the codemod
 handles the SDK-surface upgrade but **cannot** automate adopting the 2026-07-28 revision
 (`createMcpHandler`, multi-round-trip requests, `versionNegotiation`) or code reading wire-only
 members (`resultType`, envelope keys).
@@ -358,7 +358,7 @@ multi-stage non-root Dockerfile. All of that lives in `reference.md` and applies
 
 ## How this file was verified (2026-09-01)
 
-```
+```text
 $ npm view @modelcontextprotocol/server version dist-tags time    # → 2.0.0, latest: 2.0.0
 $ npm i @modelcontextprotocol/server@2.0.0 @modelcontextprotocol/node@2.0.0 \
         @modelcontextprotocol/express@2.0.0 zod express
@@ -377,8 +377,8 @@ Beyond type-checking, the built `dist/stdio.js` was fed a JSON-RPC session on st
 runtime-verified, not just type-verified.
 
 Pages fetched (all 2026-09-01): the server/node/express `README.md` files inside the installed
-packages; https://github.com/modelcontextprotocol/typescript-sdk;
-https://ts.sdk.modelcontextprotocol.io/v2/servers/tools; …/v2/servers/resources;
+packages; <https://github.com/modelcontextprotocol/typescript-sdk>;
+<https://ts.sdk.modelcontextprotocol.io/v2/servers/tools>; …/v2/servers/resources;
 …/v2/serving/http; …/v2/serving/stdio; …/v2/migration/.
 `https://raw.githubusercontent.com/modelcontextprotocol/typescript-sdk/v2.0.0/docs/migration/upgrade-to-v2.md`
 returned **404** — there is no `v2.0.0` git tag at that path, so the migration details here come

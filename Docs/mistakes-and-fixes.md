@@ -49,6 +49,7 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** Stray root renamed to doc/ (distinct name); case-only mismatch with the standard's root made its own verifier finding (DOCS_ROOT_CASE, resolved by a recorded project override, not a rename); path claims resolved case-exactly via readdirSync per segment; manifest lookup matches exact names from readdirSync
 - **Lesson:** Any fixture or checker that distinguishes paths by case must resolve each segment against readdirSync, never existsSync — a macOS run must report what a Linux checkout would see, and a case-only clash is not a valid fixture on the author's own machine
 - **Regression test:** docs-verify.test.mjs: a doc citing docs/architecture.md and SRC/app.js against Docs/ and src/ yields 2 PATH_MISSING on any filesystem
+- **Recurrence (2026-09-23, this repo itself):** git had tracked 1,250 files under `Docs/` and 67 under `docs/` (both with `plans/` and `specs/`); on macOS they were one directory, so nobody noticed that `docs/mistakes-and-fixes.md` (this file) was invisible to skills reading `Docs/…` on Linux, or that skill-trigger-repair read `docs/debriefs` while dev-debrief wrote `Docs/debriefs`. A case-only `git mv` does nothing useful on APFS; the fix was an index-level rename (`git ls-files -s docs | … | git update-index --index-info`, blob SHAs unchanged). Check with `git ls-files | cut -d/ -f1 | sort -u | sort -f | uniq -di` — any output is a case-split tree.
 
 ## 2026-09-07 — token-economy RED baseline "passed" twice because the subagents found the spec, the scenario files (with their evaluator-only pass criteria), and the draft audit script
 
@@ -57,7 +58,6 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** moved the spec, scenarios, and drafts to an unadvertised directory (`/tmp/.te-wip-<random>`) for the duration of RED, rebuilt the fixtures, re-dispatched all three clean; recorded the void in `tests/scenarios/token-economy/RED-baseline.md`. One clean agent still located the directory with `find / -iname` but did not open it.
 - **Lesson:** a RED baseline is only as clean as the file system the agent can search. Before dispatching, nothing named after the skill may exist in the repo, the scratchpad, or `/tmp`; keep the spec and scenarios out of the tree until GREEN, and grep each baseline transcript for reads of `scenario-*.md`, `docs/specs/`, and the scratchpad path before accepting it.
 - **Regression test:** `grep -o '"file_path":"[^"]*"' <task>.output` and `grep -o '"command":"[^"]\{0,160\}' <task>.output | grep -i 'spec\|scenario\|scratchpad'` are empty for every accepted RED run.
-
 
 ## 2026-09-07 — economy-setup.mjs wrote a one-line garbled "protocol block" into CLAUDE.md and its own check reported OK; the GREEN scenario-2 subagent caught it
 
@@ -130,3 +130,11 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** the live render (Docs/evals/instagram-studio-2026-09-17/live-render.md) found all 12 defects; fixed in fada6c9 and e8c001e
 - **Lesson:** a skill that drives an external CLI is not verified until one run goes end to end with the real tool; schedule the live run BEFORE the efficacy eval, not after, so eval judges are grading a skill that can actually be executed
 - **Regression test:** `node skills/instagram-studio/scripts/check-output.mjs <out-dir> --format all` exits 0 on a real render
+
+## 2026-09-25 — PR #31 went green on CI but sat BLOCKED: adding a Node matrix renamed the 'validate' job's check to 'validate (22)'/'validate (24)', and main's ruleset requires a check named exactly 'validate'
+
+- **Symptom:** PR #31 went green on CI but sat BLOCKED: adding a Node matrix renamed the 'validate' job's check to 'validate (22)'/'validate (24)', and main's ruleset requires a check named exactly 'validate'
+- **Root cause:** Required status checks match the check-run name; a matrix appends '(<value>)' to it. The ruleset was never read before the job was restructured
+- **Fix:** Matrix job renamed 'test'; a 'validate' job with needs: test, if: always(), and an explicit needs.test.result == success step (a skipped required job reports as passing)
+- **Lesson:** Before renaming, matrixing, or splitting a CI job, read the required checks (gh api repos/<o>/<r>/rules/branches/main) and keep every required context reporting — a green run that never posts the required name blocks merges forever
+- **Regression test:** (none yet)

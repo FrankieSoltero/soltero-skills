@@ -1,6 +1,7 @@
 ## What & why
 
 ## Checklist
+
 - [ ] Followed `creating-a-skill` (spec → scenarios → RED → GREEN → REFACTOR)
 - [ ] `node tools/lint-frontmatter.mjs` passes
 - [ ] `npm test` passes

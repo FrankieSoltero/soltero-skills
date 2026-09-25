@@ -2,7 +2,7 @@
 
 ## Entry format (enforced by append-lesson.mjs)
 
-```
+```text
 ## YYYY-MM-DD — <symptom>
 
 - **Symptom:** ...

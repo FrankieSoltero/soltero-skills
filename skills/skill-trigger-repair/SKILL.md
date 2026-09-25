@@ -38,7 +38,7 @@ raw material for the new trigger clause.
    a hand count or on which skill was named in the request.
 
    ```bash
-   node ${CLAUDE_SKILL_DIR}/scripts/missed-triggers.mjs docs/debriefs --routing . --markdown
+   node ${CLAUDE_SKILL_DIR}/scripts/missed-triggers.mjs Docs/debriefs --routing . --markdown
    ```
 
    It returns, per skill: distinct dates, bullet count, cited sessions, every quoted span
@@ -85,7 +85,7 @@ raw material for the new trigger clause.
    dropping the trigger. Routing gets one line per skill in the existing section — the
    always-on files are a navigational map, and a bloated one measurably costs accuracy.
 4. **The ledger is yours; every other ledger belongs to someone else.** Write
-   `Docs/trigger-repair-YYYY-MM-DD.md` and nothing else. `docs/debriefs/` holds one
+   `Docs/trigger-repair-YYYY-MM-DD.md` and nothing else. `Docs/debriefs/` holds one
    report per date plus the skip log and takes no other file from anyone —
    dropping a ledger there corrupts a shared contract that gets re-parsed nightly.
    `Docs/corrections-ledger.md` is `correction-compiler`'s. Never modify a debrief
@@ -118,7 +118,7 @@ raw material for the new trigger clause.
 - Editing a skill because of how the request was worded rather than what the count says.
 - "Already routed" written from memory rather than from the `--routing` column.
 - A proposed description clause you cannot point at a session or bullet for.
-- A ledger path under `docs/debriefs/`, or an edit to `Docs/corrections-ledger.md`.
+- A ledger path under `Docs/debriefs/`, or an edit to `Docs/corrections-ledger.md`.
 - A description that grew a paragraph, a second line, or a capitalized imperative.
 - `git commit` / `git push` in a trigger-repair session.
 - The word "fixed" in the ledger before a later debrief has been read.

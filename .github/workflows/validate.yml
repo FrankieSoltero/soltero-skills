@@ -4,27 +4,38 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  validate:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Supported LTS lines; keep in step with package.json "engines".
+        node-version: ["22", "24"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: "20"
+          node-version: ${{ matrix.node-version }}
+          cache: npm
       - name: Frontmatter lint (hard gate, no deps)
         run: node tools/lint-frontmatter.mjs
       - name: Unit tests (hard gate, no deps)
         run: npm test
       - name: Defect classes (hard gate, no deps) — GP-001 esm-entry-guard
-        run: node skills/defect-class-sweep/scripts/sweep.mjs --rule Docs/defect-classes/esm-entry-guard.rule.json --root .
+        run: npm run check:entry-guard
+      - name: Workflow script syntax (hard gate, no deps)
+        run: npm run check:workflows
+      - name: Install dependencies
+        run: npm ci
       - name: MCP server typecheck + build + tests (hard gate)
         run: |
-          npm ci
           npm run typecheck
           npm run test:mcp
-      - name: Markdown lint (best-effort)
-        run: npx --yes markdownlint-cli2 "**/*.md" "#node_modules" || echo "markdownlint unavailable — skipped"
+      - name: Markdown lint (hard gate)
+        run: npm run lint:md
       - name: Plugin validate (best-effort; CLI may be unavailable)
         run: |
           if command -v claude >/dev/null 2>&1; then
@@ -32,3 +43,14 @@ jobs:
           else
             echo "claude CLI unavailable in CI — frontmatter lint is the gate"
           fi
+
+  # The main-branch ruleset requires a status check named "validate"; matrix legs report as
+  # "test (22)" / "test (24)". always() + an explicit result check, because a skipped
+  # required job would otherwise count as passing.
+  validate:
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: All Node versions passed
+        run: test "${{ needs.test.result }}" = "success"

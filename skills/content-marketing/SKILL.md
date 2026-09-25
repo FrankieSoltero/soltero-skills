@@ -57,7 +57,7 @@ scenarios are fine when framed as hypothetical.
    a claims table by design.
 6. **Deliver with the contract** (required, per artifact):
 
-```
+```text
 Claims: <claim> ← <source|PLACEHOLDER|cut>   (one line per claim; "none" ok)
 Checks: <platform>: <N>/<limit> chars ✓|✗ · CTA: <the one CTA> · voice: <source>
 Open: <placeholders the user must fill before publishing>

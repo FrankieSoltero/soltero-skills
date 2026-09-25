@@ -3,7 +3,8 @@
 All skills are authored with the `creating-a-skill` skill — test-driven documentation.
 
 ## The loop
-1. Spec → `docs/specs/<skill>.md`.
+
+1. Spec → `Docs/specs/<skill>.md`.
 2. RED → 3 pressure scenarios in `tests/scenarios/<skill>/` — one of which never names the
    skill, so the description itself is tested and not just the body; run a fresh subagent
    without the skill and record the baseline failure. Record the model identifier and the date at the top of
@@ -20,11 +21,13 @@ All skills are authored with the `creating-a-skill` skill — test-driven docume
 8. PR → CI runs the gates.
 
 ## Confidentiality (required)
+
 No private repo/company names, proprietary code/schemas, secrets, or internal identifiers in
 any committed file. Re-derive private-inspired patterns generically. Run
 `scripts/check-private-names.sh` before pushing.
 
 ## Conventions
+
 - One kebab-case folder per skill; `name` in frontmatter equals the folder name.
 - `description`: third person, lead with the trigger, quote the literal phrasings a user
   would type, ≤1024 chars.

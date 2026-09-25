@@ -7,7 +7,7 @@ Two modes, chosen by the task's risk tier in the plan's dependency table:
 - **SPEC_ONLY** (mechanical tier): spec compliance only, on haiku;
   quality is owned by the final whole-branch review.
 
-```
+```text
 You are reviewing Task [N]'s implementation. Mode: [FULL | SPEC_ONLY].
 This is a task-scoped gate, not a merge review — a whole-branch review runs
 after all tasks.
