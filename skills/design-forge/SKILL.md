@@ -1,6 +1,6 @@
 ---
 name: design-forge
-description: Use for front-end design work — "give me design options for X", "restyle this app", "make it look good", "add components from <library>" — and for "update the design catalog". Apply mode detects the stack, composes 3-4 aesthetic directions from a license-verified catalog of free design sources, renders each as a private preview with the user's real content, and implements only after an explicit pick + confirmed change plan, on a branch, render-verified. Catalog mode refreshes references/catalog.md via a bundled research Workflow with an independent license-verifier per candidate (reads the actual LICENSE file, default-reject); update mode runs only in the soltero-skills repo.
+description: Use for front-end design work — "give me design options for X", "restyle this app", "make it look good", "add components from <library>" — or "update the design catalog". Renders 3-4 aesthetic directions from a license-verified catalog as previews with real content, and implements only after an explicit pick, on a branch, render-verified.
 ---
 
 # Design Forge

@@ -1,6 +1,6 @@
 ---
 name: multiplayer-game-dev
-description: Use when building or reviewing real-time multiplayer game features on a web stack — mini-games in shared sessions, avatar/cursor sync, movement, physics races, netcode, desync bugs, game loops, lag/jitter complaints, WebSocket game rooms (TypeScript/Node + browser; not engine-specific). Carries the netcode reference (authority, tick/snapshot/interpolation numbers, prediction, determinism) and enforces the ship-gates: authority decided first, and every feature tested under simulated latency with a desync harness and cheat probe before "done".
+description: Use when building or reviewing real-time multiplayer game features on a web stack — shared-session mini-games, avatar/cursor sync, movement, physics races, netcode, desync bugs, lag/jitter complaints, WebSocket game rooms. Carries the netcode reference and enforces authority-first design and testing under simulated latency with a desync harness before "done".
 ---
 
 # Multiplayer Game Dev (web stack)

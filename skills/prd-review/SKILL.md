@@ -1,6 +1,6 @@
 ---
 name: prd-review
-description: Use when a PRD needs a quality verdict before design or implementation ("review this PRD", "is this good enough to build against?", "grade the PRD"), at the review gate of soltero-skills:writing-prds, or after a PRD was revised following a failed review — convenes a 6-dimension grading council (bundled workflow with rubric-anchored scores, evidence quotes, and anti-inflation skeptics) instead of one agent's ungraded editorial read, and enforces a hard gate: overall ≥95 AND every dimension ≥80 AND zero blocking-severity violations, else BLOCKED with no design, partial build, or parallel eng start. Applies mechanical fixes and escalates owner decisions, but the fixer never changes the verdict — re-review rounds re-grade only the dimensions that failed, and only a fresh council round can change the verdict. Child skill of soltero-skills:writing-prds.
+description: Use when a PRD needs a verdict before design or implementation ("review this PRD", "is this good enough to build against?", "grade the PRD"), at writing-prds' review gate, or after a revision. Convenes a 6-dimension grading council workflow with a hard gate — overall 95+, every dimension 80+, no blocking violations — else BLOCKED; the fixer never changes the verdict. Child of writing-prds.
 ---
 
 # PRD Review Council

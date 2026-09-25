@@ -1,6 +1,6 @@
 ---
 name: lean-plans
-description: Use when turning an approved spec or design into an implementation plan for multi-step or subagent execution ("write the plan", after lean-brainstorming approval) and wall-clock matters — produces a contract-level plan (exact interfaces, behavior tables, exact values, and a dependency/risk-tier table the executor uses to parallelize and tier reviews) with code in the plan only where exactness is the requirement. Lean variant of the plan-writing step; plans shrink ~3× because implementation and test FILES stay the implementer's job. Executed by soltero-skills:lean-sdd; gate with soltero-skills:plan-review before executing.
+description: Use when turning an approved spec or design into an implementation plan ("write the plan", after lean-brainstorming approval). Produces a contract-level plan — exact interfaces, behavior tables, exact values, and a dependency/risk-tier table for parallel execution — with code only where exactness requires it. Gate with plan-review; executed by lean-sdd.
 ---
 
 # Lean Plans

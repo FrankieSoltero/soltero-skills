@@ -1,6 +1,6 @@
 ---
 name: defect-class-sweep
-description: Use when the same bug class has been fixed three or more times across sessions or projects — "we have run into this issue like 15 times how have we not universalized this yet", "this is the third time this month", "universalize it, I want every instance fixed", or a mistakes-and-fixes cluster sharing one root cause — to retire the whole class instead of patching another instance. Writes the rule first (correct pattern plus a mechanically detectable wrong pattern), derives the gap inventory as what the rule will not cover, sweeps the whole repo with a bundled rule-file-driven detector, fixes every instance in one reviewed batch on a branch, lands the rule as a versioned Docs/golden-principles.md entry with a CI-wired check, and leaves a greppable marker on anything genuinely undecidable. No mechanical detector means it is not a class yet — it is a lesson.
+description: Use when the same bug class has been fixed three or more times — "we have run into this issue like 15 times how have we not universalized this yet", "this is the third time this month", "universalize it", or a mistakes-and-fixes cluster with one root cause. Writes the rule, sweeps the repo with a rule-driven detector, fixes every instance in one batch, and wires a CI check.
 ---
 
 # Defect Class Sweep

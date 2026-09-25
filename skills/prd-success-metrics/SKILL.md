@@ -1,6 +1,6 @@
 ---
 name: prd-success-metrics
-description: Use when writing or reviewing a PRD's success-metrics / goals section, or on standalone asks like "define success metrics for X" or "how do we know this worked?" — converts vague goals into 3–5 primary metrics that each carry baseline, target, timeframe, and measurement source, with every unsourced number marked "proposed — confirm" instead of presented as fact, and instrumentation asked about rather than assumed. Child skill of soltero-skills:writing-prds (which invokes it for section 7).
+description: Use when writing or reviewing a PRD's success-metrics section, or on asks like "define success metrics for X" or "how do we know this worked?" — turns vague goals into 3-5 metrics each with baseline, target, timeframe and source, marks unsourced numbers "proposed — confirm", and asks about instrumentation. Child of writing-prds.
 ---
 
 # PRD Success Metrics

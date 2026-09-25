@@ -1,6 +1,6 @@
 ---
 name: feedback-synthesis
-description: Use when synthesizing user feedback of any kind — support tickets, reviews, interviews, surveys, community threads — into themes, priorities, counts, or quotes ("what are users saying", "what should we build next", "give me the numbers for the deck", "pull quotes from feedback"). Enforces the synthesis contract: exact counts with item IDs, verbatim quotes with every edit disclosed, duplicates counted once, contradictions surfaced not averaged, vivid anecdotes held at n=1, and expected-but-ABSENT topics reported. Discovery front-end for soltero-skills:writing-prds.
+description: Use when synthesizing user feedback — support tickets, reviews, interviews, surveys, community threads — into themes, priorities, counts or quotes ("what are users saying", "what should we build next", "give me the numbers for the deck", "pull quotes from feedback"). Exact counts with item IDs, verbatim quotes, contradictions surfaced, absent topics reported.
 ---
 
 # Feedback Synthesis

@@ -1,6 +1,6 @@
 ---
 name: agent-handoff
-description: Use when context is getting heavy (the bundled context-watch hook reminds around ~40%), when wrapping a long session, or when asked to hand off / save state / continue in a fresh session — writes and refreshes a living HANDOFF.md with the eight elements that make work resumable (goal, status, decisions+why, ordered next steps, files with line refs, gotchas, open questions, how to resume & verify) so a fresh agent continues with zero further questions.
+description: Use when context is getting heavy (the context-watch hook reminds around 40%), when wrapping a long session, or when asked to "hand off", "save state" or "continue in a fresh session" — writes and refreshes a living HANDOFF.md with the eight elements a fresh agent needs to resume with zero questions.
 ---
 
 # Agent Handoff
