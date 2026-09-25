@@ -7,6 +7,12 @@ project adheres to Semantic Versioning.
 
 ### Fixed
 
+- **ESM entry-point guard, GP-001 v2** — five more scripts compared the raw `argv[1]` with
+  `fileURLToPath(import.meta.url)`, a spelling the v1 detectors missed; through a symlinked
+  path they printed nothing and exited 0 (`tools/lint-frontmatter.mjs`, a CI gate, among
+  them). New detector `raw-argv-vs-module-path` in the rule file; `lesson-recall`,
+  `plan-visualizer`, `skill-ab-eval`, `skill-trigger-repair` and the frontmatter lint fixed,
+  each with a symlink-spawn regression test.
 - **CRLF frontmatter** — `tools/frontmatter.mjs` matched only `\n`, so a `SKILL.md` saved
   with Windows line endings failed `lint-frontmatter` and was omitted from the MCP server's
   skill listings. Regression test added.

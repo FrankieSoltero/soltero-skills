@@ -14,7 +14,7 @@
 //     [--files src/a.ts,src/b.tsx] [--lessons Docs/mistakes-and-fixes.md] \
 //     [--memory .claude/MEMORY.md] [--floor 0.12] [--json]
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 // ---------- tuning constants ----------
@@ -396,7 +396,11 @@ function arg(flag, fallback) {
   return i !== -1 && process.argv[i + 1] !== undefined ? process.argv[i + 1] : fallback;
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+// Entry-point guard that survives symlinked paths (GP-001, Docs/golden-principles.md).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+if (isMain()) {
   const task = arg('--task');
   if (!task) {
     console.error(

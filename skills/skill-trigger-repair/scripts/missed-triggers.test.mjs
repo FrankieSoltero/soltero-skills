@@ -185,3 +185,16 @@ test('an empty corpus summarizes without throwing', () => {
   assert.deepEqual(s.skills, []);
   assert.equal(s.reportsScanned, 0);
 });
+
+test('CLI runs when reached through a symlinked path (GP-001)', async () => {
+  const { spawnSync } = await import('node:child_process');
+  const fs = await import('node:fs');
+  const os = await import('node:os');
+  const path = await import('node:path');
+  const url = await import('node:url');
+  const here = path.dirname(url.fileURLToPath(import.meta.url));
+  const link = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'gp001-')), 'link');
+  fs.symlinkSync(here, link);
+  const r = spawnSync(process.execPath, [path.join(link, 'missed-triggers.mjs')], { encoding: 'utf8' });
+  assert.match(r.stdout + r.stderr, /usage:/, 'main() must run through a symlink, not exit silently');
+});
