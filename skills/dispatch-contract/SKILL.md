@@ -1,6 +1,6 @@
 ---
 name: dispatch-contract
-description: Use when writing or re-writing any subagent dispatch outside a lean-sdd task loop — an ad-hoc research agent, a reviewer, a security-review fan-out, an audit worker, a one-off implementer — before relaying a worker's report upward, and above all when a return like "all 19 tasks complete" or "completed-clean" turns out to be wrong and the work has to be re-dispatched or the fan-out re-run. Replaces the free-text prompt with a typed brief (objective, inputs as file paths rather than pasted content, tool allowlist, a pinned model tier, a return schema with validation conditions, the autonomy and claim-audit lines), checked by a bundled validator; holds the parent-side gate that a relayed claim is verified against the diff, the test output, or the tool result before it is spoken; and requires a re-dispatch to change the contract rather than re-run the same prompt.
+description: Use when writing any subagent dispatch outside a lean-sdd task loop (research agent, reviewer, audit worker, one-off implementer), before relaying a worker's report, and when a return like "all 19 tasks complete" or "completed-clean" proves wrong. Replaces free-text prompts with a validated typed brief (paths, tools, pinned model, return schema) and verifies relayed claims before they are spoken.
 ---
 
 # Dispatch Contract

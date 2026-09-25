@@ -1,6 +1,6 @@
 ---
 name: agent-playbook
-description: Use when doing agent-engineering work — writing CLAUDE.md/AGENTS.md, designing prompts or agentic loops, configuring subagents or workflows, choosing a coding-agent setup — or when asked for current coding-agent best practices ("what's the latest on context management", "how should I structure my agent's loop"); serves a living, tiered (Proven/Promising/Watch), source-linked playbook instead of from-memory advice. Also handles "update/refresh the agent playbook": runs a bundled research-sweep Workflow (arXiv + lab-blog + OSS lanes → dedupe vs source log → deep-read → skeptic tiering) and applies the diffs; update mode runs only in the soltero-skills repo.
+description: Use when doing agent-engineering work — writing CLAUDE.md/AGENTS.md, designing prompts, agentic loops, subagents or workflows — or asked for current coding-agent best practices ("what's the latest on context management", "how should I structure my agent's loop"). Serves a tiered, source-linked playbook instead of advice from memory; "update the agent playbook" runs its research-sweep Workflow (soltero-skills repo only).
 ---
 
 # Agent Playbook

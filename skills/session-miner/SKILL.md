@@ -1,6 +1,6 @@
 ---
 name: session-miner
-description: Use when explicitly asked to mine past sessions for reusable workflows ("mine my sessions", "what procedures keep recurring", "draft skills from my history") or as a scheduled background pass — scans past session transcripts (~/.claude/projects JSONL, HANDOFF.md files, task logs) for recurring multi-step procedures backed by external success signals (tests passed, commit made, user confirmed), then drafts candidate artifacts routed smallest-first (CLAUDE.md one-liner → lesson entry → draft skill), each redacted, provenance-flagged, vetted by an independent reviewer subagent, and landed ONLY as proposals under Docs/mining/proposals/ for human review. Never installs anything live and never runs inline during other task work.
+description: Use when explicitly asked to mine past sessions ("mine my sessions", "what procedures keep recurring", "draft skills from my history") or on a scheduled pass. Finds recurring multi-step procedures backed by success signals in ~/.claude/projects transcripts and lands redacted, reviewer-vetted proposals under Docs/mining/proposals/ only. Never installs anything, never runs inline.
 ---
 
 # Session Miner

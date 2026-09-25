@@ -1,6 +1,6 @@
 ---
 name: destructive-op-gate
-description: Use before running — or writing code that runs — an irreversible or multi-record write against a system that may be live or shared: "clear out the following bars and all of their employees", any wipe/purge/"remove all X" request, a destructive feature exercised on a real customer account ("I accidentally tested it on her prod account"), a bulk delete or cascade strip, a data-dropping migration, or any DELETE/UPDATE/TRUNCATE against a DATABASE_URL that is not provably localhost. Resolves the real target from the actual connection string instead of the conversation's description of it, enumerates the target set by id, requires a matching count-only dry run and a verified on-disk rollback artifact before the write, mints a stable idempotency key, fails closed on an unresolved environment or a count mismatch, takes typed human approval only at the top tier, and records the whole thing under Docs/destructive-ops/.
+description: Use before running, or writing code that runs, an irreversible or multi-record write on a possibly live system — wipe/purge/"remove all X", "clear out the following bars and all of their employees", bulk delete, data-dropping migration, a destructive test on a real account, DELETE/UPDATE/TRUNCATE on a non-localhost DATABASE_URL. Resolves the real target, requires a dry run and rollback artifact, fails closed.
 ---
 
 # Destructive Op Gate

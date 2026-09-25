@@ -24,6 +24,8 @@
     // Tables use bare `|---|` delimiter rows; MD060 (new since the 0.23 upgrade) flags style only.
     "MD060": false
   },
+  // Anything gitignored (worktrees, .soltero/ briefs, node_modules) is never linted.
+  "gitignore": true,
   "ignores": [
     "**/node_modules/**",
     ".claude/worktrees/**",

@@ -1,6 +1,6 @@
 ---
 name: plan-visualizer
-description: Use when asked to visualize, diagram, map, or "show the shape of" an implementation plan written by soltero-skills:lean-plans (any plan with a Task Dependency Table) — before plan-review, before lean-sdd executes it, or for a stakeholder view. Runs the bundled deterministic parser to render a risk-tier-colored dependency graph with derived waves and an integrity panel (table↔block file drift, interfaces consumed without a declared dependency, same-wave file overlaps, cycles, missing tiers) into a sibling `<plan>.viz.md` (published as an Artifact when available). Read-only on the plan; reports defects, never repairs them; never writes waves, model picks, or review order anywhere.
+description: Use when asked to visualize, diagram, map or "show the shape of" an implementation plan with a Task Dependency Table (from lean-plans). Renders a risk-tier-colored dependency graph with derived waves and an integrity panel (file drift, undeclared dependencies, same-wave overlaps, cycles) into a sibling <plan>.viz.md. Read-only; reports defects, never repairs them.
 ---
 
 # Plan Visualizer

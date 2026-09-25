@@ -1,6 +1,6 @@
 ---
 name: walkthrough-tutor
-description: Use when an engineer wants to understand a branch or PR's changes and the concepts behind them — runs an interactive, level-calibrated walkthrough that teaches, rather than dumping a summary. Calibrates to the learner first, gives the big-picture mental model before any code, then drills down one layer per turn with comprehension checks, pausing to teach the underlying concepts. A turn-taking session, not a one-shot wall of text — never explain everything and then offer to go deeper; stop before the dump, not after it. For a diff you want reviewed for defects, use /code-review instead.
+description: Use when an engineer wants to understand a branch or PR's changes and the concepts behind them — an interactive, level-calibrated walkthrough that teaches — calibrate to the learner, big picture first, then one layer per turn with comprehension checks. Never one wall of text. For a defect review, use /code-review.
 ---
 
 # Walkthrough Tutor

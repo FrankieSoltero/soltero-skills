@@ -1,6 +1,6 @@
 ---
 name: lean-sdd
-description: Use when executing an implementation plan with subagents in the current session and wall-clock or token cost matters — pipelined subagent-driven development: fresh implementer per task, read-only reviewer running CONCURRENTLY with the next disjoint task's implementer, risk-tiered review depth (mechanical → spec-only on a cheap model), a 3-round fix-loop cap with adjudication, file-based brief/report/diff handover, and a compaction-proof ledger with fixed line formats. Lean variant of subagent-driven development; consumes the dependency/risk-tier table from soltero-skills:lean-plans. Never runs two writers on overlapping files.
+description: Use when executing an implementation plan with subagents in this session and wall-clock or token cost matters — fresh implementer per task, read-only reviewer running concurrently with the next disjoint task, risk-tiered review depth, a 3-round fix cap, and a compaction-proof ledger. Consumes lean-plans' dependency table; never runs two writers on overlapping files.
 ---
 
 # Lean SDD

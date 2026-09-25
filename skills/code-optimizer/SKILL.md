@@ -1,6 +1,6 @@
 ---
 name: code-optimizer
-description: Use when asked to clean up, optimize, or slim down a codebase — remove dead and redundant code, dedupe, split oversized files (including ones still in live use), centralize repeated string literals / magic strings where the project has declared that rule, and enforce the project's coding guidelines across the whole repo. Applies changes on a branch driven by a `.code-optimizer.yml` config with a public-API allowlist, one gate-verified commit per category (serial, revert-on-red), so cleanup is systematic and reproducible instead of ad hoc detective work. Whole-repo; not a diff reviewer (use /simplify or /code-review for a diff).
+description: Use when asked to clean up, optimize or slim down a codebase — remove dead and redundant code, dedupe, split oversized files, centralize repeated literals where the project declares that rule, enforce its coding guidelines repo-wide. Config-driven with a public-API allowlist, one gate-verified commit per category. Whole-repo; for a diff use /simplify or /code-review.
 ---
 
 # Code Optimizer

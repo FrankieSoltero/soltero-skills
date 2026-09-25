@@ -1,6 +1,6 @@
 ---
 name: build-mcp-server
-description: Use when building, hardening, or deploying a Model Context Protocol (MCP) server in TypeScript ("build an MCP server", "expose this API/DB as MCP tools", "make my MCP server production-grade", "add auth or HTTP to my MCP server", "deploy my MCP server so remote clients can reach it") — pins the verified-current SDK API for whichever package family you install (@modelcontextprotocol/sdk v1 or the scoped @modelcontextprotocol/server v2) instead of authoring from memory or stale tutorials, enforces the stdout-is-the-stdio-channel rule and the tool-vs-resource decision, and makes a production floor the default (Zod validation + stderr logging + typed errors, both transports, bearer auth + env-validated secrets, tests + CI + Dockerfile), then verifies via the MCP Inspector and `claude mcp add`.
+description: Use when building, hardening or deploying a TypeScript MCP server ("build an MCP server", "expose this API/DB as MCP tools", "make my MCP server production-grade", "add auth or HTTP to my MCP server", "deploy my MCP server"). Pins the verified-current SDK API instead of memory, and makes validation, logging, auth, tests and CI the default floor.
 ---
 
 # Build MCP Server

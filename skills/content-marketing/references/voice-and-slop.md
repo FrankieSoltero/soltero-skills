@@ -2,12 +2,12 @@
 
 ## Deriving voice
 
-1. If the repo/user has a brand-voice file (`docs/brand-voice.md`,
+1. If the repo/user has a brand-voice file (`Docs/brand-voice.md` or `docs/brand-voice.md`,
    `marketing/voice.md`, or named in CLAUDE.md), it governs. Read it first.
 2. If none exists: propose 3–5 voice rules AS PAIRED EXAMPLES (on-voice vs
    off-voice sentence for each rule — the paired format is the load-bearing
    part) and get approval before drafting at scale. Offer to save the
-   approved rules as `docs/brand-voice.md` so future sessions inherit them.
+   approved rules as `Docs/brand-voice.md` so future sessions inherit them.
 3. Early-stage honesty IS a voice asset: "launched two weeks ago" reads
    better to developers than faked scale. Never write copy that implies
    maturity, customer counts, or traction the product doesn't have.

@@ -1,6 +1,6 @@
 ---
 name: writing-prds
-description: Use when asked for a PRD, requirements doc, or product spec, or when a raw product idea needs requirements before any design or code ("we should build…", "write up the requirements for…") — turns the idea into a PRD through collaborative dialogue instead of one-shotting a document full of invented decisions. Asks one question at a time, makes owner decisions blocking (no assumption-flag-and-proceed), forces decomposition of multi-subsystem bundles, builds the PRD section by section with approval, and delegates stories/scope/metrics to its child skills (prd-user-stories, prd-scoping, prd-success-metrics). Hard gate — no design, tech-stack, or implementation work until the PRD is approved. Sits upstream of soltero-skills:lean-brainstorming (PRD = what and why; brainstorming = technical design = how).
+description: Use when asked for a PRD, requirements doc or product spec, or when a raw idea needs requirements before design or code ("we should build…", "write up the requirements for…"). Builds the PRD through one-question-at-a-time dialogue with owner decisions blocking and section-by-section approval; delegates stories, scope and metrics to its child skills. No design or code until approved.
 ---
 
 # Writing PRDs
@@ -36,7 +36,7 @@ asking.
 
 Create a task per item and complete them in order:
 
-1. **Explore context** — repo, existing docs/prds, recent commits. No PRD prose yet.
+1. **Explore context** — repo, existing Docs/prds, recent commits. No PRD prose yet.
 2. **Scope check first** — if the ask bundles multiple independent subsystems, raise
    decomposition NOW (via soltero-skills:prd-scoping), before any drafting. Never inside
    the finished doc as an aside.
@@ -47,7 +47,7 @@ Create a task per item and complete them in order:
 5. **Delegate specialist sections** — user stories & acceptance criteria →
    soltero-skills:prd-user-stories; scope & prioritization → soltero-skills:prd-scoping;
    success metrics → soltero-skills:prd-success-metrics.
-6. **Write the doc** — `docs/prds/YYYY-MM-DD-<topic>-prd.md` (user's preferred location
+6. **Write the doc** — `Docs/prds/YYYY-MM-DD-<topic>-prd.md` (user's preferred location
    overrides).
 7. **Self-review** — scan for placeholders/TBDs, contradictions, ambiguity, scope creep,
    and any unconfirmed invented specific. Fix inline.

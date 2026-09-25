@@ -17,6 +17,13 @@ session hook.
 
 Then invoke skills as `soltero-skills:<skill-name>`.
 
+**Many plugins installed?** Claude Code gives the whole skill listing about 1% of the
+context window and, when it overflows, keeps every name but drops the descriptions of your
+least-used skills — which then rarely trigger on their own. Run `/doctor` to see the
+listing's cost; to make room, raise `skillListingBudgetFraction` in `settings.json` (e.g.
+`0.02`) or set noisy skills to `"name-only"` in `skillOverrides`. See
+[skill descriptions are cut short](https://code.claude.com/docs/en/skills#skill-descriptions-are-cut-short).
+
 ## Use from any agent (MCP)
 
 The library also ships as an MCP (Model Context Protocol) server over stdio,
@@ -82,7 +89,7 @@ Set `SOLTERO_SKILLS_DIR` to serve a different skills directory;
 | `dev-debrief` | Nightly local scan of all sessions → daily work summary + skill telemetry (triggers/missed triggers), Sunday deep pass with evidence-cited skill grades; silent skip on no-coding days; hardened redaction. |
 | `transcript-reader` | Verified meeting-transcript extraction: bundled pipeline (deterministic ingest → parallel extractors → reduce → refute-verifiers → completeness critic) with cited items and a correction-fed rule pool. |
 | `code-by-hand` | User-invoked navigator/driver mode: you type every line, the agent presents blocks with per-line notes, verifies what you actually typed, and never edits code files itself. |
-| `writing-prds` | Dialogue-driven idea → PRD (`docs/prds/`): hard gate before design/code, blocking questions instead of flagged assumptions, decomposition before drafting, section-by-section approval; hands off to technical design. |
+| `writing-prds` | Dialogue-driven idea → PRD (`Docs/prds/`): hard gate before design/code, blocking questions instead of flagged assumptions, decomposition before drafting, section-by-section approval; hands off to technical design. |
 | `prd-user-stories` | User stories traceable to stated requirements with compact Given/When/Then acceptance criteria — no invented personas, thresholds, or "keep it light" vagueness. |
 | `prd-scoping` | Scope sections with a decomposition-first check, MoSCoW under a forced Must budget, and an explicit Out-of-scope list that gets reworded, never deleted. |
 | `prd-success-metrics` | Success metrics with baseline/target/timeframe/measurement source each, `(proposed — confirm)` markers on unsourced numbers, and a 3–5 primary cap plus guardrail. |

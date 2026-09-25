@@ -1,6 +1,6 @@
 ---
 name: memory-gardener
-description: Use at handoff-time or on a schedule — never inline during task work — to curate persistent memory (Docs/mistakes-and-fixes.md, the project's ~/.claude memory directory, agent-written CLAUDE.md sections). Dedupes, merges, deletes falsified entries, distills repeated lessons into rules, and prunes by helpful/harmful usage counters — as discrete itemized edits, each destructive edit approved by an independent memory-skeptic subagent before it is applied, untrusted-provenance entries quarantined for human review, and the whole pass committed to git for rollback.
+description: Use at handoff time or on a schedule, never inline during task work, to curate persistent memory (Docs/mistakes-and-fixes.md, the ~/.claude memory directory, agent-written CLAUDE.md sections). Dedupes, merges, distills and prunes as itemized edits, each destructive one approved by an independent memory-skeptic subagent, committed to git for rollback.
 ---
 
 # Memory Gardener

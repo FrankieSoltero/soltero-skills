@@ -1,6 +1,6 @@
 ---
 name: skill-ab-eval
-description: Use before releasing a new or materially-edited skill, or when someone asks "does this skill actually help?", "is this skill worth shipping?", "prove the skill does anything", or a judging agent's verdicts look degenerate (a long run of identical "completed-clean" outcomes) — runs the skill's own scenarios in paired with/without arms across at least two model tiers, grades each run off the full transcript with one isolated judge per rubric dimension (each able to return Unknown), plants a canary scenario known to fail without the skill so a clean batch is evidence the grader is alive, tabulates the pairs with a bundled script, and writes a ship / no-ship / ship-for-tier-X recommendation to Docs/skill-eval-<skill>-YYYY-MM-DD.md. Measures efficacy, never conformance; never edits the skill.
+description: Use before releasing a new or materially edited skill, or when asked "does this skill actually help?", "is this skill worth shipping?", "prove the skill does anything", or when judge verdicts look degenerate. Runs paired with/without scenarios on two model tiers, isolated per-dimension judges, a planted canary, and writes a ship/no-ship recommendation to Docs/skill-eval-<skill>-YYYY-MM-DD.md.
 ---
 
 # Skill A/B Eval

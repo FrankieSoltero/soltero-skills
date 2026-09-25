@@ -39,3 +39,24 @@ export function parseFrontmatter(content) {
   }
   return fm;
 }
+
+// Frontmatter values here are single-line plain scalars. A plain scalar containing ": "
+// or " #" is invalid (or silently truncated) under a strict YAML parser, even though
+// parseFrontmatter above tolerates it — so agents and MCP clients that use a real YAML
+// library would drop the skill. Returns one error per offending top-level key.
+export function checkYamlSafety(content) {
+  const m = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!m) return [];
+  const errors = [];
+  for (const line of m[1].split(/\r?\n/)) {
+    const kv = line.match(/^([A-Za-z0-9_-]+):[ \t]+(.*)$/);
+    if (!kv) continue;
+    const [, key, raw] = kv;
+    const val = raw.trim();
+    if (/^["'|>]/.test(val)) continue; // quoted or block scalar: YAML handles it
+    if (/: /.test(val) || / #/.test(val)) {
+      errors.push(`${key}: unquoted value contains ": " or " #", which strict YAML parsers reject — reword it or quote the value`);
+    }
+  }
+  return errors;
+}

@@ -1,6 +1,6 @@
 ---
 name: correction-compiler
-description: Use when the user corrects the agent for the same class of mistake a second time (evidence in Docs/mistakes-and-fixes.md and/or session history) — compiles the repeated correction into a proposed deterministic enforcement artifact (Claude Code hook, lint rule, or CI check) recorded in Docs/corrections-ledger.md with full provenance, and never installs or modifies anything that executes without explicit human approval.
+description: Use when the user corrects the agent for the same class of mistake a second time (evidence in Docs/mistakes-and-fixes.md or session history) — compiles it into a proposed hook, lint rule or CI check recorded in Docs/corrections-ledger.md with provenance. Never installs anything that executes without explicit human approval.
 ---
 
 # Correction Compiler

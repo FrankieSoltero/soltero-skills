@@ -1,6 +1,6 @@
 ---
 name: instagram-studio
-description: Use when someone wants Instagram marketing content built from a code project or a written brief — "make an Instagram reel for this", "make a reel", "create short-form content for Instagram", "make a carousel post", "make an Instagram story", "turn this into Instagram content", "marketing video for Instagram", "promote this on Instagram". Preflights the render toolchain and stops with the fix command, extracts a facts.md that is the only allowed source of on-screen and caption claims, plans a hook-first storyboard or slide outline, composes and renders locally through the Hyperframes CLI at the exact Instagram canvas, duration and safe zones, then delivers caption.md (caption, hashtags, alt text, claims table), a per-format cover image and post-checklist.md checked by a bundled validator. Child of soltero-skills:content-marketing. Never posts, never schedules, never installs anything.
+description: Use when someone wants Instagram content from a project or brief — "make an Instagram reel for this", "make a reel", "make a carousel post", "make an Instagram story", "turn this into Instagram content", "marketing video for Instagram", "promote this on Instagram". Plans and renders locally via the Hyperframes CLI at exact Instagram specs, with a claim-traced caption and validator. Never posts or schedules.
 ---
 
 # Instagram Studio

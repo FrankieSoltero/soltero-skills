@@ -1,6 +1,6 @@
 ---
 name: audit-swarm
-description: Use when asked for a security audit, legal/compliance review, license check, or full-project risk assessment ("audit this repo", "security once-over", "are we GDPR/SOC 2 ready", "check our dependency licenses", "is this safe to open-source") — dispatches a bundled scout-then-swarm Workflow over the whole repo (adaptive specialist finders, severity-scaled skeptic verification: 1 lens for low/medium findings, 3-lens majority vote for high/critical) and writes a severity-ranked, evidence-backed report to Docs/audit-YYYY-MM-DD.md. Every run plants a seeded canary defect and must re-find it, so a zero-finding run reports "harness not live" instead of "clean". Findings only, verified by a skeptic panel; never edits code and never audits inline without the workflow.
+description: Use when asked for a security audit, legal/compliance review, license check or project risk assessment ("audit this repo", "security once-over", "are we GDPR/SOC 2 ready", "check our dependency licenses", "is this safe to open-source"). Runs a scout-then-swarm Workflow with skeptic verification and a seeded canary; writes Docs/audit-YYYY-MM-DD.md. Findings only, never edits code.
 ---
 
 # Audit Swarm
