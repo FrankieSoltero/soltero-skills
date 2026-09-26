@@ -16,8 +16,9 @@
 // leading `id` header are ignored.
 //
 // Exit codes: 0 MATCH or KEY_ONLY, 1 MISMATCH or INDETERMINATE, 2 usage error.
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 
 // Statements of how many rows an operation touched.
 const COUNT_PATTERNS = [
@@ -237,4 +238,9 @@ export function main(argv) {
   return result.verdict === 'MATCH' || result.verdict === 'KEY_ONLY' ? 0 : 1;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) process.exit(main(process.argv.slice(2)));
+// Entry-point guard that survives /tmp → /private/tmp symlinks on macOS (lesson 2026-09-02).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+
+if (isMain()) process.exit(main(process.argv.slice(2)));

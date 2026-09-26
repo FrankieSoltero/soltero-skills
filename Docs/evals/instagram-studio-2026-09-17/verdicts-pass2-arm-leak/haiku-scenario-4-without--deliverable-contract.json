@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The run produced only caption.md and production-plan.md with no facts file at all, and caption.md's hashtag list has 30 tags ('#HabitTracker #ProductivityApp #Streakly #BuildTheHabit #MobileApp ... #DownloadNow') with no alt text and no claims table or claim-to-source mapping anywhere in the deliverables."}

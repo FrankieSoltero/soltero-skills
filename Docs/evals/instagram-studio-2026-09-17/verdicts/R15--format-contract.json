@@ -1,0 +1,1 @@
+{"verdict": "fail", "evidence": "The plan sets \"Frame Rate: 60 fps\" (not the required 30fps) and gives every text overlay only a qualitative position such as \"appears bottom-left at 1.3s\" or \"appears center at 5.3s\" with no x/y placement or pixel bounds anywhere in the plan."}

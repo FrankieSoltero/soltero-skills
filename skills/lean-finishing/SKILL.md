@@ -32,7 +32,7 @@ since. Red → stop and report; the menu comes after green.
 
 **Default: present the menu and wait.**
 
-```
+```text
 Implementation complete, suite green (fresh run: <evidence>).
 1. Merge back to <base> locally
 2. Push and create a Pull Request

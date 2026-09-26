@@ -1,0 +1,34 @@
+{
+  "name": "esm-entry-guard",
+  "version": 1,
+  "principle": "GP-001",
+  "wrongPattern": "An ESM CLI decides 'am I the entry point?' by comparing import.meta.url with a file:// URL built from the RAW process.argv[1]. Node resolves symlinks for import.meta.url but not for argv[1], so through any symlinked path (macOS /tmp -> /private/tmp, a linked skills dir, a bin shim) the guard is false, main() never runs, and the process prints nothing and exits 0 - a silent PASS for a gate or validator.",
+  "correctPattern": "function isMain() { try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; } } - resolve argv[1] with realpathSync before comparing, and cover it with a test that spawns the script through a real symlink.",
+  "detectors": [
+    {
+      "id": "file-url-from-raw-argv",
+      "regex": "file://\\$\\{\\s*process\\.argv\\[1\\]\\s*\\}",
+      "flags": ""
+    },
+    {
+      "id": "pathToFileURL-of-raw-argv",
+      "regex": "pathToFileURL\\(\\s*process\\.argv\\[1\\]\\s*\\)",
+      "flags": "",
+      "unless": "realpathSync"
+    }
+  ],
+  "allowlistMarkers": [
+    "esm-entry-guard:allow"
+  ],
+  "markerPattern": "TODO\\(esm-entry-guard\\)",
+  "skipFileWhen": "@generated",
+  "include": [
+    "**/*.{mjs,js,cjs,ts,mts}"
+  ],
+  "exclude": [
+    ".claude/**",
+    ".soltero/**",
+    "Docs/evals/**",
+    "docs/evals/**"
+  ]
+}

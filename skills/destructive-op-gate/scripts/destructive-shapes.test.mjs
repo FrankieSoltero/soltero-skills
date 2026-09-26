@@ -1,6 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, symlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { matchDestructiveShapes as match } from './destructive-shapes.mjs';
+
+const here = dirname(fileURLToPath(import.meta.url));
 
 const ids = (c) => match(c).map((h) => h.id).sort();
 
@@ -61,4 +68,17 @@ test('each hit carries a reason and the clause that produced it; nothing matches
   assert.deepEqual(match(''), []);
   assert.deepEqual(match(undefined), []);
   assert.deepEqual(match('ls -la'), []);
+});
+
+test('CLI still runs when invoked through a symlinked path (macOS /tmp → /private/tmp)', () => {
+  const linkDir = mkdtempSync(join(tmpdir(), 'dog-shapes-link-'));
+  const link = join(linkDir, 'scripts-link');
+  symlinkSync(here, link);
+  const cli = join(link, 'destructive-shapes.mjs');
+  const hit = spawnSync(process.execPath, [cli, `psql -c 'DROP TABLE employees'`], { encoding: 'utf8' });
+  assert.match(hit.stdout, /sql-drop/, 'main() must run when the script is reached through a symlink');
+  assert.equal(hit.status, 1, 'a matched destructive shape must exit 1 through a symlinked script path');
+  const noArgs = spawnSync(process.execPath, [cli], { encoding: 'utf8' });
+  assert.equal(noArgs.status, 2, 'a missing argument must still be a usage error, not a silent exit 0');
+  assert.match(noArgs.stderr, /usage: destructive-shapes\.mjs/);
 });

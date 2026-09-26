@@ -1,6 +1,6 @@
 ---
 name: content-marketing
-description: Use when writing or editing any outward-facing marketing/content artifact — launch post, blog post, landing/hero copy, announcement, social post — or when asked to "promote"/"write copy for"/"make it punchy". Enforces the claim-trace gate on YOUR OWN drafting (every factual, feature, policy, or number claim traces to given facts or ships as a visible placeholder — the failure mode is inventing "free forever"-style specifics while correctly refusing the user's fake stats), mechanical platform-constraint checks, a 20-second brief, and a claims-table delivery contract. Parent of soltero-skills:seo-aeo and soltero-skills:email-marketing.
+description: Use when writing or editing any outward-facing marketing/content artifact — launch post, blog post, landing/hero copy, announcement, social post — or when asked to "promote"/"write copy for"/"make it punchy". Enforces the claim-trace gate on YOUR OWN drafting (every factual, feature, policy, or number claim traces to given facts or ships as a visible placeholder — the failure mode is inventing "free forever"-style specifics while correctly refusing the user's fake stats), mechanical platform-constraint checks, a 20-second brief, and a claims-table delivery contract. Parent of soltero-skills:seo-aeo, soltero-skills:email-marketing, and soltero-skills:instagram-studio.
 ---
 
 # Content Marketing
@@ -57,7 +57,7 @@ scenarios are fine when framed as hypothetical.
    a claims table by design.
 6. **Deliver with the contract** (required, per artifact):
 
-```
+```text
 Claims: <claim> ← <source|PLACEHOLDER|cut>   (one line per claim; "none" ok)
 Checks: <platform>: <N>/<limit> chars ✓|✗ · CTA: <the one CTA> · voice: <source>
 Open: <placeholders the user must fill before publishing>

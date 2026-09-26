@@ -18,29 +18,43 @@ edit-plan candidates) and deletes consumed lines as part of the pass commit.
   *rule* entry that cites the three episodes without absorbing them? That is an addition,
   not a distillation, and is outside what this pass's edit types allow.
 
-- [2026-09-08] flag (path/case split, live defect): the repo's real lessons file is
-  `docs/mistakes-and-fixes.md` (lowercase), but every skill defaults to
-  `Docs/mistakes-and-fixes.md` (capital D) — `skills/capture-lesson/scripts/append-lesson.mjs:10`
+- [2026-09-08, RESOLVED 2026-09-23 by PR #31] flag (path/case split, live defect): the
+  repo's real lessons file was `docs/mistakes-and-fixes.md` (lowercase) while every skill
+  defaulted to `Docs/mistakes-and-fixes.md` (capital D) — `skills/capture-lesson/scripts/append-lesson.mjs:10`
   and `skills/lesson-recall/scripts/recall-lessons.mjs:407`, plus `README.md:59-60` and
-  `skills/lesson-recall/SKILL.md`. Both `Docs/` (764 tracked files) and `docs/` (67) exist
-  as *distinct* directories in this Linux checkout. Consequence: on Linux/CI, `capture-lesson`
-  would create a second, empty `Docs/mistakes-and-fixes.md` and `lesson-recall` would read
-  that empty file instead of the real 9-entry one — silently reporting "no prior lessons".
-  On the author's case-insensitive macOS APFS volume this is invisible, which is precisely
-  the failure documented by the 2026-09-05 entry in the lessons file itself. Not fixed here:
-  the gardener's scope is memory surfaces, and this is a skill-code defect.
-  Action needed: pick one canonical path and update the skills' defaults to match.
+  `skills/lesson-recall/SKILL.md`. Both `Docs/` and `docs/` existed as *distinct*
+  directories on Linux, so `capture-lesson` would have created a second, empty
+  `Docs/mistakes-and-fixes.md` and `lesson-recall` would have read that empty file —
+  silently reporting "no prior lessons". Invisible on the author's case-insensitive macOS
+  volume, which is precisely the failure the 2026-09-05 entry documents.
+  **Resolved independently of this pass:** PR #31 collapsed the split by renaming `docs/`
+  → `Docs/` at the index level (blob SHAs unchanged) and recorded the recurrence on the
+  2026-09-05 entry. No action needed; retained here as the audit trail for how the flag
+  was closed. Detection command for the future: `git ls-files | cut -d/ -f1 | sort -u |
+  sort -f | uniq -di` — any output is a case-split tree.
 
-- [2026-09-08] flag (approaching distill threshold, 2 of 3): the `/tmp` vs `/private/tmp`
-  entry-point-guard defect has now recurred — `2026-09-02` (swarm-plan.mjs,
-  validate-brief.mjs) and `2026-09-07` (token-economy's three scripts). Same root cause,
-  same fix (`realpathSync` both sides of the main-guard), and the 2026-09-07 entry states
-  the author wrote the new scripts from memory rather than copying the existing guard.
-  Two episodes is one short of `distill`'s ≥3 bar, so no edit was proposed this pass.
-  A third occurrence should trigger distillation into a rule (and per `lesson-recall`,
-  a handoff to `correction-compiler`). Note: the counters on the 2026-09-02 entry were
-  left at `h:0/x:0` deliberately — the entry did not mislead, it simply was not recalled,
-  and `x` is reserved for entries that steered a session wrong.
+- [2026-09-08, THRESHOLD NOW MET — re-evaluate next pass] flag: the `/tmp` vs
+  `/private/tmp` entry-point-guard defect stood at 2 episodes when this pass ran
+  (`2026-09-02` swarm-plan.mjs + validate-brief.mjs; `2026-09-07` token-economy's three
+  scripts), one short of `distill`'s ≥3 bar, so no edit was proposed. It has since
+  reached **four**: the `2026-09-17` instagram-studio entry records the fourth shipment,
+  and PR #30 (GP-001) fixed the guard across five scripts with a CI hard gate.
+  The ≥3 bar for `distill` is now satisfied on a genuinely identical root cause — the
+  next pass should propose that distillation to a skeptic (and per `lesson-recall`, the
+  3+ threshold routes to `correction-compiler` / `defect-class-sweep`). Note the
+  2026-09-17 entry states a repo grep still finds the old guard live in five files
+  (`destructive-op-gate` ×3, `defect-class-sweep/sweep.mjs`, `tools/check-workflow-syntax.mjs`).
+  Counters on the 2026-09-02 entry stay `h:0/x:0` deliberately — it did not mislead, it
+  simply was not recalled, and `x` is reserved for entries that steered a session wrong.
+
+- [2026-09-26] flag (counters owed on new entries): seven entries landed on
+  `Docs/mistakes-and-fixes.md` after this pass inventoried the file — six dated
+  `2026-09-17` (instagram-studio guard/worktree/eval-harness/fixture/ffmpeg/plan-filename
+  and the live-render gap) and one `2026-09-25` (PR #31's required-check name blocked by
+  a Node matrix). They carry no `meta:` line. This pass deliberately did **not** annotate
+  them: they were never inventoried or provenance-assessed here, and adding them during a
+  merge-conflict resolution would widen the PR past what was reviewed. Action needed: the
+  next pass inventories all sixteen entries and adds counters/provenance to these seven.
 
 - [2026-09-08] flag (approaching distill threshold, 2 of 3): "the verifier was
   self-consistent with the bug" — `2026-09-02` (a main-guard that fails closed to

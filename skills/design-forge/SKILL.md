@@ -88,7 +88,7 @@ release cycle).
 3. **Invoke the Workflow — do not improvise your own sweep, and never verify a
    license yourself for a candidate you found:**
 
-   ```
+   ```text
    Workflow({
      scriptPath: "${CLAUDE_SKILL_DIR}/workflows/update.mjs",
      args: { sinceDate, today, seenKeys, catalog: <full text of references/catalog.md>, bootstrap }
@@ -99,7 +99,7 @@ release cycle).
    fetch and read the project's actual LICENSE file (marketing pages, README badges,
    and npm license fields are claims, not evidence), default-reject on doubt.
 4. **Apply the result mechanically:** each `edits[]` item under its `## <section>`
-   heading (`add` → append, removing the "_No entries yet_" placeholder; `replace` →
+   heading (`add` → append, removing the "*No entries yet*" placeholder; `replace` →
    replace the entry whose **URL** line matches `replacesUrl`); prepend `digest` to
    `references/changelog.md` below its intro line; update "Last sweep:"; append one
    source-log row per `logEntries[]` item (Key ← key, Title ← `[title](url)`,

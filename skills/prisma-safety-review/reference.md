@@ -4,6 +4,7 @@ Detailed rationale and exact fixes for each checklist item. Consult on demand; t
 table is the quick pass.
 
 ## Table of contents
+
 1. Bulk writes (transactions + pool)
 2. Pagination stability
 3. N+1 queries

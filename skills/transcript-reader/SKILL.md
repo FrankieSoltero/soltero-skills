@@ -72,7 +72,7 @@ size threshold.**
 3. **Invoke the Workflow tool** — do not read the transcript and extract inline instead,
    and do not hand-emulate the stages "because it's short":
 
-   ```
+   ```text
    Workflow({
      scriptPath: "${CLAUDE_SKILL_DIR}/workflows/distill.mjs",
      args: {

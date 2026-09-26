@@ -1,10 +1,13 @@
 {
   "name": "soltero-skills",
-  "version": "1.0.26",
+  "version": "1.0.28",
   "description": "A public Claude Code skills library",
   "type": "module",
   "private": false,
   "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "bin": {
     "soltero-skills": "mcp/dist/stdio.js"
   },
@@ -21,10 +24,11 @@
     "prepack": "npm run build",
     "typecheck": "tsc -p mcp/tsconfig.json --noEmit",
     "lint:fm": "node tools/lint-frontmatter.mjs",
-    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "lint:md": "markdownlint-cli2 \"**/*.md\"",
     "validate:plugin": "claude plugin validate ./ --strict",
-    "check:workflows": "node tools/check-workflow-syntax.mjs skills/audit-swarm/workflows/audit.mjs && node tools/check-workflow-syntax.mjs skills/agent-playbook/workflows/update.mjs && node tools/check-workflow-syntax.mjs skills/agent-swarm/workflows/swarm.mjs",
-    "check": "npm run test && npm run test:mcp && npm run lint:fm && npm run lint:md && npm run check:workflows && npm run typecheck"
+    "check:entry-guard": "node skills/defect-class-sweep/scripts/sweep.mjs --rule Docs/defect-classes/esm-entry-guard.rule.json --root .",
+    "check:workflows": "node tools/check-workflow-syntax.mjs skills/*/workflows/*.mjs",
+    "check": "npm run test && npm run test:mcp && npm run lint:fm && npm run lint:md && npm run check:workflows && npm run check:entry-guard && npm run typecheck"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
@@ -32,7 +36,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.2",
-    "markdownlint-cli2": "^0.14.0",
+    "markdownlint-cli2": "^0.23.3",
     "typescript": "^7.0.2"
   }
 }

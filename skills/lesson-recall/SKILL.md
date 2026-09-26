@@ -66,7 +66,7 @@ write half pay (`playbook.md:1668`, Proven).
 
 4. **Report before you act**, in this shape, as the first thing you say about the task:
 
-   ```
+   ```text
    Recall: 2 prior lessons match (top 0.58) — 2026-06-02 bare `YYYY-MM-DD` parsed as UTC
    midnight (fix: parse as local calendar parts); 2026-07-08 UTC getters on a local Date.
    Class "calendar-day shift" has occurred 2x. Memory index agrees: calendar days are strings.

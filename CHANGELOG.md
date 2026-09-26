@@ -3,8 +3,97 @@
 All notable changes to this project are documented here. Format: [Keep a Changelog]; this
 project adheres to Semantic Versioning.
 
-## [1.0.26] - 2026-09-07
+## [Unreleased]
+
+### Fixed
+
+- **CRLF frontmatter** — `tools/frontmatter.mjs` matched only `\n`, so a `SKILL.md` saved
+  with Windows line endings failed `lint-frontmatter` and was omitted from the MCP server's
+  skill listings. Regression test added.
+- **`Docs/` vs `docs/` case split** — git tracked 1,250 files under `Docs/` and 67 under
+  `docs/`; macOS merged them, Linux did not (e.g. `Docs/mistakes-and-fixes.md` was missing
+  on Linux, and `skill-trigger-repair` read `docs/debriefs` while `dev-debrief` writes
+  `Docs/debriefs`). Everything is now under `Docs/`.
+- **Dependencies** — `npm audit` 7 → 0 (runtime: `fast-uri`, `hono`, `qs`; dev:
+  `markdownlint-cli2` 0.14 → 0.23).
+
+### Changed
+
+- **Node ≥ 22 required** (`engines`); Node 20 reached end-of-life 2026-04-30. CI runs 22
+  and 24 with SHA-pinned actions and a read-only token.
+- **`npm run check` passes** — markdownlint is scoped by `.markdownlint-cli2.jsonc` to
+  authored docs (was 175,175 errors across worktrees and eval transcripts) and is a CI
+  hard gate, as is `check:workflows`, which now covers all 7 bundled workflows (was 3).
+
+## [1.0.28] - 2026-09-17
+
+### Fixed
+
+- **ESM entry-point guard (GP-001)** — five scripts decided "am I the entry point?" by
+  comparing `import.meta.url` with a `file://` URL built from the raw `process.argv[1]`.
+  Node resolves symlinks for one and not the other, so through a symlinked path (macOS
+  `/tmp` → `/private/tmp`) the guard was false, `main()` never ran, and the process printed
+  nothing and exited 0 — a silent pass. Fixed in `destructive-op-gate`'s
+  `compare-counts.mjs`, `resolve-target.mjs` and `destructive-shapes.mjs`,
+  `defect-class-sweep`'s `sweep.mjs`, and `tools/check-workflow-syntax.mjs` with the
+  `isMain()` realpath guard, each with a regression test that spawns the script through a
+  real symlink (written first, watched failing). Fourth occurrence of this class; the two
+  `instagram-studio` scripts were fixed in 1.0.27.
+
 ### Added
+
+- **Defect-class rule + CI hard gate** — `Docs/defect-classes/esm-entry-guard.rule.json`,
+  a new `Docs/golden-principles.md` with entry GP-001 (wrong / correct / not covered /
+  check / origin), `npm run check:entry-guard`, and a step in
+  `.github/workflows/validate.yml` that fails any PR reintroducing the guard. Swept with
+  the bundled runner: 5 matches → 0; one test comment that quotes the pattern on purpose
+  carries `esm-entry-guard:allow`.
+
+## [1.0.27] - 2026-09-17
+
+### Added
+
+- **instagram-studio** — turns a code project *or* a written brief into post-ready
+  Instagram deliverables: Reels (1080×1920), Stories, a 4:5 feed video (1080×1350) and
+  carousels (1080×1350 PNG, 3–10 slides), rendered locally and silently through the
+  Hyperframes CLI. "make an Instagram reel for this", "make a reel", "create short-form
+  content for Instagram", "make a carousel post", "make an Instagram story", "turn this
+  into Instagram content", "marketing video for Instagram", "promote this on Instagram"
+  preflight the render toolchain and stop with the fix command, extract a `facts.md` that
+  is the *only* allowed source of on-screen and caption claims, plan a hook-first
+  storyboard with x/y text placement inside the safe zone gated at the Plan step for every
+  video format, then compose and render at the exact canvas, duration and safe zones and
+  hand the caption off to content-marketing's claim-trace gate. Per-format covers
+  (`reel-cover.jpg`, `feed-cover.jpg`) are baked as frame 0. Never posts, never bundles
+  music, never installs anything. Two bundled scripts with tests — `scripts/preflight.mjs`
+  and `scripts/check-output.mjs`, 50 tests (`node --test skills/instagram-studio/scripts/*.test.mjs`).
+  Workflow inspired by `latent-spaces/brag` (MIT) — clean-room, nothing copied, no binary
+  assets. RED/GREEN in `tests/scenarios/instagram-studio/` (`RED-baseline.md`,
+  `GREEN-result.md`, 4/4 on sonnet); end-to-end live render against the real Hyperframes
+  toolchain in `Docs/evals/instagram-studio-2026-09-17/live-render.md` (validator exit 0
+  on both a reel and a carousel run). Ship gate via skill-ab-eval
+  (`Docs/skill-eval-instagram-studio-2026-09-17.md`): **sonnet 0/4 → 4/4, haiku 0/4 → 2/4,
+  canary failed as designed on both tiers. Recommendation: ship-for-sonnet only — haiku is
+  not covered, opus/fable are unmeasured.**
+- Routing for instagram-studio in `hooks/session-context.md`, `AGENTS.md`, and the README
+  index.
+
+### Changed
+
+- **content-marketing**'s description now lists instagram-studio as a child skill
+  (`tests/scenarios/content-marketing/parent-link-check.md` confirms the added clause does
+  not change when content-marketing fires).
+
+### Fixed
+
+- **instagram-studio**'s two bundled scripts (`preflight.mjs`, `check-output.mjs`): the
+  entry-point guard now survives symlinked paths (the `/tmp` → `/private/tmp` silent
+  no-op class) — a run through a symlink no longer exits 0 without doing anything.
+
+## [1.0.26] - 2026-09-07
+
+### Added
+
 - **token-economy** — the usage-limit system, reverse-engineered from 479 real sessions and
   installable for anyone. "I keep hitting my usage limit", "cut down on my model usage",
   "audit my token usage", "set up the token-saving system" run a bundled audit
@@ -30,7 +119,9 @@ project adheres to Semantic Versioning.
   both tiers reached for a forbidden lever (main-model change, forced compaction).
 
 ## [1.0.25] - 2026-09-05
+
 ### Added
+
 - **docs-standardizer** — whole-repo agent-onboarding docs to ONE user-scope standard.
   "Document this repo", "make this codebase easier to onboard to", "write a CLAUDE.md for
   this project", "standardize the docs" bring the repo to `~/.claude/docs-standard.json`
@@ -55,7 +146,9 @@ project adheres to Semantic Versioning.
   no flags — `Docs/skill-eval-docs-standardizer-2026-09-05.md`, evidence under
   `Docs/evals/docs-standardizer-2026-09-05/`. Recommendation: ship; haiku's per-commit
   gating (commits while the verifier is RED, then a fix-up commit) is the named follow-up.
+
 ### Fixed
+
 - **docs-standardizer** claim extraction (post-eval, tests added): URL/absolute/home paths
   (`/entries`, `~/.claude/...`) and extension chains (`.test.js`) are no longer read as
   repo-path claims; bold negations (`**no**`) and `@AGENTS.md` import lines are recognized.
@@ -67,7 +160,9 @@ project adheres to Semantic Versioning.
 
 Version scheme moved to 1.x with this release (0.24.0 was briefly published under the old
 scheme; the content is identical).
+
 ### Added
+
 - **agent-swarm** — the universal swarm spawner. Any "spawn a swarm / fan out agents /
   throw a bunch of agents at this" request for a purpose no existing swarm-shaped skill
   owns becomes a JSON spec (shape, lanes over items, a pinned standard tier at every
@@ -89,7 +184,9 @@ scheme; the content is identical).
   `Docs/evals/agent-swarm-2026-09-02/`. Recommendation: ship; haiku's width-by-work
   dimension regressed (2/3 → 1/3) and is queued as the next planner edit.
 - MCP pinned skill count 48 → 49.
+
 ### Fixed
+
 - **agent-swarm / dispatch-contract**: the CLI main-guard in `swarm-plan.mjs` and
   `validate-brief.mjs` compared an unresolved `argv[1]` with the resolved module path, so
   invoking either through `/tmp/…` on macOS exited 0 with no output (found by an eval
@@ -97,7 +194,9 @@ scheme; the content is identical).
   symlink.
 
 ## [0.23.0] - 2026-09-01
+
 ### Added
+
 - Six skills, each built through creating-a-skill's RED→GREEN loop on pinned sonnet with
   a bundled, unit-tested script (`npm test` 27 → 175+ cases):
   - **destructive-op-gate** — before any irreversible or multi-record write against a
@@ -131,7 +230,9 @@ scheme; the content is identical).
 - **agent-playbook** sweep 2026-09-01 (window 2026-07-17 → 09-01, all three lanes):
   60 edits (51 add, 9 replace), 345 → 396 entries, Proven 34 → 39; `update.mjs` now
   accepts `playbookPath` (the inline `playbook` arg was impractical at 250KB).
+
 ### Changed
+
 - **plan-review / prd-review**: skeptic effort override removed; prd-review's gate gains
   the blocking-violation term its selector already used; graders may return
   `verdict: "unknown"` (owner input, never a floor breach or a pass); non-convergence
@@ -158,7 +259,9 @@ scheme; the content is identical).
   unattended-run block (updated 2026-09-01 via the routines API; not in this repo).
 
 ## [0.22.0] - 2026-09-01
+
 ### Changed
+
 - **Fable 5.1 prompt audit applied** across the library (report:
   `docs/audits/2026-09-01-fable-5.1-skill-audit.md`; per-cluster diffs under
   `docs/audits/2026-09-01-fable-5.1/`). 32 High/Medium findings addressed, in four groups:
@@ -195,7 +298,9 @@ scheme; the content is identical).
   agent-playbook is six weeks stale with no Fable 5.1 content (update sweep pending).
 
 ## [0.21.0] - 2026-08-20
+
 ### Added
+
 - **plan-visualizer** skill: read-only visualization of lean-plans plans. Bundled
   `scripts/plan-graph.mjs` (unit-tested, 13 cases) parses the Task Dependency
   Table and contract blocks, derives waves from declared dependencies only, and
@@ -218,13 +323,17 @@ scheme; the content is identical).
   (backup kept) and kick-starts a debrief as the auth smoke test. Both invocations pass
   `--add-dir ~/.claude/projects` so the headless sandbox can read every project's
   transcripts (first launchd run covered only this repo without it).
+
 ### Changed
+
 - `npm test` now also runs `skills/*/scripts/*.test.mjs`.
 - dev-debrief `references/scan-protocol.md` and `docs/specs/dev-debrief.md`
   scheduling sections now document launchd instead of cron.
 
 ## [0.20.0] - 2026-08-01
+
 ### Added
+
 - **MCP server** (`mcp/`): the skills library is now served to any MCP-capable
   agent over stdio — `npx soltero-skills` (bin: `soltero-skills`, entry
   `mcp/dist/stdio.js`). Tools: `list_skills`, `get_skill` (with
@@ -245,14 +354,18 @@ scheme; the content is identical).
   `Skill` tool. Tests: unit per handler + discovery, one in-memory-transport
   integration test, and a stdio smoke test asserting stdout stays pure
   JSON-RPC; CI runs typecheck + build + mcp tests.
+
 ### Changed
+
 - Frontmatter parse/validate logic extracted from `tools/lint-frontmatter.mjs`
   into shared `tools/frontmatter.mjs` (+ `tools/frontmatter.d.mts` types) —
   one implementation now backs both the CI gate and the MCP `lint_skill`
   tool. CLI behavior and existing tests unchanged.
 
 ## [0.19.1] - 2026-07-30
+
 ### Changed
+
 - `plan-review`: gate recalibrated from overall ≥95 to **overall ≥85 AND every
   dimension ≥80 AND zero blocking-severity violations outstanding**. Field use
   showed the 95 threshold was effectively unreachable — the rubric's own band
@@ -270,7 +383,9 @@ scheme; the content is identical).
   95 gate left unchanged pending the same field evidence.
 
 ## [0.19.0] - 2026-07-29
+
 ### Changed
+
 - Model-tier standard enforced at every dispatch point repo-wide: subagents
   and workflow `agent()` calls never inherit the session model. Tiers —
   **opus** for engineering (lean-sdd standard/judgment implementers,
@@ -286,7 +401,9 @@ scheme; the content is identical).
   tier language replaced with explicit model names in SKILL.md and all four
   reference prompts; prd-/plan-review and design-forge fallback dispatch
   prose names the same models as the bundled scripts.
+
 ### Added
+
 - `code-optimizer`: `models:` block in the `.code-optimizer.yml` schema
   codifying the tier standard (`engineering: opus`, `grunt: sonnet`,
   `reading: haiku`, `orchestration: fable`) as a fixed default — with a key
@@ -294,7 +411,9 @@ scheme; the content is identical).
   guardrail mention.
 
 ## [0.18.0] - 2026-07-29
+
 ### Added
+
 - `mini-game-craft`: browser mini-game mechanics + procedural art, grounded
   in a line-level audit of the multiplayer_ai project's REAL doodle/tetris
   engines (12 concrete bugs found and classed: frame-rate-dependent apex vs
@@ -309,7 +428,9 @@ scheme; the content is identical).
   with the old line each kills; 500-seed contrast fuzz) and zero degradation.
 
 ## [0.17.0] - 2026-07-29
+
 ### Added
+
 - `multiplayer-game-dev` (lean-agency phase 3, scoped to the multiplayer_ai
   project's browser/WebSocket TS stack — engine personas discarded):
   knowledge-injection netcode reference (authority-first, fixed-timestep
@@ -321,7 +442,9 @@ scheme; the content is identical).
   latency testing); targeted GREEN 2/2 with the gate contract landing.
 
 ## [0.16.0] - 2026-07-29
+
 ### Added
+
 - Product-discovery pair (lean-agency phase 2) — the discovery front-end for
   writing-prds:
   - `feedback-synthesis`: mandatory synthesis contract — exact counts with
@@ -343,7 +466,9 @@ scheme; the content is identical).
   keepers from msitarzewski/agency-agents product agents (MIT).
 
 ## [0.15.0] - 2026-07-29
+
 ### Added
+
 - Marketing suite (lean-agency phase 1, per docs/specs/lean-agency-scoping.md;
   raw material adapted from msitarzewski/agency-agents, MIT):
   - `content-marketing`: brief-first content with the claim-trace gate on the
@@ -366,14 +491,18 @@ scheme; the content is identical).
   REFACTOR rounds.
 
 ## [0.14.1] - 2026-07-29
+
 ### Changed
+
 - lean-sdd implementer prompt now names the standing disciplines explicitly
   (lean-tdd, lean-verification, lean-debugging) so dispatched coding agents —
   which never receive the SessionStart hook — are pointed at the skills in
   their own prompt.
 
 ## [0.14.0] - 2026-07-29
+
 ### Added
+
 - Superpowers replacement complete — five skills forking the remaining
   superpowers disciplines/procedures (MIT-attributed; built RED→GREEN with
   two-tier baselines: session-default model 15/15 PASS, haiku probes exposed
@@ -397,14 +526,18 @@ scheme; the content is identical).
 - `lean-sdd` gains a bundled final whole-branch review template
   (`references/final-review-prompt.md`, adapted from
   superpowers:requesting-code-review) with ledger deferred/parked triage.
+
 ### Changed
+
 - Lean-suite cross-references now point at the forks (lean-sdd →
   lean-worktrees/lean-finishing/final-review template; lean-brainstorming →
   lean-debugging); `hooks/session-context.md` rewritten to route all
   disciplines to the lean suite — the superpowers plugin can now be disabled.
 
 ## [0.13.0] - 2026-07-29
+
 ### Added
+
 - Lean pipeline — three skills forking the superpowers spec→plan→execute flow
   for speed at equal quality (MIT-attributed; built RED→GREEN, 9/9 scenarios,
   zero refactor rounds):
@@ -428,7 +561,9 @@ scheme; the content is identical).
   superpowers plugin's session hook entirely.
 
 ## [0.12.0] - 2026-07-24
+
 ### Added
+
 - PRD & plan pipeline — six skills covering idea → requirements → gated
   design handoff → gated execution:
   - `writing-prds`: brainstorming-style dialogue that turns an idea into a PRD
@@ -459,7 +594,9 @@ scheme; the content is identical).
   18/18 with skill-section citations, both council workflows smoke-run live.
 
 ## [0.11.0] - 2026-07-22
+
 ### Added
+
 - `design-forge`: living, license-verified catalog of free front-end design
   sources (agent-playbook-style three-file references + bundled sweep workflow
   with an independent LICENSE-file verifier, default-reject) plus apply mode:
@@ -486,7 +623,9 @@ scheme; the content is identical).
   discarded contaminated probes, disk-verified GREEN, gates green).
 
 ## [0.10.0] - 2026-07-17
+
 ### Added
+
 - Memory & self-improvement suite — six skills built from the 2026-07-17 research
   sweep and roadmap (`docs/plans/2026-07-17-memory-skills-roadmap.md`), all sharing
   one design rule: the verifier stays outside the loop's write surface.
@@ -516,7 +655,9 @@ scheme; the content is identical).
   on fresh subagents → GREEN with disk-verified results → validation gates).
 
 ## [0.9.0] - 2026-07-10
+
 ### Added
+
 - `agent-playbook` skill: living, tiered (Proven/Promising/Watch) playbook of
   coding-agent and agentic-loop best practices. Advisor mode applies source-linked,
   tier-labeled entries during agent-engineering work; update mode (soltero-skills
@@ -527,7 +668,9 @@ scheme; the content is identical).
   Ships bootstrap-seeded: 258 entries from 36 vetted sources.
 
 ## [0.8.0] - 2026-07-02
+
 ### Added
+
 - `walkthrough-tutor` skill: an interactive, level-calibrated tutoring session over a branch/PR's
   changes. Calibrates to the learner first, gives the big-picture mental model before any code, then
   drills down one layer per turn with comprehension checks, pausing to teach the underlying concepts
@@ -537,7 +680,9 @@ scheme; the content is identical).
   the skill all three scenarios open with calibration-only first replies.
 
 ## [0.7.0] - 2026-07-02
+
 ### Added
+
 - `code-optimizer` skill: whole-repo cleanup that applies changes on a branch behind a real test
   gate. An inline sequenced pipeline (not a swarm — it writes code): clean-tree + new branch, a
   `.code-optimizer.yml` config with a public-API allowlist (bootstrapped from the project's declared
@@ -550,7 +695,9 @@ scheme; the content is identical).
   automated safely are listed for manual follow-up.
 
 ## [0.6.0] - 2026-07-01
+
 ### Added
+
 - `audit-swarm` skill: whole-repo security + legal audit. A bundled Workflow script runs
   scout → adaptive specialist finders (secrets, injection, authz, crypto/config, supply
   chain, licenses; conditional PII, regulatory, attribution, stack-specific) → 3-skeptic
@@ -563,7 +710,9 @@ scheme; the content is identical).
   `node --check` rejects. Wired into `npm test` and the aggregate `check`.
 
 ## [0.5.1] - 2026-06-14
+
 ### Fixed
+
 - `build-mcp-server`: the Streamable HTTP template combined `createMcpExpressApp()` (which already
   installs `express.json()`) with a second `app.use(express.json({ limit }))`, so the second parser
   read an already-consumed request stream and **every POST 500'd** (`stream is not readable`). Found
@@ -574,7 +723,9 @@ scheme; the content is identical).
   result with a valid bearer, 405 on `GET /mcp`.
 
 ## [0.5.0] - 2026-06-14
+
 ### Added
+
 - `build-mcp-server` skill: build, harden, and deploy a production-grade MCP server in TypeScript
   on the official `@modelcontextprotocol/sdk`. Centers a verify-the-SDK-first rule (the API is
   mid-migration: stable v1.29.x monolith + **raw-shape** `inputSchema` vs the v2.0.0-alpha scoped
@@ -591,7 +742,9 @@ scheme; the content is identical).
   the full floor — one agent compiled the templates against real SDK 1.29.0 to 10/10 passing tests.
 
 ## [0.4.0] - 2026-06-14
+
 ### Added
+
 - `agent-handoff` skill: writes/refreshes a living `HANDOFF.md` enforcing the 8 elements that make
   work resumable (goal, status, decisions+why, ordered next steps, files **with line refs**,
   gotchas, **open questions**, resume & verify) so a fresh agent continues with zero re-derivation.
@@ -602,7 +755,9 @@ scheme; the content is identical).
   elements present with verified-real line refs and honestly surfaced open questions.
 
 ## [0.3.0] - 2026-06-14
+
 ### Added
+
 - `scaffold-frontend` skill: a menu + scaffolder for new front-ends. Presents a neutral
   framework tradeoffs menu (Next.js / Vite+React / Astro / Expo) and the matching UI layer
   (Tailwind v4 + shadcn/ui + ReactBits for web; NativeWind + react-native-reusables for mobile),
@@ -612,7 +767,9 @@ scheme; the content is identical).
   route options reached 3/3 and standards coverage ~8.7/9. Commands verified against current docs.
 
 ## [0.2.0] - 2026-06-13
+
 ### Added
+
 - `prisma-safety-review` skill: triggers a systematic safety pass before DB changes merge,
   with two deterministic scripts (`check-prisma-versions`, `scan-prisma-antipatterns`) and a
   checklist for the high-cost, easy-to-skip issues (transaction-less bulk writes, pagination
@@ -621,7 +778,9 @@ scheme; the content is identical).
   fast-model casual review from 1/3 to 3/3 on the hardest scenario.
 
 ## [0.1.0] - 2026-06-13
+
 ### Added
+
 - `creating-a-skill` meta-skill encoding the test-driven authoring process.
 - `capture-lesson` skill for structured `Docs/mistakes-and-fixes.md` entries.
 - Plugin + marketplace manifests, frontmatter linter, CI validation.

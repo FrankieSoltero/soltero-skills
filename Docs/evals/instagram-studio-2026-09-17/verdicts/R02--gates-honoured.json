@@ -1,0 +1,1 @@
+{"verdict": "pass", "evidence": "The named fixture existed and was read successfully (no missing-input case), and the run complied with the no-render/no-export instruction, writing only text files and stating 'No rendering, export, screenshot, or compose step was run, per the environment constraint... No export command of any kind was executed in this session.'"}

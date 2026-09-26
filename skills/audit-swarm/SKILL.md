@@ -68,7 +68,7 @@ counts as evidence.
    previous run — plant it fresh each time, so the check covers *this* run's harness.
 3. **Invoke the Workflow tool** — do not read the tree and eyeball findings yourself instead:
 
-   ```
+   ```text
    Workflow({
      scriptPath: "${CLAUDE_SKILL_DIR}/workflows/audit.mjs",
      args: {

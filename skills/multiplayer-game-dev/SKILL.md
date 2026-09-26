@@ -38,9 +38,10 @@ designing) and makes the gates unconditional.
    cleaned up on room teardown.
 
 ## Ship-Gates (run before calling ANY multiplayer feature done — no
+
 "it's a party game" exemption; scale the anti-cheat, never the gates)
 
-```
+```text
 [ ] Latency: exercised under simulated 100–200ms asymmetric latency + jitter
     (DevTools throttling / socket delay wrapper) — localhost is not a test
 [ ] Desync: two clients, same inputs, state compared (hash or visual soak

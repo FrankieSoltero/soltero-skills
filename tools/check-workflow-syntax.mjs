@@ -9,7 +9,8 @@
 // gate: strip the leading `export ` keyword(s), wrap the body in an async IIFE, and compile
 // (never run) it with vm.
 import vm from 'node:vm'
-import { readFileSync } from 'node:fs'
+import { readFileSync, realpathSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
 export function checkWorkflowSyntax(source) {
   const wrapped = '(async () => {\n' + source.replace(/^export /gm, '') + '\n})()'
@@ -21,18 +22,28 @@ export function checkWorkflowSyntax(source) {
   }
 }
 
-const invokedDirectly = import.meta.url === `file://${process.argv[1]}`
+// Entry-point guard that survives /tmp → /private/tmp symlinks on macOS (lesson 2026-09-02).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url) } catch { return false }
+}
+
+const invokedDirectly = isMain()
 if (invokedDirectly) {
-  const path = process.argv[2]
-  if (!path) {
-    console.error('usage: check-workflow-syntax.mjs <workflow.mjs>')
+  const paths = process.argv.slice(2)
+  if (paths.length === 0) {
+    console.error('usage: check-workflow-syntax.mjs <workflow.mjs> [more.mjs ...]')
     process.exit(2)
   }
-  const result = checkWorkflowSyntax(readFileSync(path, 'utf8'))
-  if (result.ok) {
-    console.log(`ok: ${path} parses under the Workflow runtime dialect`)
-  } else {
-    console.error(`SYNTAX ERROR in ${path}: ${result.error}`)
-    process.exit(1)
+  // Check every path before exiting so one run reports all broken scripts.
+  let failed = false
+  for (const path of paths) {
+    const result = checkWorkflowSyntax(readFileSync(path, 'utf8'))
+    if (result.ok) {
+      console.log(`ok: ${path} parses under the Workflow runtime dialect`)
+    } else {
+      console.error(`SYNTAX ERROR in ${path}: ${result.error}`)
+      failed = true
+    }
   }
+  if (failed) process.exit(1)
 }
