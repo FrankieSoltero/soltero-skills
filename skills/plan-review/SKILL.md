@@ -1,6 +1,6 @@
 ---
 name: plan-review
-description: Use when an implementation/execution plan needs a quality verdict before anyone executes it ("review this plan", "ready to execute?", "grade the implementation plan"), after soltero-skills:lean-plans produces a plan, before soltero-skills:lean-sdd runs one, or when re-reviewing a revised plan — convenes a 6-dimension grading council (bundled workflow: rubric-anchored scores with plan-quoted evidence, anti-inflation skeptics, deterministic gate) instead of one agent's ungraded read, and enforces: overall ≥85 AND every dimension ≥80 AND zero blocking violations, else BLOCKED with no execution, no "bless the first few tasks", no absorb-as-we-go. Fix→re-review loop (max 3 rounds, re-grading only the dimensions that failed); the fixer never changes the verdict and never re-reviews its own fixes — only a fresh council round can. Small all-mechanical-tier plans get a lite single-reviewer mode instead of the full council. Sibling of soltero-skills:prd-review.
+description: Use when an implementation plan needs a verdict before anyone executes it ("review this plan", "ready to execute?", "grade the implementation plan"), after lean-plans or before lean-sdd, or on a revised plan. Convenes a 6-dimension grading council workflow with a hard gate — overall 85+, every dimension 80+, no blocking violations — else BLOCKED; max 3 fix rounds. Sibling of prd-review.
 ---
 
 # Plan Review Council
@@ -77,7 +77,7 @@ adjust or estimate a score, and you never re-review your own fixes.
    reserved for plans that need the extra scrutiny); never let a dispatch inherit the
    session model. If you also cannot dispatch subagents, run the six rubric passes
    separately yourself and DISCLOSE that it's a stand-in, not the council.
-3. **Write the report** — `docs/plan-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
+3. **Write the report** — `Docs/plan-reviews/YYYY-MM-DD-<topic>-review.md`: verdict
    banner (PASS / **BLOCKED — do not execute**), score table (dimension, weight,
    grader score, skeptic misses, final), evidence-quoted violations, then blocking
    fixes (mechanical), owner questions, recommended fixes. A dimension the council

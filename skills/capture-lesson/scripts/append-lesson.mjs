@@ -2,9 +2,13 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 
+// A flag followed by another flag (or by nothing) has no value. Values are
+// collapsed to one line so a pasted newline cannot break the entry format.
 function arg(flag) {
   const i = process.argv.indexOf(flag);
-  return i !== -1 ? process.argv[i + 1] : undefined;
+  const v = i !== -1 ? process.argv[i + 1] : undefined;
+  if (v === undefined || v.startsWith('--')) return undefined;
+  return v.replace(/\s*[\r\n]+\s*/g, ' ').trim();
 }
 
 const file = arg('--file') ?? 'Docs/mistakes-and-fixes.md';

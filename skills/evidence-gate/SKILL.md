@@ -1,6 +1,6 @@
 ---
 name: evidence-gate
-description: Use when making, accepting, or acting on a lifecycle-advancing claim — phase change, review pass, test certification, "done", "merge-ready" — as claimant or gatekeeper. Replaces prose claims with hash-bound, fail-closed JSON receipts under Docs/evidence/receipts/, produced and mechanically re-verified by bundled scripts; missing, stale, incomplete, or red evidence blocks the transition, and an agent's own "tests pass" report is never evidence.
+description: Use when making, accepting or acting on a lifecycle-advancing claim — phase change, review pass, test certification, "done", "merge-ready" — as claimant or gatekeeper. Replaces prose claims with hash-bound, fail-closed JSON receipts under Docs/evidence/receipts/ that bundled scripts create and re-verify; an agent's own "tests pass" is never evidence.
 ---
 
 # Evidence Gate

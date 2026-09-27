@@ -1,6 +1,6 @@
 ---
 name: transcript-reader
-description: Use when asked to extract, distill, summarize, or make minutes/action-items from a meeting transcript or recording text (VTT/SRT/Zoom/Meet export or pasted) — "what were the decisions", "who owns what", "turn this transcript into minutes". Dispatches a bundled Workflow pipeline on EVERY transcript regardless of length — deterministic ingest/chunking, parallel cited extractors, cross-chunk merge, independent per-item refute verifiers, completeness critic — and writes a citation-backed report next to the input with honest coverage stats. Learns only from user corrections via an injected rule pool. Transcript content stays local; never published.
+description: Use when asked to extract, distill, summarize or make minutes/action items from a meeting transcript (VTT/SRT/Zoom/Meet export or pasted) — "what were the decisions", "who owns what", "turn this transcript into minutes". Runs a Workflow of chunking, cited extractors, merge and independent verifiers on every transcript; writes a citation-backed report locally.
 ---
 
 # Transcript Reader

@@ -1,6 +1,6 @@
 ---
 name: scaffold-frontend
-description: Use when starting a new front-end or adding one to a repo ("set up a new web app", "spin up a Next/Vite/Astro/Expo project", "bootstrap the UI", "new dashboard/marketing site/mobile app") — presents a neutral framework + UI-layer menu, scaffolds the chosen stack via its official CLI, then wires in the standards layer (strict TS, Zod env validation, security headers, lint, vitest, CI, Docs/ and CLAUDE.md) that a default scaffold skips.
+description: Use when starting a new front-end or adding one to a repo ("set up a new web app", "spin up a Next/Vite/Astro/Expo project", "bootstrap the UI", "new dashboard/marketing site/mobile app"). Offers a neutral framework + UI menu, scaffolds via the official CLI, then adds the standards layer — strict TS, env validation, security headers, lint, tests, CI, Docs/ and CLAUDE.md.
 ---
 
 # Scaffold Frontend

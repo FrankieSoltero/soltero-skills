@@ -1,6 +1,6 @@
 ---
 name: docs-standardizer
-description: Use when asked to document a repo, write or refresh a CLAUDE.md / AGENTS.md for a project, make a codebase easier to onboard to, standardize or clean up its docs, or outline what documentation it has ("document this repo", "an agent keeps getting lost in this repo", "the docs are out of date", "write a CLAUDE.md for this project", "apply our docs standard", "onboarding docs") — brings the repo to ONE user-scope documentation standard (~/.claude/docs-standard.json, bootstrapped on first use) aimed at agent onboarding. Bundled scripts inventory every doc surface with its command and path claims, then the skill reconciles stale and duplicate docs, writes the entry doc under a line budget, generates the required doc set from the tree, and indexes it, one commit per category on a branch behind a bundled verifier. Whole-repo, agent-facing docs; not API reference, product docs, or a diff review. For advice on how to design agent instructions, use agent-playbook.
+description: Use when asked to document a repo or make it easier to onboard to — "document this repo", "write a CLAUDE.md for this project", "an agent keeps getting lost in this repo", "the docs are out of date", "apply our docs standard". Brings agent-facing docs to one user-scope standard via bundled inventory and verifier scripts, one commit per category. Not API or product docs.
 ---
 
 # Docs Standardizer

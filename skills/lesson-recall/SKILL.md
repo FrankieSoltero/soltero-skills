@@ -1,6 +1,6 @@
 ---
 name: lesson-recall
-description: Use at the start of a task the project may have already failed at — before lean-debugging opens an investigation, before lean-brainstorming designs anything, before any implementation code — and whenever the user says a problem "keeps happening", "we've hit this before", "this date thing again", "didn't we already fix this", or "we have run into this issue like 15 times how have we not universalized this yet". Runs the bundled matcher over Docs/mistakes-and-fixes.md and the auto-memory index, reports the ranked prior lessons with their recorded fix and a per-class recurrence count before any new investigation starts, flags a recorded fix that a later entry superseded, and at three or more occurrences of one class hands off to soltero-skills:correction-compiler instead of hand-fixing the same bug again. Read-only — it never writes, edits, prunes, or merges a lesson.
+description: Use at the start of a task the project may have failed at before (before debugging, designing or implementing), and when the user says it "keeps happening", "we've hit this before", "didn't we already fix this", or "this date thing again". Matches Docs/mistakes-and-fixes.md and memory, reports prior fixes with recurrence counts, and hands off to correction-compiler at three. Read-only.
 ---
 
 # Lesson Recall

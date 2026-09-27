@@ -1,6 +1,6 @@
 ---
 name: skill-trigger-repair
-description: Use when a dev-debrief names the same skill under "## Missed triggers" on two or more dates, or when someone asks "why didn't X fire", "why isn't capture-lesson triggering", "that skill never loads" — a skill whose description matched the work and which was not invoked. Runs a bundled parser over the debrief corpus to count recurrence per skill and classify its quoted phrasing evidence, recovers the exact words the user typed from the cited sessions, and proposes two diffs — the frontmatter description rewritten so that literal phrasing is a trigger clause, and the task-type → skill routing line in hooks/session-context.md / AGENTS.md / README.md — plus a Docs/trigger-repair-YYYY-MM-DD.md phrasing-evidence ledger and a next-debrief re-check. It proposes; a human approves each diff. Missed once is logged, not edited; never edits skill bodies, debrief reports, or another skill's ledger.
+description: Use when a dev-debrief names the same skill under "Missed triggers" on two or more dates, or when asked "why didn't X fire", "why isn't capture-lesson triggering", "that skill never loads". Parses the debriefs, recovers the user's exact words, and proposes a description rewrite plus a routing-line diff with an evidence ledger; a human approves each diff.
 ---
 
 # Skill Trigger Repair
