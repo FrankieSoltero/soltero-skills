@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseFrontmatter, validateFrontmatter } from './frontmatter.mjs';
@@ -29,4 +29,8 @@ function main() {
   process.exit(failed ? 1 : 0);
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) main();
+// Entry-point guard that survives symlinked paths (GP-001, Docs/golden-principles.md).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+if (isMain()) main();

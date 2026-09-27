@@ -11,7 +11,7 @@
 //   node plan-graph.mjs docs/plans/x.md --mermaid  # mermaid flowchart only
 //   node plan-graph.mjs docs/plans/x.md --md       # full visualization markdown
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const TIERS = new Set(['mechanical', 'standard', 'judgment']);
@@ -299,7 +299,11 @@ export function toMarkdown(r, { planPath = 'plan.md' } = {}) {
 
 // ---------- CLI ----------
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+// Entry-point guard that survives symlinked paths (GP-001, Docs/golden-principles.md).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+if (isMain()) {
   const [, , file, mode] = process.argv;
   if (!file) { console.error('usage: plan-graph.mjs <plan.md> [--mermaid|--md]'); process.exit(2); }
   const r = analyzePlan(readFileSync(file, 'utf8'));
