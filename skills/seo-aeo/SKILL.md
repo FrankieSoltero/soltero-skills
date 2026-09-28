@@ -1,6 +1,6 @@
 ---
 name: seo-aeo
-description: Use when optimizing content or a site for search discovery — "SEO", "rank for", "organic traffic", "get cited by AI/ChatGPT/Perplexity", "AI Overviews", "answer engine", "llms.txt", schema markup, meta descriptions — or when content-marketing hands a draft off for search. Serves the dated stable/fast-rotting practice reference with basis labels on every recommendation, runs the mechanical audit checklist before judgment calls, prescribes the citation baseline→fix→recheck protocol, and never promises rankings or dates. Child of soltero-skills:content-marketing.
+description: Use when optimizing content or a site for search discovery — "SEO", "rank for", "organic traffic", "get cited by AI/ChatGPT/Perplexity", "AI Overviews", "answer engine", "llms.txt", schema markup, meta descriptions — or when content-marketing hands off a draft. Dated practice reference with basis labels, a mechanical audit checklist, and no promised rankings. Child of content-marketing.
 ---
 
 # SEO & AEO

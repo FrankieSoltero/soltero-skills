@@ -1,6 +1,6 @@
 ---
 name: trend-research
-description: Use when asked about market trends, competitive landscape, market sizing, funding activity, "what's happening in <space>", or to validate a strategic premise ("investor says X is the future — get me numbers"). Enforces the evidence protocol: search when web access exists, per-claim evidence labels ([verified: source, date] / [model memory — verify] / [estimate]), NO specific numbers (TAM, funding, pricing, share) from memory — bracket them [VERIFY], premises checked before building on them, observation split from interpretation. Discovery front-end for soltero-skills:writing-prds; sibling of soltero-skills:feedback-synthesis.
+description: Use when asked about market trends, competitive landscape, market sizing, funding, "what's happening in <space>", or to validate a strategic premise ("investor says X is the future — get me numbers"). Per-claim evidence labels, no specific numbers from memory (bracketed [VERIFY]), premises checked first. Discovery front-end for writing-prds.
 ---
 
 # Trend Research

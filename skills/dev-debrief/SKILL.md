@@ -1,6 +1,6 @@
 ---
 name: dev-debrief
-description: Use when the scheduled nightly dev-debrief run fires or when explicitly asked for a daily work debrief ("run the dev debrief", "what did I actually do today across projects") — scans ~/.claude/projects transcripts from the last 24h across ALL projects; on days with no coding signals (no Edit/Write/NotebookEdit, no git commit) it skips silently (one skip-log line, no report, no push), otherwise writes Docs/debriefs/YYYY-MM-DD.md in canonical format: redacted per-project what-you-did summaries, skill telemetry with trigger kind + outcome per invocation, missed-trigger findings with cited session evidence, evidence-backed workflow observations, push headline when available. Sundays append the weekly deep section (evidence-cited A–F grades, N/A for zero-opportunity skills, corrections-ledger-compatible recommendations for skill-patcher, coverage gaps). Read-only everywhere except Docs/debriefs/; recommendations only — it never edits skills, ledgers, or CLAUDE.md.
+description: Use when the nightly dev-debrief run fires or when asked for a daily work debrief ("run the dev debrief", "what did I actually do today across projects") — scans the last 24h of ~/.claude/projects transcripts and writes Docs/debriefs/YYYY-MM-DD.md with per-project summaries, skill telemetry and missed triggers (weekly grades on Sundays); skips silently on no-coding days. Read-only elsewhere.
 ---
 
 # Dev Debrief

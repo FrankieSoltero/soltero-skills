@@ -7,10 +7,11 @@ Append; never rewrite history. Bump the version and add a line when a detector c
 Rule files live in `Docs/defect-classes/`; the runner is
 `skills/defect-class-sweep/scripts/sweep.mjs`.
 
-## GP-001 (v1, 2026-09-17) — An ESM CLI resolves `argv[1]` before asking "am I the entry point?"
+## GP-001 (v2, 2026-09-25; v1 2026-09-17) — An ESM CLI resolves `argv[1]` before asking "am I the entry point?"
 
 - **Wrong:** ``if (import.meta.url === `file://${process.argv[1]}`) main()`` (or
-  `pathToFileURL(process.argv[1]).href === import.meta.url`). Node resolves symlinks for
+  `pathToFileURL(process.argv[1]).href === import.meta.url`, or — v2 — the raw path compared
+  with the resolved one: `process.argv[1] === fileURLToPath(import.meta.url)`, either order). Node resolves symlinks for
   `import.meta.url` but not for `process.argv[1]`, so when the script is reached through
   any symlinked path — macOS `/tmp` → `/private/tmp`, a linked skills directory, a bin
   shim — the guard is false, `main()` never runs, and the process prints nothing and
@@ -39,6 +40,8 @@ Rule files live in `Docs/defect-classes/`; the runner is
     follow data flow. None exists in the repo today; if one appears, extend the detector.
   - Code that must quote the wrong pattern on purpose (a test fixture, a lint message,
     this rule's own tests): mark the line `// esm-entry-guard:allow`.
+  - A guard that realpaths only `import.meta.url`'s side, or compares basenames
+    (`argv[1].endsWith(...)`) — not detected; none exists in the repo today.
   - Markdown and other prose — the rule scans `**/*.{mjs,js,cjs,ts,mts}` only; lessons and
     eval transcripts that quote the pattern are history, not code.
 - **Check:** `npm run check:entry-guard` →
@@ -48,10 +51,18 @@ Rule files live in `Docs/defect-classes/`; the runner is
   and `dispatch-contract`'s `validate-brief.mjs`), 2026-09-07 (`token-economy`, three
   scripts), 2026-09-17 (`instagram-studio`, two scripts, on branch `feat/instagram-studio`,
   caught only when the lessons file was re-read) — each recorded in
-  `docs/mistakes-and-fixes.md` and each fixed by hand. Swept 2026-09-17: 117 files scanned, 5 instances
+  `Docs/mistakes-and-fixes.md` and each fixed by hand. Swept 2026-09-17: 117 files scanned, 5 instances
   (`destructive-op-gate` ×3, `defect-class-sweep/scripts/sweep.mjs`,
   `tools/check-workflow-syntax.mjs`), 5 fixed, 0 deferred. After `instagram-studio` (1.0.27)
   merged: 121 files, 1 allowlisted — a test comment in
   `skills/instagram-studio/scripts/check-output.test.mjs` that quotes the wrong pattern on
   purpose.
+  **v2 (2026-09-25):** the v1 detectors only matched a `file://` URL built from raw
+  `argv[1]`; the raw-path-vs-`fileURLToPath` variant slipped past them, and
+  `tools/lint-frontmatter.mjs` (a CI gate) printed nothing and exited 0 through a symlink.
+  Added detector `raw-argv-vs-module-path` (`unless: realpathSync`; 0 hits on the 16 correct
+  guards). Swept: 121 files, 5 instances (`tools/lint-frontmatter.mjs`,
+  `lesson-recall/scripts/recall-lessons.mjs`, `plan-visualizer/scripts/plan-graph.mjs`,
+  `skill-ab-eval/scripts/paired-table.mjs`, `skill-trigger-repair/scripts/missed-triggers.mjs`),
+  5 fixed with a symlink-spawn test each (watched failing first), 0 deferred.
 - **Known undecidable instances:** none.

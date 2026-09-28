@@ -1,6 +1,6 @@
 ---
 name: code-by-hand
-description: Use ONLY when the user explicitly invokes it ("code-by-hand", "let's build this by hand", "slow mode — I type everything") — never auto-triggers on task shape or hunch alone. Navigator/driver pairing where the USER types every line: the agent plans the change, presents one logical block at a time with why-this-block notes, waits for the user to type it into the real file, then reads the file and verifies what was actually typed — typos are explained and fixed by the user's own hands, not the agent's. The agent never writes code files during the session; its one writable file is the .code-by-hand.md session log. Mode exit only by explicit user say-so. For understanding an existing diff, use walkthrough-tutor instead.
+description: Use ONLY when the user explicitly asks for it ("code-by-hand", "let's build this by hand", "slow mode — I type everything"); never auto-triggers. Navigator/driver pairing where the user types every line — the agent plans one block at a time, then reads the file to verify what was typed, and never writes code files itself. For understanding a diff, use walkthrough-tutor.
 ---
 
 # Code by Hand

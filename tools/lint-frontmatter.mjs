@@ -1,7 +1,7 @@
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseFrontmatter, validateFrontmatter } from './frontmatter.mjs';
+import { checkYamlSafety, parseFrontmatter, validateFrontmatter } from './frontmatter.mjs';
 
 // Re-exported so existing consumers (and tests) keep working against this path;
 // the implementation now lives in ./frontmatter.mjs, shared with the MCP server.
@@ -22,11 +22,15 @@ function main() {
     catch { console.error(`✗ ${d}: missing SKILL.md`); failed = true; continue; }
     const fm = parseFrontmatter(content);
     if (!fm) { console.error(`✗ ${d}: missing YAML frontmatter`); failed = true; continue; }
-    const errors = validateFrontmatter(fm, d);
+    const errors = [...validateFrontmatter(fm, d), ...checkYamlSafety(content)];
     if (errors.length) { for (const e of errors) console.error(`✗ ${d}: ${e}`); failed = true; }
     else console.log(`✓ ${d}`);
   }
   process.exit(failed ? 1 : 0);
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) main();
+// Entry-point guard that survives symlinked paths (GP-001, Docs/golden-principles.md).
+function isMain() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+if (isMain()) main();

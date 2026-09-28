@@ -1,6 +1,6 @@
 ---
 name: content-marketing
-description: Use when writing or editing any outward-facing marketing/content artifact — launch post, blog post, landing/hero copy, announcement, social post — or when asked to "promote"/"write copy for"/"make it punchy". Enforces the claim-trace gate on YOUR OWN drafting (every factual, feature, policy, or number claim traces to given facts or ships as a visible placeholder — the failure mode is inventing "free forever"-style specifics while correctly refusing the user's fake stats), mechanical platform-constraint checks, a 20-second brief, and a claims-table delivery contract. Parent of soltero-skills:seo-aeo, soltero-skills:email-marketing, and soltero-skills:instagram-studio.
+description: Use when writing or editing outward-facing marketing content — launch post, blog post, landing/hero copy, announcement, social post — or asked to "promote", "write copy for" or "make it punchy". Enforces the claim-trace gate on your own drafting (every claim traces to given facts or ships as a visible placeholder) plus platform checks. Parent of seo-aeo, email-marketing and instagram-studio.
 ---
 
 # Content Marketing
