@@ -92,6 +92,7 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Lesson:** a lesson nobody recalls is not a fix; at 3+ occurrences of one defect class this routes to soltero-skills:defect-class-sweep / soltero-skills:correction-compiler for a deterministic check, and lesson-recall must run BEFORE new *.mjs CLIs are written, not at the lessons task at the end
 - **Regression test:** the two new symlink tests for preflight.mjs/check-output.mjs, plus: grep -rn 'import.meta.url === `file://' skills/instagram-studio/scripts/ returns zero hits. Repo-wide the same grep over skills/ tools/ still returns 5 files (the five listed on the Fix line above); they remain open for the defect-class sweep, not fixed by this entry.
 - **Recurrence (2026-09-25, fifth):** GP-001 v1 only detected a `file://` URL built from raw `argv[1]`; the variant `process.argv[1] === fileURLToPath(import.meta.url)` passed CI in five scripts, including `tools/lint-frontmatter.mjs`, which then printed nothing and exited 0 through a symlink. A defect-class rule is only as wide as its detectors: when fixing an instance, grep for the *mechanism* (an unresolved `argv[1]` compared to anything), not just the last-seen spelling. Rule v2 adds detector `raw-argv-vs-module-path`.
+- meta: h:0/x:0 | provenance: first-party
 
 ## 2026-09-17 — concurrent agents in one lean-sdd worktree: agent A staged two files, agent B's git commit (after git add of only its own paths) swept A's staged files into B's commit, and the controller's own commit then did the same to a later pair
 
@@ -100,6 +101,7 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** recovered both times with `git reset --soft HEAD~1` followed by a pathspec commit (`git commit -m ... -- <paths>`); no history was lost
 - **Lesson:** in any multi-agent worktree, commit with `git commit -m ... -- <paths>` and verify with `git show --stat HEAD` before moving on; the lean-sdd implementer template's 'stage exact paths only' line needs to say 'commit with a pathspec', not just 'stage exact paths'
 - **Regression test:** `git show --stat <sha>` lists only the task's own files for every task commit in a multi-agent run
+- meta: h:0/x:0 | provenance: first-party
 
 ## 2026-09-17 — the instagram-studio A/B eval's own transcript-builder harness was wrong twice before the skill under test was: it clipped every transcript at 2,500 chars (cutting the agents' own deliverables out from under the judges, three of whom abstained), then left the run id (tier, scenario, arm) in the transcript filename and every scratch path while the report claimed blinding
 
@@ -108,6 +110,7 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** both passes were archived untouched (not edited in place) and all 72 judges re-run against corrected, unclipped, opaque-id transcripts; documented in Docs/skill-eval-instagram-studio-2026-09-17.md under 'Judge disagreements and abstentions'; judge models were read back from Docs/evals/instagram-studio-2026-09-17/judge-models.json rather than assumed
 - **Lesson:** never clip what the agent WROTE when building an eval transcript; blind runs with opaque ids and grep the final transcripts for every label (tier, scenario, arm, model name) before dispatching judges, and read judge models back from the logs rather than trusting the dispatch config
 - **Regression test:** `grep -rli 'haiku\|sonnet' Docs/evals/<eval>/transcripts` returns nothing, and judge-models.json shows exactly one model per judge dispatch
+- meta: h:0/x:0 | provenance: first-party
 
 ## 2026-09-17 — an instagram-studio RED fixture handed a scenario its own answer: tests/scenarios/instagram-studio/fixtures/web-app/README.md said 'there is no app store listing, press kit, or press coverage yet', and the baseline run quoted that exact sentence as its reason for not inventing claims, while scenario-4 asked 'what exists on disk … or what does not' — a question the fixture had already pre-answered
 
@@ -116,6 +119,7 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** fixed in commit 4e2ac9b: the fixture now states only what a real artifact would state, and the scenario-4 probe was reworded so it no longer presupposes the tempting answer; baselines were re-run and recorded
 - **Lesson:** a fixture states only what a real artifact would state and never a negative inventory of what is absent; a probe question must not presuppose the answer it is meant to be testing for
 - **Regression test:** the re-run baselines recorded in tests/scenarios/instagram-studio/RED-baseline.md show the scenario-4 agent inferring absence from the file listing rather than quoting the fixture
+- meta: h:0/x:0 | provenance: first-party
 
 ## 2026-09-17 — a 'missing ffmpeg' scenario for instagram-studio didn't actually remove ffmpeg: baseline agents ran ffmpeg -version, found the real binary, and ignored the prompt; separately a PATH shim file named ffmpeg made preflight.mjs PASS because it only checks existence, and `PATH="…" cd <dir> && node preflight.mjs` scoped the PATH override to the cd only, so a haiku run passed preflight in the wrong environment and then called /opt/homebrew/bin/ffmpeg by absolute path (transcript Docs/evals/instagram-studio-2026-09-17/transcripts/R09.md)
 
@@ -124,6 +128,7 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** commit fada6c9: simulate absence by removing the real directory from PATH and verify the simulated failure before dispatch; the skill now requires every later command to run in the same environment preflight checked
 - **Lesson:** a 'missing dependency' written only into a prompt is not missing; a PATH shim cannot fail a file-existence preflight; judge a gate on its actual behaviour under a verified-broken environment, not on the prompt's claim about the environment
 - **Regression test:** PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" node skills/instagram-studio/scripts/preflight.mjs --json exits 1 with the ffmpeg check failing
+- meta: h:0/x:0 | provenance: first-party
 
 ## 2026-09-17 — the instagram-studio plan named cover.jpg as the output for two different canvases (1080x1920 reel and 1080x1350 feed under --format all), so the validator could never pass for both at once — missed by the plan author and by two plan-review rounds, found by the Task 5 review; separately, plan-review round 1 blocked the plan because Tasks 8 and 9 both wrote Docs/evals/instagram-studio-2026-09-17/ with no dependency edge while a note claimed they were disjoint
 
@@ -132,6 +137,7 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** owner amendment split the name into reel-cover.jpg / feed-cover.jpg (commit 39c28e9); the Docs/evals directory collision was resolved before plan-review round 2 passed (Docs/plan-reviews/2026-09-17-instagram-studio-review.md)
 - **Lesson:** for every fixed filename in a plan, ask what happens when every format is produced into one directory in the same run; treat a shared output DIRECTORY between two tasks as file overlap requiring a dependency edge, not just a shared output FILE
 - **Regression test:** check-output.mjs test 'an all dir with reel + feed passes both cover checks'
+- meta: h:0/x:0 | provenance: first-party
 
 ## 2026-09-17 — instagram-studio's GREEN run and the A/B eval both stopped at the Plan gate, so nobody noticed the skill gave no actual command for the cover export or the frame-0 bake, that hyperframes snapshot --at writes N+1 frames without --no-end, or that the skill's claim 'the only network call is npx' was false (Google Fonts, a jsdelivr script with no integrity attribute) — 12 such defects surfaced only once the live render was run
 
@@ -140,6 +146,7 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** the live render (Docs/evals/instagram-studio-2026-09-17/live-render.md) found all 12 defects; fixed in fada6c9 and e8c001e
 - **Lesson:** a skill that drives an external CLI is not verified until one run goes end to end with the real tool; schedule the live run BEFORE the efficacy eval, not after, so eval judges are grading a skill that can actually be executed
 - **Regression test:** `node skills/instagram-studio/scripts/check-output.mjs <out-dir> --format all` exits 0 on a real render
+- meta: h:0/x:0 | provenance: first-party
 
 ## 2026-09-25 — PR #31 went green on CI but sat BLOCKED: adding a Node matrix renamed the 'validate' job's check to 'validate (22)'/'validate (24)', and main's ruleset requires a check named exactly 'validate'
 
@@ -148,3 +155,4 @@ A running log of bugs, root causes, fixes, and lessons.
 - **Fix:** Matrix job renamed 'test'; a 'validate' job with needs: test, if: always(), and an explicit needs.test.result == success step (a skipped required job reports as passing)
 - **Lesson:** Before renaming, matrixing, or splitting a CI job, read the required checks (gh api repos/<o>/<r>/rules/branches/main) and keep every required context reporting — a green run that never posts the required name blocks merges forever
 - **Regression test:** (none yet)
+- meta: h:0/x:0 | provenance: first-party
