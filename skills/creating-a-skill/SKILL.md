@@ -56,10 +56,15 @@ Not preferences. A skill that breaks one does not ship, whatever the deadline.
 1. **Spec** — write `Docs/specs/<skill>.md` from `templates/spec.md`: problem, trigger,
    scope, one concrete success scenario, and the literal phrasings a user would type.
 2. **RED** — write 3 pressure scenarios in `tests/scenarios/<skill>/` from
-   `templates/scenario.md`; **one of them never names the skill** (Hard Rule 4). Dispatch a
-   fresh subagent on each WITHOUT the skill. Record its choices and rationalizations verbatim
-   in `RED-baseline.md`, under a dated heading with the model pinned. You must see it fail —
-   and where it does not, record that plainly instead of shipping content no failure justified.
+   `templates/scenario.md`; **one of them never names the skill** (Hard Rule 4). Prove the setup
+   before dispatching: watch the fixture exhibit the condition its scenario claims, and confirm
+   nothing naming the skill is reachable in the repo, the scratchpad, or `/tmp`
+   (`reference.md`). Then dispatch a fresh subagent on each WITHOUT the skill. Record its
+   choices and rationalizations verbatim in `RED-baseline.md`, under a dated heading with the
+   model pinned. You must see it fail — and where it does not, record that plainly instead of
+   shipping content no failure justified. An unverified fixture or a reachable answer makes a
+   run measure neither the skill nor its absence, in either direction, so grep each transcript
+   before accepting it.
 3. **GREEN** — author the minimal `SKILL.md` (start from `templates/SKILL.md.tmpl`) that
    addresses only the observed failures. No content for hypothetical cases.
 4. **Verify GREEN** — re-run the same scenarios with the skill present. Confirm compliance,
@@ -98,11 +103,16 @@ Not preferences. A skill that breaks one does not ship, whatever the deadline.
 | "It's one small deterministic step inside a big judgment skill — prose is clearer." | Small and incidental is exactly where this gets skipped. Prose re-derives the logic every run; a script cannot be talked out of running correctly. Script + test. |
 | "The description is accurate — it describes what the skill does." | Accurate and findable are different properties. If its words are not the words a user types, the skill never loads and its accuracy is never exercised. |
 | "All 3 scenarios pass, so the skill is validated." | If all 3 name the skill, you validated the body and never tested the trigger. Write the negative one. |
+| "The baseline passed without the skill, so this content isn't needed." | Or the run was never unaided. `token-economy`'s RED "passed" twice off its own spec, scenario files and scratchpad drafts, and `docs-standardizer`'s seeded `docs/`-vs-`Docs/` clash was a single directory on the author's disk. Rule out a reachable answer and an unverified fixture before reading a pass as a finding. |
 
 ## Red Flags — STOP
 
 - About to create `SKILL.md` before any scenario exists → STOP, write the scenario.
 - Adding content for a case no baseline run surfaced → delete it (YAGNI).
+- Dispatching a baseline before watching the fixture exhibit the condition → STOP, the run
+  measures nothing.
+- The spec, the scenarios, or draft scripts reachable in the repo, the scratchpad, or `/tmp`
+  → STOP, that baseline is not unaided.
 - Committing a skill that hasn't passed `lint-frontmatter` + `claude plugin validate` → STOP.
 - About to ship on pass-rate evidence from a single model tier → STOP, run the A/B eval.
 - Writing prose for a step that has exactly one right answer → STOP, write the script + test.
