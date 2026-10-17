@@ -45,6 +45,17 @@ Code quality (FULL mode only): separation of concerns; error handling; edge
 cases; tests assert real behavior (not mocks) and cover the behavior table;
 files stay focused per the plan's structure.
 
+Size and duplication (both modes): run `wc -l` on every non-test source file
+the diff touches and compare each against the size cap in the global
+constraints; run the repo's declared duplication tool (e.g. `jscpd
+--min-lines 8 --min-tokens 60`) over the directories the diff touches. These
+two read-only commands are the one exception to "do not crawl the codebase" —
+a diff physically cannot show that a block already exists elsewhere, which is
+why copies survive review. A file over the cap, or a clone with either half in
+this diff, is an **Important** finding; "matches the sibling's structure" is
+never a strength and never excuses a copy. If the constraints declare no cap
+or no tool, say so in one line rather than inventing a threshold.
+
 SPEC_ONLY tripwire: if this diff is NOT actually mechanical — materially
 larger than the brief implies, contains logic, or touches files outside its
 list — put `ESCALATE: <one sentence>` as your first line and stop; the
