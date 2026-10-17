@@ -15,13 +15,35 @@
 - One scenario in every set is the **negative** one: the task matches the skill and the prompt
   never names it. A named scenario measures the body; only the unnamed one measures the
   description, and the description is the only part loaded before the skill fires.
-- Never put the target behavior in an option. An option list that spells out the correct
-  mechanism telegraphs it — a capable model picks it and the run proves nothing. When the
-  gate under test is one a strong model can recognize from the option text, force deliverables
-  instead ("write out the run plan and the exact reply") and read what the agent volunteers.
+- **Verify the setup before dispatching, never after.** Run the fixture's own condition and
+  watch it fail the way the scenario says it does. A condition written only into the prompt is
+  not a condition: a "missing ffmpeg" scenario whose fixture leaves ffmpeg on `PATH` has the
+  baselines run `ffmpeg -version`, find it, and ignore the premise — simulate the absence in the
+  real environment and confirm the simulated failure first. A condition that only holds on the
+  author's machine is not a condition either: a case-only `docs/` vs `Docs/` clash is one
+  directory on APFS, so the clash under test never existed and the baselines reported duplicate
+  content instead.
+- Never put the target behavior in an option — or in a fixture. An option list that spells out
+  the correct mechanism telegraphs it — a capable model picks it and the run proves nothing. A
+  fixture states only what a real artifact would state and never a negative inventory of what is
+  absent: "there is no press kit yet" hands a probe about discovering absence its own answer, and
+  the baseline quotes that sentence back as its reasoning. A probe question must not presuppose
+  the answer it is meant to test for. When the gate under test is one a strong model can
+  recognize from the option text, force deliverables instead ("write out the run plan and the
+  exact reply") and read what the agent volunteers.
+- **Clear the search path, then check that it stayed clear.** A baseline is only as unaided as
+  the file system the agent can search: before dispatching, nothing named after the skill may
+  exist in the repo tree, the session scratchpad (every subagent inherits that path), or `/tmp`
+  — move the spec, the scenario files and any draft scripts somewhere unadvertised outside the
+  repo for the duration of RED and restore them at GREEN, rather than leaving the evaluator's
+  own pass criteria sitting where a `find` will reach them. A scenario that names the skill
+  sends the agent hunting for that name, and what it finds is those criteria. Before accepting a run, grep its transcript for reads of
+  `Docs/specs/`, `scenario-*.md`, and the scratchpad path.
 - Where a baseline complies instead of failing, record that outcome as-is. A complied baseline
-  means either the scenario is telegraphing or the content is unnecessary — both are findings,
-  and neither is fixed by writing the skill content anyway.
+  means the scenario is telegraphing, the run was never unaided, the condition under test never
+  existed, or the content is unnecessary — all four are findings, and none is fixed by writing
+  the skill content anyway. Rule out the middle two first: those are defects in the measurement
+  rather than results from it.
 
 ## Meta-testing
 
