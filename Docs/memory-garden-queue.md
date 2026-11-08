@@ -112,3 +112,29 @@ edit-plan candidates) and deletes consumed lines as part of the pass commit.
   Re-evaluate at the next genuine occurrence, and note the 2026-11-08 rejection above:
   identical code mechanism is not by itself sufficient if the recorded proximate causes
   diverge.
+
+- [2026-11-08] flag (provenance gap, not a falsified claim — first found by the 2026-10-08
+  pass in unmerged PR #35, re-verified and widened here): commit SHAs cited inside
+  `Docs/mistakes-and-fixes.md` entries are **unreachable in this repo**. PR #35 reported
+  two; `git cat-file -t` reports **six** are not valid objects: `b5a6e00` and `19293d9`
+  (2026-09-17 guard entry), `fada6c9` and `e8c001e` (2026-09-17 ffmpeg and live-render
+  entries), `4e2ac9b` (2026-09-17 RED-fixture entry), `39c28e9` (2026-09-17 plan-filename
+  entry). All six are branch-local SHAs that did not survive a squash merge (PR #29
+  squash-merged as `70ee49b`), so every "fixed in commit <sha>" citation written from
+  inside a feature branch is unverifiable once that branch is squashed. This is a
+  provenance gap, not evidence the fixes did not happen — the fixes are independently
+  confirmed (the `esm-entry-guard` sweep reports 0 matches). **No delete proposed.**
+  Action needed: a human decides whether to repoint these to the squash SHAs, and whether
+  `capture-lesson` should record the PR number rather than a branch-local SHA — the latter
+  is a skill change, which `memory-gardener` is scoped out of.
+
+- [2026-11-08] flag (structural redundancy — first found by the 2026-10-08 pass in
+  unmerged PR #35, re-verified here): **12 of 17** entries carry a `- **Symptom:**` bullet
+  byte-identical to their own heading line, because
+  `skills/capture-lesson/scripts/append-lesson.mjs` writes the same `--symptom` string
+  into both the heading and the Symptom line. This wastes roughly a heading's worth of
+  tokens per affected entry every time a session loads the file. Deliberately not fixed
+  here on two grounds: the root cause is in a skill script, which this skill is scoped out
+  of, and rewriting 12 entry bodies is not one of the seven edit types. Action needed: fix
+  `append-lesson.mjs` so the Symptom bullet is omitted when it would duplicate the
+  heading, then let a later pass or a human drop the redundant bullets.
