@@ -33,7 +33,7 @@ edit-plan candidates) and deletes consumed lines as part of the pass commit.
   was closed. Detection command for the future: `git ls-files | cut -d/ -f1 | sort -u |
   sort -f | uniq -di` — any output is a case-split tree.
 
-- [2026-09-08, THRESHOLD NOW MET — re-evaluate next pass] flag: the `/tmp` vs
+- [2026-09-08, RESOLVED 2026-11-08 — distillation proposed and REJECTED; see the first 2026-11-08 flag below] flag: the `/tmp` vs
   `/private/tmp` entry-point-guard defect stood at 2 episodes when this pass ran
   (`2026-09-02` swarm-plan.mjs + validate-brief.mjs; `2026-09-07` token-economy's three
   scripts), one short of `distill`'s ≥3 bar, so no edit was proposed. It has since
@@ -47,15 +47,6 @@ edit-plan candidates) and deletes consumed lines as part of the pass commit.
   Counters on the 2026-09-02 entry stay `h:0/x:0` deliberately — it did not mislead, it
   simply was not recalled, and `x` is reserved for entries that steered a session wrong.
 
-- [2026-09-26] flag (counters owed on new entries): seven entries landed on
-  `Docs/mistakes-and-fixes.md` after this pass inventoried the file — six dated
-  `2026-09-17` (instagram-studio guard/worktree/eval-harness/fixture/ffmpeg/plan-filename
-  and the live-render gap) and one `2026-09-25` (PR #31's required-check name blocked by
-  a Node matrix). They carry no `meta:` line. This pass deliberately did **not** annotate
-  them: they were never inventoried or provenance-assessed here, and adding them during a
-  merge-conflict resolution would widen the PR past what was reviewed. Action needed: the
-  next pass inventories all sixteen entries and adds counters/provenance to these seven.
-
 - [2026-09-08] flag (approaching distill threshold, 2 of 3): "the verifier was
   self-consistent with the bug" — `2026-09-02` (a main-guard that fails closed to
   "do nothing, exit 0", which reads as PASS to anything checking only the exit code) and
@@ -63,3 +54,61 @@ edit-plan candidates) and deletes consumed lines as part of the pass commit.
   comparing the output to the generator's own wrong extraction, so `--check` reported
   `PROTOCOL_BLOCK OK` on garbled output). Two first-party episodes; below the ≥3 bar.
   Re-evaluate at the next occurrence.
+
+- [2026-11-08] flag (skeptic-rejected edit): proposed `distill` of the three ESM
+  entry-point-guard entries (`2026-09-02` swarm-plan.mjs + validate-brief.mjs,
+  `2026-09-07` token-economy's three scripts, `2026-09-17` instagram-studio's
+  preflight.mjs + check-output.mjs) into one RULE entry retaining all occurrence dates.
+  This is the proposal the `[2026-09-08, THRESHOLD NOW MET]` flag above asked this pass to
+  make. REJECTED by memory-skeptic, on four grounds: (1) the replacement text **lost
+  distinct facts** — the 2026-09-17 Fix line's list of the five files where the old guard
+  was then still live, its "they remain open for the defect-class sweep" note, the
+  2026-09-07 Lesson's "copy the `isMain()` guard from `swarm-plan.mjs` and test through a
+  `/tmp` path before dispatching", the 2026-09-07 eval-copy handicap note, and the
+  2026-09-02 Lesson's "or drop the guard for bin-style scripts" option; (2) the proposed
+  text **invented a fact** — it asserted "Proximate cause: the guard was written that way
+  originally" for the 2026-09-02 episode, which that entry's on-disk Root cause field does
+  not say (it records only the string mismatch), i.e. the proposer's inference presented
+  as a recorded cause; (3) the three entries' recorded **proximate causes differ**
+  (original mismatch / written from memory / deferred-minor at review plus lesson-recall
+  not run), so the 2026-09-08 "symptom shape, not a root cause" precedent applies even
+  though the code defect is byte-identical; (4) the rule is **redundant** — GP-001 v2 in
+  `Docs/golden-principles.md` already states the Wrong/Correct patterns, the symlink-test
+  requirement and the silent-exit-0-reads-as-PASS consequence nearly verbatim, with
+  detectors in `Docs/defect-classes/esm-entry-guard.rule.json`. Deferred, not applied; the
+  three entries are untouched. The skeptic's suggested alternative, for a human or a later
+  pass to weigh: keep the three entries intact and add a one-line pointer to GP-001 from
+  each — which is not one of this skill's seven edit types, so a human should decide
+  whether that is wanted. A re-proposed distillation would have to preserve all of the
+  specifics listed in (1) and drop the invented line in (2).
+
+- [2026-11-08] flag (stale claim in a live entry): the `2026-09-17` instagram-studio
+  guard entry's **Fix** line says "a repo grep still finds the old guard live in
+  skills/destructive-op-gate/scripts/compare-counts.mjs, resolve-target.mjs,
+  destructive-shapes.mjs, skills/defect-class-sweep/scripts/sweep.mjs, and
+  tools/check-workflow-syntax.mjs", and its **Regression test** line says the repo-wide
+  grep "still returns 5 files … they remain open for the defect-class sweep, not fixed by
+  this entry". Both claims are **stale as of 2026-11-08**: verified this pass and
+  independently by the memory-skeptic, ``grep -rn 'import.meta.url === `file://' skills/
+  tools/`` and `grep -rn 'process\.argv\[1\] === fileURLToPath' skills/ tools/` each
+  return ZERO hits, so no file is still open for the sweep. A session reading that entry
+  today would believe five scripts are still broken. The five filenames are still useful
+  as the historical record of which scripts were affected — the stale part is "still
+  live" / "remain open". Correcting an entry body is not one of this skill's seven edit
+  types (`merge`/`delete`/`distill`/`prune`/`counter`/`flag`/`quarantine`), so this pass
+  flagged it rather than editing it. Action needed: a human appends a dated resolution
+  line to that entry (the convention the `2026-09-05` entry already uses for its
+  "**Recurrence (2026-09-23 …)**" line), or authorises a future pass to do so.
+
+- [2026-11-08] flag (threshold survey, still 2 of 3 — no distill proposed): re-checked
+  the `[2026-09-08]` "the verifier was self-consistent with the bug" flag below. The
+  nearest candidate third episode is `2026-09-25` ("a skipped required job reports as
+  passing"), but its mechanism is a CI gate that never posts a required check name, not a
+  test comparing output to the generator's own wrong extraction — an adjacent class ("a
+  gate that does not run reads as PASS"), not the same root cause. The other 2026-09-17
+  candidates are weaker still: the ffmpeg entry is "the check tests the wrong property"
+  (existence vs usability) and the eval-harness entry is a broken measuring instrument.
+  The ≥3 same-root-cause bar is therefore **not** met; no distillation proposed this pass.
+  Re-evaluate at the next genuine occurrence, and note the 2026-11-08 rejection above:
+  identical code mechanism is not by itself sufficient if the recorded proximate causes
+  diverge.
