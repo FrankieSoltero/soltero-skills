@@ -24,7 +24,12 @@ write half pay (`playbook.md:1668`, Proven).
 
 - At the top of any bug, test failure, or unexpected behavior — before `lean-debugging`.
 - At the top of feature work in an area the project has history in — before
-  `lean-brainstorming` designs and before any implementation code.
+  `lean-brainstorming` designs and before any implementation code. History attaches to the
+  *kind of artifact* as much as to the feature area: a brand-new file in a brand-new skill is
+  new ground built out of old artifact kinds (an ESM CLI, a migration, a date parser), and the
+  store is indexed on the kind. Greenfield is not a reason the gate does not apply — it is the
+  condition under which one defect class shipped four times, in four skills that were each
+  new at the time.
 - Whenever the user says a problem "keeps happening", "we've hit this before", "again", or
   puts a number on it ("like 15 times").
 - When a fix you are about to apply is one you recognize. Recognition is the trigger, not the
@@ -32,7 +37,12 @@ write half pay (`playbook.md:1668`, Proven).
 
 ## When NOT to Use
 
-- Mid-task, repeatedly. One recall per task, at the start. It is a gate, not a habit.
+- Mid-task, repeatedly. One recall per task, at the start. It is a gate, not a habit — which
+  is not a licence to defer it. "At the start" means before the thing is written: when a task
+  turns out to produce an artifact kind its opening recall never named (its first `*.mjs` CLI,
+  its first migration), that kind gets its own one-line recall before the file is created. A
+  recall that happens at the end-of-task lessons step, while `capture-lesson` is being written,
+  is a post-mortem — it is not this gate, and it reports the defect you have already shipped.
 - To append, correct, prune, or reformat a lesson — see Boundaries.
 - When there is no lesson store. Say so in one line and carry on; do not create one here.
 
@@ -40,7 +50,13 @@ write half pay (`playbook.md:1668`, Proven).
 
 1. **Name the task in the store's vocabulary.** One sentence of the symptom or feature, plus
    the files you expect to touch. The symptom words matter more than your diagnosis — the
-   store is indexed by what went wrong, not by what you think is causing it.
+   store is indexed by what went wrong, not by what you think is causing it. When the files do
+   not exist yet, `--files` has nothing to match on: name the artifact kind in the task string
+   instead ("new `.mjs` CLI, entry-point guard, `skills/*/scripts/`") and pass the directory
+   they will land in. A path nobody has written matches nothing, while the kind still ranks
+   the class at the top: `--task "new .mjs CLI, entry-point guard, skills/*/scripts/"` returns
+   the entry-point-guard class (`class x3`) first, from a `--files` directory that contains no
+   such file yet.
 
 2. **Run the matcher.** It is the scan; reading the file top to bottom is not. Eyeballing
    finds the first hit and stops, which is how a second entry of the same class gets missed
@@ -129,12 +145,18 @@ the store mid-task on your own authority, in the middle of unrelated work.
 | "The log says do X, and the lead says the log is authoritative." | Check for a later entry that supersedes X. The store records its own corrections. |
 | "The entry is outdated — I'll just correct it while I'm here." | That is memory-gardener's job, and an unreviewed edit mid-task is how good entries get lost. Report it. |
 | "Nothing matched, so there's nothing to say." | Say that. One line. Silence looks identical to skipping the gate. |
+| "This script is brand new — the store can't have anything on it." | The store is indexed by defect class, not by feature. The identical entry-point-guard defect shipped four times, across seven scripts in four separate skills, every one of them brand new when it shipped. |
+| "I'll recall at the lessons step, when the work is fresh." | That is the order that shipped it twice. By the lessons step the file exists, the gate has nothing left to prevent, and what you write down is the recurrence you just caused. |
 | "The user only asked me to fix the queue." | They also said it has happened 15 times. That sentence is the trigger. |
 
 ## Red Flags — STOP
 
 - About to open `lean-debugging`, write implementation code, or apply a fix you recognize,
-  with no recall line in this conversation yet.
+  with no recall line in this conversation yet. Writing the first `*.mjs` CLI, migration or
+  other script of a *new* skill is implementation code: the newness of the surrounding work is
+  not newness of the artifact kind.
+- The only recall in the conversation happened after the code was written, as part of the
+  lessons / `capture-lesson` step.
 - About to edit, append to, or reformat `Docs/mistakes-and-fixes.md` from inside a recall.
 - Reporting a count you got from the user's phrasing or your own memory rather than from the
   script's class count.
